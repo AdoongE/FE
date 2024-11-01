@@ -5,6 +5,7 @@
   "lint": "eslint './/*.{ts,tsx,js,jsx}'",
   "lint:fix": "eslint --fix './/*.{ts,tsx,js,jsx}'",
   "dependencies": {
+    "@iconify/react": "^5.0.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",

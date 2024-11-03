@@ -1,8 +1,18 @@
-## Description
-해당 이슈에 대한 설명
-## Changes
-### 변경 사항 제목
-- [ ] 세부 사항 1
-- [ ] 세부 사항 2
-## Additional context
-추가적인 내용
+---
+name: Custom issue template
+about: Describe this issue template's purpose here.
+title: ''
+labels: ''
+assignees: ''
+
+---
+
+## ✨ 어떤 기능인가요?
+
+> 추가하려는 기능에 대해 간결하게 설명해주세요
+
+## ✅ 작업 상세 내용
+
+- [ ] TODO
+- [ ] TODO
+- [ ] TODO

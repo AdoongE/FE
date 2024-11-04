@@ -14,6 +14,8 @@ function ContentBox() {
     <Box>
       <ImageBox>
         <Dday>D-365</Dday>
+        {/* 나중에 디데이 값 속성으로 주시면 될거 같습니다 */}
+        {/* <Dday>D-${date}</Dday> */}
         <Dropdown>
           <ContentDropdown />
         </Dropdown>
@@ -89,7 +91,6 @@ const IconBox = styled.div`
 
 const Dday = styled.div`
   position: absolute;
-  /* width: 25px; */
   width: fit-content;
 
   height: 17px;
@@ -98,7 +99,6 @@ const Dday = styled.div`
   border-radius: 50px;
   padding: 5px 15px;
   opacity: 80%;
-  background-color: white;
 
   display: flex;
   align-items: center;
@@ -108,13 +108,24 @@ const Dday = styled.div`
   line-height: 16.71px;
   text-align: center;
   color: black;
+
+  /* 넣는 디데이 값마다 배경색 다르도록 설정했습니다. */
+  /* background-color: ${(props) =>
+    props.date === 1 || props.date === 2 || props.date === 3
+      ? 'white'
+      : props.date === 'DAY'
+        ? '#9AE4D6'
+        : '#DCDADA'}; */
+
+  /* 일단 임시로 지정한거라, 나중에 이 코드는 지우시면 될거 같아요. */
+  background-color: white;
 `;
 
-const Tag = styled.div`
+const Tag = styled.button`
   width: fit-content;
   height: fit-content;
-  /* width: 54px;
-  height: 24px; */
+  border: 0;
+
   border-radius: 50px;
   opacity: 80%;
   background-color: white;

@@ -8,7 +8,8 @@ import fileplusIcon from '../assets/icons/file-plus.png';
 import gridIcon from '../assets/icons/grid.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import Switch from '@mui/material/Switch';
+import { IOSSwitch } from '../components/switch/PublicCategorySwitch';
+import { Icon } from '@iconify/react';
 
 const Sidebar = () => {
   const [activeButton, setActiveButton] = useState('collect');
@@ -17,7 +18,7 @@ const Sidebar = () => {
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPublic, setIsPublic] = useState(false); // 토글 관리
+  const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
 
@@ -25,17 +26,19 @@ const Sidebar = () => {
     setIsPublic(!isPublic);
   };
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setIsModalOpen(true);
+    setIsCategoryOpen(true);
+  };
   const closeModal = () => {
     setIsModalOpen(false);
-    setCategoryName(''); // 모달 닫을 때 입력값 초기화
+    setCategoryName('');
   };
 
   const handleConfirm = () => {
-    if (categoryName) {
-      setCategories([...categories, categoryName]); // 카테고리 추가
-      closeModal();
-    }
+    const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
+    setCategories([...categories, newCategoryName]); // 카테고리 추가, 임시로 카테고리 추가하면 콘텐츠 페이지가 아닌 텍스트만(newCategoryName) 추가되도록 하였습니다.
+    closeModal();
   };
 
   return (
@@ -93,9 +96,11 @@ const Sidebar = () => {
             </AccordionTitle>
             {isCategoryOpen && (
               <>
-                <AccordionContent>카테고리를 생성하세요.</AccordionContent>
+                {categories.length === 0 && (
+                  <AccordionContent>카테고리를 생성하세요.</AccordionContent>
+                )}
                 {categories.map((category, index) => (
-                  <div key={index}>{category}</div>
+                  <CategoryItem key={index}>{category}</CategoryItem> // 임시로 카테고리 추가하면 콘텐츠 페이지가 아닌 텍스트만 추가되도록 하였습니다.
                 ))}
               </>
             )}
@@ -118,10 +123,21 @@ const Sidebar = () => {
           <ModalOverlay onClick={closeModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <ModalDiv>
-                <ModalTitle>카테고리 추가</ModalTitle>
+                <TopDiv>
+                  <ModalTitle>카테고리 추가</ModalTitle>
+                  <Icon
+                    icon="line-md:close"
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={closeModal}
+                  />
+                </TopDiv>
                 <Label>
                   공개 카테고리
-                  <Switch checked={isPublic} onChange={handleToggle} />
+                  <IOSSwitch checked={isPublic} onChange={handleToggle} />
                 </Label>
                 <Input
                   value={categoryName}
@@ -221,7 +237,7 @@ const AddIconWrapper = styled.div`
 `;
 
 const AccordionTitle = styled.div`
-  margin: 0 21px;
+  margin: 10px 21px;
   font-size: 20px;
   font-family: 'Pretendard-Regular';
   font-weight: 500;
@@ -276,6 +292,13 @@ const AccordionContent = styled.div`
   margin-left: 78px;
 `;
 
+const CategoryItem = styled.div`
+  margin-bottom: 18px;
+  margin-left: 78px;
+  font-size: 20px;
+  font-family: 'Pretendard-Regular';
+`;
+
 // 모달 관련 스타일
 const ModalOverlay = styled.div`
   position: fixed;
@@ -298,11 +321,18 @@ const ModalContent = styled.div`
 `;
 
 const ModalDiv = styled.div`
-  margin: 3.563rem;
+  margin: 3.125rem;
+`;
+
+const TopDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 27px;
 `;
 
 const ModalTitle = styled.h2`
   font-size: 32px;
+  font-weight: 850;
   font-family: 'Pretendard-Regular';
   margin-bottom: 10px;
 `;
@@ -314,6 +344,7 @@ const Label = styled.label`
   display: flex;
   justify-content: right;
   align-items: center;
+  gap: 11px;
 `;
 
 const Input = styled.input`

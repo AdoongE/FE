@@ -1,11 +1,14 @@
+import { StyledEngineProvider } from '@mui/material';
 import './App.css';
 import Router from './routes/Router';
+import GlobalStyle from './styles/GlobalStyle';
 
 function App() {
   return (
-    <div className="App">
+    <StyledEngineProvider injectFirst>
+      <GlobalStyle />
       <Router />
-    </div>
+    </StyledEngineProvider>
   );
 }
 

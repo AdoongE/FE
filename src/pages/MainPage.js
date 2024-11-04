@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { React } from 'react';
-import Contents from '../components/Contents';
+import ContentHeader from '../components/ContentHeader';
+import ContentBox from '../components/ContentBox';
 
 const MainPage = () => {
   return (
     <StMainPage>
-      <Contents />
+      <ContentHeader />
+      <ContentBox />
     </StMainPage>
   );
 };

@@ -1,15 +1,15 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <MainPage />,
-  },
-]);
-function Router() {
-  return <RouterProvider router={router} />;
-}
+const Router = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/main" element={<MainPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default Router;

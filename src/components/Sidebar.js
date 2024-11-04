@@ -3,12 +3,11 @@ import { useState } from 'react';
 import seedIcon from '../assets/icons/seed.png';
 import treeIcon from '../assets/icons/tree.png';
 import forestIcon from '../assets/icons/forest.png';
-import bookmarkIcon from '../assets/icons/bookmark.png';
-import fileplusIcon from '../assets/icons/file-plus.png';
-import gridIcon from '../assets/icons/grid.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IOSSwitch } from '../components/switch/PublicCategorySwitch';
+import Dropdown from '../components/dropdown/CategoryDropdown';
 import { Icon } from '@iconify/react';
 
 const Sidebar = () => {
@@ -17,11 +16,12 @@ const Sidebar = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
+  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
-
+  const [openDropdown, setOpenDropdown] = useState(false);
   const handleToggle = () => {
     setIsPublic(!isPublic);
   };
@@ -37,8 +37,12 @@ const Sidebar = () => {
 
   const handleConfirm = () => {
     const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
-    setCategories([...categories, newCategoryName]); // 카테고리 추가, 임시로 카테고리 추가하면 콘텐츠 페이지가 아닌 텍스트만(newCategoryName) 추가되도록 하였습니다.
+    setCategories([...categories, newCategoryName]); // 카테고리 추가
     closeModal();
+  };
+
+  const toggleDropdown = () => {
+    setOpenDropdown((prev) => !prev);
   };
 
   return (
@@ -71,7 +75,7 @@ const Sidebar = () => {
           <CategoryP>모든 카테고리 (30)</CategoryP> {/*숫자 임시 지정*/}
           <Accordion>
             <AccordionTitle onClick={() => setIsBookmarkOpen(!isBookmarkOpen)}>
-              <CategoryIcon src={bookmarkIcon} alt="bookmark icon" />
+              <Icons icon="material-symbols:bookmark-outline" />
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
             </AccordionTitle>
@@ -85,7 +89,7 @@ const Sidebar = () => {
               onMouseEnter={() => setHoveredCategory(true)}
               onMouseLeave={() => setHoveredCategory(false)}
             >
-              <CategoryIcon src={gridIcon} alt="file plus icon" />
+              <Icons icon="ion:grid-outline" />
               {`내 카테고리`}
               <RightArrowIcon open={isCategoryOpen} />
               {hoveredCategory && (
@@ -99,16 +103,36 @@ const Sidebar = () => {
                 {categories.length === 0 && (
                   <AccordionContent>카테고리를 생성하세요.</AccordionContent>
                 )}
-                {categories.map((category, index) => (
-                  <CategoryItem key={index}>{category}</CategoryItem> // 임시로 카테고리 추가하면 콘텐츠 페이지가 아닌 텍스트만 추가되도록 하였습니다.
-                ))}
+                <>
+                  {categories.map((category, index) => (
+                    <CategoryItem
+                      key={index}
+                      onMouseEnter={() => setHoveredCategoryIndex(index)}
+                      onMouseLeave={() => setHoveredCategoryIndex(null)}
+                    >
+                      {category}
+                      {hoveredCategoryIndex === index && (
+                        <DotBox onClick={toggleDropdown}>
+                          <MoreVertIcon />
+                        </DotBox>
+                      )}
+                    </CategoryItem>
+                  ))}
+                  {openDropdown && (
+                    <Dropdown
+                      isOpen={openDropdown}
+                      onClose={toggleDropdown}
+                      categoryName={categoryName}
+                    />
+                  )}
+                </>
               </>
             )}
 
             <AccordionTitle
               onClick={() => setIsSubscribeOpen(!isSubscribeOpen)}
             >
-              <CategoryIcon src={fileplusIcon} alt="grid icon" />
+              <Icons icon="iconamoon:file-add-light" />
               구독한 카테고리
               <RightArrowIcon open={isSubscribeOpen} />
             </AccordionTitle>
@@ -240,7 +264,7 @@ const AccordionTitle = styled.div`
   margin: 10px 21px;
   font-size: 20px;
   font-family: 'Pretendard-Regular';
-  font-weight: 500;
+  font-weight: 580;
   padding: 10px 0;
   padding-left: 20px;
   cursor: pointer;
@@ -258,7 +282,7 @@ const AccordionTitle = styled.div`
   }
 `;
 
-const CategoryIcon = styled.img`
+const Icons = styled(Icon)`
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 13px;
@@ -275,13 +299,13 @@ const AddButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   background-color: #9f9f9f;
   border-radius: 7px;
-  margin-left: 8px;
+  /* margin-left: 8px; */
   position: absolute;
-  right: 10px;
+  right: 8px;
 `;
 
 const AccordionContent = styled.div`
@@ -292,11 +316,35 @@ const AccordionContent = styled.div`
   margin-left: 78px;
 `;
 
-const CategoryItem = styled.div`
+const CategoryItem = styled.button`
   margin-bottom: 18px;
-  margin-left: 78px;
+  margin: auto;
   font-size: 20px;
   font-family: 'Pretendard-Regular';
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 56px;
+  width: 303px;
+  height: 44px;
+  &:hover {
+    background-color: #dcdada;
+    border-radius: 10px;
+  }
+`;
+
+const DotBox = styled.div`
+  width: 32px;
+  height: 32px;
+  background-color: #9f9f9f;
+  border-radius: 7px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 // 모달 관련 스타일

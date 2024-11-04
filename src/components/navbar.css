@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden; /* 전체 화면을 1920px로 고정 */
+}
+
+.main-content {
+    margin-left: 21.5625vw;
+    flex-grow: 1;
+}
+
+.navbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+height: 118px;
+border-bottom: 0.0521rem solid #ffffff; /* 1px */
+box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1); /* 0 2px 5px */
+position: relative;
+z-index: 2; /* 사이드바 위에 배치 */
+}
+
+.navbar-logo-container {
+display: flex;
+align-items: center;
+}
+
+.navbar-logo-box {
+align-items: center;
+width: 1.75rem; /* 28px */
+height: 1.625rem; /* 26px */
+background-color: #41c3ab;
+margin-left: 1.5rem; /* 24px */
+}
+
+.navbar-logo {
+margin-left: 1.25rem; /* 20px */
+margin-bottom: 0.75rem; /* 12px */
+font-size: 2.5rem; /* 40px */
+font-weight: bold;
+width: 9.25rem; /* 148px */
+height: 2.5rem; /* 40px */
+}
+
+.navbar-menu {
+display: flex;
+gap: 4vw;
+margin-left: -16vw;
+position: relative;
+}
+
+.navbar-menu button {
+color: #666;
+padding: 0.75rem 1.25rem;
+border-radius: 0;
+font-size: 1.5vw;
+display: inline-block;
+background: transparent;
+border: none;
+cursor: pointer;
+outline: none;
+}
+
+.navbar-menu a {
+margin-top: 0.5729vw; /* 11px */
+margin-left: 17.96875vw; /* 345px */
+color: #333;
+text-decoration: none;
+border-radius: 0.3125rem; /* 5px */
+font-size: 1rem; /* 16px */
+display: inline-block;
+}
+
+.navbar-menu button.active {
+font-weight: bold;
+background-color: transparent;
+color: #000;
+border-radius: 0;
+}
+
+.active-bar {
+width: 9vw !important; /* 고정 너비를 vw로 설정 */
+max-width: 155px;
+height: 0.45rem;
+background-color: #41c3ab;
+position: absolute;
+top: 85px;
+left: 0;
+transition: width 0.3s ease, left 0.3s ease;
+z-index: 3; /* box-shadow 위로 active-bar가 오게 설정 */
+}
+
+.navbar-right {
+display: flex;
+align-items: center;
+}
+
+.navbar-icon {
+width: 1.56vw;
+height: 1.56vw;
+font-size: 1.2em;
+color: #333; /* 아이콘 색상을 검은색으로 설정 */
+background-color: transparent; /* 배경색 제거 */
+padding: 0; /* 패딩을 없앰 */
+border: none; /* 테두리 제거 */
+cursor: pointer;
+}
+
+.navbar-new-content {
+background-color: #41c3ab;
+font-size: 0.92vw;
+color: #fff;
+border: none;
+width: 8.13vw;
+height: 2.51vw;
+border-radius: 2.52rem; 
+padding: 0.3rem; 
+margin-left: 1.04vw; 
+margin-right: 1.04vw; 
+cursor: pointer;
+opacity: 1;
+}
+
+
+.navbar-profile {
+width: 2.5vw;
+height: 2.5vw;
+border-radius: 50%;
+background-color: #ddd;
+margin-right: 1rem; /* 16px */
+opacity: 1;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+width: 21.5625vw; /* 345px */
+height: calc(100vh - 150px); /* 화면 높이에서 navbar 높이를 뺀 값 */
+background-color: #F8FBFB;
+position: fixed; /* 화면 좌측에 고정 */
+top: 118px; /* navbar 높이만큼 아래로 배치 */
+left: 0;
+z-index: 1; /* 네비게이션 바보다 아래에 배치 */
+}

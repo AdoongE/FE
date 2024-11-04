@@ -19,12 +19,8 @@
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
-<<<<<<< HEAD
     "styled-components": "^6.1.13",
     "styled-reset": "^4.5.2",
-    "typescript": "^5.6.3",
-=======
->>>>>>> feat/main-page-navbar-#3
     "web-vitals": "^2.1.0"
   },
   "scripts": {

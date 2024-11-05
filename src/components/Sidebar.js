@@ -21,7 +21,9 @@ const Sidebar = () => {
   const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
-  const [openDropdown, setOpenDropdown] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const [openDropdown, setOpenDropdown] = useState(null);
+
   const handleToggle = () => {
     setIsPublic(!isPublic);
   };
@@ -41,8 +43,11 @@ const Sidebar = () => {
     closeModal();
   };
 
-  const toggleDropdown = () => {
-    setOpenDropdown((prev) => !prev);
+  const handleBookmarkAdd = (categoryName) => {
+    console.log('handleBookmarkAdd, sidebar');
+    if (!bookmarks.includes(categoryName)) {
+      setBookmarks([...bookmarks, categoryName]);
+    }
   };
 
   return (
@@ -79,8 +84,43 @@ const Sidebar = () => {
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
             </AccordionTitle>
-            {isBookmarkOpen && (
+            {/* {isBookmarkOpen && (
               <AccordionContent>북마크를 추가하세요.</AccordionContent>
+            )} */}
+            {isBookmarkOpen && (
+              <>
+                {bookmarks.length === 0 && (
+                  <AccordionContent>북마크를 추가하세요.</AccordionContent>
+                )}
+                {/* {bookmarks.map((bookmark, index) => (
+                    <Button key={index}>{bookmark}</Button>
+                  ))
+                )} */}
+                <>
+                  {bookmarks.map((bookmark, index) => (
+                    <CategoryItem
+                      key={index}
+                      onMouseEnter={() => setHoveredCategoryIndex(index)}
+                      onMouseLeave={() => setHoveredCategoryIndex(null)}
+                    >
+                      {bookmark}
+                      {hoveredCategoryIndex === index && (
+                        <DotBox onClick={() => setOpenDropdown(index)}>
+                          <MoreVertIcon />
+                        </DotBox>
+                      )}
+                      {openDropdown === index && (
+                        <Dropdown
+                          isOpen={openDropdown === index}
+                          onClose={() => setOpenDropdown(null)}
+                          categoryName={bookmark}
+                          onBookmarkAdd={handleBookmarkAdd} // Pass the function
+                        />
+                      )}
+                    </CategoryItem>
+                  ))}
+                </>
+              </>
             )}
 
             <AccordionTitle
@@ -112,19 +152,20 @@ const Sidebar = () => {
                     >
                       {category}
                       {hoveredCategoryIndex === index && (
-                        <DotBox onClick={toggleDropdown}>
+                        <DotBox onClick={() => setOpenDropdown(index)}>
                           <MoreVertIcon />
                         </DotBox>
                       )}
+                      {openDropdown === index && (
+                        <Dropdown
+                          isOpen={openDropdown === index}
+                          onClose={() => setOpenDropdown(null)}
+                          categoryName={category}
+                          onBookmarkAdd={handleBookmarkAdd}
+                        />
+                      )}
                     </CategoryItem>
                   ))}
-                  {openDropdown && (
-                    <Dropdown
-                      isOpen={openDropdown}
-                      onClose={toggleDropdown}
-                      categoryName={categoryName}
-                    />
-                  )}
                 </>
               </>
             )}

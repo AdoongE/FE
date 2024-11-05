@@ -37,10 +37,11 @@ const Icons = styled(Icon)`
   margin-right: 17px;
 `;
 
-const Dropdown = ({ isOpen, onClose, categoryName }) => {
+const Dropdown = ({ isOpen, onClose, categoryName, onBookmarkAdd }) => {
   if (!isOpen) return null;
 
-  const handleAddBookmark = () => {
+  const addBookmark = () => {
+    onBookmarkAdd(categoryName);
     onClose();
   };
 
@@ -50,12 +51,11 @@ const Dropdown = ({ isOpen, onClose, categoryName }) => {
 
   const handleDeleteCategory = () => {
     onClose();
-    console.log('hi' + categoryName);
   };
 
   return (
     <DropdownMenu>
-      <DropdownItem onClick={handleAddBookmark}>
+      <DropdownItem onClick={addBookmark}>
         <Icons icon="mdi:bookmark-plus-outline" />
         북마크에 추가
       </DropdownItem>
@@ -75,6 +75,7 @@ Dropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   categoryName: PropTypes.string.isRequired,
+  onBookmarkAdd: PropTypes.func.isRequired,
 };
 
 export default Dropdown;

@@ -41,13 +41,19 @@ const Dropdown = ({
   isOpen,
   onClose,
   categoryName,
+  isBookmarked,
   onBookmarkAdd,
+  onBookmarkRemove,
   onEditCategory,
 }) => {
   if (!isOpen) return null;
 
-  const addBookmark = () => {
-    onBookmarkAdd(categoryName);
+  const toggleBookmark = () => {
+    if (isBookmarked) {
+      onBookmarkRemove(categoryName);
+    } else {
+      onBookmarkAdd(categoryName);
+    }
     onClose();
   };
 
@@ -63,9 +69,15 @@ const Dropdown = ({
 
   return (
     <DropdownMenu>
-      <DropdownItem onClick={addBookmark}>
-        <Icons icon="mdi:bookmark-plus-outline" />
-        북마크에 추가
+      <DropdownItem onClick={toggleBookmark}>
+        <Icons
+          icon={
+            isBookmarked
+              ? 'mdi:bookmark-remove-outline'
+              : 'mdi:bookmark-plus-outline'
+          }
+        />
+        {isBookmarked ? '북마크에서 삭제' : '북마크에 추가'}
       </DropdownItem>
       <DropdownItem onClick={handleEditCategory}>
         <Icons icon="iconamoon:edit-light" />
@@ -83,6 +95,7 @@ Dropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   categoryName: PropTypes.string.isRequired,
+  isBookmarked: PropTypes.bool.isRequired,
   onBookmarkAdd: PropTypes.func.isRequired,
   onEditCategory: PropTypes.func.isRequired,
 };

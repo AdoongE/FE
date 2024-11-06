@@ -26,6 +26,7 @@ const Sidebar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState('');
+  const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -47,7 +48,6 @@ const Sidebar = () => {
   };
 
   const handleBookmarkAdd = (categoryName) => {
-    console.log('handleBookmarkAdd, sidebar');
     if (!bookmarks.includes(categoryName)) {
       setBookmarks([...bookmarks, categoryName]);
     }
@@ -64,6 +64,26 @@ const Sidebar = () => {
     );
     setCategories(updatedCategories);
     setEditModalOpen(false);
+  };
+
+  const handleBookmarkDotBoxClick = (index) => {
+    setOpenBookmarkDropdowns((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  const handleBookmarkCloseDropdown = (index) => {
+    setOpenBookmarkDropdowns((prev) => ({
+      ...prev,
+      [index]: false,
+    }));
+  };
+
+  const handleBookmarkRemove = (category) => {
+    setBookmarks((prevBookmarks) =>
+      prevBookmarks.filter((item) => item !== category),
+    );
   };
 
   return (
@@ -100,42 +120,35 @@ const Sidebar = () => {
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
             </AccordionTitle>
-            {/* {isBookmarkOpen && (
-              <AccordionContent>북마크를 추가하세요.</AccordionContent>
-            )} */}
             {isBookmarkOpen && (
               <>
                 {bookmarks.length === 0 && (
                   <AccordionContent>북마크를 추가하세요.</AccordionContent>
                 )}
-                {/* {bookmarks.map((bookmark, index) => (
-                    <Button key={index}>{bookmark}</Button>
-                  ))
-                )} */}
-                <>
-                  {bookmarks.map((bookmark, index) => (
-                    <CategoryItem
-                      key={index}
-                      onMouseEnter={() => setHoveredCategoryIndex(index)}
-                      onMouseLeave={() => setHoveredCategoryIndex(null)}
-                    >
-                      {bookmark}
-                      {hoveredCategoryIndex === index && (
-                        <DotBox onClick={() => setOpenDropdown(index)}>
-                          <MoreVertIcon />
-                        </DotBox>
-                      )}
-                      {openDropdown === index && (
-                        <Dropdown
-                          isOpen={openDropdown === index}
-                          onClose={() => setOpenDropdown(null)}
-                          categoryName={bookmark}
-                          onBookmarkAdd={handleBookmarkAdd} // Pass the function
-                        />
-                      )}
-                    </CategoryItem>
-                  ))}
-                </>
+                {bookmarks.map((bookmark, index) => (
+                  <CategoryItem
+                    key={index}
+                    onMouseEnter={() => setHoveredCategoryIndex(index)}
+                    onMouseLeave={() => setHoveredCategoryIndex(null)}
+                  >
+                    {bookmark}
+                    {hoveredCategoryIndex === index && (
+                      <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
+                        <MoreVertIcon />
+                      </DotBox>
+                    )}
+                    {openBookmarkDropdowns[index] && (
+                      <Dropdown
+                        isOpen={openBookmarkDropdowns[index]}
+                        onClose={() => handleBookmarkCloseDropdown(index)}
+                        categoryName={bookmark}
+                        isBookmarked={bookmarks.includes(bookmark)}
+                        onBookmarkAdd={handleBookmarkAdd}
+                        onBookmarkRemove={handleBookmarkRemove}
+                      />
+                    )}
+                  </CategoryItem>
+                ))}
               </>
             )}
 

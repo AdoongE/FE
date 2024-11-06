@@ -45,6 +45,7 @@ const Dropdown = ({
   onBookmarkAdd,
   onBookmarkRemove,
   onEditCategory,
+  onRemoveCategory,
 }) => {
   if (!isOpen) return null;
 
@@ -63,7 +64,7 @@ const Dropdown = ({
   };
 
   const handleDeleteCategory = () => {
-    onEditCategory(categoryName);
+    onRemoveCategory(categoryName);
     onClose();
   };
 
@@ -98,6 +99,7 @@ Dropdown.propTypes = {
   isBookmarked: PropTypes.bool.isRequired,
   onBookmarkAdd: PropTypes.func.isRequired,
   onEditCategory: PropTypes.func.isRequired,
+  onRemoveCategory: PropTypes.func.isRequired,
 };
 
 export default Dropdown;

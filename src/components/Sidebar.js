@@ -10,6 +10,7 @@ import { IOSSwitch } from '../components/switch/PublicCategorySwitch';
 import Dropdown from '../components/dropdown/CategoryDropdown';
 import { Icon } from '@iconify/react';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
+import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 
 const Sidebar = () => {
   const [activeButton, setActiveButton] = useState('collect');
@@ -27,6 +28,8 @@ const Sidebar = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  // const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -59,12 +62,12 @@ const Sidebar = () => {
   };
 
   const handleConfirmEdit = (newCategoryName) => {
-    // '내 카테고리' - 카테고리 이름 편집
+    // '내 카테고리'에서 카테고리 이름 편집
     const updatedCategories = categories.map((category) =>
       category === editCategoryName ? newCategoryName : category,
     );
     setCategories(updatedCategories);
-    // '북마크' - 카테고리 이름 편집
+    // '북마크'에서 카테고리 이름 편집
     const updatedBookmarks = bookmarks.map((bookmark) =>
       bookmark === editCategoryName ? newCategoryName : bookmark,
     );
@@ -90,6 +93,25 @@ const Sidebar = () => {
     setBookmarks((prevBookmarks) =>
       prevBookmarks.filter((item) => item !== category),
     );
+  };
+
+  const handleRemoveCategory = (categoryNameToRemove) => {
+    setCategoryName(categoryNameToRemove);
+    setDeleteModalOpen(true); // 모달 열기
+  };
+
+  const handleConfirmRemove = (categoryName) => {
+    // 내 카테고리에서 삭제
+    const updatedCategories = categories.filter(
+      (category) => category !== categoryName,
+    );
+    setCategories(updatedCategories);
+    // 북마크에서 삭제
+    const updatedBookmarks = bookmarks.filter(
+      (bookmark) => bookmark !== categoryName,
+    );
+    setBookmarks(updatedBookmarks);
+    setDeleteModalOpen(false);
   };
 
   return (
@@ -152,6 +174,7 @@ const Sidebar = () => {
                         onBookmarkAdd={handleBookmarkAdd}
                         onBookmarkRemove={handleBookmarkRemove}
                         onEditCategory={handleEditCategory}
+                        onRemoveCategory={handleRemoveCategory}
                       />
                     )}
                   </CategoryItem>
@@ -199,6 +222,7 @@ const Sidebar = () => {
                           categoryName={category}
                           onBookmarkAdd={handleBookmarkAdd}
                           onEditCategory={handleEditCategory}
+                          onRemoveCategory={handleRemoveCategory}
                         />
                       )}
                     </CategoryItem>
@@ -272,6 +296,22 @@ const Sidebar = () => {
           initialCategoryName={editCategoryName}
           onConfirm={handleConfirmEdit}
         />
+        {/* 삭제 모달 창 */}
+        {categories.map((category) => (
+          <Dropdown
+            key={category}
+            categoryName={category}
+            onRemoveCategory={handleRemoveCategory}
+          />
+        ))}
+        {isDeleteModalOpen && (
+          <RemoveCategoryModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setDeleteModalOpen(false)}
+            categoryName={categoryName}
+            onConfirm={handleConfirmRemove}
+          />
+        )}
       </SideDiv>
     </StMainPage>
   );

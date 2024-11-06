@@ -30,15 +30,14 @@ const Sidebar = () => {
   const [editCategoryName, setEditCategoryName] = useState('');
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isAddingBookmark, setIsAddingBookmark] = useState(false);
 
   useEffect(() => {
-    if (isEditModalOpen) {
+    if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
       setHoveredCategoryIndex(null);
+      setHoveredBookmarkIndex(null);
     }
-    if (isDeleteModalOpen) {
-      setHoveredCategoryIndex(null);
-    }
-  }, [isEditModalOpen, isDeleteModalOpen]);
+  }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -63,6 +62,7 @@ const Sidebar = () => {
     if (!bookmarks.includes(categoryName)) {
       setBookmarks([...bookmarks, categoryName]);
     }
+    setIsAddingBookmark(true);
   };
 
   const handleEditCategory = (categoryName) => {

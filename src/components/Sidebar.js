@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import seedIcon from '../assets/icons/seed.png';
 import treeIcon from '../assets/icons/tree.png';
 import forestIcon from '../assets/icons/forest.png';
@@ -30,6 +30,15 @@ const Sidebar = () => {
   const [editCategoryName, setEditCategoryName] = useState('');
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (isEditModalOpen) {
+      setHoveredCategoryIndex(null);
+    }
+    if (isDeleteModalOpen) {
+      setHoveredCategoryIndex(null);
+    }
+  }, [isEditModalOpen, isDeleteModalOpen]);
 
   const handleToggle = () => {
     setIsPublic(!isPublic);

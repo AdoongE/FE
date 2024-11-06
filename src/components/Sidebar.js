@@ -9,6 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IOSSwitch } from '../components/switch/PublicCategorySwitch';
 import Dropdown from '../components/dropdown/CategoryDropdown';
 import { Icon } from '@iconify/react';
+import EditCategoryModal from '../components/modal/EditCategoryModal';
 
 const Sidebar = () => {
   const [activeButton, setActiveButton] = useState('collect');
@@ -23,6 +24,8 @@ const Sidebar = () => {
   const [categories, setCategories] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [editCategoryName, setEditCategoryName] = useState('');
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -48,6 +51,19 @@ const Sidebar = () => {
     if (!bookmarks.includes(categoryName)) {
       setBookmarks([...bookmarks, categoryName]);
     }
+  };
+
+  const handleEditCategory = (categoryName) => {
+    setEditCategoryName(categoryName);
+    setEditModalOpen(true);
+  };
+
+  const handleConfirmEdit = (newCategoryName) => {
+    const updatedCategories = categories.map((category) =>
+      category === editCategoryName ? newCategoryName : category,
+    );
+    setCategories(updatedCategories);
+    setEditModalOpen(false);
   };
 
   return (
@@ -162,6 +178,7 @@ const Sidebar = () => {
                           onClose={() => setOpenDropdown(null)}
                           categoryName={category}
                           onBookmarkAdd={handleBookmarkAdd}
+                          onEditCategory={handleEditCategory}
                         />
                       )}
                     </CategoryItem>
@@ -221,6 +238,20 @@ const Sidebar = () => {
             </ModalContent>
           </ModalOverlay>
         )}
+        {/* 편집 모달 창 */}
+        {categories.map((category) => (
+          <Dropdown
+            key={category}
+            categoryName={category}
+            onEditCategory={handleEditCategory}
+          />
+        ))}
+        <EditCategoryModal
+          isOpen={isEditModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          initialCategoryName={editCategoryName}
+          onConfirm={handleConfirmEdit}
+        />
       </SideDiv>
     </StMainPage>
   );

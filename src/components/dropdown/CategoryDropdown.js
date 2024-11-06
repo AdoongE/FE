@@ -37,7 +37,13 @@ const Icons = styled(Icon)`
   margin-right: 17px;
 `;
 
-const Dropdown = ({ isOpen, onClose, categoryName, onBookmarkAdd }) => {
+const Dropdown = ({
+  isOpen,
+  onClose,
+  categoryName,
+  onBookmarkAdd,
+  onEditCategory,
+}) => {
   if (!isOpen) return null;
 
   const addBookmark = () => {
@@ -46,10 +52,12 @@ const Dropdown = ({ isOpen, onClose, categoryName, onBookmarkAdd }) => {
   };
 
   const handleEditCategory = () => {
+    onEditCategory(categoryName);
     onClose();
   };
 
   const handleDeleteCategory = () => {
+    onEditCategory(categoryName);
     onClose();
   };
 
@@ -76,6 +84,7 @@ Dropdown.propTypes = {
   onClose: PropTypes.func.isRequired,
   categoryName: PropTypes.string.isRequired,
   onBookmarkAdd: PropTypes.func.isRequired,
+  onEditCategory: PropTypes.func.isRequired,
 };
 
 export default Dropdown;

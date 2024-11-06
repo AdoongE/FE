@@ -59,10 +59,16 @@ const Sidebar = () => {
   };
 
   const handleConfirmEdit = (newCategoryName) => {
+    // '내 카테고리' - 카테고리 이름 편집
     const updatedCategories = categories.map((category) =>
       category === editCategoryName ? newCategoryName : category,
     );
     setCategories(updatedCategories);
+    // '북마크' - 카테고리 이름 편집
+    const updatedBookmarks = bookmarks.map((bookmark) =>
+      bookmark === editCategoryName ? newCategoryName : bookmark,
+    );
+    setBookmarks(updatedBookmarks);
     setEditModalOpen(false);
   };
 
@@ -145,6 +151,7 @@ const Sidebar = () => {
                         isBookmarked={bookmarks.includes(bookmark)}
                         onBookmarkAdd={handleBookmarkAdd}
                         onBookmarkRemove={handleBookmarkRemove}
+                        onEditCategory={handleEditCategory}
                       />
                     )}
                   </CategoryItem>

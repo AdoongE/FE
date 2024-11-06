@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
@@ -10,6 +10,12 @@ export const EditCategoryModal = ({
   onConfirm,
 }) => {
   const [newCategoryName, setNewCategoryName] = useState(initialCategoryName);
+
+  useEffect(() => {
+    if (isOpen) {
+      setNewCategoryName(initialCategoryName);
+    }
+  }, [isOpen, initialCategoryName]);
 
   if (!isOpen) return null;
 

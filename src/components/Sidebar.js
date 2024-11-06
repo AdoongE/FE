@@ -19,6 +19,7 @@ const Sidebar = () => {
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
+  const [hoveredBookdmarkIndex, setHoveredBookmarkIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
   const [categoryName, setCategoryName] = useState('');
@@ -29,7 +30,6 @@ const Sidebar = () => {
   const [editCategoryName, setEditCategoryName] = useState('');
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  // const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -156,11 +156,11 @@ const Sidebar = () => {
                 {bookmarks.map((bookmark, index) => (
                   <CategoryItem
                     key={index}
-                    onMouseEnter={() => setHoveredCategoryIndex(index)}
-                    onMouseLeave={() => setHoveredCategoryIndex(null)}
+                    onMouseEnter={() => setHoveredBookmarkIndex(index)}
+                    onMouseLeave={() => setHoveredBookmarkIndex(null)}
                   >
                     {bookmark}
-                    {hoveredCategoryIndex === index && (
+                    {hoveredBookdmarkIndex === index && (
                       <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
                         <MoreVertIcon />
                       </DotBox>
@@ -380,18 +380,6 @@ const Accordion = styled.div`
   margin-top: 32px;
 `;
 
-const AddIconWrapper = styled.div`
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  background-color: #9f9f9f;
-  color: #555;
-  margin-right: 13px;
-`;
-
 const AccordionTitle = styled.div`
   margin: 10px 21px;
   font-size: 20px;
@@ -408,9 +396,6 @@ const AccordionTitle = styled.div`
   &.category:hover {
     background-color: #dcdada;
     border-radius: 10px;
-  }
-  &:hover ${AddIconWrapper} {
-    display: flex;
   }
 `;
 
@@ -435,7 +420,6 @@ const AddButton = styled.div`
   height: 32px;
   background-color: #9f9f9f;
   border-radius: 7px;
-  /* margin-left: 8px; */
   position: absolute;
   right: 8px;
 `;

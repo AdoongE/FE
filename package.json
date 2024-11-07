@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.13.0",
     "@hookform/resolvers": "^3.9.1",
     "@iconify/react": "^5.0.2",
+    "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@testing-library/jest-dom": "^5.14.1",

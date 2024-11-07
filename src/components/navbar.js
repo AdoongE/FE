@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FaBell } from "react-icons/fa";
-import styled from "styled-components";
+import React, { useState, useEffect, useRef } from 'react';
+import { FaBell } from 'react-icons/fa';
+import styled from 'styled-components';
 
 const NavbarContainer = styled.div`
   display: flex;
@@ -46,8 +46,8 @@ const MenuButton = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
-  font-weight: ${(props) => (props.active ? "bold" : "normal")};
-  color: ${(props) => (props.active ? "#000" : "#666")};
+  font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
+  color: ${(props) => (props.active ? '#000' : '#666')};
 `;
 
 const ActiveBar = styled.div`
@@ -57,7 +57,9 @@ const ActiveBar = styled.div`
   position: absolute;
   top: 85px;
   left: ${(props) => props.left}px;
-  transition: width 0.3s ease, left 0.3s ease;
+  transition:
+    width 0.3s ease,
+    left 0.3s ease;
   z-index: 3;
 `;
 
@@ -100,7 +102,7 @@ const ProfileIcon = styled.div`
 `;
 
 function Navbar() {
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState('');
   const [activeBarWidth, setActiveBarWidth] = useState(0);
   const [activeBarLeft, setActiveBarLeft] = useState(0);
   const navbarMenuRef = useRef(null);
@@ -114,7 +116,7 @@ function Navbar() {
   };
 
   useEffect(() => {
-    const firstButton = navbarMenuRef.current.querySelector("button");
+    const firstButton = navbarMenuRef.current.querySelector('button');
     if (firstButton) {
       firstButton.click();
     }
@@ -128,20 +130,20 @@ function Navbar() {
       </LogoContainer>
       <NavbarMenu ref={navbarMenuRef}>
         <MenuButton
-          onClick={(e) => handleTabClick("모아보기", e)}
-          active={activeTab === "모아보기"}
+          onClick={(e) => handleTabClick('모아보기', e)}
+          active={activeTab === '모아보기'}
         >
           모아보기
         </MenuButton>
         <MenuButton
-          onClick={(e) => handleTabClick("관리하기", e)}
-          active={activeTab === "관리하기"}
+          onClick={(e) => handleTabClick('관리하기', e)}
+          active={activeTab === '관리하기'}
         >
           관리하기
         </MenuButton>
         <MenuButton
-          onClick={(e) => handleTabClick("탐색하기", e)}
-          active={activeTab === "탐색하기"}
+          onClick={(e) => handleTabClick('탐색하기', e)}
+          active={activeTab === '탐색하기'}
         >
           탐색하기
         </MenuButton>

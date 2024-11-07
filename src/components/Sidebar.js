@@ -31,6 +31,7 @@ const Sidebar = () => {
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
+  const [draggingIndex, setDraggingIndex] = useState(null);
 
   useEffect(() => {
     if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -71,12 +72,11 @@ const Sidebar = () => {
   };
 
   const handleConfirmEdit = (newCategoryName) => {
-    // '내 카테고리'에서 카테고리 이름 편집
     const updatedCategories = categories.map((category) =>
       category === editCategoryName ? newCategoryName : category,
     );
     setCategories(updatedCategories);
-    // '북마크'에서 카테고리 이름 편집
+
     const updatedBookmarks = bookmarks.map((bookmark) =>
       bookmark === editCategoryName ? newCategoryName : bookmark,
     );
@@ -110,17 +110,51 @@ const Sidebar = () => {
   };
 
   const handleConfirmRemove = (categoryName) => {
-    // 내 카테고리에서 삭제
     const updatedCategories = categories.filter(
       (category) => category !== categoryName,
     );
     setCategories(updatedCategories);
-    // 북마크에서 삭제
+
     const updatedBookmarks = bookmarks.filter(
       (bookmark) => bookmark !== categoryName,
     );
     setBookmarks(updatedBookmarks);
     setDeleteModalOpen(false);
+  };
+
+  // 드래그 앤 드롭
+  const onDragStart = (e, id, listType) => {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('index', String(id));
+    e.dataTransfer.setData('listType', listType);
+    setDraggingIndex(id);
+  };
+
+  const onDragDrop = (e, dropIndex, listType) => {
+    e.preventDefault();
+
+    const sourceIndex = Number(e.dataTransfer.getData('index'));
+    const sourceListType = e.dataTransfer.getData('listType');
+
+    if (sourceIndex === dropIndex && sourceListType === listType) return;
+
+    if (listType === 'categories') {
+      const updatedCategories = [...categories];
+      const [movedItem] = updatedCategories.splice(sourceIndex, 1);
+      updatedCategories.splice(dropIndex, 0, movedItem);
+      setCategories(updatedCategories);
+    } else if (listType === 'bookmarks') {
+      const updatedBookmarks = [...bookmarks];
+      const [movedItem] = updatedBookmarks.splice(sourceIndex, 1);
+      updatedBookmarks.splice(dropIndex, 0, movedItem);
+      setBookmarks(updatedBookmarks);
+    }
+
+    setDraggingIndex(null);
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -164,6 +198,11 @@ const Sidebar = () => {
                 )}
                 {bookmarks.map((bookmark, index) => (
                   <CategoryItem
+                    draggable
+                    onDragStart={(e) => onDragStart(e, index, 'bookmarks')}
+                    onDragOver={onDragOver}
+                    onDrop={(e) => onDragDrop(e, index, 'bookmarks')}
+                    active={draggingIndex === index}
                     key={index}
                     onMouseEnter={() => setHoveredBookmarkIndex(index)}
                     onMouseLeave={() => setHoveredBookmarkIndex(null)}
@@ -214,6 +253,11 @@ const Sidebar = () => {
                 <>
                   {categories.map((category, index) => (
                     <CategoryItem
+                      draggable
+                      onDragStart={(e) => onDragStart(e, index, 'categories')}
+                      onDragOver={onDragOver}
+                      onDrop={(e) => onDragDrop(e, index, 'categories')}
+                      active={draggingIndex === index}
                       key={index}
                       onMouseEnter={() => setHoveredCategoryIndex(index)}
                       onMouseLeave={() => setHoveredCategoryIndex(null)}
@@ -456,7 +500,10 @@ const CategoryItem = styled.button`
   width: 303px;
   height: 44px;
   &:hover {
-    background-color: #dcdada;
+    background-color: ${({ active }) => {
+      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
+    }};
+
     border-radius: 10px;
   }
 `;

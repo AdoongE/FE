@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import ContentHeader from '../components/ContentHeader';
 import ContentBox from '../components/ContentBox';
 import Navbar from '../components/Navbar';
@@ -9,24 +10,28 @@ const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9; // 페이지당 표시할 ContentBox 수
 
-  // 목데이터 생성
-  const mockData = Array.from({ length: 46 }, (_, i) => ({
-    id: i + 1,
-    title: `콘텐츠 ${i + 1}`,
-    description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
-    user: `사용자 ${i + 1}`,
-    category: `카테고리 ${(i % 5) + 1}`,
-  }));
+  const [contentBoxes, setContentBoxes] = useState([]); // API로부터 가져온 데이터
+  const [loading, setLoading] = useState(true); // 로딩 상태
 
-  // ContentBox 데이터를 동적으로 생성
-  const contentBoxes = mockData.map((data) => (
-    <ContentBox
-      key={data.id}
-      title={data.title}
-      user={data.user}
-      category={data.category}
-    />
-  ));
+  // API 호출 함수
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/api/v1/content', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // JWT 토큰 가져오기
+        },
+      });
+      setContentBoxes(response.data.results); // API 응답에서 결과 데이터 설정
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false); // 로딩 완료
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // 컴포넌트가 마운트될 때 데이터 가져오기
+  }, []);
 
   // 페이지 계산을 위한 totalPages 정의
   const totalPages = Math.ceil(contentBoxes.length / contentPerPage);
@@ -69,7 +74,18 @@ const MainPage = () => {
         </ContentHeaderArea>
 
         <ContentArea>
-          {displayedContentBoxes} {/*ContentBox 배열*/}
+          {loading ? (
+            <div>Loading...</div> // 로딩 중일 때 표시
+          ) : (
+            displayedContentBoxes.map((data) => (
+              <ContentBox
+                key={data.contentId} // API 데이터의 contentId 사용
+                title={data.contentName}
+                user={data.user} // API 데이터에서 사용자 이름
+                category={data.category} // API 데이터에서 카테고리 이름
+              />
+            ))
+          )}
         </ContentArea>
 
         <Pagination>
@@ -82,13 +98,13 @@ const MainPage = () => {
           </PageArrow>
 
           {/* 페이지 번호 */}
-          {getPaginationNumbers().map((pageNumber) => (
+          {Array.from({ length: totalPages }, (_, i) => (
             <PageNumber
-              key={pageNumber}
-              active={currentPage === pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
+              key={i + 1}
+              active={currentPage === i + 1}
+              onClick={() => handlePageChange(i + 1)}
             >
-              {pageNumber}
+              {i + 1}
             </PageNumber>
           ))}
 
@@ -123,7 +139,6 @@ const MainContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 45px;
   margin-top: 118px;
 `;
 
@@ -144,7 +159,7 @@ const Pagination = styled.div`
   justify-content: center;
   gap: 8px;
   margin-top: 110px;
-  padding-bottom: 58px;
+  margin-bottom: 58px;
 `;
 
 const PageArrow = styled.button`

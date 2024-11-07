@@ -61,7 +61,6 @@ const Option = styled.div`
 
 const Main = styled.div`
   position: relative;
-  padding-left: 45px;
   padding-top: 83px;
   padding-bottom: 70px;
 `;
@@ -71,7 +70,6 @@ const Title = styled.div`
   font-size: 44px;
   position: absolute;
   left: 0;
-  margin-left: 45px;
 `;
 
 const Filter = styled.div`

@@ -1,6 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell } from 'react-icons/fa';
 import styled from 'styled-components';
+
+// IconoirBell 컴포넌트를 Navbar 파일 안에서 정의
+function IconoirBell(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1.2em"
+      height="1.2em"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="none"
+        stroke="black"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M18 8.4c0-1.697-.632-3.325-1.757-4.525S13.59 2 12 2s-3.117.674-4.243 1.875C6.632 5.075 6 6.703 6 8.4C6 15.867 3 18 3 18h18s-3-2.133-3-9.6M13.73 21a2 2 0 0 1-3.46 0"
+      />
+    </svg>
+  );
+}
 
 const NavbarContainer = styled.div`
   display: flex;
@@ -9,7 +30,11 @@ const NavbarContainer = styled.div`
   height: 118px;
   border-bottom: 1px solid #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
   z-index: 2;
 `;
 
@@ -26,23 +51,23 @@ const LogoBox = styled.div`
 `;
 
 const Logo = styled.div`
-  margin-left: 20px;
-  margin-bottom: 12px;
+  margin-left: 16px;
   font-size: 40px;
   font-weight: bold;
 `;
 
 const NavbarMenu = styled.div`
   display: flex;
-  gap: 4vw;
-  margin-left: -16vw;
-  position: relative;
+  gap: 64px;
+  left: 398px;
+  position: fixed;
 `;
 
 const MenuButton = styled.button`
   color: #666;
-  padding: 0.75rem 1.25rem;
-  font-size: 1.5vw;
+  padding: 12px 20px;
+  font-size: 26px;
+  margin-left: 53px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -52,10 +77,11 @@ const MenuButton = styled.button`
 
 const ActiveBar = styled.div`
   width: ${(props) => props.width}px;
-  height: 0.45rem;
+  height: 7px;
+  weight: 100px;
   background-color: #41c3ab;
   position: absolute;
-  top: 85px;
+  top: 84px;
   left: ${(props) => props.left}px;
   transition:
     width 0.3s ease,
@@ -68,37 +94,26 @@ const NavbarRight = styled.div`
   align-items: center;
 `;
 
-const Icon = styled(FaBell)`
-  width: 1.56vw;
-  height: 1.56vw;
-  font-size: 1.2em;
-  color: #333;
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  cursor: pointer;
-`;
-
 const NewContentButton = styled.button`
   background-color: #41c3ab;
-  font-size: 0.92vw;
+  font-size: 15px;
   color: #fff;
   border: none;
-  width: 8.13vw;
-  height: 2.51vw;
-  border-radius: 2.52rem;
-  padding: 0.3rem;
-  margin-left: 1.04vw;
-  margin-right: 1.04vw;
+  width: 130px;
+  height: 40px;
+  border-radius: 40px;
+  padding: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
   cursor: pointer;
 `;
 
 const ProfileIcon = styled.div`
-  width: 2.5vw;
-  height: 2.5vw;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #ddd;
-  margin-right: 1rem;
+  margin-right: 16px;
 `;
 
 function Navbar() {
@@ -150,7 +165,7 @@ function Navbar() {
         <ActiveBar width={activeBarWidth} left={activeBarLeft} />
       </NavbarMenu>
       <NavbarRight>
-        <Icon />
+        <IconoirBell style={{ color: 'black' }} />
         <NewContentButton>+ 새 콘텐츠</NewContentButton>
         <ProfileIcon />
       </NavbarRight>

@@ -9,10 +9,26 @@ const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9; // 페이지당 표시할 ContentBox 수
 
+  // 목데이터 생성
+  const mockData = Array.from({ length: 23 }, (_, i) => ({
+    id: i + 1,
+    title: `콘텐츠 ${i + 1}`,
+    description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
+    user: `사용자 ${i + 1}`,
+    category: `카테고리 ${(i % 5) + 1}`,
+  }));
+
   // ContentBox 데이터를 동적으로 생성
-  const contentBoxes = Array.from({ length: 23 }, (_, i) => (
-    <ContentBox key={i} />
+  const contentBoxes = mockData.map((data) => (
+    <ContentBox
+      key={data.id}
+      title={data.title}
+      user={data.user}
+      category={data.category}
+    />
   ));
+
+  // 페이지 계산을 위한 totalPages 정의
   const totalPages = Math.ceil(contentBoxes.length / contentPerPage);
 
   // 현재 페이지에 맞는 ContentBox 목록 계산
@@ -41,7 +57,7 @@ const MainPage = () => {
         </ContentHeaderArea>
 
         <ContentArea>
-          {displayedContentBoxes.map((contentBox) => contentBox)}
+          {displayedContentBoxes} {/* displayedContentBoxes 사용 */}
         </ContentArea>
 
         <Pagination>
@@ -58,7 +74,7 @@ const MainPage = () => {
             <PageNumber
               key={i + 1}
               active={currentPage === i + 1}
-              onClick={() => setCurrentPage(i + 1)}
+              onClick={() => handlePageChange(i + 1)} // handlePageChange 사용
             >
               {i + 1}
             </PageNumber>
@@ -116,7 +132,7 @@ const Pagination = styled.div`
   justify-content: center;
   gap: 8px;
   margin-top: 110px;
-  margin-buttom: 58ox;
+  margin-bottom: 58px;
 `;
 
 const PageArrow = styled.button`

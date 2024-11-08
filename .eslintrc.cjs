@@ -5,11 +5,11 @@ module.exports = {
     es2021: true,
   },
   extends: [
+    'react-app',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended', // prettier 추가
-    'plugin:react-hooks/recommended',
   ],
   overrides: [],
   parserOptions: {

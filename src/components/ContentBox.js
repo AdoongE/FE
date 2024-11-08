@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 
-function ContentBox() {
+function ContentBox({ title, user, category }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
   const handleIconClick = () => {
@@ -37,12 +37,12 @@ function ContentBox() {
             onClick={handleIconClick}
           />
         </IconBox>
-        <ContentName>콘텐츠명</ContentName>
+        <ContentName>{title || '콘텐츠명'}</ContentName>
       </ContentTitle>
       <Filter>
-        <div>사용자 이름</div>
+        <div>{user || '사용자 이름'}</div>
         <div>|</div>
-        <div>카테고리명</div>
+        <div>{category || '카테고리명'}</div>
       </Filter>
     </Box>
   );

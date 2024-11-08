@@ -18,7 +18,13 @@ function SignupPage() {
   const [customOccupation, setCustomOccupation] = useState('');
   const [customField, setCustomField] = useState('');
   const navigate = useNavigate();
+  const [isClicked, setIsClicked] = useState(false);
 
+  const handleClick = () => {
+    if (!isClicked) {
+      setIsClicked(true);
+    }
+  };
   const handleChange1 = (event) => {
     setChecked([
       event.target.checked,
@@ -50,13 +56,19 @@ function SignupPage() {
       .required('닉네임은 필수 항목입니다.'),
     birthday: yup
       .string()
-      .matches(/^\d{4}-\d{2}-\d{2}$/)
+      .matches(/^\d{4}-\d{2}-\d{2}$/, '생년원일은 필수 항목입니다.')
       .required('생년원일은 필수 항목입니다.'),
     gender: yup.string().required('성별은 필수 항목입니다.'),
     occupation: yup.string(),
     field: yup.string(),
-    consentToTermsOfService: yup.boolean().required(),
-    consentToPersonalInformation: yup.boolean().required(),
+    consentToTermsOfService: yup
+      .boolean()
+      .oneOf([true], '서비스 이용약관에 동의해야 합니다.'),
+
+    consentToPersonalInformation: yup
+      .boolean()
+      .oneOf([true], '개인정보 수집 및 이용에 동의해야 합니다.'),
+
     consentToMarketingAndAds: yup.boolean(),
   });
 
@@ -66,7 +78,8 @@ function SignupPage() {
     control,
     watch,
     setValue,
-    formState: { isValid, errors },
+    trigger,
+    formState: { isValid, errors, touchedFields },
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
@@ -81,7 +94,10 @@ function SignupPage() {
     setValue('consentToTermsOfService', checked[0]);
     setValue('consentToPersonalInformation', checked[1]);
     setValue('consentToMarketingAndAds', checked[2]);
-  }, [checked, setValue]);
+    if (isClicked) {
+      trigger();
+    } // 유효성 검사 강제 트리거
+  }, [checked, setValue, trigger, isClicked]);
 
   const onSubmit = async (data) => {
     const formData = {
@@ -124,18 +140,28 @@ function SignupPage() {
                 type={'text'}
                 {...register('nickname')}
                 placeholder="닉네임을 입력하세요."
+                onClick={handleClick}
               />
-              <Error>{errors.nickname?.message}</Error>
+              {errors.nickname && touchedFields.nickname && (
+                <Error>{errors.nickname?.message}</Error>
+              )}
             </Option>
             <Option>
               <Name>생년원일 *</Name>
-              <Date type="date" {...register('birthday')} />
-              <Error>{errors.birthday?.message}</Error>
+              <Date
+                onClick={handleClick}
+                type="date"
+                {...register('birthday')}
+              />
+              {errors.birthday && touchedFields.birthday && (
+                <Error>{errors.birthday?.message}</Error>
+              )}
             </Option>
             <Option>
               <Name>성별 *</Name>
 
               <Controller
+                onClick={handleClick}
                 name="gender"
                 control={control}
                 defaultValue={''}
@@ -146,8 +172,8 @@ function SignupPage() {
                       value={field.value}
                       $isSelected={field.value === 'MALE'}
                       onClick={() => field.onChange('MALE')}
-                      error={fieldState.error ? true : undefined}
-                      helperText={fieldState.error && fieldState.error.message}
+                      $error={fieldState.error ? true : undefined}
+                      $helperText={fieldState.error && fieldState.error.message}
                     >
                       남자
                     </GenderChoice>
@@ -156,15 +182,17 @@ function SignupPage() {
                       value={field.value}
                       $isSelected={field.value === 'FEMALE'}
                       onClick={() => field.onChange('FEMALE')}
-                      error={fieldState.error ? true : undefined}
-                      helperText={fieldState.error && fieldState.error.message}
+                      $error={fieldState.error ? true : undefined}
+                      $helperText={fieldState.error && fieldState.error.message}
                     >
                       여자
                     </GenderChoice>
                   </Gender>
                 )}
               />
-              <Error>{errors.gender?.message}</Error>
+              {errors.gender && touchedFields.gender && (
+                <Error>{errors.gender?.message}</Error>
+              )}
             </Option>
             <Option>
               <Name>직업</Name>
@@ -176,8 +204,8 @@ function SignupPage() {
                   render={({ field, fieldState }) => (
                     <SingleSelectPlaceholder
                       label="occupation"
-                      error={fieldState.error ? true : undefined}
-                      helperText={fieldState.error && fieldState.error.message}
+                      $error={fieldState.error ? true : undefined}
+                      $helperText={fieldState.error && fieldState.error.message}
                       value={isOtherSelected ? '' : field.value}
                       onChange={(value) => {
                         if (value === '기타(직접 입력)') {
@@ -212,8 +240,8 @@ function SignupPage() {
                   render={({ field, fieldState }) => (
                     <FieldSelectPlaceholder
                       label="field"
-                      error={fieldState.error ? true : undefined}
-                      helperText={fieldState.error && fieldState.error.message}
+                      $error={fieldState.error ? true : undefined}
+                      $helperText={fieldState.error && fieldState.error.message}
                       value={isFieldOther ? '' : field.value}
                       onChange={(value) => {
                         if (value === '기타(직접 입력)') {
@@ -324,6 +352,7 @@ function SignupPage() {
 const Error = styled.div`
   color: red;
   font-size: 18px;
+  transform: translateY(-7px);
 `;
 
 const Date = styled.input`

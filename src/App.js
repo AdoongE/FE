@@ -1,6 +1,6 @@
 import { StyledEngineProvider } from '@mui/material';
 import './App.css';
-import Router from './routes/router';
+import Router from './routes/Router';
 import GlobalStyle from './styles/GlobalStyle';
 
 function App() {

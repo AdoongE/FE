@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import ContentHeader from '../components/ContentHeader';
-import ContentBox from '../components/ContentBox';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import ContentHeader from '../components/ContentHeader';
+import ContentBox from '../components/ContentBox';
 
 const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1);

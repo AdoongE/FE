@@ -11,7 +11,7 @@ import Dropdown from '../components/dropdown/CategoryDropdown';
 import { Icon } from '@iconify/react';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
-// import axios from 'axios';
+import axios from 'axios';
 
 const Sidebar = () => {
   const [activeButton, setActiveButton] = useState('collect');
@@ -20,7 +20,7 @@ const Sidebar = () => {
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
-  const [hoveredBookdmarkIndex, setHoveredBookmarkIndex] = useState(null);
+  const [hoveredBookmarkIndex, setHoveredBookmarkIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
   const [categoryName, setCategoryName] = useState('');
@@ -34,30 +34,97 @@ const Sidebar = () => {
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [draggingIndex, setDraggingIndex] = useState(null);
 
-  // const createCategory = async (categoryName, visibility) => {
-  //   try {
-  //     const token = 'YOUR_JWT_TOKEN'; // 로그인 시 발급받은 JWT 토큰을 여기에 넣으세요.
-  //     const response = await axios.post(
-  //       '/api/v1/category', //API 경로
-  //       {
-  //         categoryName,
-  //         visibility,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-  //     if (response.status === 200) {
-  //       console.log('카테고리 생성 성공');
-  //     } else {
-  //       console.error('카테고리 생성 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 발생:', error);
-  //   }
-  // };
+  const createCategory = async (categoryName, visibility) => {
+    try {
+      const token = 'YOUR_JWT_TOKEN'; // 로그인 시 발급받은 JWT 토큰
+      await axios.post(
+        '/api/v1/category', // API 경로
+        {
+          categoryName,
+          visibility,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCategories((prevCategories) => [...prevCategories, categoryName]); // 카테고리 추가
+    } catch (error) {
+      console.error('카테고리 추가 중 에러 발생:', error);
+    }
+  };
+
+  const handleConfirm = () => {
+    const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
+    createCategory(newCategoryName, isPublic); // API 호출
+    closeModal();
+  };
+
+  const handleConfirmEdit = async (newCategoryName) => {
+    try {
+      const token = 'YOUR_JWT_TOKEN'; // JWT 토큰
+      await axios.put(
+        `/api/v1/category/${editCategoryName}`, // 카테고리 수정 API 경로
+        {
+          newCategoryName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updatedCategories = categories.map((category) =>
+        category === editCategoryName ? newCategoryName : category
+      );
+      setCategories(updatedCategories);
+      setEditModalOpen(false);
+    } catch (error) {
+      console.error('카테고리 수정 중 에러 발생:', error);
+    }
+  };
+
+  const handleBookmarkAdd = async (categoryName) => {
+    try {
+      const token = 'YOUR_JWT_TOKEN'; // JWT 토큰
+      await axios.post(
+        '/api/v1/bookmark', // 북마크 추가 API 경로
+        {
+          categoryName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setBookmarks((prevBookmarks) => [...prevBookmarks, categoryName]); // 북마크 추가
+      setIsAddingBookmark(true);
+    } catch (error) {
+      console.error('북마크 추가 중 에러 발생:', error);
+    }
+  };
+
+  const handleRemoveCategory = async (categoryNameToRemove) => {
+    try {
+      const token = 'YOUR_JWT_TOKEN'; // JWT 토큰
+      await axios.delete(
+        `/api/v1/category/${categoryNameToRemove}`, // 카테고리 삭제 API 경로
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCategories((prevCategories) => 
+        prevCategories.filter(category => category !== categoryNameToRemove)
+      );
+      setDeleteModalOpen(false); // 모달 닫기
+    } catch (error) {
+      console.error('카테고리 삭제 중 에러 발생:', error);
+    }
+  };
 
   useEffect(() => {
     if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -74,113 +141,10 @@ const Sidebar = () => {
     setIsModalOpen(true);
     setIsCategoryOpen(true);
   };
+  
   const closeModal = () => {
     setIsModalOpen(false);
     setCategoryName('');
-  };
-
-  const handleConfirm = () => {
-    const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
-    setCategories([...categories, newCategoryName]); // 카테고리 추가
-    closeModal();
-  };
-
-  const handleBookmarkAdd = (categoryName) => {
-    if (!bookmarks.includes(categoryName)) {
-      setBookmarks([...bookmarks, categoryName]);
-    }
-    setIsAddingBookmark(true);
-  };
-
-  const handleEditCategory = (categoryName) => {
-    setEditCategoryName(categoryName);
-    setEditModalOpen(true);
-  };
-
-  const handleConfirmEdit = (newCategoryName) => {
-    const updatedCategories = categories.map((category) =>
-      category === editCategoryName ? newCategoryName : category,
-    );
-    setCategories(updatedCategories);
-
-    const updatedBookmarks = bookmarks.map((bookmark) =>
-      bookmark === editCategoryName ? newCategoryName : bookmark,
-    );
-    setBookmarks(updatedBookmarks);
-    setEditModalOpen(false);
-  };
-
-  const handleBookmarkDotBoxClick = (index) => {
-    setOpenBookmarkDropdowns((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
-  };
-
-  const handleBookmarkCloseDropdown = (index) => {
-    setOpenBookmarkDropdowns((prev) => ({
-      ...prev,
-      [index]: false,
-    }));
-  };
-
-  const handleBookmarkRemove = (category) => {
-    setBookmarks((prevBookmarks) =>
-      prevBookmarks.filter((item) => item !== category),
-    );
-  };
-
-  const handleRemoveCategory = (categoryNameToRemove) => {
-    setCategoryName(categoryNameToRemove);
-    setDeleteModalOpen(true); // 모달 열기
-  };
-
-  const handleConfirmRemove = (categoryName) => {
-    const updatedCategories = categories.filter(
-      (category) => category !== categoryName,
-    );
-    setCategories(updatedCategories);
-
-    const updatedBookmarks = bookmarks.filter(
-      (bookmark) => bookmark !== categoryName,
-    );
-    setBookmarks(updatedBookmarks);
-    setDeleteModalOpen(false);
-  };
-
-  // 드래그 앤 드롭
-  const onDragStart = (e, id, listType) => {
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('index', String(id));
-    e.dataTransfer.setData('listType', listType);
-    setDraggingIndex(id);
-  };
-
-  const onDragDrop = (e, dropIndex, listType) => {
-    e.preventDefault();
-
-    const sourceIndex = Number(e.dataTransfer.getData('index'));
-    const sourceListType = e.dataTransfer.getData('listType');
-
-    if (sourceIndex === dropIndex && sourceListType === listType) return;
-
-    if (listType === 'categories') {
-      const updatedCategories = [...categories];
-      const [movedItem] = updatedCategories.splice(sourceIndex, 1);
-      updatedCategories.splice(dropIndex, 0, movedItem);
-      setCategories(updatedCategories);
-    } else if (listType === 'bookmarks') {
-      const updatedBookmarks = [...bookmarks];
-      const [movedItem] = updatedBookmarks.splice(sourceIndex, 1);
-      updatedBookmarks.splice(dropIndex, 0, movedItem);
-      setBookmarks(updatedBookmarks);
-    }
-
-    setDraggingIndex(null);
-  };
-
-  const onDragOver = (e) => {
-    e.preventDefault();
   };
 
   return (

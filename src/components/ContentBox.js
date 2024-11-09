@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 
-function ContentBox({ title, user, category }) {
+function ContentBox({ title, user, category, tags, dDay }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
   const handleIconClick = () => {
@@ -13,17 +13,18 @@ function ContentBox({ title, user, category }) {
   return (
     <Box>
       <ImageBox>
-        <Dday>D-365</Dday>
-        {/* 나중에 디데이 값 속성으로 주시면 될거 같습니다 */}
-        {/* <Dday>D-${date}</Dday> */}
+        {dDay <= 0 && (
+          <Dday dDay={dDay}>{`D-${dDay === 0 ? 'DAY' : Math.abs(dDay)}`}</Dday>
+        )}
         <Dropdown>
           <ContentDropdown />
         </Dropdown>
       </ImageBox>
-      <Tags>
-        <Tag>#태그1</Tag>
-        <Tag>#태그24324</Tag>
-      </Tags>
+      <TagContainer>
+        {tags.map((tag, index) => (
+          <Tag key={index}>{tag}</Tag>
+        ))}
+      </TagContainer>
       <ContentTitle>
         <IconBox>
           <Icon
@@ -109,23 +110,25 @@ const Dday = styled.div`
   text-align: center;
   color: black;
 
-  /* 넣는 디데이 값마다 배경색 다르도록 설정했습니다. */
-  /* background-color: ${(props) =>
-    props.date === 1 || props.date === 2 || props.date === 3
-      ? 'white'
-      : props.date === 'DAY'
-        ? '#9AE4D6'
-        : '#DCDADA'}; */
+  background-color: ${({ dDay }) =>
+    dDay === 0
+      ? '#9AE4D6' // D-DAY 색상
+      : dDay === -1 || dDay === -2 || dDay === -3
+        ? '#DCDADA' // D-1, D-2, D-3 색상
+        : dDay <= -4
+          ? '#FFFFFF' // D-4 이하 색상
+          : 'transparent'};
+`;
 
-  /* 일단 임시로 지정한거라, 나중에 이 코드는 지우시면 될거 같아요. */
-  background-color: white;
+const TagContainer = styled.div`
+  display: flex;
+  gap: 8px;
 `;
 
 const Tag = styled.button`
   width: fit-content;
   height: fit-content;
   border: 0;
-
   border-radius: 50px;
   opacity: 80%;
   background-color: white;
@@ -137,12 +140,6 @@ const Tag = styled.button`
   align-items: center;
   justify-content: center;
   color: black;
-`;
-
-const Tags = styled.div`
-  display: flex;
-  column-gap: 8px;
-  flex-wrap: wrap;
 `;
 
 const ContentTitle = styled.div`

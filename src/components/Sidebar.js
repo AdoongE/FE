@@ -13,8 +13,7 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 // import axios from 'axios';
 
-const Sidebar = () => {
-  const [activeButton, setActiveButton] = useState('collect');
+const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
@@ -65,6 +64,10 @@ const Sidebar = () => {
       setHoveredBookmarkIndex(null);
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
+
+  useEffect(() => {
+    setActiveTab('모아보기');
+  }, [setActiveTab]);
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -183,29 +186,33 @@ const Sidebar = () => {
     e.preventDefault();
   };
 
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+  };
+
   return (
     <StMainPage>
       <SideDiv>
         <BtnDiv>
           <CollectBtn
-            active={activeButton === 'collect'}
-            onClick={() => setActiveButton('collect')}
+            active={activeTab === '모아보기'}
+            onClick={() => handleTabClick('모아보기')}
           >
             <ImgIcon src={seedIcon} alt="seed icon" />
             모아보기
           </CollectBtn>
           <ManageBtn
-            active={activeButton === 'manage'}
-            onClick={() => setActiveButton('manage')}
+            active={activeTab === '관리하기'}
+            onClick={() => handleTabClick('관리하기')}
           >
-            <ImgIcon src={treeIcon} alt="seed icon" />
+            <ImgIcon src={treeIcon} alt="tree icon" />
             관리하기
           </ManageBtn>
           <ExploreBtn
-            active={activeButton === 'explore'}
-            onClick={() => setActiveButton('explore')}
+            active={activeTab === '탐색하기'}
+            onClick={() => handleTabClick('탐색하기')}
           >
-            <ImgIcon src={forestIcon} alt="seed icon" />
+            <ImgIcon src={forestIcon} alt="forest icon" />
             탐색하기
           </ExploreBtn>
         </BtnDiv>

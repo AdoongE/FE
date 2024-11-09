@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
+import defaultImage from '../assets/icons/seed_contentbox.png';
 
-function ContentBox({ title, user, category, tags, dDay }) {
+function ContentBox({ title, user, category, tags, dDay, thumbnailImage }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
   const handleIconClick = () => {
@@ -13,6 +14,10 @@ function ContentBox({ title, user, category, tags, dDay }) {
   return (
     <Box>
       <ImageBox>
+        <ContentImage
+          src={thumbnailImage || defaultImage}
+          alt="content thumbnail"
+        />
         {dDay <= 0 && (
           <Dday dDay={dDay}>{`D-${dDay === 0 ? 'DAY' : Math.abs(dDay)}`}</Dday>
         )}
@@ -67,6 +72,7 @@ const Filter = styled.div`
 const Box = styled.div`
   width: 440px;
   height: 387px;
+  z-index: 0;
 `;
 
 const ImageBox = styled.div`
@@ -76,6 +82,17 @@ const ImageBox = styled.div`
   border-radius: 10px;
   position: relative;
   margin-bottom: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ContentImage = styled.img`
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  opacity: 0.2;
 `;
 
 const IconBox = styled.div`

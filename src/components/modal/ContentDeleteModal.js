@@ -26,7 +26,7 @@ const ContentDeleteModal = forwardRef((props, ref) => {
         dialogElement.removeEventListener('click', handleClickOutside);
       };
     }
-  }, []);
+  }, [ref]);
 
   return (
     <Dialog ref={ref}>

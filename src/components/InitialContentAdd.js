@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import checkIcon from '../assets/icons/Check.png';
 import { FaArrowRight } from 'react-icons/fa';
+import { Icon } from '@iconify/react';
 
 const InitialContentAdd = ({ onContentSelect }) => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCheckboxChange = (event) => {
     const option = event.target.name;
@@ -14,9 +15,11 @@ const InitialContentAdd = ({ onContentSelect }) => {
     onContentSelect(option === selectedOption ? null : option);
   };
 
-  const navigate = useNavigate();
-  const handleGoBack = () => {
-    navigate(-1); // 이전 페이지 이동
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleConfirm = () => {
+    window.history.back(); // 이전 페이지로 이동
   };
 
   return (
@@ -55,11 +58,33 @@ const InitialContentAdd = ({ onContentSelect }) => {
         </Group>
       </LeftDiv>
       <RightDiv>
-        <Button onClick={handleGoBack}>
+        <Button onClick={openModal}>
           나가기
           <ArrowIcon />
         </Button>
       </RightDiv>
+      {isModalOpen && (
+        <ModalOverlay>
+          <ModalContent>
+            <Icon
+              icon="ph:warning-circle-thin"
+              width="148"
+              height="148"
+              style={{ color: '#41c3ab', marginBottom: 34 }}
+            />
+            <ModalTitle>지금 나가시겠습니까?</ModalTitle>
+            <ModalText>지금까지 설정한 모든 항목이 초기화됩니다.</ModalText>
+            <ButtonContainer>
+              <ModalButton className="no" onClick={closeModal}>
+                취소
+              </ModalButton>
+              <ModalButton className="ok" onClick={handleConfirm}>
+                확인
+              </ModalButton>
+            </ButtonContainer>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </MainDiv>
   );
 };
@@ -158,6 +183,69 @@ const ArrowIcon = styled(FaArrowRight)`
   font-size: 24px;
   color: #4f4f4f;
   transform: scale(0.7);
+`;
+
+// 모달 관련 스타일
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  border-radius: 50px;
+  width: 56.25rem;
+  height: 32.438rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 40px;
+  font-weight: 850;
+  font-family: 'Pretendard-Regular';
+  margin-bottom: 0.625rem;
+`;
+
+const ModalText = styled.h2`
+  font-size: 26px;
+  color: #4f4f4f;
+  font-family: 'Pretendard-Regular';
+  margin-bottom: 1.875rem;
+  text-align: center;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const ModalButton = styled.button`
+  height: 3.75rem;
+  width: 9.125rem;
+  font-size: 22px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  &.ok {
+    background-color: #41c3ab;
+    color: white;
+  }
+  &.no {
+    background-color: #f2f2f2;
+    color: black;
+  }
 `;
 
 export default InitialContentAdd;

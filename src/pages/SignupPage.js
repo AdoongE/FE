@@ -52,7 +52,6 @@ function SignupPage() {
         /^[가-힣a-zA-Z0-9\s]{1,10}$/,
         '닉네임은 공백 포함 10자 이내로 가능합니다.',
       )
-      // .max(10)
       .required('닉네임은 필수 항목입니다.'),
     birthday: yup
       .string()
@@ -76,7 +75,7 @@ function SignupPage() {
     register,
     handleSubmit,
     control,
-    watch,
+    // watch,
     setValue,
     trigger,
     formState: { isValid, errors, touchedFields },
@@ -108,19 +107,24 @@ function SignupPage() {
     };
     console.log('폼 데이터 제출:', formData);
 
-    const result = await SignUpHandler(formData); // API 호출
-
-    if (result?.data?.status?.code === 200) {
-      navigate('/main'); // 성공 시 페이지 이동
-    } else {
-      alert(`회원가입 실패: ${result?.data?.status?.code}`);
+    try {
+      const result = await SignUpHandler(formData); // API 호출
+      if (result?.data?.status?.code === 200) {
+        alert('회원가입 성공: ' + result.data.status.message);
+        navigate('/main'); // 성공 시 페이지 이동
+      }
+    } catch (error) {
+      // 에러 발생 시 에러 메시지를 경고창으로 표시
+      alert(
+        `회원가입 실패: ${error.message || '알 수 없는 오류가 발생했습니다.'}`,
+      );
     }
   };
 
-  const formValues = watch();
-  useEffect(() => {
-    console.log('현재 폼 값:', formValues);
-  }, [formValues]);
+  // const formValues = watch();
+  // useEffect(() => {
+  //   console.log('현재 폼 값:', formValues);
+  // }, [formValues]);
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>

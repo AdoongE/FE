@@ -6,12 +6,11 @@ import SplashPage from '../pages/SplashPage';
 import KakaoRedirect from '../components/api/KakaoRedirect';
 import SignupPage from '../pages/SignupPage';
 import AddContent from '../components/AddContent';
-
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SplashPage />} />
+        {<Route path="/" element={<SplashPage />} />}
         <Route path="/main" element={<MainPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/kakao/callback" element={<KakaoRedirect />} />

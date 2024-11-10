@@ -68,10 +68,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     setActiveTab('모아보기');
   }, [setActiveTab]);
 
-  const handleToggle = () => {
-    setIsPublic(!isPublic);
-  };
-
   const openModal = () => {
     setIsModalOpen(true);
     setIsCategoryOpen(true);

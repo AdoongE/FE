@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
-function ContentHeader() {
+function ContentHeader({ setSortOrder }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
 
   const handleFilterClick = (filterOption) => {
     setSelectedFilter(filterOption);
+    setSortOrder(filterOption);
   };
 
   return (
@@ -94,6 +95,7 @@ const SearchContainer = styled.div`
 
   justify-content: space-around;
   align-items: center;
+  z-index: 0;
 `;
 
 const Search = styled.input`

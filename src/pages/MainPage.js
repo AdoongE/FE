@@ -1,53 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ContentHeader from '../components/ContentHeader';
 import ContentBox from '../components/ContentBox';
+import ContentBlank from '../components/ContentBlank';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
 const MainPage = () => {
+  const [sortOrder, setSortOrder] = useState('최신순');
   const [currentPage, setCurrentPage] = useState(1);
-  const contentPerPage = 9; // 페이지당 표시할 ContentBox 수
+  const [sortedData, setSortedData] = useState([]);
+  const contentPerPage = 9;
+  const [activeTab, setActiveTab] = useState('모아보기');
 
-  // 목데이터 생성
-  const mockData = Array.from({ length: 46 }, (_, i) => ({
-    id: i + 1,
-    title: `콘텐츠 ${i + 1}`,
-    description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
-    user: `사용자 ${i + 1}`,
-    category: `카테고리 ${(i % 5) + 1}`,
-  }));
+  // //목데이터
+  // const [mockData] = useState(
+  //   Array.from({ length: 46 }, (_, i) => ({
+  //     id: i + 1,
+  //     title: `콘텐츠 ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
+  //     description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
+  //     user: `사용자 ${i + 1}`,
+  //     category: `카테고리 ${(i % 5) + 1}`,
+  //     tags: Array.from(
+  //       { length: Math.floor(Math.random() * 3) + 1 },
+  //       (_, j) => `태그 ${j + 1}`,
+  //     ),
+  //     dDay: Math.floor(Math.random() * 366) * -1,
+  //     createdAt: new Date(
+  //       Date.now() - Math.floor(Math.random() * 365) * 86400000,
+  //     ),
+  //   })),
+  // );
 
-  // ContentBox 데이터를 동적으로 생성
-  const contentBoxes = mockData.map((data) => (
-    <ContentBox
-      key={data.id}
-      title={data.title}
-      user={data.user}
-      category={data.category}
-    />
-  ));
+  //빈콘텐츠 화면용 목데이터
+  const [mockData] = useState([]);
 
-  // 페이지 계산을 위한 totalPages 정의
-  const totalPages = Math.ceil(contentBoxes.length / contentPerPage);
+  useEffect(() => {
+    const sorted = [...mockData].sort((a, b) => {
+      if (sortOrder === '최신순') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      if (sortOrder === '이름순') {
+        return a.title.localeCompare(b.title);
+      }
+      return 0;
+    });
+    setSortedData(sorted);
+  }, [sortOrder, mockData]);
 
-  // 현재 페이지에 맞는 ContentBox 목록 계산
-  const displayedContentBoxes = contentBoxes.slice(
+  const displayedContentBoxes = sortedData.slice(
     (currentPage - 1) * contentPerPage,
     currentPage * contentPerPage,
   );
 
-  // 페이지 변경 함수
   const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
+    if (
+      newPage >= 1 &&
+      newPage <= Math.ceil(mockData.length / contentPerPage)
+    ) {
       setCurrentPage(newPage);
     }
   };
 
-  // 페이지 번호를 계산하여 반환하는 함수
+  const totalPages = Math.ceil(mockData.length / contentPerPage);
+
   const getPaginationNumbers = () => {
-    const startPage = Math.max(1, currentPage - 4); // 현재 페이지 기준으로 4페이지 앞
-    const endPage = Math.min(startPage + 4, totalPages); // 최대 5페이지 표시
+    if (sortedData.length === 0) {
+      // 빈 콘텐츠일 경우 <1>만 반환
+      return [1];
+    }
+
+    const startPage = Math.max(1, currentPage - 4);
+    const endPage = Math.min(startPage + 4, totalPages);
 
     const pages = [];
     for (let i = startPage; i <= endPage; i++) {
@@ -58,41 +82,44 @@ const MainPage = () => {
 
   return (
     <MainContainer>
-      <Navbar />
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SidebarContainer>
-        <Sidebar />
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </SidebarContainer>
-
       <MainContent>
-        <ContentHeaderArea>
-          <ContentHeader />
-        </ContentHeaderArea>
-
-        <ContentArea>
-          {displayedContentBoxes} {/*ContentBox 배열*/}
+        <ContentHeader setSortOrder={setSortOrder} />
+        <ContentArea isBlank={sortedData.length === 0}>
+          {sortedData.length === 0 ? (
+            <ContentBlank />
+          ) : (
+            displayedContentBoxes.map((data) => (
+              <ContentBox
+                key={data.id}
+                title={data.title}
+                user={data.user}
+                category={data.category}
+                tags={data.tags}
+                dDay={data.dDay}
+              />
+            ))
+          )}
         </ContentArea>
-
         <Pagination>
-          {/* 이전 페이지 버튼 */}
           <PageArrow
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
             {'<'}
           </PageArrow>
-
-          {/* 페이지 번호 */}
-          {getPaginationNumbers().map((pageNumber) => (
+          {getPaginationNumbers().map((page) => (
             <PageNumber
-              key={pageNumber}
-              active={currentPage === pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
+              key={page}
+              active={currentPage === page}
+              onClick={() => handlePageChange(page)}
             >
-              {pageNumber}
+              {page}
             </PageNumber>
           ))}
-
-          {/* 다음 페이지 버튼 */}
           <PageArrow
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
@@ -127,16 +154,16 @@ const MainContent = styled.div`
   margin-top: 118px;
 `;
 
-const ContentHeaderArea = styled.div`
-  padding: 20px;
-  margin-left: 45px;
-`;
-
 const ContentArea = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: ${({ isBlank }) => (isBlank ? 'flex' : 'grid')};
+  grid-template-columns: ${({ isBlank }) =>
+    isBlank ? 'none' : 'repeat(3, 1fr)'};
+  align-items: ${({ isBlank }) => (isBlank ? 'center' : 'start')};
+  justify-content: ${({ isBlank }) => (isBlank ? 'center' : 'stretch')};
   gap: 20px;
-  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 118px 0;
 `;
 
 const Pagination = styled.div`

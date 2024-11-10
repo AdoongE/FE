@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
-function Navbar() {
-  const [activeTab, setActiveTab] = useState('');
+function Navbar({ activeTab, setActiveTab }) {
   const [activeBarWidth, setActiveBarWidth] = useState(0);
   const [activeBarLeft, setActiveBarLeft] = useState(0);
   const navbarMenuRef = useRef(null);
@@ -23,11 +22,15 @@ function Navbar() {
   };
 
   useEffect(() => {
-    const firstButton = navbarMenuRef.current.querySelector('button');
-    if (firstButton) {
-      firstButton.click();
+    const activeButton = navbarMenuRef.current.querySelector(
+      `[data-tab="${activeTab}"]`,
+    );
+    if (activeButton) {
+      const { offsetWidth, offsetLeft } = activeButton;
+      setActiveBarWidth(offsetWidth);
+      setActiveBarLeft(offsetLeft);
     }
-  }, []);
+  }, [activeTab]);
 
   return (
     <NavbarContainer>
@@ -37,18 +40,21 @@ function Navbar() {
       </LogoContainer>
       <NavbarMenu ref={navbarMenuRef}>
         <MenuButton
+          data-tab="모아보기"
           onClick={(e) => handleTabClick('모아보기', e)}
           active={activeTab === '모아보기'}
         >
           모아보기
         </MenuButton>
         <MenuButton
+          data-tab="관리하기"
           onClick={(e) => handleTabClick('관리하기', e)}
           active={activeTab === '관리하기'}
         >
           관리하기
         </MenuButton>
         <MenuButton
+          data-tab="탐색하기"
           onClick={(e) => handleTabClick('탐색하기', e)}
           active={activeTab === '탐색하기'}
         >

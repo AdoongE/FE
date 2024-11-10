@@ -47,7 +47,7 @@ const Sidebar = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       setCategories((prevCategories) => [...prevCategories, categoryName]); // 카테고리 추가
     } catch (error) {
@@ -73,10 +73,10 @@ const Sidebar = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       const updatedCategories = categories.map((category) =>
-        category === editCategoryName ? newCategoryName : category
+        category === editCategoryName ? newCategoryName : category,
       );
       setCategories(updatedCategories);
       setEditModalOpen(false);
@@ -97,7 +97,7 @@ const Sidebar = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       setBookmarks((prevBookmarks) => [...prevBookmarks, categoryName]); // 북마크 추가
       setIsAddingBookmark(true);
@@ -115,10 +115,10 @@ const Sidebar = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
-      setCategories((prevCategories) => 
-        prevCategories.filter(category => category !== categoryNameToRemove)
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) => category !== categoryNameToRemove),
       );
       setDeleteModalOpen(false); // 모달 닫기
     } catch (error) {
@@ -141,7 +141,7 @@ const Sidebar = () => {
     setIsModalOpen(true);
     setIsCategoryOpen(true);
   };
-  
+
   const closeModal = () => {
     setIsModalOpen(false);
     setCategoryName('');

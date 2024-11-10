@@ -13,27 +13,27 @@ const MainPage = () => {
   const contentPerPage = 9;
   const [activeTab, setActiveTab] = useState('모아보기');
 
-  //목데이터
-  const [mockData] = useState(
-    Array.from({ length: 46 }, (_, i) => ({
-      id: i + 1,
-      title: `콘텐츠 ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
-      description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
-      user: `사용자 ${i + 1}`,
-      category: `카테고리 ${(i % 5) + 1}`,
-      tags: Array.from(
-        { length: Math.floor(Math.random() * 3) + 1 },
-        (_, j) => `태그 ${j + 1}`,
-      ),
-      dDay: Math.floor(Math.random() * 366) * -1,
-      createdAt: new Date(
-        Date.now() - Math.floor(Math.random() * 365) * 86400000,
-      ),
-    })),
-  );
+  // //목데이터
+  // const [mockData] = useState(
+  //   Array.from({ length: 46 }, (_, i) => ({
+  //     id: i + 1,
+  //     title: `콘텐츠 ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
+  //     description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
+  //     user: `사용자 ${i + 1}`,
+  //     category: `카테고리 ${(i % 5) + 1}`,
+  //     tags: Array.from(
+  //       { length: Math.floor(Math.random() * 3) + 1 },
+  //       (_, j) => `태그 ${j + 1}`,
+  //     ),
+  //     dDay: Math.floor(Math.random() * 366) * -1,
+  //     createdAt: new Date(
+  //       Date.now() - Math.floor(Math.random() * 365) * 86400000,
+  //     ),
+  //   })),
+  // );
 
   //빈콘텐츠 화면용 목데이터
-  // const [mockData] = useState([]);
+  const [mockData] = useState([]);
 
   useEffect(() => {
     const sorted = [...mockData].sort((a, b) => {
@@ -88,11 +88,9 @@ const MainPage = () => {
       </SidebarContainer>
       <MainContent>
         <ContentHeader setSortOrder={setSortOrder} />
-        <ContentArea>
+        <ContentArea isBlank={sortedData.length === 0}>
           {sortedData.length === 0 ? (
-            <ContentBlankWrapper>
-              <ContentBlank />
-            </ContentBlankWrapper>
+            <ContentBlank />
           ) : (
             displayedContentBoxes.map((data) => (
               <ContentBox
@@ -157,23 +155,15 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: ${({ isBlank }) => (isBlank ? 'flex' : 'grid')};
+  grid-template-columns: ${({ isBlank }) =>
+    isBlank ? 'none' : 'repeat(3, 1fr)'};
+  align-items: ${({ isBlank }) => (isBlank ? 'center' : 'start')};
+  justify-content: ${({ isBlank }) => (isBlank ? 'center' : 'stretch')};
   gap: 20px;
-  width: calc(100% - 1283px);
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
-`;
-
-const ContentBlankWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: calc(100% - 1283px);
-  max-width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 118px 0;
 `;
 
 const Pagination = styled.div`

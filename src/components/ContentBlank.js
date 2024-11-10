@@ -15,8 +15,11 @@ function ContentBlank() {
 }
 
 const Blank = styled.div`
-  position: relative;
-  padding-left: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 `;
 
 const Sentence = styled.div`
@@ -31,7 +34,6 @@ const NewButton = styled.button`
   width: 404px;
   height: 76px;
   margin-top: 44px;
-  margin-bottom: 267px;
   color: white;
   background-color: #41c3ab;
   text-align: center;

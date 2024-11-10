@@ -4,24 +4,22 @@ import { React } from 'react';
 function ContentBlank() {
   return (
     <Blank>
-      <Page>
-        <Sentence>
-          다시 보고 싶은 링크와 사진들,
-          <br />
-          여기저기 저장하지 말고 이젠 한 곳에서 관리하세요!
-        </Sentence>
-        <NewButton>+ 새 콘텐츠 저장하기</NewButton>
-      </Page>
-
-      {/* 페이지네이션 */}
-      <Pagination>&lt; 1 &gt;</Pagination>
+      <Sentence>
+        다시 보고 싶은 링크와 사진들,
+        <br />
+        여기저기 저장하지 말고 이젠 한 곳에서 관리하세요!
+      </Sentence>
+      <NewButton>+ 새 콘텐츠 저장하기</NewButton>
     </Blank>
   );
 }
 
 const Blank = styled.div`
-  position: relative;
-  padding-left: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 `;
 
 const Sentence = styled.div`
@@ -43,23 +41,6 @@ const NewButton = styled.button`
   font-weight: 600;
   font-size: 30px;
   border: 0;
-`;
-
-const Page = styled.div`
-  position: absolute;
-  top: 188px;
-  right: 506px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Pagination = styled.div`
-  position: absolute;
-  right: 847px;
-  top: 659px;
-  font-weight: 500;
-  font-size: 24px;
 `;
 
 export default ContentBlank;

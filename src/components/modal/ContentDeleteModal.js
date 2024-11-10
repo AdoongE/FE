@@ -1,10 +1,32 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const ContentDeleteModal = forwardRef((props, ref) => {
   const cloesModal = () => {
     ref.current?.close();
   };
+
+  useEffect(() => {
+    if (ref.current) {
+      const dialogElement = ref.current;
+
+      const handleClickOutside = (event) => {
+        const dialogArea = dialogElement.getBoundingClientRect();
+        if (
+          event.clientX < dialogArea.left ||
+          event.clientX > dialogArea.right ||
+          event.clientY < dialogArea.top ||
+          event.clientY > dialogArea.bottom
+        ) {
+          dialogElement.close();
+        }
+      };
+      dialogElement.addEventListener('click', handleClickOutside);
+      return () => {
+        dialogElement.removeEventListener('click', handleClickOutside);
+      };
+    }
+  }, [ref]);
 
   return (
     <Dialog ref={ref}>
@@ -16,6 +38,7 @@ const ContentDeleteModal = forwardRef((props, ref) => {
     </Dialog>
   );
 });
+
 ContentDeleteModal.displayName = 'ContentDeleteModal';
 
 const Buttons = styled.div`
@@ -70,6 +93,9 @@ const Dialog = styled.dialog`
   border-radius: 50px;
   background-color: white;
   border: 0;
+  ::backdrop {
+    background-color: #0000008c;
+  }
 `;
 
 export default ContentDeleteModal;

@@ -144,7 +144,7 @@ const Button = styled.button`
   height: 57px;
   color: #4f4f4f;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 500;
   background-color: #dcdada;
   border: none;
   border-radius: 10px;

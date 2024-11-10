@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
-function ContentHeader() {
+function ContentHeader({ setSortOrder }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
 
   const handleFilterClick = (filterOption) => {
     setSelectedFilter(filterOption);
+    setSortOrder(filterOption);
   };
 
   return (
@@ -61,7 +62,6 @@ const Option = styled.div`
 
 const Main = styled.div`
   position: relative;
-  padding-left: 45px;
   padding-top: 83px;
   padding-bottom: 70px;
 `;
@@ -71,7 +71,6 @@ const Title = styled.div`
   font-size: 44px;
   position: absolute;
   left: 0;
-  margin-left: 45px;
 `;
 
 const Filter = styled.div`
@@ -96,6 +95,7 @@ const SearchContainer = styled.div`
 
   justify-content: space-around;
   align-items: center;
+  z-index: 0;
 `;
 
 const Search = styled.input`

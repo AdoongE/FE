@@ -14,7 +14,7 @@ const Router = () => {
         <Route path="/main" element={<MainPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/kakao/callback" element={<KakaoRedirect />} />
-
+        <Route path="/content-add" element={<ContentAddPage />} />
       </Routes>
     </BrowserRouter>
   );

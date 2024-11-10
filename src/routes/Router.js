@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import React from 'react';
 import MainPage from '../pages/MainPage';
-// import ContentAddPage from '../pages/ContentAddPage';
+import ContentAddPage from '../pages/ContentAddPage';
 // import SplashPage from '../pages/SplashPage';
 // import KakaoRedirect from '../components/api/KakaoRedirect';
 // import SignupPage from '../pages/SignupPage';

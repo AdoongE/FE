@@ -58,7 +58,6 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
 };
 
 AddCategoryModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
 };

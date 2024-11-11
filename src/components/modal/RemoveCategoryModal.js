@@ -19,10 +19,10 @@ export const RemoveCategoryModal = ({
     <ModalOverlay>
       <ModalContent>
         <ModalTitle>카테고리를 삭제하시겠습니까?</ModalTitle>
-        <ModalTitle2>
+        <ModalText>
           카테고리를 삭제하면 저장된 콘텐츠도 함께 삭제됩니다. <br />
           그래도 삭제하시겠습니까?
-        </ModalTitle2>
+        </ModalText>
         <ButtonContainer>
           <ModalButton className="no" onClick={onClose}>
             취소
@@ -76,7 +76,7 @@ const ModalTitle = styled.h2`
   margin-bottom: 1.625rem;
 `;
 
-const ModalTitle2 = styled.h2`
+const ModalText = styled.h2`
   font-size: 22px;
   font-family: 'Pretendard-Regular';
   margin-bottom: 3.25rem;

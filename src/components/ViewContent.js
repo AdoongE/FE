@@ -6,15 +6,20 @@ function ViewContent() {
   const handleLinkClick = (url) => {
     window.open(url, '_blank');
   };
+  const handleClose = () => {
+    window.history.back();
+  };
   return (
     <>
       <ContentPage>
-        <ButtonDiv>
-          <LinkShare>링크공유</LinkShare>
-          <CloseBtn>닫기</CloseBtn>
-        </ButtonDiv>
         <Contents>
-          <TitleDiv>에어비엔비 광고 레퍼런스</TitleDiv>
+          <UpperDiv>
+            <TitleDiv>에어비엔비 광고 레퍼런스</TitleDiv>
+            <ButtonDiv>
+              <LinkShare>링크공유</LinkShare>
+              <CloseBtn onClick={handleClose}>닫기</CloseBtn>
+            </ButtonDiv>
+          </UpperDiv>
           <ContentDiv>
             <Name>카테고리</Name>
             <CategoryTag>카테고리1</CategoryTag>
@@ -57,10 +62,26 @@ function ViewContent() {
                 </Short>
               </Name>
             </Long>
+            <DdayDiv>
+              <RemainDay>D-1</RemainDay>
+              <Calendar>
+                <Icon
+                  icon="lucide:calendar"
+                  width="24px"
+                  height="24px"
+                  style={{
+                    color: '#4f4f4f',
+                    paddingBottom: '3px',
+                    marginRight: '10px',
+                  }}
+                />
+                <Date>2024 / 11 / 30</Date>
+              </Calendar>
+            </DdayDiv>
           </Dday>
           <Memo>
             <Name>메모 입력</Name>
-            <Text placeholder="메모를 입력하세요"></Text>
+            <Text>에어비엔비의 광고.여행 관련 브랜드 광고 시 참고할 것.</Text>
           </Memo>
         </Contents>
         <Button>수정하기</Button>
@@ -75,6 +96,7 @@ const ButtonDiv = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  margin-top: -60px;
 `;
 
 const LinkShare = styled.button`
@@ -113,6 +135,12 @@ const Contents = styled.div`
   row-gap: 60px;
   margin-top: 57px;
   margin-bottom: 80px;
+`;
+
+const UpperDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const TitleDiv = styled.p`
@@ -164,6 +192,40 @@ const Text = styled.textarea`
 
 const Dday = styled.div``;
 
+const DdayDiv = styled.div`
+  display: flex;
+  gap: 21px;
+`;
+
+const RemainDay = styled.div`
+  background-color: #9f9f9f;
+  border-radius: 10px;
+  width: 74px;
+  height: 48px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+`;
+
+const Calendar = styled.div`
+  display: flex;
+  border: 1px solid #9f9f9f;
+  border-radius: 10px;
+  width: 238px;
+  height: 50px;
+  color: #4f4f4f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+`;
+
+const Date = styled.div`
+  color: #4f4f4f;
+`;
+
 const Memo = styled.div`
   display: flex;
   flex-direction: column;
@@ -205,6 +267,7 @@ const Button = styled.button`
   color: white;
   font-size: 30px;
   font-weight: 500;
+  margin-bottom: 98px;
 `;
 
 export default ViewContent;

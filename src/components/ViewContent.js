@@ -9,6 +9,10 @@ function ViewContent() {
   return (
     <>
       <ContentPage>
+        <ButtonDiv>
+          <LinkShare>링크공유</LinkShare>
+          <CloseBtn>닫기</CloseBtn>
+        </ButtonDiv>
         <Contents>
           <TitleDiv>에어비엔비 광고 레퍼런스</TitleDiv>
           <ContentDiv>
@@ -64,6 +68,37 @@ function ViewContent() {
     </>
   );
 }
+
+const ButtonDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;
+
+const LinkShare = styled.button`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #21a58c;
+  border-radius: 10px;
+  background-color: #def3f1;
+  width: 143px;
+  height: 57px;
+  color: #21a58c;
+  font-size: 24px;
+`;
+const CloseBtn = styled.button`
+  background-color: #dcdada;
+  color: #9f9f9f;
+  width: 102px;
+  height: 57px;
+  border: none;
+  border-radius: 10px;
+  font-size: 24px;
+`;
 
 const ContentPage = styled.div`
   display: flex;

@@ -1,18 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from '@iconify/react';
 
 function ViewContent() {
+  const handleLinkClick = (url) => {
+    window.open(url, '_blank');
+  };
   return (
     <>
       <ContentPage>
         <Contents>
           <TitleDiv>에어비엔비 광고 레퍼런스</TitleDiv>
-          <CategoryDiv>
+          <ContentDiv>
             <Name>카테고리</Name>
             <Category>카테고리1</Category>
             <Category>카테고리2</Category>
-          </CategoryDiv>
-          <Name>링크</Name>
+          </ContentDiv>
+          <ContentDiv>
+            <Name>링크</Name>
+            <Link
+              onClick={() =>
+                handleLinkClick('https://www.youtube.com/watch?v=0cICRaWZFxk')
+              }
+            >
+              <Icon
+                icon="ic:twotone-link"
+                width="24"
+                height="24"
+                style={{
+                  color: '#4f4f4f',
+                  marginRight: '10px',
+                  paddingBottom: '3px',
+                  verticalAlign: 'middle',
+                }}
+              />
+              https://www.youtube.com/watch?v=0cICRaWZFxk
+            </Link>
+          </ContentDiv>
           <Tag>
             <TagName>태그 (2개 이상)*</TagName>
             {/* <TagInputs>
@@ -141,7 +165,7 @@ const TitleDiv = styled.p`
   font-size: 40px;
 `;
 
-const CategoryDiv = styled.div`
+const ContentDiv = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -158,6 +182,19 @@ const Category = styled.div`
   border-radius: 5px;
   font-size: 20px;
   margin-right: 20px;
+`;
+
+const Link = styled.div`
+  font-size: 20px;
+  color: #4f4f4f;
+  border-bottom: 1px solid #9f9f9f;
+  padding-bottom: 8px;
+  cursor: pointer;
+  display: inline-block;
+  width: fit-content;
+  &:hover {
+    color: #41c3ab;
+  }
 `;
 
 const Text = styled.textarea`
@@ -182,16 +219,6 @@ const Memo = styled.div`
   flex-direction: column;
   row-gap: 16px;
 `;
-
-// const Date = styled.input`
-//   width: 238px;
-//   height: 50px;
-//   border-radius: 5px;
-//   border: 1px solid #9f9f9f;
-//   font-size: 20px;
-//   font-weight: 400;
-//   color: #4f4f4f;
-// `;
 
 const Short = styled.span`
   font-weight: 400;

@@ -22,10 +22,10 @@ const MainContainer = styled.div`
   height: 100vh;
 `;
 const Content = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
   padding-top: 14vh;
+  padding-left: 10vh;
 `;
 
 export default ContentViewPage;

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
-const MAX_FILES = 5;
+const MAX_FILES = 3;
 
 const PdfUploadComponent = () => {
   const [files, setFiles] = useState([]);

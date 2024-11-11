@@ -3,77 +3,79 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
-const MAX_IMAGES = 5;
+const MAX_FILES = 5;
 
-const ImageUploadComponent = () => {
-  const [images, setImages] = useState([]);
-  const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
+const PdfUploadComponent = () => {
+  const [files, setFiles] = useState([]);
+  const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 파일 인덱스
 
   const onDrop = (acceptedFiles) => {
-    const newImages = acceptedFiles.map((file) => {
-      const preview = URL.createObjectURL(file);
-      return {
-        id: file.name,
-        label: file.name,
-        preview,
-      };
-    });
+    const newFiles = acceptedFiles.map((file) => ({
+      id: file.name,
+      label: file.name,
+      type: file.type,
+    }));
 
-    if (images.length + newImages.length <= MAX_IMAGES) {
-      setImages((prevImages) => [...prevImages, ...newImages]);
-      if (images.length === 0) setRepresentativeIndex(0); // 첫 이미지가 대표로 설정됨
+    if (files.length + newFiles.length <= MAX_FILES) {
+      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+      if (files.length === 0) setRepresentativeIndex(0); // 첫 파일이 대표로 설정됨
     }
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: 'image/jpeg, image/png, image/svg+xml',
+    accept: 'application/pdf',
     maxSize: 10 * 1024 * 1024, // 10 MB 제한
   });
 
-  const handleDeleteImage = (id) => {
-    const updatedImages = images.filter((image) => image.id !== id);
-    setImages(updatedImages);
+  const handleDeleteFile = (id) => {
+    const updatedFiles = files.filter((file) => file.id !== id);
+    setFiles(updatedFiles);
 
-    if (representativeIndex >= updatedImages.length) {
-      setRepresentativeIndex(0); // 이미지가 삭제될 경우, 첫 이미지로 대표 설정
+    if (representativeIndex >= updatedFiles.length) {
+      setRepresentativeIndex(0); // 파일이 삭제될 경우, 첫 파일로 대표 설정
     }
   };
 
   const handleSetRepresentative = (index) => {
-    setRepresentativeIndex(index); // 클릭 시 대표 이미지 변경
+    setRepresentativeIndex(index); // 클릭 시 대표 파일 변경
   };
 
   return (
     <>
       <Instructions>
-        이미지 업로드*{' '}
-        <span>
-          최대 OOMB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
-        </span>
+        PDF 파일 업로드*{' '}
+        <span>최대 10MB 이하의 PDF 파일만 첨부할 수 있습니다.</span>
       </Instructions>
-      <ImagesWrapper>
-        {images.map((image, index) => (
-          <ImageContainer key={image.id}>
-            <ImageBox onClick={() => handleSetRepresentative(index)}>
+      <FilesWrapper>
+        {files.map((file, index) => (
+          <FileContainer key={file.id}>
+            <FileBox onClick={() => handleSetRepresentative(index)}>
               {index === representativeIndex && (
                 <RepresentativeLabel>대표</RepresentativeLabel>
               )}
-              <ImagePreview src={image.preview} alt={image.label} />
+              <FileIcon>
+                <Icon
+                  icon="file-icons:pdf"
+                  width="40"
+                  height="40"
+                  style={{ color: '#4CAF50' }}
+                />
+              </FileIcon>
               <DeleteButton
                 onClick={(e) => {
                   e.stopPropagation(); // 클릭 이벤트 버블링 방지
-                  handleDeleteImage(image.id);
+                  handleDeleteFile(file.id);
                 }}
               >
-                x
+                ×
               </DeleteButton>
-            </ImageBox>
-            <FileName>{image.label}</FileName>
-          </ImageContainer>
+            </FileBox>
+            <FileName>{file.label}</FileName>
+          </FileContainer>
         ))}
-        {images.length < MAX_IMAGES && (
-          <AddImageBox {...getRootProps()}>
+        {files.length < MAX_FILES && (
+          <AddFileBox {...getRootProps()}>
             <input {...getInputProps()} />
             <AddCircle>
               <Icon
@@ -83,16 +85,17 @@ const ImageUploadComponent = () => {
                 style={{ color: '#aaa' }}
               />
             </AddCircle>
-            <AddText>이미지 추가하기</AddText>
-          </AddImageBox>
+            <AddText>PDF 추가하기</AddText>
+          </AddFileBox>
         )}
-      </ImagesWrapper>
+      </FilesWrapper>
     </>
   );
 };
 
-export default ImageUploadComponent;
+export default PdfUploadComponent;
 
+// 스타일 컴포넌트
 const Instructions = styled.p`
   font-size: 30px;
   font-weight: bold;
@@ -105,7 +108,7 @@ const Instructions = styled.p`
   }
 `;
 
-const ImagesWrapper = styled.div`
+const FilesWrapper = styled.div`
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
@@ -117,17 +120,17 @@ const ImagesWrapper = styled.div`
   max-width: 1100px;
 `;
 
-const ImageContainer = styled.div`
+const FileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const ImageBox = styled.div`
+const FileBox = styled.div`
   width: 159px;
   height: 177px;
   position: relative;
-  background-color: #f0f0f0;
+  background-color: #eaf4f4;
   border-radius: 4px;
   display: flex;
   justify-content: center;
@@ -146,11 +149,11 @@ const RepresentativeLabel = styled.div`
   border-radius: 12px;
 `;
 
-const ImagePreview = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  object-fit: cover;
+const FileIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4caf50;
 `;
 
 const DeleteButton = styled.button`
@@ -169,14 +172,14 @@ const FileName = styled.div`
   font-size: 14px;
   color: #666;
   text-align: center;
-  width: 140px; // 사진 크기에 맞게 조정
+  width: 140px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
-const AddImageBox = styled.div`
+const AddFileBox = styled.div`
   width: 159px;
   height: 177px;
   border: 1px dashed #ccc;

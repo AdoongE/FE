@@ -8,10 +8,15 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import NewAddCategoryModal from './modal/NewAddCategoryModal';
 import AddTagModal from './modal/AddTagModal';
+import ContentSaveModal from './modal/ContentSaveModal';
+import LinkUploader from './LinkUploader';
+
+// import Box from '@mui/material/Box';
 
 function AddContent() {
   const dialogRef = useRef(null);
   const TagRef = useRef(null);
+  const SaveRef = useRef(null);
 
   const showModal = () => {
     dialogRef.current?.showModal();
@@ -21,18 +26,40 @@ function AddContent() {
     TagRef.current?.showModal();
   };
 
+  const showSaveModal = () => {
+    SaveRef.current?.showModal();
+  };
+
   const schema = yup.object().shape({
-    dDay: yup
-      .string()
-      .matches(/^\d{4}-\d{2}-\d{2}$/, '생년원일은 필수 항목입니다.'),
     boardCategory: yup
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
       .required(),
+    contentLink: yup.string().required(),
+    tags: yup
+      .array()
+      .of(yup.string())
+      .min(2, '2개 이상의 태그를 선택해주세요.')
+      .required(),
+    dDay: yup
+      .string()
+      .matches(/^\d{4}-\d{2}-\d{2}$/, {
+        message: '유효한 날짜 형식이어야 합니다.',
+        excludeEmptyString: true,
+      })
+      .nullable()
+      .notRequired(),
+    contentDetail: yup.string().max(1500),
   });
 
-  const { register, handleSubmit, control, watch } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { isValid },
+  } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
@@ -41,10 +68,16 @@ function AddContent() {
     console.log('콘텐츠 값', data);
   };
 
+  const contentDetail = watch('contentDetail', '');
+
   const formValues = watch();
   useEffect(() => {
     console.log('현재 폼 값:', formValues);
   }, [formValues]);
+
+  useEffect(() => {
+    console.log('현재 isValid 상태:', isValid);
+  }, [isValid]);
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +104,7 @@ function AddContent() {
                       }}
                     />
                     <InputButton onClick={() => showModal(field)}>
-                      카테고리 추가
+                      + 카테고리 추가
                     </InputButton>
                     <NewAddCategoryModal
                       ref={dialogRef}
@@ -86,9 +119,21 @@ function AddContent() {
               />
             </Inputs>
           </Inputs>
-          <Inputs>
-            <Name>링크 업로드*</Name>
-          </Inputs>
+
+          <Controller
+            name="contentLink"
+            control={control}
+            render={({ field, fieldState }) => (
+              <LinkUploader
+                label="contentLink"
+                $error={fieldState.error ? true : undefined}
+                $helperText={fieldState.error && fieldState.error.message}
+                value={field.value || []}
+                onChange={field.onChange}
+              />
+            )}
+          />
+
           <Tag>
             <TagName>태그 (2개 이상)*</TagName>
             <TagInputs>
@@ -111,13 +156,47 @@ function AddContent() {
                           field.onChange(newValue);
                         }}
                       />
+                      {/* <Box
+                        sx={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: 0.5,
+                          mt: 1,
+                        }}
+                      >
+                        {field.value.map((tag) => (
+                          <Chip key={tag}>
+                            {tag}
+                            <Icon
+                              icon="ic:round-close"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                                color: 'white',
+                              }}
+                              onMouseDown={() => handleDelete(tag, field)}
+                            />
+                          </Chip>
+                        ))}
+                      </Box>
                       <InputButton onClick={() => showTagModal(field)}>
                         + 태그 선택
                       </InputButton>
                       <AddTagModal
                         ref={TagRef}
-                        onConfirm={(newCategory) => {
-                          field.onChange([...field.value, newCategory]);
+                        onConfirm={(newTag) => {
+                          field.onChange([...field.value, newTag]);
+                        }}
+                      /> */}
+                      <InputButton onClick={() => showTagModal(field)}>
+                        + 태그 선택
+                      </InputButton>
+                      <AddTagModal
+                        ref={TagRef}
+                        onConfirm={(newTag) => {
+                          field.onChange([
+                            ...new Set([...field.value, ...newTag]),
+                          ]);
                         }}
                       />
                     </>
@@ -150,18 +229,61 @@ function AddContent() {
                 </Short>
               </Name>
             </Long>
-            <Date type="date" {...register('dDay')} />
+            <Date type="date" {...register('dDay')} defaultValue={null} />
           </Dday>
           <Memo>
             <Name>메모 입력</Name>
-            <Text placeholder="메모를 입력하세요"></Text>
+            <div>
+              <Text
+                defaultValue={null}
+                maxLength={1500}
+                name="contentDetail"
+                type="text"
+                {...register('contentDetail')}
+                placeholder="메모를 입력하세요"
+              />
+              <Count>{contentDetail.length}/1500</Count>
+            </div>
           </Memo>
         </Contents>
-        <Button>저장하기</Button>
+        <Button
+          disabled={!isValid}
+          type="button"
+          onClick={() => {
+            if (isValid) {
+              showSaveModal();
+            }
+          }}
+        >
+          저장하기
+        </Button>
+        <ContentSaveModal ref={SaveRef} onConfirm={handleSubmit(onSubmit)} />
       </ContentPage>
     </form>
   );
 }
+
+// const Chip = styled.div`
+//   width: fit-content;
+//   height: 44px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   color: white;
+//   border: 0;
+//   border-radius: 5px;
+//   column-gap: 5px;
+//   background-color: #41c3ab;
+//   padding-left: 16px;
+//   padding-right: 16px;
+// `;
+
+const Count = styled.div`
+  font-weight: 400;
+  font-size: 20px;
+  color: #9f9f9f;
+  transform: translateX(1268px) translateY(-40px);
+`;
 
 const RecommendBox = styled.button`
   display: flex;
@@ -251,6 +373,7 @@ const Text = styled.textarea`
   font-size: 20px;
   padding-left: 27px;
   padding-top: 26px;
+  padding-right: 27px;
 
   &::placeholder {
     color: #4f4f4f;
@@ -327,13 +450,24 @@ const Button = styled.button`
   height: 76px;
   border-radius: 10px;
   border: 0;
+  background-color: #41c3ab;
+  color: white;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 80px;
+
+  &:disabled {
+    background-color: #dcdada;
+    color: #9f9f9f;
+  }
 `;
 
 const ContentPage = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
+  margin-left: 443px;
 `;
 
 export default AddContent;

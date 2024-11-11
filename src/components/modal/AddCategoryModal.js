@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { IOSSwitch } from '../switch/PublicCategorySwitch';
 
-export const AddCategoryModal = ({ isOpen, onClose, onConfirm }) => {
+export const AddCategoryModal = ({ onClose, onConfirm }) => {
   const [categoryName, setCategoryName] = useState('');
   const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
 

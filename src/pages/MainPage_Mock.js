@@ -1,99 +1,75 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ContentHeader from '../components/ContentHeader';
 import ContentBox from '../components/ContentBox';
 import ContentBlank from '../components/ContentBlank';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: 'http://52.78.221.255',
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('JWK_Token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 const MainPage = () => {
+  const [sortOrder, setSortOrder] = useState('최신순');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedData, setSortedData] = useState([]);
-  const [categoryId, setCategoryId] = useState(null);
-  const contentPerPage = 9;
+  const contentPerPage = 9; //페이지당 표시할 ContentBox 수
   const [activeTab, setActiveTab] = useState('모아보기');
-  const [loading, setLoading] = useState(true);
 
-  // API 호출 함수
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const url = categoryId
-        ? `/api/v1/content/${categoryId}`
-        : '/api/v1/content';
-      console.log(`GET 요청할 URL: ${url}`);
+  // //목데이터
+  // const [mockData] = useState(
+  //   Array.from({ length: 46 }, (_, i) => ({
+  //     id: i + 1,
+  //     title: `콘텐츠 ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
+  //     description: `이것은 콘텐츠 ${i + 1}의 설명입니다.`,
+  //     user: `사용자 ${i + 1}`,
+  //     category: `카테고리 ${(i % 5) + 1}`,
+  //     tags: Array.from(
+  //       { length: Math.floor(Math.random() * 3) + 1 },
+  //       (_, j) => `태그 ${j + 1}`,
+  //     ),
+  //     dDay: Math.floor(Math.random() * 366) * -1,
+  //     createdAt: new Date(
+  //       Date.now() - Math.floor(Math.random() * 365) * 86400000,
+  //     ),
+  //   })),
+  // );
 
-      const response = await api.get(url);
-      const results = response.data.results.flatMap((content) =>
-        content.contentsInfoList.map((info) => ({
-          id: info.contentId,
-          title: info.contentName || '제목 없음',
-          user: content.nickname || '사용자 정보 없음',
-          category:
-            info.categoryName && info.categoryName.length > 0
-              ? info.categoryName[0]
-              : '카테고리 없음',
-          tags: info.tagName || [],
-          dDay: info.dday === 0 ? 'D-DAY' : `D${info.dday}`,
-          contentDateType: info.contentDateType,
-          thumbnailImage: info.thumbnailImage,
-          updatedDt: info.updatedDt,
-        })),
-      );
-
-      setSortedData(results);
-      console.log('데이터 가져오기 성공:', results);
-    } catch (error) {
-      console.error(
-        'GET 요청으로 데이터 가져오기 에러:',
-        error.response ? error.response.data : error,
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [categoryId]);
+  // //빈콘텐츠 화면용 목데이터
+  // const [mockData] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('JWK_Token');
-    if (token) {
-      fetchData();
-    } else {
-      console.log('토큰이 없습니다. 로그인 확인이 필요합니다.');
-    }
-  }, [fetchData]);
-
-  // 페이지네이션 관련 함수
-  const handlePageChange = (newPage) => {
-    const totalPages = Math.ceil(sortedData.length / contentPerPage);
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
+    const sorted = [...mockData].sort((a, b) => {
+      if (sortOrder === '최신순') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      if (sortOrder === '이름순') {
+        return a.title.localeCompare(b.title);
+      }
+      return 0;
+    });
+    setSortedData(sorted);
+  }, [sortOrder, mockData]);
 
   const displayedContentBoxes = sortedData.slice(
     (currentPage - 1) * contentPerPage,
     currentPage * contentPerPage,
   );
 
-  const totalPages = Math.ceil(sortedData.length / contentPerPage);
+  const handlePageChange = (newPage) => {
+    if (
+      newPage >= 1 &&
+      newPage <= Math.ceil(mockData.length / contentPerPage)
+    ) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const totalPages = Math.ceil(mockData.length / contentPerPage);
 
   const getPaginationNumbers = () => {
     if (sortedData.length === 0) {
+      // 빈 콘텐츠일 경우 <1>만 반환
       return [1];
     }
+
     const startPage = Math.max(1, currentPage - 4);
     const endPage = Math.min(startPage + 4, totalPages);
 
@@ -108,18 +84,12 @@ const MainPage = () => {
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SidebarContainer>
-        <Sidebar
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setCategoryId={setCategoryId}
-        />
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader setSortOrder={() => {}} />
-        <ContentArea $isBlank={sortedData.length === 0}>
-          {loading ? (
-            <div>로딩 중...</div>
-          ) : sortedData.length === 0 ? (
+        <ContentHeader setSortOrder={setSortOrder} />
+        <ContentArea isBlank={sortedData.length === 0}>
+          {sortedData.length === 0 ? (
             <ContentBlank />
           ) : (
             displayedContentBoxes.map((data) => (
@@ -130,8 +100,6 @@ const MainPage = () => {
                 category={data.category}
                 tags={data.tags}
                 dDay={data.dDay}
-                contentDateType={data.contentDateType}
-                thumbnailImage={data.thumbnailImage}
               />
             ))
           )}
@@ -146,7 +114,7 @@ const MainPage = () => {
           {getPaginationNumbers().map((page) => (
             <PageNumber
               key={page}
-              $active={currentPage === page}
+              active={currentPage === page}
               onClick={() => handlePageChange(page)}
             >
               {page}
@@ -164,7 +132,6 @@ const MainPage = () => {
   );
 };
 
-// 스타일 컴포넌트
 const MainContainer = styled.div`
   display: flex;
   padding-left: 390px;
@@ -188,11 +155,11 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
-  display: ${({ $isBlank }) => ($isBlank ? 'flex' : 'grid')};
-  grid-template-columns: ${({ $isBlank }) =>
-    $isBlank ? 'none' : 'repeat(3, 1fr)'};
-  align-items: ${({ $isBlank }) => ($isBlank ? 'center' : 'start')};
-  justify-content: ${({ $isBlank }) => ($isBlank ? 'center' : 'stretch')};
+  display: ${({ isBlank }) => (isBlank ? 'flex' : 'grid')};
+  grid-template-columns: ${({ isBlank }) =>
+    isBlank ? 'none' : 'repeat(3, 1fr)'};
+  align-items: ${({ isBlank }) => (isBlank ? 'center' : 'start')};
+  justify-content: ${({ isBlank }) => (isBlank ? 'center' : 'stretch')};
   gap: 20px;
   width: 100%;
   box-sizing: border-box;
@@ -223,8 +190,8 @@ const PageNumber = styled.button`
   background: transparent;
   border: none;
   font-size: 16px;
-  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
-  color: ${({ $active }) => ($active ? '#000' : '#999')};
+  font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
+  color: ${(props) => (props.active ? '#000' : '#999')};
   cursor: pointer;
 
   &:hover {

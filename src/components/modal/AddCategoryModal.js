@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { IOSSwitch } from '../switch/PublicCategorySwitch';
+import axios from 'axios';
 
 export const AddCategoryModal = ({ onClose, onConfirm }) => {
   const [categoryName, setCategoryName] = useState('');
@@ -12,10 +13,35 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
     setIsPublic(!isPublic);
   };
 
-  const handleConfirm = () => {
+  const api = axios.create({
+    baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+  });
+
+  const handleConfirm = async () => {
     const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
     onConfirm(newCategoryName);
     setCategoryName('');
+    try {
+      const token = '';
+
+      const response = await api.post(
+        '/api/v1/category',
+        { name: newCategoryName, visibility: isPublic ? 'PUBLIC' : 'PRIVATE' },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('카테고리 생성 성공');
+      } else {
+        console.error('카테고리 생성 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   return (

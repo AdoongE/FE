@@ -11,7 +11,7 @@ import { Icon } from '@iconify/react';
 import AddCategoryModal from '../components/modal/AddCategoryModal';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
-// import axios from 'axios';
+import axios from 'axios';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
@@ -32,30 +32,28 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [draggingIndex, setDraggingIndex] = useState(null);
 
-  // const createCategory = async (categoryName, visibility) => {
-  //   try {
-  //     const token = 'YOUR_JWT_TOKEN'; // 로그인 시 발급받은 JWT 토큰을 여기에 넣으세요.
-  //     const response = await axios.post(
-  //       '/api/v1/category', //API 경로
-  //       {
-  //         categoryName,
-  //         visibility,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-  //     if (response.status === 200) {
-  //       console.log('카테고리 생성 성공');
-  //     } else {
-  //       console.error('카테고리 생성 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 발생:', error);
-  //   }
-  // };
+  const handleViewCategory = async () => {
+    setIsCategoryOpen(!isCategoryOpen);
+    const token = localStorage.getItem('jwtToken');
+    const api = axios.create({
+      baseURL: 'http://52.78.221.255',
+      headers: { Authorization: `${token}` },
+    });
+    try {
+      const response = await api.get('/api/v1/category');
+      const results = response.data.results;
+      const names = results.map((item) => item.name);
+      setCategories(names); // 카테고리 조회 연동
+
+      if (response.status === 200) {
+        console.log('카테고리 조회 성공');
+      } else {
+        console.error('카테고리 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
 
   useEffect(() => {
     if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -260,7 +258,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
             <AccordionTitle
               className="category"
-              onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+              onClick={handleViewCategory}
               onMouseEnter={() => setHoveredCategory(true)}
               onMouseLeave={() => setHoveredCategory(false)}
             >
@@ -515,7 +513,5 @@ const DotBox = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-// export { createCategory };
 
 export default Sidebar;

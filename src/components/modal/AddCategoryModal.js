@@ -22,14 +22,14 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
     onConfirm(newCategoryName);
     setCategoryName('');
     try {
-      const token = '';
+      const token = localStorage.getItem('jwtToken');
 
       const response = await api.post(
         '/api/v1/category',
         { name: newCategoryName, visibility: isPublic ? 'PUBLIC' : 'PRIVATE' },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
           },
         },
       );

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://3.38.212.252', // 백엔드 서버 주소로 설정
+  baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
 });
 
 export const SignUpHandler = async (data) => {
@@ -27,11 +27,20 @@ export const SignUpHandler = async (data) => {
 
   // API 요청에 보낼 데이터 전체 출력
   console.log('회원가입 요청 데이터:', requestData);
-
   try {
     const response = await api.post('/api/v1/auth/signup', requestData);
+
     if (response.data.status.code === 200) {
       console.log('회원가입 성공: ', response.data.status.message);
+
+      // JWT 토큰을 응답 헤더에서 가져옵니다.
+      const jwtToken = response.headers['authorization'];
+      console.log('JWT Token:', jwtToken);
+
+      // 필요한 추가 처리 (예: 토큰 저장)
+      localStorage.setItem('jwtToken', jwtToken);
+      console.log('회원가입 jwtToken:', localStorage.getItem('jwtToken'));
+
       return response;
     } else {
       // 실패 시 에러를 던짐

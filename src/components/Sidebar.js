@@ -33,6 +33,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const [draggingIndex, setDraggingIndex] = useState(null);
   const [categoryIds, setCategoryIds] = useState([]);
   const [bookmarkIds, setBookmarkIds] = useState([]);
+  const [editIds, setEditIds] = useState([]);
 
   const handleViewCategory = async () => {
     setIsCategoryOpen(!isCategoryOpen);
@@ -142,6 +143,9 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const handleEditCategory = (categoryName) => {
     setEditCategoryName(categoryName);
     setEditModalOpen(true);
+    const categoryIndex = categories.indexOf(categoryName);
+    const editId = categoryIds[categoryIndex];
+    setEditIds(editId);
   };
 
   const handleConfirmEdit = (newCategoryName) => {
@@ -414,6 +418,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           onClose={() => setEditModalOpen(false)}
           initialCategoryName={editCategoryName}
           onConfirm={handleConfirmEdit}
+          categoryId={editIds}
         />
         {/* 삭제 모달 창 */}
         {categories.map((category) => (

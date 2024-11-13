@@ -4,10 +4,7 @@ import axios from 'axios';
 
 // axios 인스턴스 생성
 const api = axios.create({
-  baseURL: 'http://3.38.212.252', // 백엔드 서버 주소로 설정
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded', // 필요 시 헤더 추가
-  },
+  baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
 });
 
 const KakaoRedirect = () => {
@@ -24,7 +21,7 @@ const KakaoRedirect = () => {
       }
       handleGetToken();
     }
-  }, [code]);
+  }, []);
 
   const handleGetToken = async () => {
     try {
@@ -34,12 +31,16 @@ const KakaoRedirect = () => {
         console.log('로그인 성공: ', response.data.status.message);
         sessionStorage.setItem('usedCode', code);
 
-        await api.get('/api/v1/auth/login/kakao', {
-          headers: {
-            Authorization: `Bearer <JWT_TOKEN>`,
-          },
-        });
+        // JWT 토큰을 응답 헤더에서 가져옵니다.
+        const jwtToken = response.headers['authorization'];
 
+        // 필요한 추가 처리 (예: 토큰 저장)
+        localStorage.setItem('jwtToken', jwtToken);
+
+        const savedJwtToken = localStorage.getItem('jwtToken');
+        console.log('저장된 JWT Token:', savedJwtToken);
+
+        // 메인 페이지로 이동
         navigate('/main');
       } else if (response.data.status.code === 404) {
         console.log(response.data.status.message);

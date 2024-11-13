@@ -33,14 +33,11 @@ export const EditCategoryModal = ({
     onConfirm(newCategoryName);
     setNewCategoryName('');
     console.log('이름 편집 아이디', categoryId);
+
     try {
-      const response = await api.patch(
-        `/api/v1/category/${categoryId}`,
-        {
-          name: newCategoryName,
-        },
-        { withCredentials: true },
-      );
+      const response = await api.patch(`/api/v1/category/${categoryId}`, {
+        name: newCategoryName,
+      });
 
       if (response.status === 200) {
         console.log('카테고리 편집 성공');

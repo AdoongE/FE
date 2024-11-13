@@ -35,13 +35,15 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const [bookmarkIds, setBookmarkIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
 
+  const token = localStorage.getItem('jwtToken');
+  const api = axios.create({
+    baseURL: 'http://52.78.221.255',
+    headers: { Authorization: `${token}` },
+  });
+
   const handleViewCategory = async () => {
     setIsCategoryOpen(!isCategoryOpen);
-    const token = localStorage.getItem('jwtToken');
-    const api = axios.create({
-      baseURL: 'http://52.78.221.255',
-      headers: { Authorization: `${token}` },
-    });
+
     try {
       const response = await api.get('/api/v1/category');
       const results = response.data.results;
@@ -61,11 +63,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   };
   const handleViewBookmark = async () => {
     setIsBookmarkOpen(!isBookmarkOpen);
-    const token = localStorage.getItem('jwtToken');
-    const api = axios.create({
-      baseURL: 'http://52.78.221.255',
-      headers: { Authorization: `${token}` },
-    });
+
     try {
       const response = await api.get('/api/v1/bookmark');
       const results = response.data.results;
@@ -119,12 +117,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     }
     setIsAddingBookmark(true);
     console.log(`Bookmark added: Category ID = ${categoryId}`);
-
-    const token = localStorage.getItem('jwtToken');
-    const api = axios.create({
-      baseURL: 'http://52.78.221.255',
-      headers: { Authorization: `${token}` },
-    });
 
     try {
       const response = await api.post(
@@ -183,12 +175,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     );
     console.log(`Bookmark remove: bookmark ID = ${bookmarkId}`);
 
-    const token = localStorage.getItem('jwtToken');
-    const api = axios.create({
-      baseURL: 'http://52.78.221.255',
-      headers: { Authorization: `${token}` },
-    });
-
     try {
       const response = await api.delete(`/api/v1/bookmark/${bookmarkId}`);
       if (response.status === 200) {
@@ -220,12 +206,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
     const categoryIndex = categories.indexOf(categoryName);
     const categoryId = categoryIds[categoryIndex];
-
-    const token = localStorage.getItem('jwtToken');
-    const api = axios.create({
-      baseURL: 'http://52.78.221.255',
-      headers: { Authorization: `${token}` },
-    });
 
     try {
       const response = await api.delete(`/api/v1/category/${categoryId}`);

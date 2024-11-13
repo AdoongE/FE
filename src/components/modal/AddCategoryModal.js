@@ -13,26 +13,22 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
     setIsPublic(!isPublic);
   };
 
+  const token = localStorage.getItem('jwtToken');
   const api = axios.create({
-    baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+    baseURL: 'http://52.78.221.255',
+    headers: { Authorization: `${token}` },
   });
 
   const handleConfirm = async () => {
     const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
     onConfirm(newCategoryName);
     setCategoryName('');
-    try {
-      const token = localStorage.getItem('jwtToken');
 
-      const response = await api.post(
-        '/api/v1/category',
-        { name: newCategoryName, visibility: isPublic ? 'PUBLIC' : 'PRIVATE' },
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        },
-      );
+    try {
+      const response = await api.post('/api/v1/category', {
+        name: newCategoryName,
+        visibility: isPublic ? 'PUBLIC' : 'PRIVATE',
+      });
 
       if (response.status === 200) {
         console.log('카테고리 생성 성공');

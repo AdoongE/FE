@@ -31,6 +31,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [draggingIndex, setDraggingIndex] = useState(null);
+  const [categoryIds, setCategoryIds] = useState([]);
 
   const handleViewCategory = async () => {
     setIsCategoryOpen(!isCategoryOpen);
@@ -42,6 +43,8 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     try {
       const response = await api.get('/api/v1/category');
       const results = response.data.results;
+      const ids = results.map((item) => item.categoryId);
+      setCategoryIds(ids);
       const names = results.map((item) => item.name);
       setCategories(names); // 카테고리 조회 연동
 
@@ -81,11 +84,34 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     closeModal();
   };
 
-  const handleBookmarkAdd = (categoryName) => {
+  const handleBookmarkAdd = async (categoryName) => {
+    const categoryIndex = categories.indexOf(categoryName);
+    const categoryId = categoryIds[categoryIndex];
+
     if (!bookmarks.includes(categoryName)) {
       setBookmarks([...bookmarks, categoryName]);
     }
     setIsAddingBookmark(true);
+    console.log(`Bookmark added: Category ID = ${categoryId}`);
+
+    const token = localStorage.getItem('jwtToken');
+    const api = axios.create({
+      baseURL: 'http://52.78.221.255',
+      headers: { Authorization: `${token}` },
+    });
+
+    try {
+      const response = await api.post(
+        `/api/v1/category/${categoryId}/bookmark`,
+      );
+      if (response.status === 200) {
+        console.log('북마크 생성 성공');
+      } else {
+        console.error('북마크 생성 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   const handleEditCategory = (categoryName) => {

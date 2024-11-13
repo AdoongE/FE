@@ -19,7 +19,7 @@ function ViewContent() {
   });
 
   useEffect(() => {
-    // handleViewContent();
+    handleViewContent();
     console.log(contentInfo);
   }, []);
 
@@ -30,7 +30,7 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const contentId = 5;
+      const contentId = 1;
       const response = await api.get(`/api/v1/content/all/${contentId}`);
 
       const results = response.data.results;
@@ -140,7 +140,7 @@ function ViewContent() {
             <Text>에어비엔비의 광고.여행 관련 브랜드 광고 시 참고할 것.</Text>
           </Memo>
         </Contents>
-        <Button onClick={handleViewContent}>수정하기</Button>
+        <Button>수정하기</Button>
       </ContentPage>
     </>
   );

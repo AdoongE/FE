@@ -12,15 +12,15 @@ function ViewContent() {
     contentImage: '',
     contentDoc: '',
     thumbnailImage: '',
-    boardCategory: '',
-    tags: '',
-    dDay: '',
+    boardCategory: [],
+    tags: [],
+    dday: '',
     contentDetail: '',
   });
 
   useEffect(() => {
     handleViewContent();
-    console.log(contentInfo);
+    console.log('useEffect', contentInfo.contentId);
   }, []);
 
   const handleViewContent = async () => {
@@ -33,8 +33,9 @@ function ViewContent() {
       const contentId = 1;
       const response = await api.get(`/api/v1/content/all/${contentId}`);
 
-      const results = response.data.results;
-      console.log('hihihi', results);
+      const results = response.data.results[0];
+      console.log('하이', results.tags);
+
       setContentInfo({
         contentId: results.contentId,
         contentDataType: results.contentDataType,
@@ -45,7 +46,7 @@ function ViewContent() {
         thumbnailImage: results.thumbnailImage,
         boardCategory: results.boardCategory,
         tags: results.tags,
-        dDay: results.dDay,
+        dday: results.dday,
         contentDetail: results.contentDetail,
       });
 
@@ -70,7 +71,7 @@ function ViewContent() {
       <ContentPage>
         <Contents>
           <UpperDiv>
-            <TitleDiv>에어비엔비 광고 레퍼런스</TitleDiv>
+            <TitleDiv>{contentInfo.contentName}</TitleDiv>
             <ButtonDiv>
               <LinkShare>링크공유</LinkShare>
               <CloseBtn onClick={handleClose}>닫기</CloseBtn>
@@ -78,16 +79,13 @@ function ViewContent() {
           </UpperDiv>
           <ContentDiv>
             <Name>카테고리</Name>
-            <CategoryTag>카테고리1</CategoryTag>
-            <CategoryTag>카테고리2</CategoryTag>
+            {contentInfo.boardCategory.map((category) => (
+              <CategoryTag key={category}>{category}</CategoryTag>
+            ))}
           </ContentDiv>
           <ContentDiv>
             <Name>링크</Name>
-            <Link
-              onClick={() =>
-                handleLinkClick('https://www.youtube.com/watch?v=0cICRaWZFxk')
-              }
-            >
+            <Link onClick={() => handleLinkClick(`${contentInfo.contentLink}`)}>
               <Icon
                 icon="ic:twotone-link"
                 width="24"
@@ -99,15 +97,14 @@ function ViewContent() {
                   verticalAlign: 'middle',
                 }}
               />
-              https://www.youtube.com/watch?v=0cICRaWZFxk
+              {contentInfo.contentLink}
             </Link>
           </ContentDiv>
           <ContentDiv>
             <Name>태그 (2개 이상)*</Name>
-            <CategoryTag>광고</CategoryTag>
-            <CategoryTag>여행</CategoryTag>
-            <CategoryTag>에어비엔비</CategoryTag>
-            <CategoryTag>3D일러스트</CategoryTag>
+            {contentInfo.tags.map((tag) => (
+              <CategoryTag key={tag}>{tag}</CategoryTag>
+            ))}
           </ContentDiv>
           <Dday>
             <Long>
@@ -131,13 +128,13 @@ function ViewContent() {
                     marginRight: '10px',
                   }}
                 />
-                <Date>2024 / 11 / 30</Date>
+                <Date>{contentInfo.dday}</Date>
               </Calendar>
             </DdayDiv>
           </Dday>
           <Memo>
-            <Name>메모 입력</Name>
-            <Text>에어비엔비의 광고.여행 관련 브랜드 광고 시 참고할 것.</Text>
+            <Name>메모</Name>
+            <Text>{contentInfo.contentDetail}</Text>
           </Memo>
         </Contents>
         <Button>수정하기</Button>
@@ -236,7 +233,7 @@ const Link = styled.div`
   }
 `;
 
-const Text = styled.textarea`
+const Text = styled.div`
   width: 1334px;
   height: 238px;
   border-radius: 10px;

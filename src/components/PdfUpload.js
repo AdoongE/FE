@@ -98,7 +98,7 @@ export default PdfUploadComponent;
 // 스타일 컴포넌트
 const Instructions = styled.p`
   font-size: 30px;
-  font-weight: bold;
+  font-weight: 400;
   margin-bottom: 15px;
 
   span {

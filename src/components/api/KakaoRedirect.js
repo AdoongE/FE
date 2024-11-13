@@ -5,6 +5,9 @@ import axios from 'axios';
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded', // 필요 시 헤더 추가
+  },
 });
 
 const KakaoRedirect = () => {
@@ -34,9 +37,7 @@ const KakaoRedirect = () => {
         // JWT 토큰을 응답 헤더에서 가져옵니다.
         const jwtToken = response.headers['authorization'];
 
-        // 필요한 추가 처리 (예: 토큰 저장)
         localStorage.setItem('jwtToken', jwtToken);
-
         const savedJwtToken = localStorage.getItem('jwtToken');
         console.log('저장된 JWT Token:', savedJwtToken);
 

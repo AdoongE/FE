@@ -206,7 +206,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     setDeleteModalOpen(true); // 모달 열기
   };
 
-  const handleConfirmRemove = (categoryName) => {
+  const handleConfirmRemove = async (categoryName) => {
     const updatedCategories = categories.filter(
       (category) => category !== categoryName,
     );
@@ -217,6 +217,26 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     );
     setBookmarks(updatedBookmarks);
     setDeleteModalOpen(false);
+
+    const categoryIndex = categories.indexOf(categoryName);
+    const categoryId = categoryIds[categoryIndex];
+
+    const token = localStorage.getItem('jwtToken');
+    const api = axios.create({
+      baseURL: 'http://52.78.221.255',
+      headers: { Authorization: `${token}` },
+    });
+
+    try {
+      const response = await api.delete(`/api/v1/category/${categoryId}`);
+      if (response.status === 200) {
+        console.log('카테고리 삭제 성공');
+      } else {
+        console.error('카테고리 삭제 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   // 드래그 앤 드롭

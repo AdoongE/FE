@@ -35,11 +35,10 @@ export const SignUpHandler = async (data) => {
 
       // JWT 토큰을 응답 헤더에서 가져옵니다.
       const jwtToken = response.headers['authorization'];
-      console.log('JWT Token:', jwtToken);
 
-      // 필요한 추가 처리 (예: 토큰 저장)
       localStorage.setItem('jwtToken', jwtToken);
-      console.log('회원가입 jwtToken:', localStorage.getItem('jwtToken'));
+      const savedJwtToken = localStorage.getItem('jwtToken');
+      console.log('회원가입 JWT Token:', savedJwtToken);
 
       return response;
     } else {

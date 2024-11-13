@@ -24,7 +24,7 @@ const KakaoRedirect = () => {
       }
       handleGetToken();
     }
-  }, [code]);
+  }, []);
 
   const handleGetToken = async () => {
     try {
@@ -37,9 +37,9 @@ const KakaoRedirect = () => {
         // JWT 토큰을 응답 헤더에서 가져옵니다.
         const jwtToken = response.headers['authorization'];
 
-        //이거 방금 추가
         localStorage.setItem('jwtToken', jwtToken);
-        console.log('로그인 jwtToken:', localStorage.getItem('jwtToken'));
+        const savedJwtToken = localStorage.getItem('jwtToken');
+        console.log('저장된 JWT Token:', savedJwtToken);
 
         // 메인 페이지로 이동
         navigate('/main');

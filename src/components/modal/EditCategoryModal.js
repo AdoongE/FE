@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 
 export const EditCategoryModal = ({
   isOpen,
   onClose,
   initialCategoryName,
   onConfirm,
+  categoryId,
 }) => {
   const [newCategoryName, setNewCategoryName] = useState(initialCategoryName);
 
@@ -19,9 +21,32 @@ export const EditCategoryModal = ({
 
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
+  const token = localStorage.getItem('jwtToken');
+  const api = axios.create({
+    baseURL: 'http://52.78.221.255',
+    headers: {
+      Authorization: `${token}`,
+      withCredentials: true,
+    },
+  });
+  const handleConfirm = async () => {
     onConfirm(newCategoryName);
     setNewCategoryName('');
+    console.log('이름 편집 아이디', categoryId);
+
+    try {
+      const response = await api.patch(`/api/v1/category/${categoryId}`, {
+        name: newCategoryName,
+      });
+
+      if (response.status === 200) {
+        console.log('카테고리 편집 성공');
+      } else {
+        console.error('카테고리 편집 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   return (
@@ -65,6 +90,7 @@ EditCategoryModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   initialCategoryName: PropTypes.string.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  categoryId: PropTypes.number.isRequired,
 };
 
 export default EditCategoryModal;

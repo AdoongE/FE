@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+const token = localStorage.getItem('jwtToken');
+
 const api = axios.create({
   baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
   headers: {
-    Authorization: 'Bearer <JWT_TOKEN>', // 필요 시 헤더 추가
+    Authorization: `${token}`, // 토큰을 템플릿 리터럴로 추가
   },
 });
 
@@ -20,10 +22,8 @@ export const ContentAddHandler = async (data) => {
     const response = await api.post('/api/v1/content', requestData);
     if (response.data.status.code === 200) {
       console.log('콘텐츠 생성 성공: ', response.data.status.message);
+      console.log(response.data.results.msg);
       return response;
-    } else {
-      // 실패 시 에러를 던짐
-      throw new Error(response.data.status.message || '콘텐츠 생성 실패');
     }
   } catch (error) {
     console.error(error);

@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import AddLinkModal from './modal/AddLinkModal';
+import Alert from '@mui/material/Alert';
 
 function LinkUploader({ value, onChange }) {
   const LinkRef = useRef(null);
@@ -11,7 +12,16 @@ function LinkUploader({ value, onChange }) {
   };
 
   const handleConfirm = (newLink) => {
-    onChange(newLink);
+    const regex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}(\/[\w-]*)*\/?$/;
+    const isValid = regex.test(newLink);
+
+    if (isValid) {
+      onChange(newLink);
+    } else {
+      <Alert severity="info" sx={{ bgcolor: '#F2F2F2' }}>
+        유효하지 않은 링크입니다.
+      </Alert>;
+    }
   };
 
   return (

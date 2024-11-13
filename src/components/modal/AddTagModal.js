@@ -56,9 +56,18 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
     );
   };
 
+  const handleClose = () => {
+    setSelectedTags([]);
+    closeModal();
+  };
+
   const handleApply = () => {
     onConfirm([...selectedTags]);
     closeModal();
+  };
+
+  const handleReset = () => {
+    setSelectedTags([]);
   };
 
   const closeModal = () => {
@@ -99,6 +108,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
               height: '32px',
               color: 'black',
             }}
+            onClick={handleReset}
           />
           <Icon
             icon="ic:round-close"
@@ -107,7 +117,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
               height: '36px',
               color: 'black',
             }}
-            onClick={closeModal}
+            onClick={handleClose}
           />
         </Icons>
       </Head>

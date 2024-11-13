@@ -57,6 +57,29 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       console.error('에러 발생:', error);
     }
   };
+  const handleViewBookmark = async () => {
+    setIsBookmarkOpen(!isBookmarkOpen);
+    const token = localStorage.getItem('jwtToken');
+    const api = axios.create({
+      baseURL: 'http://52.78.221.255',
+      headers: { Authorization: `${token}` },
+    });
+    try {
+      const response = await api.get('/api/v1/bookmark');
+      const results = response.data.results;
+      console.log(results);
+      const names = results.map((item) => item.name);
+      setBookmarks(names);
+
+      if (response.status === 200) {
+        console.log('북마크 조회 성공');
+      } else {
+        console.error('북마크 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
 
   useEffect(() => {
     if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -238,7 +261,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         <CategoryDiv>
           <CategoryP>모든 카테고리 (30)</CategoryP> {/*숫자 임시 지정*/}
           <Accordion>
-            <AccordionTitle onClick={() => setIsBookmarkOpen(!isBookmarkOpen)}>
+            <AccordionTitle onClick={handleViewBookmark}>
               <Icons icon="material-symbols:bookmark-outline" />
               북마크
               <RightArrowIcon open={isBookmarkOpen} />

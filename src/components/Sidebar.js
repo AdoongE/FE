@@ -32,6 +32,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [draggingIndex, setDraggingIndex] = useState(null);
   const [categoryIds, setCategoryIds] = useState([]);
+  const [bookmarkIds, setBookmarkIds] = useState([]);
 
   const handleViewCategory = async () => {
     setIsCategoryOpen(!isCategoryOpen);
@@ -67,7 +68,8 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     try {
       const response = await api.get('/api/v1/bookmark');
       const results = response.data.results;
-      console.log(results);
+      const ids = results.map((item) => item.bookmarkId);
+      setBookmarkIds(ids);
       const names = results.map((item) => item.name);
       setBookmarks(names);
 
@@ -169,10 +171,30 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     }));
   };
 
-  const handleBookmarkRemove = (category) => {
+  const handleBookmarkRemove = async (category) => {
+    const bookmarkIndex = bookmarks.indexOf(category);
+    const bookmarkId = bookmarkIds[bookmarkIndex];
     setBookmarks((prevBookmarks) =>
       prevBookmarks.filter((item) => item !== category),
     );
+    console.log(`Bookmark remove: bookmark ID = ${bookmarkId}`);
+
+    const token = localStorage.getItem('jwtToken');
+    const api = axios.create({
+      baseURL: 'http://52.78.221.255',
+      headers: { Authorization: `${token}` },
+    });
+
+    try {
+      const response = await api.delete(`/api/v1/bookmark/${bookmarkId}`);
+      if (response.status === 200) {
+        console.log('북마크 삭제 성공');
+      } else {
+        console.error('북마크 삭제 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   const handleRemoveCategory = (categoryNameToRemove) => {

@@ -1,8 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 
 function ViewContent() {
+  const [contentInfo, setContentInfo] = useState({
+    contentId: '',
+    contentDataType: '',
+    contentName: '',
+    contentLink: '',
+    contentImage: '',
+    contentDoc: '',
+    thumbnailImage: '',
+    boardCategory: '',
+    tags: '',
+    dDay: '',
+    contentDetail: '',
+  });
+
+  useEffect(() => {
+    // handleViewContent();
+    console.log(contentInfo);
+  }, []);
+
+  const handleViewContent = async () => {
+    const token = localStorage.getItem('jwtToken');
+    const api = axios.create({
+      baseURL: 'http://52.78.221.255',
+      headers: { Authorization: `${token}` },
+    });
+    try {
+      const contentId = 5;
+      const response = await api.get(`/api/v1/content/all/${contentId}`);
+
+      const results = response.data.results;
+      console.log('hihihi', results);
+      setContentInfo({
+        contentId: results.contentId,
+        contentDataType: results.contentDataType,
+        contentName: results.contentName,
+        contentLink: results.contentLink,
+        contentImage: results.contentImage,
+        contentDoc: results.contentDoc,
+        thumbnailImage: results.thumbnailImage,
+        boardCategory: results.boardCategory,
+        tags: results.tags,
+        dDay: results.dDay,
+        contentDetail: results.contentDetail,
+      });
+
+      if (response.status === 200) {
+        console.log('콘텐츠 상세 조회 성공');
+      } else {
+        console.error('콘텐츠 상세 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+
   const handleLinkClick = (url) => {
     window.open(url, '_blank');
   };
@@ -84,7 +140,7 @@ function ViewContent() {
             <Text>에어비엔비의 광고.여행 관련 브랜드 광고 시 참고할 것.</Text>
           </Memo>
         </Contents>
-        <Button>수정하기</Button>
+        <Button onClick={handleViewContent}>수정하기</Button>
       </ContentPage>
     </>
   );

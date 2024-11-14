@@ -174,9 +174,9 @@ const NewContentButton = styled.button`
   cursor: pointer;
   margin-left: 16px;
 
-
   svg {
     margin-left: 10px;
+  }
 `;
 
 const ProfileIcon = styled.div`

@@ -11,7 +11,7 @@ import { Icon } from '@iconify/react';
 import AddCategoryModal from '../components/modal/AddCategoryModal';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
-// import axios from 'axios';
+import axios from 'axios';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
@@ -31,31 +31,56 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [draggingIndex, setDraggingIndex] = useState(null);
+  const [categoryIds, setCategoryIds] = useState([]);
+  const [bookmarkIds, setBookmarkIds] = useState([]);
+  const [editIds, setEditIds] = useState([]);
 
-  // const createCategory = async (categoryName, visibility) => {
-  //   try {
-  //     const token = 'YOUR_JWT_TOKEN'; // 로그인 시 발급받은 JWT 토큰을 여기에 넣으세요.
-  //     const response = await axios.post(
-  //       '/api/v1/category', //API 경로
-  //       {
-  //         categoryName,
-  //         visibility,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-  //     if (response.status === 200) {
-  //       console.log('카테고리 생성 성공');
-  //     } else {
-  //       console.error('카테고리 생성 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 발생:', error);
-  //   }
-  // };
+  const token = localStorage.getItem('jwtToken');
+  const api = axios.create({
+    baseURL: 'http://52.78.221.255',
+    headers: { Authorization: `${token}` },
+  });
+
+  const handleViewCategory = async () => {
+    setIsCategoryOpen(!isCategoryOpen);
+
+    try {
+      const response = await api.get('/api/v1/category');
+      const results = response.data.results;
+      const ids = results.map((item) => item.categoryId);
+      setCategoryIds(ids);
+      const names = results.map((item) => item.name);
+      setCategories(names); // 카테고리 조회 연동
+
+      if (response.status === 200) {
+        console.log('카테고리 조회 성공');
+      } else {
+        console.error('카테고리 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+  const handleViewBookmark = async () => {
+    setIsBookmarkOpen(!isBookmarkOpen);
+
+    try {
+      const response = await api.get('/api/v1/bookmark');
+      const results = response.data.results;
+      const ids = results.map((item) => item.bookmarkId);
+      setBookmarkIds(ids);
+      const names = results.map((item) => item.name);
+      setBookmarks(names);
+
+      if (response.status === 200) {
+        console.log('북마크 조회 성공');
+      } else {
+        console.error('북마크 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
 
   useEffect(() => {
     if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -83,16 +108,36 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     closeModal();
   };
 
-  const handleBookmarkAdd = (categoryName) => {
+  const handleBookmarkAdd = async (categoryName) => {
+    const categoryIndex = categories.indexOf(categoryName);
+    const categoryId = categoryIds[categoryIndex];
+
     if (!bookmarks.includes(categoryName)) {
       setBookmarks([...bookmarks, categoryName]);
     }
     setIsAddingBookmark(true);
+    console.log(`Bookmark added: Category ID = ${categoryId}`);
+
+    try {
+      const response = await api.post(
+        `/api/v1/category/${categoryId}/bookmark`,
+      );
+      if (response.status === 200) {
+        console.log('북마크 생성 성공');
+      } else {
+        console.error('북마크 생성 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   const handleEditCategory = (categoryName) => {
     setEditCategoryName(categoryName);
     setEditModalOpen(true);
+    const categoryIndex = categories.indexOf(categoryName);
+    const editId = categoryIds[categoryIndex];
+    setEditIds(editId);
   };
 
   const handleConfirmEdit = (newCategoryName) => {
@@ -122,10 +167,24 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     }));
   };
 
-  const handleBookmarkRemove = (category) => {
+  const handleBookmarkRemove = async (category) => {
+    const bookmarkIndex = bookmarks.indexOf(category);
+    const bookmarkId = bookmarkIds[bookmarkIndex];
     setBookmarks((prevBookmarks) =>
       prevBookmarks.filter((item) => item !== category),
     );
+    console.log(`Bookmark remove: bookmark ID = ${bookmarkId}`);
+
+    try {
+      const response = await api.delete(`/api/v1/bookmark/${bookmarkId}`);
+      if (response.status === 200) {
+        console.log('북마크 삭제 성공');
+      } else {
+        console.error('북마크 삭제 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   const handleRemoveCategory = (categoryNameToRemove) => {
@@ -133,7 +192,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     setDeleteModalOpen(true); // 모달 열기
   };
 
-  const handleConfirmRemove = (categoryName) => {
+  const handleConfirmRemove = async (categoryName) => {
     const updatedCategories = categories.filter(
       (category) => category !== categoryName,
     );
@@ -144,6 +203,20 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     );
     setBookmarks(updatedBookmarks);
     setDeleteModalOpen(false);
+
+    const categoryIndex = categories.indexOf(categoryName);
+    const categoryId = categoryIds[categoryIndex];
+
+    try {
+      const response = await api.delete(`/api/v1/category/${categoryId}`);
+      if (response.status === 200) {
+        console.log('카테고리 삭제 성공');
+      } else {
+        console.error('카테고리 삭제 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   // 드래그 앤 드롭
@@ -214,7 +287,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         <CategoryDiv>
           <CategoryP>모든 카테고리 (30)</CategoryP> {/*숫자 임시 지정*/}
           <Accordion>
-            <AccordionTitle onClick={() => setIsBookmarkOpen(!isBookmarkOpen)}>
+            <AccordionTitle onClick={handleViewBookmark}>
               <Icons icon="material-symbols:bookmark-outline" />
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
@@ -260,7 +333,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
             <AccordionTitle
               className="category"
-              onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+              onClick={handleViewCategory}
               onMouseEnter={() => setHoveredCategory(true)}
               onMouseLeave={() => setHoveredCategory(false)}
             >
@@ -345,6 +418,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           onClose={() => setEditModalOpen(false)}
           initialCategoryName={editCategoryName}
           onConfirm={handleConfirmEdit}
+          categoryId={editIds}
         />
         {/* 삭제 모달 창 */}
         {categories.map((category) => (
@@ -515,7 +589,5 @@ const DotBox = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-// export { createCategory };
 
 export default Sidebar;

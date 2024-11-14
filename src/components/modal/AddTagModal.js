@@ -56,9 +56,18 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
     );
   };
 
-  const handleApply = () => {
-    onConfirm(selectedTags);
+  const handleClose = () => {
+    setSelectedTags([]);
     closeModal();
+  };
+
+  const handleApply = () => {
+    onConfirm([...selectedTags]);
+    closeModal();
+  };
+
+  const handleReset = () => {
+    setSelectedTags([]);
   };
 
   const closeModal = () => {
@@ -99,6 +108,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
               height: '32px',
               color: 'black',
             }}
+            onClick={handleReset}
           />
           <Icon
             icon="ic:round-close"
@@ -107,13 +117,17 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
               height: '36px',
               color: 'black',
             }}
-            onClick={closeModal}
+            onClick={handleClose}
           />
         </Icons>
       </Head>
       <TagContainer>
         {TagOption.map((tag, index) => (
-          <TagItem key={index} onClick={() => handleSelectTag(tag)}>
+          <TagItem
+            key={index}
+            onClick={() => handleSelectTag(tag)}
+            $isSelected={selectedTags.includes(tag)}
+          >
             {tag}
           </TagItem>
         ))}
@@ -133,6 +147,9 @@ const TagItem = styled.button`
   font-size: 22px;
   font-weight: 500;
   padding: 14px 30px;
+  color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
+  background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
+  border: ${(props) => (props.$isSelected ? 0 : '1px solid #9F9F9F')};
 `;
 
 const Button = styled.button`

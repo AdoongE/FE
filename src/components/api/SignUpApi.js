@@ -27,7 +27,6 @@ export const SignUpHandler = async (data) => {
 
   // API 요청에 보낼 데이터 전체 출력
   console.log('회원가입 요청 데이터:', requestData);
-
   try {
     const response = await api.post('/api/v1/auth/signup', requestData);
 
@@ -37,11 +36,9 @@ export const SignUpHandler = async (data) => {
       // JWT 토큰을 응답 헤더에서 가져옵니다.
       const jwtToken = response.headers['authorization'];
 
-      // 필요한 추가 처리 (예: 토큰 저장)
       localStorage.setItem('jwtToken', jwtToken);
-
       const savedJwtToken = localStorage.getItem('jwtToken');
-      console.log('저장된 JWT Token:', savedJwtToken);
+      console.log('회원가입 JWT Token:', savedJwtToken);
 
       return response;
     } else {

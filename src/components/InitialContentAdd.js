@@ -5,9 +5,14 @@ import checkIcon from '../assets/icons/Check.png';
 import { FaArrowRight } from 'react-icons/fa';
 import { Icon } from '@iconify/react';
 
-const InitialContentAdd = ({ onContentSelect }) => {
+const InitialContentAdd = ({ onContentSelect, dDay }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [contentName, setContentName] = useState('');
+
+  const handleContentName = (event) => {
+    setContentName(event.target.value);
+  };
 
   const handleCheckboxChange = (event) => {
     const option = event.target.name;
@@ -22,10 +27,21 @@ const InitialContentAdd = ({ onContentSelect }) => {
     window.history.back(); // 이전 페이지로 이동
   };
 
+  const finalContentName = contentName.trim() !== '' ? contentName : dDay;
+
+  localStorage.setItem('contentName', finalContentName);
+
   return (
     <MainDiv>
       <LeftDiv>
-        <TitleDiv placeholder="제목을 입력하세요 (선택)" />
+        <TitleDiv
+          placeholder="제목을 입력하세요 (선택)"
+          type="text"
+          name="contentName"
+          onChange={handleContentName}
+          value={contentName}
+        />
+
         <Label>저장할 콘텐츠의 형식을 선택하세요.</Label>
         <Group>
           <CheckboxLabel>

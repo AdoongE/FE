@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import LogoImage from '../assets/icons/seedzip_logo.png';
+import Logo from '../assets/icons/seedzip.png';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
@@ -35,8 +37,8 @@ function Navbar({ activeTab, setActiveTab }) {
   return (
     <NavbarContainer>
       <LogoContainer>
-        <LogoBox />
-        <Logo>seedzip</Logo>
+        <StyledLogoImage src={LogoImage} alt="seedzip_logo" />
+        <StyledLogo src={Logo} alt="seedzip" />
       </LogoContainer>
       <NavbarMenu ref={navbarMenuRef}>
         <MenuButton
@@ -104,17 +106,17 @@ const LogoContainer = styled.div`
   align-items: center;
 `;
 
-const LogoBox = styled.div`
-  width: 28px;
-  height: 26px;
-  background-color: #41c3ab;
-  margin-left: 24px;
+const StyledLogoImage = styled.img`
+  width: 36px;
+  height: 36px;
+  margin-left: 40px;
 `;
 
-const Logo = styled.div`
+const StyledLogo = styled.img`
+  width: 148px;
+  height: 40px;
   margin-left: 16px;
-  font-size: 40px;
-  font-weight: bold;
+  margin-top: 12px;
 `;
 
 const NavbarMenu = styled.div`

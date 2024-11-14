@@ -17,11 +17,22 @@ function ViewContent() {
     dday: '',
     contentDetail: '',
   });
+  const [remainingDays, setRemainingDays] = useState(null);
 
   useEffect(() => {
     handleViewContent();
-    console.log('useEffect', contentInfo.contentId);
-  }, []);
+    if (contentInfo.dday) {
+      calRemainingDays(contentInfo.dday);
+    }
+  }, [contentInfo.dday]);
+
+  const calRemainingDays = () => {
+    const currentDate = new globalThis.Date();
+    const ddayDate = new globalThis.Date(contentInfo.dday);
+    const timeDiff = ddayDate - currentDate;
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setRemainingDays(dayDiff);
+  };
 
   const handleViewContent = async () => {
     const token = localStorage.getItem('jwtToken');
@@ -32,10 +43,7 @@ function ViewContent() {
     try {
       const contentId = 1;
       const response = await api.get(`/api/v1/content/all/${contentId}`);
-
       const results = response.data.results[0];
-      console.log('하이', results.tags);
-
       setContentInfo({
         contentId: results.contentId,
         contentDataType: results.contentDataType,
@@ -116,7 +124,11 @@ function ViewContent() {
               </Name>
             </Long>
             <DdayDiv>
-              <RemainDay>D-1</RemainDay>
+              <RemainDay>
+                {remainingDays !== null
+                  ? `D${remainingDays >= 0 ? `-${remainingDays}` : `+${Math.abs(remainingDays)}`}`
+                  : '계산 중...'}
+              </RemainDay>
               <Calendar>
                 <Icon
                   icon="lucide:calendar"
@@ -273,6 +285,7 @@ const Calendar = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 20px;
+  padding-right: 15px;
 `;
 
 const Date = styled.div`

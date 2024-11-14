@@ -580,6 +580,7 @@ const Backdrop = styled.div`
 `;
 
 const Count = styled.div`
+  width: fit-content;
   font-weight: 400;
   font-size: 20px;
   color: #9f9f9f;

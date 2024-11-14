@@ -39,10 +39,6 @@ function ContentDropdown() {
       {isKebabOpen && (
         <Open ref={optionsRef}>
           <Options onClick={() => setIsKebabOpen(false)}>
-            <Seed src="/seed.png" alt="seed" />
-            <Text>콘텐츠 열기</Text>
-          </Options>
-          <Options onClick={() => setIsKebabOpen(false)}>
             <Icon
               icon="tabler:dots"
               style={{
@@ -85,11 +81,6 @@ const Text = styled.div`
   font-size: 16px;
 `;
 
-const Seed = styled.img`
-  width: 20px;
-  height: 20px;
-  color: #4f4f4f;
-`;
 const Options = styled.button`
   width: 150px;
   border: 0px;
@@ -114,7 +105,7 @@ const Open = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 179px;
-  height: 112px;
+  height: 80px;
   border-radius: 10.03px;
   background-color: white;
   color: #4f4f4f;

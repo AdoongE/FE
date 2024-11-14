@@ -68,7 +68,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
       const timer = setTimeout(() => {
         dialogRef.current?.close();
         setErrorMessage('');
-      }, 2000);
+      }, 1200);
 
       return () => {
         clearTimeout(timer);

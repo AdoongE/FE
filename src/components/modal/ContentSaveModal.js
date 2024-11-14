@@ -1,7 +1,9 @@
 import React, { forwardRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ContentSaveModal = forwardRef(({ onConfirm }, ref) => {
+  const navigate = useNavigate();
   const cloesModal = () => {
     ref.current?.close();
   };
@@ -9,6 +11,7 @@ const ContentSaveModal = forwardRef(({ onConfirm }, ref) => {
   const handleSave = () => {
     onConfirm();
     cloesModal();
+    navigate('/main');
   };
 
   useEffect(() => {

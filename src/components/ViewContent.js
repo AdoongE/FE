@@ -41,7 +41,7 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const contentId = 14;
+      const contentId = 13;
       const response = await api.get(`/api/v1/content/all/${contentId}`);
       const results = response.data.results[0];
       console.log('결과', results);
@@ -138,6 +138,29 @@ function ViewContent() {
                   </ImageContainer>
                 ))}
               </ImagesWrapper>
+            )}
+            {contentInfo.contentDataType === 'PDF' && (
+              <FilesWrapper>
+                {contentInfo.contentDoc.map((file, index) => (
+                  <FileContainer key={file}>
+                    {/* <FileBox onClick={() => handleSetRepresentative(index)}> */}
+                    <FileBox onClick={() => window.open(file, '_blank')}>
+                      {index === 0 && (
+                        <RepresentativeLabel>대표</RepresentativeLabel>
+                      )}
+                      <FileIcon>
+                        <Icon
+                          icon="file-icons:pdf"
+                          width="40"
+                          height="40"
+                          style={{ color: '#4CAF50' }}
+                        />
+                      </FileIcon>
+                    </FileBox>
+                    {/* <FileName>파일이름</FileName> */}
+                  </FileContainer>
+                ))}
+              </FilesWrapper>
             )}
           </ContentDiv>
           <ContentDiv>
@@ -429,5 +452,44 @@ const ImagePreview = styled.img`
 //   text-overflow: ellipsis;
 //   white-space: nowrap;
 // `;
+
+// 링크 조회 관련 스타일
+
+const FilesWrapper = styled.div`
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 1100px;
+`;
+
+const FileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const FileBox = styled.div`
+  width: 159px;
+  height: 177px;
+  position: relative;
+  background-color: #eaf4f4;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const FileIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4caf50;
+`;
 
 export default ViewContent;

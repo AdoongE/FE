@@ -41,7 +41,7 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const contentId = 13;
+      const contentId = 1;
       const response = await api.get(`/api/v1/content/all/${contentId}`);
       const results = response.data.results[0];
       console.log('결과', results);
@@ -180,7 +180,7 @@ function ViewContent() {
             )}
           </ContentDiv>
           <ContentDiv>
-            <Name>태그 (2개 이상)*</Name>
+            <Name>태그</Name>
             {contentInfo.tags.map((tag) => (
               <CategoryTag key={tag}>{tag}</CategoryTag>
             ))}
@@ -386,7 +386,7 @@ const Long = styled.div`
 const Name = styled.div`
   font-weight: 400;
   font-size: 30px;
-  width: 238px;
+  width: 154px;
   padding-top: 5px;
   &.dday {
     width: 550px;

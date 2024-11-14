@@ -92,8 +92,24 @@ function ViewContent() {
               <CategoryTag key={category}>{category}</CategoryTag>
             ))}
           </ContentDiv>
-          <ContentDiv>
-            <Name>
+          <ContentDiv
+            style={{
+              flexDirection:
+                contentInfo.contentDataType === 'PDF' ||
+                contentInfo.contentDataType === 'IMAGE'
+                  ? 'column'
+                  : 'row',
+            }}
+          >
+            <Name
+              style={{
+                alignSelf:
+                  contentInfo.contentDataType === 'PDF' ||
+                  contentInfo.contentDataType === 'IMAGE'
+                    ? 'flex-start'
+                    : 'center', // 이미지와 PDF 외에는 중앙 정렬 유지
+              }}
+            >
               {contentInfo.contentDataType === 'LINK'
                 ? '링크'
                 : contentInfo.contentDataType === 'IMAGE'
@@ -269,7 +285,7 @@ const TitleDiv = styled.p`
 
 const ContentDiv = styled.div`
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 `;
 
 const CategoryTag = styled.div`
@@ -371,6 +387,7 @@ const Name = styled.div`
   font-weight: 400;
   font-size: 30px;
   width: 238px;
+  padding-top: 5px;
   &.dday {
     width: 550px;
   }
@@ -403,6 +420,7 @@ const ImagesWrapper = styled.div`
   border-radius: 8px;
   width: 100%;
   max-width: 1100px;
+  margin-top: 16px;
 `;
 
 const ImageContainer = styled.div`
@@ -465,6 +483,7 @@ const FilesWrapper = styled.div`
   border-radius: 8px;
   width: 100%;
   max-width: 1100px;
+  margin-top: 16px;
 `;
 
 const FileContainer = styled.div`

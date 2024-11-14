@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
+import Logo from '../../assets/icons/logo.png';
 
 const LoginModal = forwardRef((props, ref) => {
   const REST_API_KEY = 'c070041b0cad704dd796871d5f281434';
@@ -56,7 +57,7 @@ const LoginModal = forwardRef((props, ref) => {
         }}
       />
       <Contents>
-        <LogoBox />
+        <LogoBox src={Logo} />
         <Sentence>
           당신만의 인사이트를 놓치지 않게
           <br />
@@ -134,7 +135,7 @@ const LoginButtons = styled.button`
 const Logins = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 14.14px;
+  row-gap: 20.69px;
 `;
 
 const Sentence = styled.div`
@@ -142,8 +143,8 @@ const Sentence = styled.div`
   font-size: 24px;
   line-height: 31.2px;
   text-align: center;
-  margin-top: 26.99px;
-  margin-bottom: 45.53px;
+  margin-top: 28.33px;
+  margin-bottom: 63px;
 `;
 
 const Contents = styled.div`
@@ -154,16 +155,14 @@ const Contents = styled.div`
   margin-top: 98px;
 `;
 
-const LogoBox = styled.div`
-  width: 221.5px;
-  height: 221.5px;
-  background-color: #d9d9d9;
-  border-radius: 100%;
+const LogoBox = styled.img`
+  width: 289px;
+  height: 126.66px;
 `;
 
 const Dialog = styled.dialog`
   width: 614px;
-  height: 783px;
+  height: 734px;
   border-radius: 54.98px;
   border: 0;
   box-shadow: 0px 0px 5px 0px #0000004d;

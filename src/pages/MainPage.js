@@ -12,9 +12,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('JWK_Token');
+  const token = localStorage.getItem('jwtToken');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `${token}`;
   }
   return config;
 });
@@ -32,27 +32,30 @@ const MainPage = () => {
     try {
       setLoading(true);
       const url = categoryId
-        ? `/api/v1/content/${categoryId}`
-        : '/api/v1/content';
+        ? `/api/v1/category/${categoryId}`
+        : '/api/v1/category';
+
       console.log(`GET 요청할 URL: ${url}`);
 
       const response = await api.get(url);
-      const results = response.data.results.flatMap((content) =>
-        content.contentsInfoList.map((info) => ({
-          id: info.contentId,
-          title: info.contentName || '제목 없음',
-          user: content.nickname || '사용자 정보 없음',
-          category:
-            info.categoryName && info.categoryName.length > 0
-              ? info.categoryName[0]
-              : '카테고리 없음',
-          tags: info.tagName || [],
-          dDay: info.dday === 0 ? 'D-DAY' : `D${info.dday}`,
-          contentDateType: info.contentDateType,
-          thumbnailImage: info.thumbnailImage,
-          updatedDt: info.updatedDt,
-        })),
-      );
+      const results =
+        response.data.results.flatMap(
+          (content) =>
+            (content.contentsInfoList || []).map((info) => ({
+              id: info.contentId,
+              title: info.contentName || '제목 없음',
+              user: content.nickname || '사용자 정보 없음',
+              category:
+                info.categoryName && info.categoryName.length > 0
+                  ? info.categoryName[0]
+                  : '카테고리 없음',
+              tags: info.tagName || [],
+              dDay: info.dday === 0 ? 'D-DAY' : `D${info.dday}`,
+              contentDateType: info.contentDateType,
+              thumbnailImage: info.thumbnailImage,
+              updatedDt: info.updatedDt,
+            })) || [], //contentsInfoList가 undefined일 경우 빈 배열로 설정
+        ) || []; //results가 undefined일 경우 빈 배열로 설정
 
       setSortedData(results);
       console.log('데이터 가져오기 성공:', results);
@@ -67,13 +70,13 @@ const MainPage = () => {
   }, [categoryId]);
 
   useEffect(() => {
-    const token = localStorage.getItem('JWK_Token');
+    const token = localStorage.getItem('jwtToken');
     if (token) {
       fetchData();
     } else {
       console.log('토큰이 없습니다. 로그인 확인이 필요합니다.');
     }
-  }, [fetchData]);
+  }, [fetchData, categoryId, activeTab]);
 
   // 페이지네이션 관련 함수
   const handlePageChange = (newPage) => {

@@ -41,7 +41,7 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const contentId = 1;
+      const contentId = 13;
       const response = await api.get(`/api/v1/content/all/${contentId}`);
       const results = response.data.results[0];
       console.log('결과', results);
@@ -107,9 +107,10 @@ function ViewContent() {
                   contentInfo.contentDataType === 'PDF' ||
                   contentInfo.contentDataType === 'IMAGE'
                     ? 'flex-start'
-                    : 'center', // 이미지와 PDF 외에는 중앙 정렬 유지
+                    : 'center',
               }}
             >
+              {/* 이미지, pdf 조회 부분에서 스타일 조정이 필요해서 복잡한 코드.. 나중에 수정할 수 있음 하도록 */}
               {contentInfo.contentDataType === 'LINK'
                 ? '링크'
                 : contentInfo.contentDataType === 'IMAGE'

@@ -41,9 +41,11 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const contentId = 1;
-      const response = await api.get(`/api/v1/content/all/${contentId}`);
+      const response = await api.get(
+        `/api/v1/content/all/${contentInfo.contentId}`,
+      );
       const results = response.data.results[0];
+      console.log('결과', results);
       setContentInfo({
         contentId: results.contentId,
         contentDataType: results.contentDataType,

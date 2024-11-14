@@ -342,10 +342,14 @@ function AddContent() {
                       </InputButton>
                       <AddTagModal
                         ref={TagRef}
-                        onConfirm={(newTag) => {
-                          field.onChange([
-                            ...new Set([...field.value, ...newTag]),
-                          ]);
+                        onConfirm={(newTags) => {
+                          // 중복 제거 후 최소 2개 확인
+                          const uniqueTags = [
+                            ...new Set([...field.value, ...newTags]),
+                          ];
+                          if (uniqueTags.length >= 2) {
+                            field.onChange(uniqueTags);
+                          }
                         }}
                       />
                     </>

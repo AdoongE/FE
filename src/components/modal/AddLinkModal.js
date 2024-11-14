@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
+import Alert from '@mui/material/Alert';
 
 const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   const closeModal = () => {
@@ -8,10 +9,25 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   };
 
   const [contentLinks, setContentLinks] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleAddLink = () => {
-    onConfirm(contentLinks);
-    closeModal();
+    if (contentLinks === '') {
+      setErrorMessage('URL을 입력해주세요.');
+      return;
+    }
+
+    const regex =
+      /^(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/[^\s]*)*$/i;
+    const isValid = regex.test(contentLinks);
+
+    if (!isValid) {
+      setErrorMessage('유효하지 않은 링크입니다.');
+    } else {
+      onConfirm(contentLinks);
+      setErrorMessage('');
+      closeModal();
+    }
   };
 
   useEffect(() => {
@@ -59,6 +75,11 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
           <ModalButton className="ok" onClick={handleAddLink}>
             확인
           </ModalButton>
+          {errorMessage && (
+            <Alert severity="info" sx={{ bgcolor: '#F2F2F2', mt: 2 }}>
+              {errorMessage}
+            </Alert>
+          )}
         </ButtonContainer>
       </ModalDiv>
     </Dialog>

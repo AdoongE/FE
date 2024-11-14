@@ -472,17 +472,19 @@ function AddContent() {
               </div>
             </Memo>
           </Contents>
-          <Buttons
-            disabled={!isValid}
-            type="button"
-            onClick={() => {
-              if (isValid) {
-                showSaveModal();
-              }
-            }}
-          >
-            저장하기
-          </Buttons>
+          <ButtonContainers>
+            <Buttons
+              disabled={!isValid}
+              type="button"
+              onClick={() => {
+                if (isValid) {
+                  showSaveModal();
+                }
+              }}
+            >
+              저장하기
+            </Buttons>
+          </ButtonContainers>
           <ContentSaveModal ref={SaveRef} onConfirm={handleSubmit(onSubmit)} />
         </ContentPage>
       )}
@@ -504,6 +506,12 @@ function AddContent() {
 //   padding-left: 16px;
 //   padding-right: 16px;
 // `;
+
+const ButtonContainers = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const ShortTitle = styled.div`
   font-weight: 400;

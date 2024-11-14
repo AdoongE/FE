@@ -160,12 +160,9 @@ function AddContent() {
   };
 
   const onSubmit = (data) => {
-    const contentNameValue =
-      data.contentName.trim() === '' ? data.dday : data.contentName;
-
     let updateData = {
       dataType: data.dataType,
-      contentName: contentNameValue,
+      contentName: data.contentName,
       boardCategory: data.boardCategory,
       tags: data.tags,
       dday: data.dday || null,

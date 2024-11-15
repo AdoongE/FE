@@ -1,9 +1,34 @@
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
-const ContentDeleteModal = forwardRef((props, ref) => {
+const token = localStorage.getItem('jwtToken');
+
+const api = axios.create({
+  baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+  headers: {
+    Authorization: `${token}`, // 토큰을 템플릿 리터럴로 추가
+  },
+});
+
+const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
   const cloesModal = () => {
     ref.current?.close();
+  };
+
+  const handleDelete = async () => {
+    console.log('콘텐츠 삭제 id: ', contentId);
+    try {
+      const response = await api.delete(
+        `/api/v1/content/api/v1/content/${contentId}`,
+      );
+
+      console.log('삭제 성공: ', response?.data.results);
+      cloesModal();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -33,7 +58,7 @@ const ContentDeleteModal = forwardRef((props, ref) => {
       <Alert>정말 삭제하시겠습니까?</Alert>
       <Buttons>
         <No onClick={cloesModal}>아니오</No>
-        <Yes>네</Yes>
+        <Yes onClick={handleDelete}>네</Yes>
       </Buttons>
     </Dialog>
   );

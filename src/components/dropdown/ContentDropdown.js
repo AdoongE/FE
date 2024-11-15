@@ -1,10 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import ContentDeleteModal from '../modal/ContentDeleteModal';
+import { useNavigate } from 'react-router-dom';
 
-function ContentDropdown() {
+function ContentDropdown({ contentId }) {
   const [isKebabOpen, setIsKebabOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('contentId: ', contentId);
+  }, [contentId]);
 
   const dialogRef = useRef(null);
 
@@ -25,6 +31,11 @@ function ContentDropdown() {
     }
   };
 
+  const handleDetail = () => {
+    navigate('/content-view', { state: { contentId: contentId } });
+    setIsKebabOpen(false);
+  };
+
   return (
     <div>
       <Button onClick={handleKebabToggle} onBlur={handleKebabClose}>
@@ -38,11 +49,7 @@ function ContentDropdown() {
       </Button>
       {isKebabOpen && (
         <Open ref={optionsRef}>
-          <Options onClick={() => setIsKebabOpen(false)}>
-            <Seed src="/seed.png" alt="seed" />
-            <Text>콘텐츠 열기</Text>
-          </Options>
-          <Options onClick={() => setIsKebabOpen(false)}>
+          <Options onClick={handleDetail}>
             <Icon
               icon="tabler:dots"
               style={{
@@ -74,7 +81,7 @@ function ContentDropdown() {
           </div>
         </Open>
       )}
-      <ContentDeleteModal ref={dialogRef} />
+      <ContentDeleteModal ref={dialogRef} contentId={contentId} />
     </div>
   );
 }
@@ -85,11 +92,6 @@ const Text = styled.div`
   font-size: 16px;
 `;
 
-const Seed = styled.img`
-  width: 20px;
-  height: 20px;
-  color: #4f4f4f;
-`;
 const Options = styled.button`
   width: 150px;
   border: 0px;
@@ -114,7 +116,7 @@ const Open = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 179px;
-  height: 112px;
+  height: 80px;
   border-radius: 10.03px;
   background-color: white;
   color: #4f4f4f;

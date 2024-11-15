@@ -14,31 +14,25 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('jwtToken');
   if (token) {
-    config.headers.Authorization = `${token}`;
+    config.headers.Authorization = token;
   }
   return config;
 });
 
 const MainPage = () => {
   const [sortedData, setSortedData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
-  const [currentPage, setCurrentPage] = useState(1); // 페이지 상태 추가
-  const contentPerPage = 9; // 페이지당 콘텐츠 수 설정
+  const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
+  const [currentPage, setCurrentPage] = useState(1);
+  const contentPerPage = 9;
 
-  // 전체 콘텐츠 조회 API 호출 함수
+  // 데이터 가져오기
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const url = '/api/v1/content/';
-      console.log(`GET 요청할 URL: ${url}`);
-
-      const response = await api.get(url);
-
-      // 응답 데이터 전체 확인
-      console.log('응답 데이터:', response.data);
-
-      // contentsInfoList에서 데이터를 추출하여 매핑
+      const response = await api.get('/api/v1/content/');
       const results =
         response.data.results?.flatMap(
           (item) =>
@@ -51,14 +45,14 @@ const MainPage = () => {
               contentDateType: content.contentDateType || '타입 없음',
               thumbnailImage: content.thumbnailImage || '이미지 없음',
               updatedDt: content.updatedDt || '업데이트 정보 없음',
-            })) ?? [], // 내부 배열이 undefined인 경우 빈 배열 반환
-        ) ?? []; // 최종 결과가 undefined인 경우 빈 배열 반환
-
-      setSortedData(results);
-      console.log('데이터 가져오기 성공:', results);
+              createdAt: content.createdAt || new Date(), // 날짜 정렬을 위한 필드
+            })) ?? [],
+        ) ?? [];
+      setOriginalData(results);
+      setSortedData(results); // 초기 데이터 설정
     } catch (error) {
       console.error(
-        'GET 요청으로 데이터 가져오기 에러:',
+        '데이터 가져오기 실패:',
         error.response ? error.response.data : error,
       );
     } finally {
@@ -67,33 +61,46 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchData(); // 전체 콘텐츠 로드
+    fetchData();
   }, [fetchData]);
 
-  // 페이지네이션 관련 함수
+  // 정렬 처리
+  useEffect(() => {
+    const sorted = [...originalData].sort((a, b) => {
+      if (sortOrder === '최신순') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      if (sortOrder === '이름순') {
+        return a.title.localeCompare(b.title);
+      }
+      return 0;
+    });
+    setSortedData(sorted);
+  }, [sortOrder, originalData]);
+
+  // 페이지네이션 처리
   const handlePageChange = (newPage) => {
-    const totalPages = Math.ceil(sortedData.length / contentPerPage);
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage); // 페이지 변경
+    if (
+      newPage >= 1 &&
+      newPage <= Math.ceil(sortedData.length / contentPerPage)
+    ) {
+      setCurrentPage(newPage);
     }
   };
 
-  // 현재 페이지에 맞는 콘텐츠 데이터 가져오기
   const displayedContentBoxes = sortedData.slice(
     (currentPage - 1) * contentPerPage,
     currentPage * contentPerPage,
   );
 
-  const totalPages = Math.ceil(sortedData.length / contentPerPage);
-
   const getPaginationNumbers = () => {
+    const totalPages = Math.ceil(sortedData.length / contentPerPage);
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(startPage + 4, totalPages);
-    const pages = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    return pages;
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i,
+    );
   };
 
   return (
@@ -103,7 +110,7 @@ const MainPage = () => {
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader setSortOrder={() => {}} />
+        <ContentHeader setSortOrder={setSortOrder} />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
             <div>로딩 중...</div>
@@ -112,7 +119,7 @@ const MainPage = () => {
           ) : (
             displayedContentBoxes.map((data) => (
               <ContentBox
-                key={data.id} // 고유한 key 값 추가
+                key={data.id}
                 title={data.title}
                 user={data.user}
                 category={data.category}
@@ -143,7 +150,9 @@ const MainPage = () => {
           ))}
           <PageArrow
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            disabled={
+              currentPage === Math.ceil(sortedData.length / contentPerPage)
+            }
           >
             {'>'}
           </PageArrow>

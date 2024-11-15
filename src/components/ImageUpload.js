@@ -27,7 +27,7 @@ const ImageUploadComponent = ({ onSetRepresentative }) => {
         // 첫 이미지 업로드 시 자동으로 대표 이미지 설정
         if (images.length === 0) {
           setRepresentativeIndex(0);
-          onSetRepresentative(newImages[0]); // 첫 번째 이미지 객체를 부모로 전달
+          onSetRepresentative(newImages[0]);
         }
       }
     },
@@ -39,77 +39,119 @@ const ImageUploadComponent = ({ onSetRepresentative }) => {
     const updatedImages = images.filter((image) => image.id !== id);
     setImages(updatedImages);
 
-    // 대표 이미지 인덱스 조정
     if (representativeIndex >= updatedImages.length) {
       setRepresentativeIndex(0);
-      onSetRepresentative(updatedImages[0] || null); // 이미지가 없으면 null 전달
+      onSetRepresentative(updatedImages[0] || null);
     }
   };
 
   const handleSetRepresentative = (index) => {
-    setRepresentativeIndex(index); // 대표 이미지 인덱스를 상태로 설정
-    onSetRepresentative(index); // 인덱스를 부모 컴포넌트로 전달
+    setRepresentativeIndex(index);
+    onSetRepresentative(index);
   };
 
   return (
-    <>
+    <Wrapper>
       <Instructions>
         이미지 업로드*{' '}
         <span>
-          최대 OOMB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
+          최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
         </span>
       </Instructions>
-      <ImagesWrapper>
-        {images.map((image, index) => (
-          <ImageContainer key={image.id}>
-            <ImageBox onClick={() => handleSetRepresentative(index)}>
-              {index === representativeIndex && (
-                <RepresentativeLabel>대표</RepresentativeLabel>
-              )}
-              <ImagePreview src={image.preview} alt={image.label} />
-              <DeleteButton
-                onClick={(e) => {
-                  e.stopPropagation(); // 클릭 이벤트 버블링 방지
-                  handleDeleteImage(image.id);
-                }}
-              >
-                x
-              </DeleteButton>
-            </ImageBox>
-            <FileName>{image.label}</FileName>
-          </ImageContainer>
-        ))}
-        {images.length < MAX_IMAGES && (
-          <AddImageBox {...getRootProps()}>
-            <input {...getInputProps()} />
-            <AddCircle>
-              <Icon
-                icon="iconoir:plus"
-                width="35"
-                height="35"
-                style={{ color: '#aaa' }}
-              />
-            </AddCircle>
-            <AddText>이미지 추가하기</AddText>
-          </AddImageBox>
-        )}
-      </ImagesWrapper>
-    </>
+      {images.length === 0 ? (
+        <DropArea {...getRootProps()}>
+          <input {...getInputProps()} />
+          <IconWrapper>
+            <Icon
+              icon="iconoir:upload"
+              width="40"
+              height="40"
+              style={{ color: '#aaa' }}
+            />
+          </IconWrapper>
+          <DropText>이미지 선택 혹은 여기로 파일을 끌어오세요.</DropText>
+        </DropArea>
+      ) : (
+        <ImagesWrapper>
+          {images.map((image, index) => (
+            <ImageContainer key={image.id}>
+              <ImageBox onClick={() => handleSetRepresentative(index)}>
+                {index === representativeIndex && (
+                  <RepresentativeLabel>대표</RepresentativeLabel>
+                )}
+                <ImagePreview src={image.preview} alt={image.label} />
+                <DeleteButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteImage(image.id);
+                  }}
+                >
+                  ×
+                </DeleteButton>
+              </ImageBox>
+              <FileName>{image.label}</FileName>
+            </ImageContainer>
+          ))}
+          {images.length < MAX_IMAGES && (
+            <AddImageBox {...getRootProps()}>
+              <input {...getInputProps()} />
+              <AddCircle>
+                <Icon
+                  icon="iconoir:plus"
+                  width="35"
+                  height="35"
+                  style={{ color: '#aaa' }}
+                />
+              </AddCircle>
+              <AddText>이미지 추가하기</AddText>
+            </AddImageBox>
+          )}
+        </ImagesWrapper>
+      )}
+    </Wrapper>
   );
 };
 
 export default ImageUploadComponent;
 
+// 스타일 컴포넌트
+const Wrapper = styled.div`
+  margin: 0;
+  padding: 0;
+`;
+
 const Instructions = styled.p`
   font-size: 30px;
   font-weight: 400;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 
   span {
     font-size: 18px;
     color: #999;
     font-weight: normal;
   }
+`;
+
+const DropArea = styled.div`
+  width: 100%;
+  max-width: 1100px;
+  height: 200px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const IconWrapper = styled.div`
+  margin-bottom: 10px;
+`;
+
+const DropText = styled.div`
+  color: #aaa;
+  font-size: 16px;
 `;
 
 const ImagesWrapper = styled.div`
@@ -176,7 +218,7 @@ const FileName = styled.div`
   font-size: 14px;
   color: #666;
   text-align: center;
-  width: 140px; // 사진 크기에 맞게 조정
+  width: 140px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

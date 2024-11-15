@@ -23,12 +23,19 @@ const MainPage = () => {
   const [sortedData, setSortedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
+  const [categoryId, setCategoryId] = useState(null);
 
   // 전체 콘텐츠 조회 API 호출 함수
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const url = '/api/v1/content/';
+      let url = '';
+      if (activeTab == '모아보기') {
+        url = '/api/v1/content/';
+      } else if (activeTab !== '모아보기' && categoryId) {
+        url = `/api/v1/content/${categoryId}`;
+      }
+      console.log('너 뭐야', activeTab);
       console.log(`GET 요청할 URL: ${url}`);
 
       const response = await api.get(url);
@@ -62,7 +69,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab, categoryId]);
 
   // 전체 콘텐츠를 기본으로 로드
   useEffect(() => {
@@ -73,7 +80,11 @@ const MainPage = () => {
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SidebarContainer>
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setCategoryId={setCategoryId}
+        />
       </SidebarContainer>
       <MainContent>
         <ContentHeader setSortOrder={() => {}} />

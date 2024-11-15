@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -23,20 +24,8 @@ const MenuProps = {
   },
 };
 
-const categoryOptions = [
-  '카테고리1',
-  '카테고리2',
-  '카테고리3',
-  '카테고리4',
-  '카테고리5',
-  '카테고리6',
-  '카테고리7',
-  '카테고리8',
-  '카테고리9',
-  '카테고리10',
-];
-
 export default function AddCategory({ value = [], onChange }) {
+  const [categories, setCategories] = useState([]);
   const theme = useTheme();
 
   const handleCheckChange = (event, field) => {
@@ -51,15 +40,40 @@ export default function AddCategory({ value = [], onChange }) {
     onChange(value.filter((item) => item !== field));
   };
 
+  const token = localStorage.getItem('jwtToken');
+  const api = axios.create({
+    baseURL: 'http://52.78.221.255',
+    headers: { Authorization: `${token}` },
+  });
+
+  const handleViewCategory = async () => {
+    try {
+      const response = await api.get('/api/v1/category');
+      const results = response.data.results;
+      console.log('카테고리 이름 좀 보자', results);
+      const names = results.map((item) => item.name);
+      setCategories(names);
+
+      if (response.status === 200) {
+        console.log('카테고리 조회 성공');
+      } else {
+        console.error('카테고리 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+
   return (
     <div>
-      <StyledFormControl>
+      <StyledFormControl onClick={handleViewCategory}>
         <StyledSelect
           id="demo-multiple-chip"
           multiple
           displayEmpty
           value={Array.isArray(value) ? value : []}
           onChange={(event) => onChange(event.target.value)}
+          onClick={handleViewCategory}
           input={<OutlinedInput id="demo-multiple-chip" />}
           renderValue={() => {
             if (value.length === 0) {
@@ -97,7 +111,7 @@ export default function AddCategory({ value = [], onChange }) {
           inputProps={{ 'aria-label': 'Without label' }}
         >
           <Title>내 카테고리</Title>
-          {categoryOptions.map((field) => (
+          {categories.map((field) => (
             <FormGroup
               key={field}
               style={{

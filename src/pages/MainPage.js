@@ -24,6 +24,8 @@ const MainPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // 페이지 상태 추가
+  const contentPerPage = 9; // 페이지당 콘텐츠 수 설정
 
   // 전체 콘텐츠 조회 API 호출 함수
   const fetchData = useCallback(async () => {
@@ -71,10 +73,35 @@ const MainPage = () => {
     }
   }, [activeTab, categoryId]);
 
-  // 전체 콘텐츠를 기본으로 로드
   useEffect(() => {
     fetchData(); // 전체 콘텐츠 로드
   }, [fetchData]);
+
+  // 페이지네이션 관련 함수
+  const handlePageChange = (newPage) => {
+    const totalPages = Math.ceil(sortedData.length / contentPerPage);
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage); // 페이지 변경
+    }
+  };
+
+  // 현재 페이지에 맞는 콘텐츠 데이터 가져오기
+  const displayedContentBoxes = sortedData.slice(
+    (currentPage - 1) * contentPerPage,
+    currentPage * contentPerPage,
+  );
+
+  const totalPages = Math.ceil(sortedData.length / contentPerPage);
+
+  const getPaginationNumbers = () => {
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(startPage + 4, totalPages);
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
   const categoryName = sortedData.length > 0 ? sortedData[0].category : '';
 
@@ -100,7 +127,7 @@ const MainPage = () => {
           ) : sortedData.length === 0 ? (
             <ContentBlank />
           ) : (
-            sortedData.map((data) => (
+            displayedContentBoxes.map((data) => (
               <ContentBox
                 key={data.id} // 고유한 key 값 추가
                 title={data.title}
@@ -113,6 +140,31 @@ const MainPage = () => {
             ))
           )}
         </ContentArea>
+
+        {/* 페이지네이션 */}
+        <Pagination>
+          <PageArrow
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            {'<'}
+          </PageArrow>
+          {getPaginationNumbers().map((page) => (
+            <PageNumber
+              key={page}
+              $active={currentPage === page}
+              onClick={() => handlePageChange(page)}
+            >
+              {page}
+            </PageNumber>
+          ))}
+          <PageArrow
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            {'>'}
+          </PageArrow>
+        </Pagination>
       </MainContent>
     </MainContainer>
   );
@@ -151,6 +203,37 @@ const ContentArea = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 118px 0;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 110px;
+  padding-bottom: 58px;
+`;
+
+const PageArrow = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: ${(props) => (props.disabled ? '#ccc' : '#000')};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  &:hover {
+    color: ${(props) => (props.disabled ? '#ccc' : '#333')};
+  }
+`;
+
+const PageNumber = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
+  color: ${({ $active }) => ($active ? '#000' : '#999')};
+  cursor: pointer;
+  &:hover {
+    color: #000;
+  }
 `;
 
 export default MainPage;

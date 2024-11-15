@@ -28,27 +28,29 @@ const MainPage = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const url = '/api/v1/content/'; // 전체 콘텐츠 조회 URL
-
+      const url = '/api/v1/content/';
       console.log(`GET 요청할 URL: ${url}`);
 
       const response = await api.get(url);
 
-      const results = response.data.results
-        ? response.data.results.map((content) => ({
-            id: content.contentId,
-            title: content.contentName ? content.contentName[0] : '제목 없음',
-            user: content.nickname || '사용자 정보 없음',
-            category:
-              content.boardCategory && content.boardCategory.length > 0
-                ? content.boardCategory[0]
-                : '카테고리 없음',
-            tags: content.tagName || [],
-            contentDateType: content.contentDateType,
-            thumbnailImage: content.thumbnailImage,
-            updatedDt: content.updatedDt,
-          }))
-        : [];
+      // 응답 데이터 전체 확인
+      console.log('응답 데이터:', response.data);
+
+      // contentsInfoList에서 데이터를 추출하여 매핑
+      const results =
+        response.data.results?.flatMap(
+          (item) =>
+            item.contentsInfoList?.map((content) => ({
+              id: content.contentId || 'ID 없음',
+              title: content.contentName || '제목 없음',
+              user: item.nickname || '사용자 정보 없음',
+              category: content.categoryName?.[0] || '카테고리 없음',
+              tags: content.tagName || [],
+              contentDateType: content.contentDateType || '타입 없음',
+              thumbnailImage: content.thumbnailImage || '이미지 없음',
+              updatedDt: content.updatedDt || '업데이트 정보 없음',
+            })) ?? [], // 내부 배열이 undefined인 경우 빈 배열 반환
+        ) ?? []; // 최종 결과가 undefined인 경우 빈 배열 반환
 
       setSortedData(results);
       console.log('데이터 가져오기 성공:', results);
@@ -83,7 +85,7 @@ const MainPage = () => {
           ) : (
             sortedData.map((data) => (
               <ContentBox
-                key={data.id} // 고유한 key 값을 지정
+                key={data.id} // 고유한 key 값 추가
                 title={data.title}
                 user={data.user}
                 category={data.category}

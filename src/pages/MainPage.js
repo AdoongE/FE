@@ -23,6 +23,7 @@ const MainPage = () => {
   const [sortedData, setSortedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
+  const [categoryId, setCategoryId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // 페이지 상태 추가
   const contentPerPage = 9; // 페이지당 콘텐츠 수 설정
 
@@ -30,7 +31,13 @@ const MainPage = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const url = '/api/v1/content/';
+      let url = '';
+      if (activeTab == '모아보기') {
+        url = '/api/v1/content/';
+      } else if (activeTab !== '모아보기' && categoryId) {
+        url = `/api/v1/content/${categoryId}`;
+      }
+      console.log('너 뭐야', activeTab);
       console.log(`GET 요청할 URL: ${url}`);
 
       const response = await api.get(url);
@@ -64,7 +71,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab, categoryId]);
 
   useEffect(() => {
     fetchData(); // 전체 콘텐츠 로드
@@ -96,14 +103,24 @@ const MainPage = () => {
     return pages;
   };
 
+  const categoryName = sortedData.length > 0 ? sortedData[0].category : '';
+
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SidebarContainer>
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setCategoryId={setCategoryId}
+        />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader setSortOrder={() => {}} />
+        <ContentHeader
+          setSortOrder={() => {}}
+          categoryId={categoryId}
+          categoryName={categoryName}
+        />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
             <div>로딩 중...</div>

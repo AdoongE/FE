@@ -13,7 +13,7 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import axios from 'axios';
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
@@ -258,6 +258,14 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     setActiveTab(tabName);
   };
 
+  const handleCategoryClick = (categoryName) => {
+    const categoryIndex = categories.indexOf(categoryName);
+    const categoryId = categoryIds[categoryIndex];
+    setCategoryId(categoryId);
+    setActiveTab('카테고리');
+    console.log('제발요', categoryId);
+  };
+
   return (
     <StMainPage>
       <SideDiv>
@@ -299,6 +307,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                 )}
                 {bookmarks.map((bookmark, index) => (
                   <CategoryItem
+                    onClick={() => handleCategoryClick(bookmark)}
                     draggable
                     onDragStart={(e) => onDragStart(e, index, 'bookmarks')}
                     onDragOver={onDragOver}
@@ -354,6 +363,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                 <>
                   {categories.map((category, index) => (
                     <CategoryItem
+                      onClick={() => handleCategoryClick(category)}
                       draggable
                       onDragStart={(e) => onDragStart(e, index, 'categories')}
                       onDragOver={onDragOver}

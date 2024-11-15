@@ -9,24 +9,28 @@ const ImageUploadComponent = ({ onSetRepresentative }) => {
   const [images, setImages] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
 
-  const onDrop = (acceptedFiles) => {
-    const newImages = acceptedFiles.map((file) => {
-      const preview = URL.createObjectURL(file);
-      return {
-        id: file.name,
-        label: file.name,
-        preview,
-      };
-    });
-
-    if (images.length + newImages.length <= MAX_IMAGES) {
-      setImages((prevImages) => [...prevImages, ...newImages]);
-      if (images.length === 0) setRepresentativeIndex(0); // 첫 이미지가 대표로 설정됨
-    }
-  };
-
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
+    onDrop: (acceptedFiles) => {
+      const newImages = acceptedFiles.map((file) => {
+        const preview = URL.createObjectURL(file);
+        return {
+          id: file.name,
+          label: file.name,
+          preview,
+        };
+      });
+
+      if (images.length + newImages.length <= MAX_IMAGES) {
+        const updatedImages = [...images, ...newImages];
+        setImages(updatedImages);
+
+        // 첫 이미지 업로드 시 자동으로 대표 이미지 설정
+        if (images.length === 0) {
+          setRepresentativeIndex(0);
+          onSetRepresentative(newImages[0]); // 첫 번째 이미지 객체를 부모로 전달
+        }
+      }
+    },
     accept: 'image/jpeg, image/png, image/svg+xml',
     maxSize: 10 * 1024 * 1024, // 10 MB 제한
   });
@@ -35,14 +39,16 @@ const ImageUploadComponent = ({ onSetRepresentative }) => {
     const updatedImages = images.filter((image) => image.id !== id);
     setImages(updatedImages);
 
+    // 대표 이미지 인덱스 조정
     if (representativeIndex >= updatedImages.length) {
-      setRepresentativeIndex(0); // 이미지가 삭제될 경우, 첫 이미지로 대표 설정
+      setRepresentativeIndex(0);
+      onSetRepresentative(updatedImages[0] || null); // 이미지가 없으면 null 전달
     }
   };
 
   const handleSetRepresentative = (index) => {
-    setRepresentativeIndex(index); // 클릭 시 대표 이미지 변경
-    onSetRepresentative(index);
+    setRepresentativeIndex(index); // 대표 이미지 인덱스를 상태로 설정
+    onSetRepresentative(index); // 인덱스를 부모 컴포넌트로 전달
   };
 
   return (

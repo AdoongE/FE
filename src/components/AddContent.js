@@ -19,8 +19,8 @@ import { ContentAddHandler } from './api/ContentAddApi';
 
 function AddContent() {
   const [dataType, setDataType] = useState(null);
+  const [representativeIndex, setRepresentativeIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [thumbnailImage, setThumbnailImage] = useState(0);
   const [pendingOption, setPendingOption] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isFirstSelection, setIsFirstSelection] = useState(true);
@@ -28,8 +28,8 @@ function AddContent() {
   const ChangeRef = useRef(null);
 
   const handleImage = (index) => {
-    setThumbnailImage(index);
-    setValue('thumbnailImage', thumbnailImage, { shouldValidate: true });
+    setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
+    setValue('thumbnailImage', index, { shouldValidate: true }); // index를 직접 전달
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -175,7 +175,7 @@ function AddContent() {
     if (dataType === 'LINK') {
       updateData.contentLink = data.contentLink;
     } else if (dataType === 'IMAGE') {
-      updateData.thumbnailImage = data.thumbnailImage;
+      updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
     }
 
     console.log('콘텐츠 값', updateData);

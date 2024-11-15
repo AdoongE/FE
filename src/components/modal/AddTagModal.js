@@ -1,4 +1,10 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
@@ -46,7 +52,14 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
     '정치',
   ];
 
+  const dialogRef = useRef(null);
   const [selectedTags, setSelectedTags] = useState([]);
+
+  useImperativeHandle(ref, () => ({
+    resetTags: () => setSelectedTags([]),
+    showModal: () => dialogRef.current?.showModal(),
+    close: () => dialogRef.current?.close(),
+  }));
 
   const handleSelectTag = (tag) => {
     setSelectedTags((prevTags) =>
@@ -56,19 +69,23 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
     );
   };
 
-  const handleApply = () => {
-    onConfirm([...selectedTags]);
-    closeModal();
+  const handleClose = () => {
+    setSelectedTags([]);
+    dialogRef.current?.close();
   };
 
-  const closeModal = () => {
-    ref.current?.close();
+  const handleApply = () => {
+    onConfirm([...selectedTags]);
+    dialogRef.current?.close();
+  };
+
+  const handleReset = () => {
+    setSelectedTags([]);
   };
 
   useEffect(() => {
-    if (ref.current) {
-      const dialogElement = ref.current;
-
+    const dialogElement = dialogRef.current;
+    if (dialogElement) {
       const handleClickOutside = (event) => {
         const dialogArea = dialogElement.getBoundingClientRect();
         if (
@@ -80,15 +97,15 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
           dialogElement.close();
         }
       };
-      dialogElement.addEventListener('click', handleClickOutside);
+      dialogElement.addEventListener('mousedown', handleClickOutside);
       return () => {
-        dialogElement.removeEventListener('click', handleClickOutside);
+        dialogElement.removeEventListener('mousedown', handleClickOutside);
       };
     }
   }, []);
 
   return (
-    <Dialog ref={ref}>
+    <Dialog ref={dialogRef}>
       <Head>
         <Title>태그를 선택하세요.</Title>
         <Icons>
@@ -99,6 +116,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
               height: '32px',
               color: 'black',
             }}
+            onClick={handleReset}
           />
           <Icon
             icon="ic:round-close"
@@ -107,7 +125,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
               height: '36px',
               color: 'black',
             }}
-            onClick={closeModal}
+            onClick={handleClose}
           />
         </Icons>
       </Head>

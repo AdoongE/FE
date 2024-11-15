@@ -1,17 +1,43 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
+import Alert from '@mui/material/Alert';
 
 const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   const closeModal = () => {
     ref.current?.close();
   };
 
+  const dialogRef = useRef(null);
+  const showLinkModal = () => {
+    dialogRef.current?.showModal();
+  };
+
   const [contentLinks, setContentLinks] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const closeLinkModal = () => {
+    ref.current?.close();
+    setContentLinks('');
+  };
 
   const handleAddLink = () => {
-    onConfirm(contentLinks);
-    closeModal();
+    console.log('입력된 링크:', contentLinks);
+    if (contentLinks === '') {
+      setErrorMessage('URL을 입력해주세요.');
+      return;
+    }
+
+    const regex = /^(http|https):\/\/[^\s$.?#].[^\s]*$/i;
+    const isValid = regex.test(contentLinks);
+
+    if (!isValid) {
+      setErrorMessage('유효하지 않은 링크입니다.');
+    } else {
+      onConfirm(contentLinks);
+      setErrorMessage('');
+      closeModal();
+    }
   };
 
   useEffect(() => {
@@ -26,6 +52,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
           event.clientY > dialogArea.bottom
         ) {
           dialogElement.close();
+          setContentLinks('');
         }
       };
       dialogElement.addEventListener('click', handleClickOutside);
@@ -35,6 +62,20 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (errorMessage) {
+      showLinkModal();
+      const timer = setTimeout(() => {
+        dialogRef.current?.close();
+        setErrorMessage('');
+      }, 1200);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [errorMessage, setErrorMessage]);
+
   return (
     <Dialog ref={ref}>
       <ModalDiv>
@@ -43,7 +84,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
           <Icon
             icon="line-md:close"
             style={{ width: '36px', height: '36px', cursor: 'pointer' }}
-            onClick={closeModal}
+            onClick={closeLinkModal}
           />
         </TopDiv>
 
@@ -53,19 +94,48 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
           placeholder="링크를 입력하세요."
         />
         <ButtonContainer>
-          <ModalButton className="no" onClick={closeModal}>
+          <ModalButton className="no" onClick={closeLinkModal}>
             취소
           </ModalButton>
           <ModalButton className="ok" onClick={handleAddLink}>
             확인
           </ModalButton>
+          {errorMessage && showLinkModal()}
         </ButtonContainer>
       </ModalDiv>
+      <ErrorDialog ref={dialogRef}>
+        <Alert
+          severity="info"
+          sx={{
+            bgcolor: '#F2F2F2',
+            mt: 2,
+            width: '300px',
+            display: 'flex',
+            fontSize: '15px',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {errorMessage}
+        </Alert>
+      </ErrorDialog>
     </Dialog>
   );
 });
 
 AddLinkModal.displayName = 'AddLinkModal';
+
+const ErrorDialog = styled.dialog`
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+`;
 
 const Input = styled.input`
   background-color: #f6f6f6;

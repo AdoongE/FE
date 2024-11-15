@@ -10,8 +10,12 @@ function LinkUploader({ value, onChange }) {
     LinkRef.current?.showModal();
   };
 
+  const handleDeleteLink = () => {
+    onChange('');
+  };
+
   const handleConfirm = (newLink) => {
-    onChange(newLink);
+    onChange(newLink); // 부모 컴포넌트로 값 전달
   };
 
   return (
@@ -34,6 +38,7 @@ function LinkUploader({ value, onChange }) {
               value={value}
             />
             <Icon
+              onClick={handleDeleteLink}
               icon="ic:round-close"
               style={{
                 width: '24px',

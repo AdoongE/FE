@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import LoginModal from '../modal/LoginModal';
 import LogoImage from '../../assets/icons/seedzip_logo.png';
 import Logo from '../../assets/icons/seedzip.png';
-import LoginModal from '../modal/LoginModal';
 
 function SplashBar() {
   const dialogRef = useRef(null);
@@ -24,6 +24,26 @@ function SplashBar() {
   );
 }
 
+const LogoContainer = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledLogoImage = styled.img`
+  width: 36px;
+  height: 36px;
+  margin-left: 40px;
+`;
+
+const StyledLogo = styled.img`
+  width: 148px;
+  height: 40px;
+  margin-left: 16px;
+  margin-top: 12px;
+`;
+
 const LoginButton = styled.button`
   width: 107px;
   height: 45px;
@@ -40,7 +60,7 @@ const LoginButton = styled.button`
   border: 0;
   position: absolute;
   top: 36px;
-  right: 80px;
+  right: 40px;
 `;
 
 const Bar = styled.div`
@@ -51,24 +71,6 @@ const Bar = styled.div`
   align-items: center;
   padding-left: 49px;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.05);
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledLogoImage = styled.img`
-  width: 36px;
-  height: 36px;
-  margin-left: 40px;
-`;
-
-const StyledLogo = styled.img`
-  width: 148px;
-  height: 40px;
-  margin-left: 16px;
-  margin-top: 12px;
 `;
 
 export default SplashBar;

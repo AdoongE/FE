@@ -4,7 +4,15 @@ import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 import defaultImage from '../assets/icons/seed_contentbox.png';
 
-function ContentBox({ title, user, category, tags, dDay, thumbnailImage }) {
+function ContentBox({
+  contentId,
+  title,
+  user,
+  category,
+  tags,
+  dDay,
+  thumbnailImage,
+}) {
   const [showNewImage, setShowNewImage] = useState(false);
 
   const handleIconClick = () => {
@@ -22,7 +30,7 @@ function ContentBox({ title, user, category, tags, dDay, thumbnailImage }) {
           <Dday dDay={dDay}>{`D-${dDay === 0 ? 'DAY' : Math.abs(dDay)}`}</Dday>
         )}
         <Dropdown>
-          <ContentDropdown />
+          <ContentDropdown contentId={contentId} />
         </Dropdown>
       </ImageBox>
       <TagContainer>

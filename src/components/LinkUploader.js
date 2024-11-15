@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import AddLinkModal from './modal/AddLinkModal';
-import Alert from '@mui/material/Alert';
 
 function LinkUploader({ value, onChange }) {
   const LinkRef = useRef(null);
@@ -11,17 +10,12 @@ function LinkUploader({ value, onChange }) {
     LinkRef.current?.showModal();
   };
 
-  const handleConfirm = (newLink) => {
-    const regex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}(\/[\w-]*)*\/?$/;
-    const isValid = regex.test(newLink);
+  const handleDeleteLink = () => {
+    onChange('');
+  };
 
-    if (isValid) {
-      onChange(newLink);
-    } else {
-      <Alert severity="info" sx={{ bgcolor: '#F2F2F2' }}>
-        유효하지 않은 링크입니다.
-      </Alert>;
-    }
+  const handleConfirm = (newLink) => {
+    onChange(newLink); // 부모 컴포넌트로 값 전달
   };
 
   return (
@@ -44,6 +38,7 @@ function LinkUploader({ value, onChange }) {
               value={value}
             />
             <Icon
+              onClick={handleDeleteLink}
               icon="ic:round-close"
               style={{
                 width: '24px',

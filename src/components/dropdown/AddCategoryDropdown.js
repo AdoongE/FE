@@ -84,7 +84,7 @@ export default function AddCategory({ value = [], onChange }) {
                         color: 'white',
                       }}
                       onMouseDown={(e) => {
-                        e.stopPropagation(); // Prevent the dropdown from opening
+                        e.stopPropagation();
                         handleDelete(val);
                       }}
                     />

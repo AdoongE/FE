@@ -15,8 +15,6 @@ import PdfUploadComponent from './PdfUpload';
 import ImageUploadComponent from './ImageUpload';
 import { ContentAddHandler } from './api/ContentAddApi';
 
-// import Box from '@mui/material/Box';
-
 function AddContent() {
   const [dataType, setDataType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +22,29 @@ function AddContent() {
   const [pendingOption, setPendingOption] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isFirstSelection, setIsFirstSelection] = useState(true);
+  const [tags, setTags] = useState([]);
+  const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
+
+  const handleTagInput = (event) => {
+    if (isComposing) return;
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const newTag = event.target.value;
+      if (
+        newTag &&
+        !tags.includes(newTag) &&
+        newTag.length <= 8 &&
+        !/\s/.test(newTag)
+      ) {
+        setTags([...tags, newTag]);
+        event.target.value = '';
+      }
+    }
+  };
+
+  const removeTag = (tagIdx) => {
+    setTags(tags.filter((tag, idx) => idx != tagIdx));
+  };
 
   const ChangeRef = useRef(null);
 
@@ -353,7 +374,6 @@ function AddContent() {
             {dataType === 'IMAGE' && (
               <ImageUploadComponent onSetRepresentative={handleImage} />
             )}
-
             <Tag>
               <TagName>태그 (2개 이상)*</TagName>
               <TagInputs>
@@ -362,32 +382,11 @@ function AddContent() {
                     name="tags"
                     control={control}
                     defaultValue={[]}
-                    render={({ field, fieldState }) => (
+                    render={({ field }) => (
                       <>
-                        <TagInput
-                          label="tags"
-                          $error={fieldState.error ? true : undefined}
-                          $helperText={
-                            fieldState.error && fieldState.error.message
-                          }
-                          placeholder="태그 입력 후 엔터, 최대 8자, 띄어쓰기 불가"
-                          value={field.value || []}
-                          onChange={(newValue) => {
-                            field.onChange(newValue);
-                          }}
-                        />
-
-                        {/* <Box
-                        sx={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: 0.5,
-                          mt: 1,
-                        }}
-                      >
-                        {field.value.map((tag) => (
-                          <Chip key={tag}>
-                            {tag}
+                        {tags.map((tag, idx) => (
+                          <Chip key={idx}>
+                            <TagP>{tag}</TagP>
                             <Icon
                               icon="ic:round-close"
                               style={{
@@ -395,20 +394,22 @@ function AddContent() {
                                 height: '24px',
                                 color: 'white',
                               }}
-                              onMouseDown={() => handleDelete(tag, field)}
+                              onClick={() => removeTag(idx)}
                             />
                           </Chip>
                         ))}
-                      </Box>
-                      <InputButton onClick={() => showTagModal(field)}>
-                        + 태그 선택
-                      </InputButton>
-                      <AddTagModal
-                        ref={TagRef}
-                        onConfirm={(newTag) => {
-                          field.onChange([...field.value, newTag]);
-                        }}
-                      /> */}
+                        {tags.length <= 5 && (
+                          <TagInput
+                            onCompositionStart={() => setIsComposing(true)}
+                            onCompositionEnd={() => setIsComposing(false)}
+                            onKeyDown={handleTagInput}
+                            placeholder={
+                              tags.length == 0
+                                ? '엔터를 입력하여 태그를 등록해주세요'
+                                : ''
+                            }
+                          />
+                        )}
                         <InputButton onClick={() => showTagModal(field)}>
                           + 태그 선택
                         </InputButton>
@@ -493,20 +494,25 @@ function AddContent() {
   );
 }
 
-// const Chip = styled.div`
-//   width: fit-content;
-//   height: 44px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   color: white;
-//   border: 0;
-//   border-radius: 5px;
-//   column-gap: 5px;
-//   background-color: #41c3ab;
-//   padding-left: 16px;
-//   padding-right: 16px;
-// `;
+const Chip = styled.div`
+  width: fit-content;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  column-gap: 15px;
+  background-color: #41c3ab;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-right: 10px;
+`;
+
+const TagP = styled.p`
+  font-size: 20px;
+`;
 
 const ButtonContainers = styled.div`
   display: flex;
@@ -645,7 +651,7 @@ const TagContainer = styled.div`
   border: 1px solid #9f9f9f;
   border-radius: 10px;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   z-index: 1;
   opacity: 1;
@@ -657,24 +663,14 @@ const TagInputs = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 15px;
-  /* font-size: 20px; */
 `;
 
 const TagInput = styled.input`
-  width: 625px;
-  height: 50px;
+  flex-grow: 1;
+  padding: 0.5em 0;
   border: none;
-  -webkit-appearance: none;
-  appearance: none;
-  overflow: auto;
-  z-index: -1;
-
-  &::placeholder {
-    font-size: 20px;
-    font-weight: 400;
-    color: #4f4f4f;
-    margin: 18px 18px;
-  }
+  outline: none;
+  font-size: 20px;
 `;
 
 const Text = styled.textarea`
@@ -779,8 +775,6 @@ const ContentPage = styled.div`
   flex-direction: column;
   margin: 0 auto;
   width: 1334px;
-  /* justify-content: center;
-  align-items: center; */
 `;
 
 const MainDiv = styled.div`

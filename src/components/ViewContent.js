@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 
 function ViewContent() {
+  const { state } = useLocation();
   const [contentInfo, setContentInfo] = useState({
     contentId: '',
     contentDataType: '',
@@ -41,9 +43,7 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const response = await api.get(
-        `/api/v1/content/all/${contentInfo.contentId}`,
-      );
+      const response = await api.get(`/api/v1/content/all/${state.contentId}`);
       const results = response.data.results[0];
       console.log('결과', results);
       setContentInfo({

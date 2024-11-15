@@ -17,10 +17,10 @@ import { ContentAddHandler } from './api/ContentAddApi';
 
 // import Box from '@mui/material/Box';
 
-function AddContent() {
+function AddContent({ onSetRepresentativeImage }) {
   const [dataType, setDataType] = useState(null);
+  const [representativeIndex, setRepresentativeIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [thumbnailImage, setThumbnailImage] = useState(0);
   const [pendingOption, setPendingOption] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isFirstSelection, setIsFirstSelection] = useState(true);
@@ -28,8 +28,16 @@ function AddContent() {
   const ChangeRef = useRef(null);
 
   const handleImage = (index) => {
-    setThumbnailImage(index);
-    setValue('thumbnailImage', thumbnailImage, { shouldValidate: true });
+    setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
+    setValue('thumbnailImage', index, { shouldValidate: true });
+    if (onSetRepresentativeImage) {
+      onSetRepresentativeImage(index); // 부모 컴포넌트로 콜백 전달
+    }
+  };
+
+  const handlePdf = (index) => {
+    setRepresentativeIndex(index); // 대표 파일 인덱스 관리
+    setValue('thumbnailImage', index, { shouldValidate: true }); // Form 값 설정
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -172,7 +180,7 @@ function AddContent() {
     if (dataType === 'LINK') {
       updateData.contentLink = data.contentLink;
     } else if (dataType === 'IMAGE') {
-      updateData.thumbnailImage = data.thumbnailImage;
+      updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
     }
 
     console.log('콘텐츠 값', updateData);
@@ -346,11 +354,12 @@ function AddContent() {
                 )}
               />
             )}
-            {dataType === 'PDF' && <PdfUploadComponent />}
             {dataType === 'IMAGE' && (
               <ImageUploadComponent onSetRepresentative={handleImage} />
             )}
-
+            {dataType === 'PDF' && (
+              <PdfUploadComponent onSetRepresentative={handlePdf} />
+            )}
             <Tag>
               <TagName>태그 (2개 이상)*</TagName>
               <TagInputs>

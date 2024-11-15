@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import LogoImage from '../../assets/icons/seedzip_logo.png';
+import Logo from '../../assets/icons/seedzip.png';
 import LoginModal from '../modal/LoginModal';
 
 function SplashBar() {
@@ -11,10 +13,10 @@ function SplashBar() {
   return (
     <div>
       <Bar>
-        <Logo>
-          <LogoImg />
-          <LogoName>seedzip</LogoName>
-        </Logo>
+        <LogoContainer>
+          <StyledLogoImage src={LogoImage} alt="seedzip_logo" />
+          <StyledLogo src={Logo} alt="seedzip" />
+        </LogoContainer>
         <LoginButton onClick={showModal}>로그인</LoginButton>
       </Bar>
       <LoginModal ref={dialogRef} />
@@ -38,7 +40,7 @@ const LoginButton = styled.button`
   border: 0;
   position: absolute;
   top: 36px;
-  right: 40px;
+  right: 80px;
 `;
 
 const Bar = styled.div`
@@ -51,23 +53,22 @@ const Bar = styled.div`
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.05);
 `;
 
-const Logo = styled.div`
-  position: absolute;
+const LogoContainer = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
 `;
 
-const LogoImg = styled.div`
-  width: 28px;
-  height: 26px;
-  background-color: #41c3ab;
+const StyledLogoImage = styled.img`
+  width: 36px;
+  height: 36px;
+  margin-left: 40px;
 `;
 
-const LogoName = styled.div`
-  font-weight: 700;
-  font-size: 40px;
+const StyledLogo = styled.img`
+  width: 148px;
+  height: 40px;
   margin-left: 16px;
+  margin-top: 12px;
 `;
 
 export default SplashBar;

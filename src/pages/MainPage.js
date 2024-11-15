@@ -24,6 +24,7 @@ const MainPage = () => {
   const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
+  const [categoryId, setCategoryId] = useState(null);
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
@@ -32,7 +33,19 @@ const MainPage = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/v1/content/');
+      let url = '';
+      if (activeTab == '모아보기') {
+        url = '/api/v1/content/';
+      } else if (activeTab !== '모아보기' && categoryId) {
+        url = `/api/v1/content/${categoryId}`;
+      }
+      console.log('너 뭐야', activeTab);
+      console.log(`GET 요청할 URL: ${url}`);
+
+      const response = await api.get(url);
+
+      // 응답 데이터 전체 확인
+      console.log('응답 데이터:', response.data);
       const results =
         response.data.results?.flatMap(
           (item) =>
@@ -58,7 +71,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab, categoryId]);
 
   useEffect(() => {
     fetchData();
@@ -103,14 +116,24 @@ const MainPage = () => {
     );
   };
 
+  const categoryName = sortedData.length > 0 ? sortedData[0].category : '';
+
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SidebarContainer>
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setCategoryId={setCategoryId}
+        />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader setSortOrder={setSortOrder} />
+        <ContentHeader
+          setSortOrder={setSortOrder}
+          categoryId={categoryId}
+          categoryName={categoryName}
+        />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
             <div>로딩 중...</div>

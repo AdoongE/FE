@@ -76,6 +76,8 @@ const MainPage = () => {
     fetchData(); // 전체 콘텐츠 로드
   }, [fetchData]);
 
+  const categoryName = sortedData.length > 0 ? sortedData[0].category : '';
+
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -87,7 +89,11 @@ const MainPage = () => {
         />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader setSortOrder={() => {}} />
+        <ContentHeader
+          setSortOrder={() => {}}
+          categoryId={categoryId}
+          categoryName={categoryName}
+        />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
             <div>로딩 중...</div>

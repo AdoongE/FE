@@ -2,8 +2,21 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
-function ContentHeader({ setSortOrder }) {
+function ContentHeader({ setSortOrder, categoryId, categoryName }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
+  // const [categoryName, setCategoryName] = useState('');
+
+  // useEffect(() => {
+  //   console.log('카테고리 이름 제발좀요', categories);
+  //   // if (categoryId) {
+  //   //   const category = categories.find((cat) => cat.id === categoryId);
+  //   //   if (category) {
+  //   //     setCategoryName(category.name);
+  //   //   }
+  //   // } else {
+  //   //   setCategoryName('');
+  //   // }
+  // }, [categoryId, categories]);
 
   const handleFilterClick = (filterOption) => {
     setSelectedFilter(filterOption);
@@ -12,7 +25,15 @@ function ContentHeader({ setSortOrder }) {
 
   return (
     <Main>
-      <Title>내 콘텐츠 모아보기</Title>
+      <Title>
+        {categoryId ? (
+          <>
+            내 콘텐츠 모아보기<CategoryName>&gt; {categoryName}</CategoryName>
+          </>
+        ) : (
+          '내 콘텐츠 모아보기'
+        )}
+      </Title>
       <Bar>
         <Filter>
           <Option
@@ -71,6 +92,15 @@ const Title = styled.div`
   font-size: 44px;
   position: absolute;
   left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CategoryName = styled.span`
+  font-weight: 400;
+  font-size: 30px;
+  margin-left: 11px;
 `;
 
 const Filter = styled.div`

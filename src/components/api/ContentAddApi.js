@@ -19,7 +19,7 @@ export const ContentAddHandler = async (data) => {
   console.log('콘텐츠 생성 요청 데이터:', requestData);
 
   try {
-    const response = await api.post('/api/v1/content', requestData);
+    const response = await api.post('/api/v1/content/', requestData);
     if (response.data.status.code === 200) {
       console.log('콘텐츠 생성 성공: ', response.data.status.message);
       console.log(response.data.results.msg);

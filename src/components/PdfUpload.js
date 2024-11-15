@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 
 const MAX_FILES = 3;
 
-const PdfUploadComponent = () => {
+const PdfUploadComponent = ({ onSetRepresentative }) => {
   const [files, setFiles] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 파일 인덱스
 
@@ -18,7 +18,14 @@ const PdfUploadComponent = () => {
 
     if (files.length + newFiles.length <= MAX_FILES) {
       setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-      if (files.length === 0) setRepresentativeIndex(0); // 첫 파일이 대표로 설정됨
+
+      // 첫 번째 파일을 대표로 설정
+      if (files.length === 0) {
+        setRepresentativeIndex(0);
+        if (onSetRepresentative) {
+          onSetRepresentative(0); // 대표 파일 인덱스 전달
+        }
+      }
     }
   };
 
@@ -34,11 +41,17 @@ const PdfUploadComponent = () => {
 
     if (representativeIndex >= updatedFiles.length) {
       setRepresentativeIndex(0); // 파일이 삭제될 경우, 첫 파일로 대표 설정
+      if (onSetRepresentative) {
+        onSetRepresentative(0); // 대표 파일이 없으면 첫 파일로 재설정
+      }
     }
   };
 
   const handleSetRepresentative = (index) => {
-    setRepresentativeIndex(index); // 클릭 시 대표 파일 변경
+    setRepresentativeIndex(index);
+    if (onSetRepresentative) {
+      onSetRepresentative(index); // 선택된 대표 파일 인덱스 전달
+    }
   };
 
   return (

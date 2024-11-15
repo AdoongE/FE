@@ -17,7 +17,7 @@ import { ContentAddHandler } from './api/ContentAddApi';
 
 // import Box from '@mui/material/Box';
 
-function AddContent() {
+function AddContent({ onSetRepresentativeImage }) {
   const [dataType, setDataType] = useState(null);
   const [representativeIndex, setRepresentativeIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,7 +29,15 @@ function AddContent() {
 
   const handleImage = (index) => {
     setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
-    setValue('thumbnailImage', index, { shouldValidate: true }); // index를 직접 전달
+    setValue('thumbnailImage', index, { shouldValidate: true });
+    if (onSetRepresentativeImage) {
+      onSetRepresentativeImage(index); // 부모 컴포넌트로 콜백 전달
+    }
+  };
+
+  const handlePdf = (index) => {
+    setRepresentativeIndex(index); // 대표 파일 인덱스 관리
+    setValue('thumbnailImage', index, { shouldValidate: true }); // Form 값 설정
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -349,11 +357,12 @@ function AddContent() {
                 )}
               />
             )}
-            {dataType === 'PDF' && <PdfUploadComponent />}
             {dataType === 'IMAGE' && (
               <ImageUploadComponent onSetRepresentative={handleImage} />
             )}
-
+            {dataType === 'PDF' && (
+              <PdfUploadComponent onSetRepresentative={handlePdf} />
+            )}
             <Tag>
               <TagName>태그 (2개 이상)*</TagName>
               <TagInputs>

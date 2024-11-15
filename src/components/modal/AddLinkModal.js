@@ -22,13 +22,13 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   };
 
   const handleAddLink = () => {
+    console.log('입력된 링크:', contentLinks);
     if (contentLinks === '') {
       setErrorMessage('URL을 입력해주세요.');
       return;
     }
 
-    const regex =
-      /^(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/[^\s]*)*$/i;
+    const regex = /^(http|https):\/\/[^\s$.?#].[^\s]*$/i;
     const isValid = regex.test(contentLinks);
 
     if (!isValid) {

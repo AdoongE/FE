@@ -24,15 +24,22 @@ const MainPage = () => {
   const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
-  const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
-  const [currentPage, setCurrentPage] = useState(1);
-  const contentPerPage = 9;
+  const [currentPage, setCurrentPage] = useState(1); // 페이지 상태 추가
+  const contentPerPage = 9; // 페이지당 콘텐츠 수 설정
 
   // 데이터 가져오기
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/v1/content/');
+      const url = '/api/v1/content/';
+      console.log(`GET 요청할 URL: ${url}`);
+
+      const response = await api.get(url);
+
+      // 응답 데이터 전체 확인
+      console.log('응답 데이터:', response.data);
+
+      // contentsInfoList에서 데이터를 추출하여 매핑
       const results =
         response.data.results?.flatMap(
           (item) =>
@@ -58,7 +65,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab, categoryId]);
 
   useEffect(() => {
     fetchData();
@@ -103,14 +110,20 @@ const MainPage = () => {
     );
   };
 
+  const categoryName = sortedData.length > 0 ? sortedData[0].category : '';
+
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SidebarContainer>
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setCategoryId={setCategoryId}
+        />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader setSortOrder={setSortOrder} />
+        <ContentHeader setSortOrder={() => {}} />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
             <div>로딩 중...</div>

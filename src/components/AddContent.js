@@ -107,26 +107,18 @@ function AddContent({ onSetRepresentativeImage }) {
   }, []);
 
   const schema = yup.object().shape({
+    thumbnailImage: yup.number().required(),
     dataType: yup
       .string()
       .required('콘텐츠 형식을 선택하세요.')
       .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
-    thumbnailImage: yup
-      .number()
-      .nullable()
-      .when('dataType', {
-        is: (val) => val === 'IMAGE' || val === 'PDF',
-        then: yup.number().required('대표 이미지를 선택하세요.'),
-        otherwise: yup.number().nullable(), // 다른 경우엔 필수가 아님
-      }),
-    contentName: yup.string().max(50, '최대 50자까지 입력 가능합니다.'),
-    contentLink: yup
-      .string()
-      .nullable()
-      .when('dataType', {
-        is: 'LINK',
-        then: yup.string().required('링크를 입력하세요.'),
-      }),
+    contentName: yup.string(),
+    boardCategory: yup
+      .array()
+      .of(yup.string())
+      .max(5, '최대 5개의 항목만 선택 가능합니다')
+      .required(),
+    contentLink: yup.string().required(),
     tags: yup
       .array()
       .of(yup.string())
@@ -134,8 +126,12 @@ function AddContent({ onSetRepresentativeImage }) {
       .required(),
     dday: yup
       .string()
+      .matches(/^\d{4}-\d{2}-\d{2}$/, {
+        message: '유효한 날짜 형식이어야 합니다.',
+        excludeEmptyString: true,
+      })
       .nullable()
-      .matches(/^\d{4}-\d{2}-\d{2}$/, '유효한 날짜 형식이어야 합니다.'),
+      .notRequired(),
     contentDetail: yup.string().max(1500),
   });
 
@@ -192,35 +188,29 @@ function AddContent({ onSetRepresentativeImage }) {
     }
   };
 
-  const onSubmit = (data, e) => {
-    try {
-      e.preventDefault();
-      e.stopPropagation();
-      const contentNameValue =
-        data.contentName.trim() === '' ? data.dday : data.contentName;
+  const onSubmit = (data) => {
+    const contentNameValue =
+      data.contentName.trim() === '' ? data.dday : data.contentName;
 
-      let updateData = {
-        dataType: data.dataType,
-        contentName: contentNameValue,
-        boardCategory: data.boardCategory,
-        tags: data.tags,
-        dday: data.dday || null,
-        contentDetail: data.contentDetail || null,
-      };
+    let updateData = {
+      dataType: data.dataType,
+      contentName: contentNameValue,
+      boardCategory: data.boardCategory,
+      tags: data.tags,
+      dday: data.dday || null,
+      contentDetail: data.contentDetail || null,
+    };
 
-      if (dataType === 'LINK') {
-        updateData.contentLink = data.contentLink;
-      } else if (dataType === 'IMAGE') {
-        updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
-      }
+    if (dataType === 'LINK') {
+      updateData.contentLink = data.contentLink;
+    } else if (dataType === 'IMAGE') {
+      updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
+    }
 
-      console.log('콘텐츠 값', updateData);
-      ContentAddHandler(updateData);
-      if (TagRef.current) {
-        TagRef.current.resetTags();
-      }
-    } catch (error) {
-      console.warn('에러 발생했는데 일부러 에러 안나게 함', error);
+    console.log('콘텐츠 값', updateData);
+    ContentAddHandler(updateData);
+    if (TagRef.current) {
+      TagRef.current.resetTags();
     }
   };
 

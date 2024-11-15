@@ -9,7 +9,7 @@ function ViewContent() {
     contentDataType: '',
     contentName: '',
     contentLink: '',
-    contentImage: '',
+    contentImage: [],
     contentDoc: '',
     thumbnailImage: '',
     boardCategory: [],
@@ -41,9 +41,8 @@ function ViewContent() {
       headers: { Authorization: `${token}` },
     });
     try {
-      const response = await api.get(
-        `/api/v1/content/all/${contentInfo.contentId}`,
-      );
+      const contentId = 13;
+      const response = await api.get(`/api/v1/content/all/${contentId}`);
       const results = response.data.results[0];
       console.log('결과', results);
       setContentInfo({
@@ -93,25 +92,96 @@ function ViewContent() {
               <CategoryTag key={category}>{category}</CategoryTag>
             ))}
           </ContentDiv>
-          <ContentDiv>
-            <Name>링크</Name>
-            <Link onClick={() => handleLinkClick(`${contentInfo.contentLink}`)}>
-              <Icon
-                icon="ic:twotone-link"
-                width="24"
-                height="24"
-                style={{
-                  color: '#4f4f4f',
-                  marginRight: '10px',
-                  paddingBottom: '3px',
-                  verticalAlign: 'middle',
-                }}
-              />
-              {contentInfo.contentLink}
-            </Link>
+          <ContentDiv
+            style={{
+              flexDirection:
+                contentInfo.contentDataType === 'PDF' ||
+                contentInfo.contentDataType === 'IMAGE'
+                  ? 'column'
+                  : 'row',
+            }}
+          >
+            <Name
+              style={{
+                alignSelf:
+                  contentInfo.contentDataType === 'PDF' ||
+                  contentInfo.contentDataType === 'IMAGE'
+                    ? 'flex-start'
+                    : 'center',
+              }}
+            >
+              {/* 이미지, pdf 조회 부분에서 스타일 조정이 필요해서 복잡한 코드.. 나중에 수정할 수 있음 하도록 */}
+              {contentInfo.contentDataType === 'LINK'
+                ? '링크'
+                : contentInfo.contentDataType === 'IMAGE'
+                  ? '이미지'
+                  : 'PDF 파일'}
+            </Name>
+
+            {contentInfo.contentDataType === 'LINK' && (
+              <Link
+                onClick={() => handleLinkClick(`${contentInfo.contentLink}`)}
+              >
+                <Icon
+                  icon="ic:twotone-link"
+                  width="24"
+                  height="24"
+                  style={{
+                    color: '#4f4f4f',
+                    marginRight: '10px',
+                    paddingBottom: '3px',
+                    verticalAlign: 'middle',
+                  }}
+                />
+                {contentInfo.contentLink}
+              </Link>
+            )}
+            {contentInfo.contentDataType === 'IMAGE' && (
+              <ImagesWrapper>
+                {contentInfo.contentImage.map((image, index) => (
+                  <ImageContainer key={image}>
+                    {/* <ImageBox onClick={() => handleSetRepresentative(index)}> */}
+                    <ImageBox>
+                      {index === 0 && (
+                        <RepresentativeLabel>대표</RepresentativeLabel>
+                      )}
+                      <ImagePreview
+                        src={image}
+                        alt=""
+                        onClick={console.log(image)}
+                      />
+                    </ImageBox>
+                    {/* <FileName></FileName> */}
+                  </ImageContainer>
+                ))}
+              </ImagesWrapper>
+            )}
+            {contentInfo.contentDataType === 'PDF' && (
+              <FilesWrapper>
+                {contentInfo.contentDoc.map((file, index) => (
+                  <FileContainer key={file}>
+                    {/* <FileBox onClick={() => handleSetRepresentative(index)}> */}
+                    <FileBox onClick={() => window.open(file, '_blank')}>
+                      {index === 0 && (
+                        <RepresentativeLabel>대표</RepresentativeLabel>
+                      )}
+                      <FileIcon>
+                        <Icon
+                          icon="file-icons:pdf"
+                          width="40"
+                          height="40"
+                          style={{ color: '#4CAF50' }}
+                        />
+                      </FileIcon>
+                    </FileBox>
+                    {/* <FileName>파일이름</FileName> */}
+                  </FileContainer>
+                ))}
+              </FilesWrapper>
+            )}
           </ContentDiv>
           <ContentDiv>
-            <Name>태그 (2개 이상)*</Name>
+            <Name>태그</Name>
             {contentInfo.tags.map((tag) => (
               <CategoryTag key={tag}>{tag}</CategoryTag>
             ))}
@@ -216,7 +286,7 @@ const TitleDiv = styled.p`
 
 const ContentDiv = styled.div`
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 `;
 
 const CategoryTag = styled.div`
@@ -317,7 +387,8 @@ const Long = styled.div`
 const Name = styled.div`
   font-weight: 400;
   font-size: 30px;
-  width: 238px;
+  width: 154px;
+  padding-top: 5px;
   &.dday {
     width: 550px;
   }
@@ -336,6 +407,109 @@ const Button = styled.button`
   font-size: 30px;
   font-weight: 500;
   margin-bottom: 98px;
+`;
+
+// 이미지 조회 컴포넌트
+
+const ImagesWrapper = styled.div`
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 16px;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ImageBox = styled.div`
+  width: 159px;
+  height: 177px;
+  position: relative;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const RepresentativeLabel = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: #47c28b;
+  color: white;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 12px;
+`;
+
+const ImagePreview = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+`;
+
+// const FileName = styled.div`
+//   margin-top: 8px;
+//   font-size: 14px;
+//   color: #666;
+//   text-align: center;
+//   width: 140px; // 사진 크기에 맞게 조정
+//   max-width: 100%;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// `;
+
+// 링크 조회 관련 스타일
+
+const FilesWrapper = styled.div`
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 16px;
+`;
+
+const FileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const FileBox = styled.div`
+  width: 159px;
+  height: 177px;
+  position: relative;
+  background-color: #eaf4f4;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const FileIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4caf50;
 `;
 
 export default ViewContent;

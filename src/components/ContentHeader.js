@@ -4,19 +4,6 @@ import { Icon } from '@iconify/react';
 
 function ContentHeader({ setSortOrder, categoryId, categoryName }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
-  // const [categoryName, setCategoryName] = useState('');
-
-  // useEffect(() => {
-  //   console.log('카테고리 이름 제발좀요', categories);
-  //   // if (categoryId) {
-  //   //   const category = categories.find((cat) => cat.id === categoryId);
-  //   //   if (category) {
-  //   //     setCategoryName(category.name);
-  //   //   }
-  //   // } else {
-  //   //   setCategoryName('');
-  //   // }
-  // }, [categoryId, categories]);
 
   const handleFilterClick = (filterOption) => {
     setSelectedFilter(filterOption);

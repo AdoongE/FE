@@ -188,29 +188,35 @@ function AddContent({ onSetRepresentativeImage }) {
     }
   };
 
-  const onSubmit = (data) => {
-    const contentNameValue =
-      data.contentName.trim() === '' ? data.dday : data.contentName;
+  const onSubmit = (data, e) => {
+    try {
+      e.preventDefault();
+      e.stopPropagation();
+      const contentNameValue =
+        data.contentName.trim() === '' ? data.dday : data.contentName;
 
-    let updateData = {
-      dataType: data.dataType,
-      contentName: contentNameValue,
-      boardCategory: data.boardCategory,
-      tags: data.tags,
-      dday: data.dday || null,
-      contentDetail: data.contentDetail || null,
-    };
+      let updateData = {
+        dataType: data.dataType,
+        contentName: contentNameValue,
+        boardCategory: data.boardCategory,
+        tags: data.tags,
+        dday: data.dday || null,
+        contentDetail: data.contentDetail || null,
+      };
 
-    if (dataType === 'LINK') {
-      updateData.contentLink = data.contentLink;
-    } else if (dataType === 'IMAGE') {
-      updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
-    }
+      if (dataType === 'LINK') {
+        updateData.contentLink = data.contentLink;
+      } else if (dataType === 'IMAGE') {
+        updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
+      }
 
-    console.log('콘텐츠 값', updateData);
-    ContentAddHandler(updateData);
-    if (TagRef.current) {
-      TagRef.current.resetTags();
+      console.log('콘텐츠 값', updateData);
+      ContentAddHandler(updateData);
+      if (TagRef.current) {
+        TagRef.current.resetTags();
+      }
+    } catch (error) {
+      console.warn('에러 발생했는데 일부러 에러 안나게 함', error);
     }
   };
 

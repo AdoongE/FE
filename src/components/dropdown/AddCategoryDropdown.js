@@ -66,14 +66,14 @@ export default function AddCategory({ value = [], onChange }) {
 
   return (
     <div>
-      <StyledFormControl onClick={handleViewCategory}>
+      <StyledFormControl>
         <StyledSelect
           id="demo-multiple-chip"
           multiple
           displayEmpty
           value={Array.isArray(value) ? value : []}
           onChange={(event) => onChange(event.target.value)}
-          onClick={handleViewCategory}
+          onOpen={handleViewCategory}
           input={<OutlinedInput id="demo-multiple-chip" />}
           renderValue={() => {
             if (value.length === 0) {

@@ -2,6 +2,7 @@ import React, { forwardRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { IOSSwitch } from '../switch/PublicCategorySwitch';
+import axios from 'axios';
 
 const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
   const [isPublic, setIsPublic] = useState(true);
@@ -15,11 +16,31 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
     setIsPublic(!isPublic);
   };
 
-  const handleAddCategory = () => {
+  const token = localStorage.getItem('jwtToken');
+  const api = axios.create({
+    baseURL: 'http://52.78.221.255',
+    headers: { Authorization: `${token}` },
+  });
+
+  const handleAddCategory = async () => {
     const newCategoryName = categoryName.trim() || '새로운 카테고리';
     onConfirm(newCategoryName);
     setCategoryName('');
-    closeModal();
+    try {
+      const response = await api.post('/api/v1/category', {
+        name: newCategoryName,
+        visibility: isPublic ? 'PUBLIC' : 'PRIVATE',
+      });
+
+      if (response.status === 200) {
+        console.log('카테고리 생성 성공');
+        closeModal();
+      } else {
+        console.error('카테고리 생성 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   useEffect(() => {

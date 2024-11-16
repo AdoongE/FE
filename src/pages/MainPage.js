@@ -143,6 +143,7 @@ const MainPage = () => {
             displayedContentBoxes.map((data) => (
               <ContentBox
                 key={data.id}
+                contentId={data.id}
                 title={data.title}
                 user={data.user}
                 category={data.category}

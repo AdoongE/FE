@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 import { React } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ContentBlank() {
+  const navigate = useNavigate();
+
+  const handleNewContentClick = () => {
+    navigate('/content-add');
+  };
+
   return (
     <Blank>
       <Sentence>
@@ -9,7 +16,9 @@ function ContentBlank() {
         <br />
         여기저기 저장하지 말고 이젠 한 곳에서 관리하세요!
       </Sentence>
-      <NewButton>+ 새 콘텐츠 저장하기</NewButton>
+      <NewContentButton onClick={handleNewContentClick}>
+        + 새 콘텐츠 저장하기
+      </NewContentButton>
     </Blank>
   );
 }
@@ -30,7 +39,7 @@ const Sentence = styled.div`
   line-height: 46px;
 `;
 
-const NewButton = styled.button`
+const NewContentButton = styled.button`
   width: 404px;
   height: 76px;
   margin-top: 44px;

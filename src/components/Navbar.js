@@ -80,7 +80,14 @@ function Navbar({ activeTab, setActiveTab }) {
           />
           새 콘텐츠
         </NewContentButton>
-        <ProfileIcon />
+        <ProfileIcon>
+          <Icon
+            icon="ix:user-profile-filled"
+            width="40x"
+            height="40px"
+            style={{ color: '#9F9F9F' }}
+          />
+        </ProfileIcon>
       </NavbarRight>
     </NavbarContainer>
   );
@@ -182,10 +189,6 @@ const NewContentButton = styled.button`
 `;
 
 const ProfileIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #ddd;
   margin-left: 16px;
   margin-right: 40px;
 `;

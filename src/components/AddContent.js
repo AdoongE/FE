@@ -441,9 +441,7 @@ function AddContent({ onSetRepresentativeImage }) {
                             const uniqueTags = [
                               ...new Set([...field.value, ...newTags]),
                             ];
-                            if (uniqueTags.length >= 2) {
-                              field.onChange(uniqueTags);
-                            }
+                            field.onChange(uniqueTags);
                           }}
                         />
                       </>

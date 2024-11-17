@@ -50,7 +50,7 @@ export const EditCategoryModal = ({
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={onClose}>
       <ModalContent>
         <ModalDiv>
           <TopDiv>

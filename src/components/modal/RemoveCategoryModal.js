@@ -16,7 +16,7 @@ export const RemoveCategoryModal = ({
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={onClose}>
       <ModalContent>
         <ModalTitle>카테고리를 삭제하시겠습니까?</ModalTitle>
         <ModalText>

@@ -441,8 +441,9 @@ function AddContent({ onSetRepresentativeImage }) {
                             const uniqueTags = [
                               ...new Set([...field.value, ...newTags]),
                             ];
-
                             field.onChange(uniqueTags);
+                            setTags(uniqueTags);
+                            setValue('tags', uniqueTags);
                           }}
                         />
                       </>

@@ -12,7 +12,6 @@ const DropdownMenu = styled.ul`
   list-style: none;
   z-index: 1;
   width: 14.875rem;
-  /* padding: 9px; */
 `;
 
 const DropdownItem = styled.li`

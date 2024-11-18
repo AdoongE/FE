@@ -192,7 +192,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
     setDeleteModalOpen(true); // 모달 열기
   };
 
-  const handleConfirmRemove = async (categoryName) => {
+  const handleConfirmRemove = async (categoryId, categoryName) => {
     const updatedCategories = categories.filter(
       (category) => category !== categoryName,
     );
@@ -202,10 +202,11 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
       (bookmark) => bookmark !== categoryName,
     );
     setBookmarks(updatedBookmarks);
-    setDeleteModalOpen(false);
 
-    const categoryIndex = categories.indexOf(categoryName);
-    const categoryId = categoryIds[categoryIndex];
+    const updatedBookmarkIds = bookmarkIds.filter((id) => id !== categoryId);
+    setBookmarkIds(updatedBookmarkIds);
+
+    setDeleteModalOpen(false);
 
     try {
       const response = await api.delete(`/api/v1/category/${categoryId}`);
@@ -442,6 +443,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
           <RemoveCategoryModal
             isOpen={isDeleteModalOpen}
             onClose={() => setDeleteModalOpen(false)}
+            categoryId={categoryIds[categories.indexOf(categoryName)]}
             categoryName={categoryName}
             onConfirm={handleConfirmRemove}
           />

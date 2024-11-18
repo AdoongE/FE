@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 export const RemoveCategoryModal = ({
   isOpen,
   onClose,
+  categoryId,
   categoryName,
   onConfirm,
 }) => {
   if (!isOpen) return null;
 
   const handleConfirmDelete = () => {
-    onConfirm(categoryName);
+    onConfirm(categoryId, categoryName);
     onClose();
   };
 

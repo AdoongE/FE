@@ -5,8 +5,7 @@ import { Icon } from '@iconify/react';
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  /* top: 50;
-  right: 30%; */
+  left: 310px;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;

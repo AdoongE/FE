@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
@@ -47,6 +47,24 @@ const Dropdown = ({
   onEditCategory,
   onRemoveCategory,
 }) => {
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const toggleBookmark = () => {
@@ -69,7 +87,7 @@ const Dropdown = ({
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu ref={dropdownRef}>
       <DropdownItem onClick={toggleBookmark}>
         <Icons
           icon={

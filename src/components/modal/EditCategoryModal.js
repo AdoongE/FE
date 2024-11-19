@@ -51,7 +51,7 @@ export const EditCategoryModal = ({
 
   return (
     <ModalOverlay onClick={onClose}>
-      <ModalContent>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
         <ModalDiv>
           <TopDiv>
             <ModalTitle>카테고리 이름 편집</ModalTitle>

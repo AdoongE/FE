@@ -398,28 +398,28 @@ function AddContent({ onSetRepresentativeImage }) {
             <Tag>
               <TagName>태그 (2개 이상)*</TagName>
               <TagInputs>
-                <TagContainer>
-                  <Controller
-                    name="tags"
-                    control={control}
-                    defaultValue={[]}
-                    render={({ field }) => (
-                      <>
-                        {tags.map((tag, idx) => (
-                          <Chip key={idx}>
-                            <TagP>{tag}</TagP>
-                            <Icon
-                              icon="ic:round-close"
-                              style={{
-                                width: '24px',
-                                height: '24px',
-                                color: 'white',
-                              }}
-                              onClick={() => removeTag(idx)}
-                            />
-                          </Chip>
-                        ))}
-                        {tags.length <= 5 && (
+                <TagDiv>
+                  <TagContainer>
+                    <Controller
+                      name="tags"
+                      control={control}
+                      defaultValue={[]}
+                      render={({ field }) => (
+                        <>
+                          {tags.map((tag, idx) => (
+                            <Chip key={idx}>
+                              <TagP>{tag}</TagP>
+                              <Icon
+                                icon="ic:round-close"
+                                style={{
+                                  width: '24px',
+                                  height: '24px',
+                                  color: 'white',
+                                }}
+                                onClick={() => removeTag(idx)}
+                              />
+                            </Chip>
+                          ))}
                           <TagInput
                             onCompositionStart={() => setIsComposing(true)}
                             onCompositionEnd={() => setIsComposing(false)}
@@ -430,26 +430,26 @@ function AddContent({ onSetRepresentativeImage }) {
                                 : ''
                             }
                           />
-                        )}
-                        <InputButton onClick={() => showTagModal(field)}>
-                          + 태그 선택
-                        </InputButton>
-                        <AddTagModal
-                          ref={TagRef}
-                          onConfirm={(newTags) => {
-                            // 중복 제거 후 최소 2개 확인
-                            const uniqueTags = [
-                              ...new Set([...field.value, ...newTags]),
-                            ];
-                            field.onChange(uniqueTags);
-                            setTags(uniqueTags);
-                            setValue('tags', uniqueTags);
-                          }}
-                        />
-                      </>
-                    )}
-                  />
-                </TagContainer>
+                          <AddTagModal
+                            ref={TagRef}
+                            onConfirm={(newTags) => {
+                              // 중복 제거 후 최소 2개 확인
+                              const uniqueTags = [
+                                ...new Set([...field.value, ...newTags]),
+                              ];
+                              field.onChange(uniqueTags);
+                              setTags(uniqueTags);
+                              setValue('tags', uniqueTags);
+                            }}
+                          />
+                        </>
+                      )}
+                    />
+                  </TagContainer>
+                  <InputButton onClick={() => showTagModal()}>
+                    + 태그 선택
+                  </InputButton>
+                </TagDiv>
                 <Recommends>
                   <Recommend>추천</Recommend>
                   <RecommendBox>
@@ -528,7 +528,8 @@ const Chip = styled.div`
   background-color: #41c3ab;
   padding-left: 16px;
   padding-right: 16px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
+  margin: 4px 4px;
 `;
 
 const TagP = styled.p`
@@ -663,21 +664,18 @@ const InputButton = styled.button`
   font-weight: 500;
   font-size: 20px;
   background-color: #9f9f9f;
-  padding: 10px 16px;
+  padding: 10px 18px;
 `;
 
 const TagContainer = styled.div`
-  width: 794px;
-  height: 60px;
+  width: 709px;
+  min-height: 60px;
   border: 1px solid #9f9f9f;
   border-radius: 10px;
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
-  z-index: 1;
-  opacity: 1;
-  padding-left: 12px;
-  padding-right: 10px;
+  flex-wrap: wrap;
+  padding: 0px 6px;
 `;
 
 const TagInputs = styled.div`
@@ -692,6 +690,13 @@ const TagInput = styled.input`
   border: none;
   outline: none;
   font-size: 20px;
+  background-color: transparent;
+`;
+
+const TagDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 `;
 
 const Text = styled.textarea`

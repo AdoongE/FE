@@ -188,5 +188,7 @@ const StyledSelect = styled(Select)`
     height: 60px;
     display: flex;
     align-items: center;
+    font-size: 20px;
+    color: #9f9f9f;
   }
 `;

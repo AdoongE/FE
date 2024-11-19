@@ -26,7 +26,6 @@ function AddContent({ onSetRepresentativeImage }) {
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log('엔터 입력 태그들', tags);
   const navigate = useNavigate();
 
   const handleTagInput = (event) => {
@@ -45,8 +44,6 @@ function AddContent({ onSetRepresentativeImage }) {
         setValue('tags', updatedTags, { shouldValidate: true });
         trigger('tags');
         event.target.value = '';
-        // setTags([...tags, newTag]);
-        // event.target.value = '';
       }
     }
   };
@@ -255,7 +252,7 @@ function AddContent({ onSetRepresentativeImage }) {
   const onSubmit = (data) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-    trigger(); // 유효성 검증 강제 실행
+    trigger();
     if (!isValid) return;
     try {
       let updateData = {
@@ -297,7 +294,7 @@ function AddContent({ onSetRepresentativeImage }) {
   }, [isValid]);
 
   useEffect(() => {
-    trigger('tags'); // 태그 변경 시 유효성 검증 실행
+    trigger('tags');
   }, [tags]);
 
   return (
@@ -453,8 +450,8 @@ function AddContent({ onSetRepresentativeImage }) {
                     $helperText={fieldState.error && fieldState.error.message}
                     value={field.value || []}
                     onChange={(value) => {
-                      field.onChange(value); // 바로 전달된 값 사용
-                      trigger('contentLink'); // 유효성 강제 실행
+                      field.onChange(value);
+                      trigger('contentLink');
                     }}
                   />
                 )}
@@ -516,7 +513,6 @@ function AddContent({ onSetRepresentativeImage }) {
                             const uniqueTags = [
                               ...new Set([...field.value, ...newTags]),
                             ];
-                            // field.onChange(uniqueTags);
                             setTags(uniqueTags);
                             setValue('tags', uniqueTags);
                           }}
@@ -574,11 +570,6 @@ function AddContent({ onSetRepresentativeImage }) {
             <Buttons
               disabled={!isValid}
               type="button"
-              // onClick={() => {
-              //   if (isValid) {
-              //     handleSubmit(onSubmit)();
-              //   }
-              // }}
               onClick={() => {
                 if (isValid) {
                   showSaveModal();

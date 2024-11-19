@@ -22,7 +22,6 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   };
 
   const handleAddLink = () => {
-    console.log('입력된 링크:', contentLinks);
     if (contentLinks === '') {
       setErrorMessage('URL을 입력해주세요.');
       return;

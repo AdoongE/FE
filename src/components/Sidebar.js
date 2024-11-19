@@ -13,7 +13,7 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import axios from 'axios';
 
-const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
+const Sidebar = ({ activeTab, setActiveTab, setCategoryId, setCateName }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
@@ -33,6 +33,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
   const [draggingIndex, setDraggingIndex] = useState(null);
   const [categoryIds, setCategoryIds] = useState([]);
   const [bookmarkIds, setBookmarkIds] = useState([]);
+  const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
 
   const token = localStorage.getItem('jwtToken');
@@ -41,8 +42,15 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
     headers: { Authorization: `${token}` },
   });
 
-  const handleViewCategory = async () => {
-    setIsCategoryOpen(!isCategoryOpen);
+  const handleViewCategory = async (source) => {
+    if (source === 'click') {
+      setIsCategoryOpen((prev) => {
+        if (!prev) {
+          console.log('카테고리를 처음 열었따!');
+        }
+        return !prev;
+      });
+    }
 
     try {
       const response = await api.get('/api/v1/category');
@@ -69,6 +77,8 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
       const results = response.data.results;
       const ids = results.map((item) => item.bookmarkId);
       setBookmarkIds(ids);
+      const ids_ = results.map((item) => item.categoryId);
+      setBookcateIds(ids_); // 북마크의 카테고리 id
       const names = results.map((item) => item.name);
       setBookmarks(names);
 
@@ -189,7 +199,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
 
   const handleRemoveCategory = (categoryNameToRemove) => {
     setCategoryName(categoryNameToRemove);
-    setDeleteModalOpen(true); // 모달 열기
+    setDeleteModalOpen(true);
   };
 
   const handleConfirmRemove = async (categoryId, categoryName) => {
@@ -259,12 +269,27 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
     setActiveTab(tabName);
   };
 
-  const handleCategoryClick = (categoryName) => {
-    const categoryIndex = categories.indexOf(categoryName);
-    const categoryId = categoryIds[categoryIndex];
-    setCategoryId(categoryId);
-    setActiveTab('카테고리');
-    console.log('제발요', categoryId);
+  const handleCategoryClick = (categoryName, listType) => {
+    let categoryIndex, categoryId;
+
+    if (listType === 'category') {
+      categoryIndex = categories.indexOf(categoryName);
+      categoryId = categoryIds[categoryIndex];
+    } else if (listType === 'bookmark') {
+      categoryIndex = bookmarks.indexOf(categoryName);
+      categoryId = bookcateIds[categoryIndex];
+    }
+
+    if (categoryId) {
+      setCategoryId(categoryId);
+      setCateName(categoryName); // 메인페이지로 전달하는 카테고리 이름
+      setActiveTab('카테고리');
+      console.log('선택한 카테고리 ID:', categoryId);
+    } else {
+      console.error('해당 카테고리 ID를 찾을 수 없습니다.');
+    }
+
+    handleViewCategory('categoryClick');
   };
 
   return (
@@ -308,7 +333,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
                 )}
                 {bookmarks.map((bookmark, index) => (
                   <CategoryItem
-                    onClick={() => handleCategoryClick(bookmark)}
+                    onClick={() => handleCategoryClick(bookmark, 'bookmark')}
                     draggable
                     onDragStart={(e) => onDragStart(e, index, 'bookmarks')}
                     onDragOver={onDragOver}
@@ -343,7 +368,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
 
             <AccordionTitle
               className="category"
-              onClick={handleViewCategory}
+              onClick={() => handleViewCategory('click')}
               onMouseEnter={() => setHoveredCategory(true)}
               onMouseLeave={() => setHoveredCategory(false)}
             >
@@ -364,7 +389,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId }) => {
                 <>
                   {categories.map((category, index) => (
                     <CategoryItem
-                      onClick={() => handleCategoryClick(category)}
+                      onClick={() => handleCategoryClick(category, 'category')}
                       draggable
                       onDragStart={(e) => onDragStart(e, index, 'categories')}
                       onDragOver={onDragOver}

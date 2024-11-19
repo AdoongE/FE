@@ -94,10 +94,10 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
           placeholder="링크를 입력하세요."
         />
         <ButtonContainer>
-          <ModalButton className="no" onClick={closeLinkModal}>
+          <ModalButton type="button" className="no" onClick={closeLinkModal}>
             취소
           </ModalButton>
-          <ModalButton className="ok" onClick={handleAddLink}>
+          <ModalButton type="button" className="ok" onClick={handleAddLink}>
             확인
           </ModalButton>
           {errorMessage && showLinkModal()}

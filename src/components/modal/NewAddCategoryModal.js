@@ -85,10 +85,10 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
           placeholder="카테고리 이름을 입력하세요. (선택)"
         />
         <ButtonContainer>
-          <ModalButton className="no" onClick={closeModal}>
+          <ModalButton type="button" className="no" onClick={closeModal}>
             취소
           </ModalButton>
-          <ModalButton className="ok" onClick={handleAddCategory}>
+          <ModalButton type="button" className="ok" onClick={handleAddCategory}>
             확인
           </ModalButton>
         </ButtonContainer>

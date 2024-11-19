@@ -361,7 +361,7 @@ function AddContent({ onSetRepresentativeImage }) {
           </Group>
         </LeftDiv>
         <RightDiv>
-          <Button onClick={openModal}>
+          <Button type="button" onClick={openModal}>
             나가기
             <ArrowIcon />
           </Button>
@@ -378,10 +378,14 @@ function AddContent({ onSetRepresentativeImage }) {
               <ModalTitle>지금 나가시겠습니까?</ModalTitle>
               <ModalText>지금까지 설정한 모든 항목이 초기화됩니다.</ModalText>
               <ButtonContainer>
-                <ModalButton className="no" onClick={closeModal}>
+                <ModalButton type="button" className="no" onClick={closeModal}>
                   취소
                 </ModalButton>
-                <ModalButton className="ok" onClick={handleConfirm}>
+                <ModalButton
+                  type="button"
+                  className="ok"
+                  onClick={handleConfirm}
+                >
                   확인
                 </ModalButton>
               </ButtonContainer>
@@ -514,10 +518,7 @@ function AddContent({ onSetRepresentativeImage }) {
                       )}
                     />
                   </TagContainer>
-                  <InputButton
-                    type="button"
-                    onClick={() => showTagModal(field)}
-                  >
+                  <InputButton type="button" onClick={() => showTagModal()}>
                     + 태그 선택
                   </InputButton>
                 </TagDiv>

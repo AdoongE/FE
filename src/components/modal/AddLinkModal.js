@@ -22,7 +22,6 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   };
 
   const handleAddLink = () => {
-    console.log('입력된 링크:', contentLinks);
     if (contentLinks === '') {
       setErrorMessage('URL을 입력해주세요.');
       return;
@@ -94,10 +93,10 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
           placeholder="링크를 입력하세요."
         />
         <ButtonContainer>
-          <ModalButton className="no" onClick={closeLinkModal}>
+          <ModalButton type="button" className="no" onClick={closeLinkModal}>
             취소
           </ModalButton>
-          <ModalButton className="ok" onClick={handleAddLink}>
+          <ModalButton type="button" className="ok" onClick={handleAddLink}>
             확인
           </ModalButton>
           {errorMessage && showLinkModal()}

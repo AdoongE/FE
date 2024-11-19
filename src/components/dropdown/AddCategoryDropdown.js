@@ -171,7 +171,7 @@ const Title = styled.div`
 const StyledFormControl = styled(FormControl)`
   && {
     margin: 0;
-    width: 602px;
+    width: 709px;
     height: fit-content;
     margin-top: 0;
     border-radius: 10px;
@@ -185,7 +185,7 @@ const StyledFormControl = styled(FormControl)`
 
 const StyledSelect = styled(Select)`
   && {
-    height: fit-content;
+    height: 60px;
     display: flex;
     align-items: center;
   }

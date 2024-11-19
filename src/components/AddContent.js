@@ -48,9 +48,9 @@ function AddContent({ onSetRepresentativeImage }) {
     }
   };
 
-  const removeTag = (tagIdx) => {
-    setTags(tags.filter((tag, idx) => idx != tagIdx));
-  };
+  // const removeTag = (tagIdx) => {
+  //   setTags(tags.filter((tag, idx) => idx != tagIdx));
+  // };
 
   const ChangeRef = useRef(null);
 
@@ -193,6 +193,11 @@ function AddContent({ onSetRepresentativeImage }) {
     setIsModalVisible(false);
     setPendingOption(null);
   };
+
+  // const handleDelete = (field, idx) => {
+  //   removeTag(idx);
+  //   onChange(tags.filter((item) => item !== field));
+  // };
 
   const handleCheckboxChange = (event) => {
     const option = event.target.name;
@@ -488,7 +493,16 @@ function AddContent({ onSetRepresentativeImage }) {
                                   height: '24px',
                                   color: 'white',
                                 }}
-                                onClick={() => removeTag(idx)}
+                                onClick={() => {
+                                  const updatedTags = tags.filter(
+                                    (item) => item !== tag,
+                                  );
+                                  setTags(updatedTags);
+                                  field.onChange(updatedTags);
+                                  if (TagRef.current) {
+                                    TagRef.current.removeTags(tag);
+                                  }
+                                }}
                               />
                             </Chip>
                           ))}

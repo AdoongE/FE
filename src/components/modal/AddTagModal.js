@@ -57,6 +57,8 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
 
   useImperativeHandle(ref, () => ({
     resetTags: () => setSelectedTags([]),
+    removeTags: (tag) =>
+      setSelectedTags((prevTags) => prevTags.filter((item) => item !== tag)),
     showModal: () => dialogRef.current?.showModal(),
     close: () => dialogRef.current?.close(),
   }));

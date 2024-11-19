@@ -56,8 +56,9 @@ const MainPage = () => {
               user: item.nickname || '사용자 정보 없음',
               category: content.categoryName?.[0] || '카테고리 없음',
               tags: content.tagName || [],
+              dDay: content.dDay || 0, // dDay 추가
               contentDateType: content.contentDateType || '타입 없음',
-              thumbnailImage: content.thumbnailImage || '이미지 없음',
+              thumbnailImage: content.thumbnailImage || '', // 기본 이미지를 ContentBox에서 처리
               updatedDt: content.updatedDt || '업데이트 정보 없음',
               createdAt: content.createdAt || new Date(), // 날짜 정렬을 위한 필드
             })) ?? [],

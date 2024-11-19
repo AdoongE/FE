@@ -132,6 +132,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
       <TagContainer>
         {TagOption.map((tag, index) => (
           <TagItem
+            type="button"
             key={index}
             onClick={() => handleSelectTag(tag)}
             $isSelected={selectedTags.includes(tag)}
@@ -141,7 +142,9 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
         ))}
       </TagContainer>
       <Line />
-      <Button onClick={handleApply}>적용하기</Button>
+      <Button type="button" onClick={handleApply}>
+        적용하기
+      </Button>
     </Dialog>
   );
 });

@@ -83,7 +83,7 @@ function Navbar({ activeTab, setActiveTab }) {
         <ProfileIcon>
           <Icon
             icon="ix:user-profile-filled"
-            width="40x"
+            width="40px"
             height="40px"
             style={{ color: '#9F9F9F' }}
           />

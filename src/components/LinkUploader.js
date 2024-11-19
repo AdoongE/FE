@@ -47,7 +47,7 @@ function LinkUploader({ value, onChange }) {
               }}
             />
           </InputContainer>
-          <InputButton onClick={() => showLinkModal()}>
+          <InputButton type="button" onClick={() => showLinkModal()}>
             + 링크 업로드
           </InputButton>
           <AddLinkModal ref={LinkRef} onConfirm={handleConfirm} />

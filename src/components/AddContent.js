@@ -14,6 +14,7 @@ import LinkUploader from './LinkUploader';
 import PdfUploadComponent from './PdfUpload';
 import ImageUploadComponent from './ImageUpload';
 import { ContentAddHandler } from './api/ContentAddApi';
+import { useNavigate } from 'react-router-dom';
 
 function AddContent({ onSetRepresentativeImage }) {
   const [dataType, setDataType] = useState(null);
@@ -24,7 +25,8 @@ function AddContent({ onSetRepresentativeImage }) {
   const [isFirstSelection, setIsFirstSelection] = useState(true);
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
-  console.log('엔터 입력 태그들', tags);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleTagInput = (event) => {
     if (isComposing) return;
@@ -39,10 +41,9 @@ function AddContent({ onSetRepresentativeImage }) {
       ) {
         const updatedTags = [...tags, newTag];
         setTags(updatedTags);
-        setValue('tags', updatedTags);
+        setValue('tags', updatedTags, { shouldValidate: true });
+        trigger('tags');
         event.target.value = '';
-        // setTags([...tags, newTag]);
-        // event.target.value = '';
       }
     }
   };
@@ -56,6 +57,7 @@ function AddContent({ onSetRepresentativeImage }) {
   const handleImage = (index) => {
     setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
     setValue('thumbnailImage', index, { shouldValidate: true });
+    trigger('thumbnailImage');
     if (onSetRepresentativeImage) {
       onSetRepresentativeImage(index); // 부모 컴포넌트로 콜백 전달
     }
@@ -64,6 +66,7 @@ function AddContent({ onSetRepresentativeImage }) {
   const handlePdf = (index) => {
     setRepresentativeIndex(index); // 대표 파일 인덱스 관리
     setValue('thumbnailImage', index, { shouldValidate: true }); // Form 값 설정
+    trigger('thumbnailImage');
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -112,7 +115,6 @@ function AddContent({ onSetRepresentativeImage }) {
   }, []);
 
   const schema = yup.object().shape({
-    thumbnailImage: yup.number().required(),
     dataType: yup
       .string()
       .required('콘텐츠 형식을 선택하세요.')
@@ -123,7 +125,30 @@ function AddContent({ onSetRepresentativeImage }) {
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
       .required(),
-    contentLink: yup.string().required(),
+    thumbnailImage: yup
+      .number()
+      .nullable()
+      .test(
+        'is-thumbnail-required',
+        '대표 이미지/PDF를 선택해주세요.',
+        function (value) {
+          const { dataType } = this.parent;
+          if (dataType === 'IMAGE' || dataType === 'PDF') {
+            return value !== null && value !== undefined;
+          }
+          return true;
+        },
+      ),
+    contentLink: yup
+      .string()
+      .nullable()
+      .test('is-link-required', '링크를 입력해주세요.', function (value) {
+        const { dataType } = this.parent;
+        if (dataType === 'LINK') {
+          return value && value.trim() !== '';
+        }
+        return true;
+      }),
     tags: yup
       .array()
       .of(yup.string())
@@ -137,7 +162,7 @@ function AddContent({ onSetRepresentativeImage }) {
       })
       .nullable()
       .notRequired(),
-    contentDetail: yup.string().max(1500),
+    contentDetail: yup.string().max(1500).nullable().notRequired(),
   });
 
   const {
@@ -147,6 +172,7 @@ function AddContent({ onSetRepresentativeImage }) {
     control,
     watch,
     setValue,
+    trigger,
     formState: { isValid },
   } = useForm({
     resolver: yupResolver(schema),
@@ -154,6 +180,12 @@ function AddContent({ onSetRepresentativeImage }) {
     defaultValues: {
       dataType: '',
       thumbnailImage: 0,
+      contentName: '',
+      boardCategory: [],
+      contentLink: '',
+      tags: [],
+      dday: null,
+      contentDetail: null,
     },
   });
 
@@ -169,6 +201,7 @@ function AddContent({ onSetRepresentativeImage }) {
       setDataType(option);
       setIsFirstSelection(false);
       setValue('dataType', option, { shouldValidate: true });
+      trigger('dataType');
     } else if (dataType !== option) {
       setPendingOption(option);
       setIsModalVisible(true);
@@ -176,7 +209,7 @@ function AddContent({ onSetRepresentativeImage }) {
   };
 
   const handleConfirmChange = () => {
-    if (pendingOption) {
+    if (pendingOption && pendingOption !== dataType) {
       setDataType(pendingOption);
       reset({
         dataType: pendingOption,
@@ -188,21 +221,43 @@ function AddContent({ onSetRepresentativeImage }) {
         dday: null,
         contentDetail: null,
       });
+
+      setTags([]);
+
+      setTimeout(() => {
+        trigger([
+          'dataType',
+          'thumbnailImage',
+          'boardCategory',
+          'contentLink',
+          'tags',
+        ]);
+      }, 0);
+
       setPendingOption(null);
       setIsModalVisible(false);
+
+      if (TagRef.current) {
+        TagRef.current.resetTags();
+      }
     }
   };
 
-  const onSubmit = (data, e) => {
-    try {
-      e.preventDefault();
-      e.stopPropagation();
-      const contentNameValue =
-        data.contentName.trim() === '' ? data.dday : data.contentName;
+  useEffect(() => {
+    if (dataType) {
+      trigger();
+    }
+  }, [dataType]);
 
+  const onSubmit = (data) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    trigger();
+    if (!isValid) return;
+    try {
       let updateData = {
         dataType: data.dataType,
-        contentName: contentNameValue,
+        contentName: data.contentName,
         boardCategory: data.boardCategory,
         tags: data.tags,
         dday: data.dday || null,
@@ -220,8 +275,10 @@ function AddContent({ onSetRepresentativeImage }) {
       if (TagRef.current) {
         TagRef.current.resetTags();
       }
+      navigate('/main');
     } catch (error) {
-      console.warn('에러 발생했는데 일부러 에러 안나게 함', error);
+      console.error(error);
+      throw error;
     }
   };
 
@@ -236,8 +293,12 @@ function AddContent({ onSetRepresentativeImage }) {
     console.log('현재 isValid 상태:', isValid);
   }, [isValid]);
 
+  useEffect(() => {
+    trigger('tags');
+  }, [tags]);
+
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form noValidate>
       <MainDiv>
         <LeftDiv>
           <TitleDiv
@@ -351,10 +412,14 @@ function AddContent({ onSetRepresentativeImage }) {
                         onChange={(newValue) => {
                           if (newValue.length <= 5) {
                             field.onChange(newValue);
+                            trigger('boardCategory');
                           }
                         }}
                       />
-                      <InputButton onClick={() => showModal(field)}>
+                      <InputButton
+                        type="button"
+                        onClick={() => showModal(field)}
+                      >
                         + 카테고리 추가
                       </InputButton>
                       <NewAddCategoryModal
@@ -384,7 +449,10 @@ function AddContent({ onSetRepresentativeImage }) {
                     $error={fieldState.error ? true : undefined}
                     $helperText={fieldState.error && fieldState.error.message}
                     value={field.value || []}
-                    onChange={field.onChange}
+                    onChange={(value) => {
+                      field.onChange(value);
+                      trigger('contentLink');
+                    }}
                   />
                 )}
               />
@@ -421,6 +489,7 @@ function AddContent({ onSetRepresentativeImage }) {
                             </Chip>
                           ))}
                           <TagInput
+                            onBlur={() => trigger('tags')}
                             onCompositionStart={() => setIsComposing(true)}
                             onCompositionEnd={() => setIsComposing(false)}
                             onKeyDown={handleTagInput}
@@ -437,7 +506,6 @@ function AddContent({ onSetRepresentativeImage }) {
                               const uniqueTags = [
                                 ...new Set([...field.value, ...newTags]),
                               ];
-                              field.onChange(uniqueTags);
                               setTags(uniqueTags);
                               setValue('tags', uniqueTags);
                             }}
@@ -446,7 +514,10 @@ function AddContent({ onSetRepresentativeImage }) {
                       )}
                     />
                   </TagContainer>
-                  <InputButton onClick={() => showTagModal()}>
+                  <InputButton
+                    type="button"
+                    onClick={() => showTagModal(field)}
+                  >
                     + 태그 선택
                   </InputButton>
                 </TagDiv>

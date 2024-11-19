@@ -66,14 +66,14 @@ export default function AddCategory({ value = [], onChange }) {
 
   return (
     <div>
-      <StyledFormControl onClick={handleViewCategory}>
+      <StyledFormControl>
         <StyledSelect
           id="demo-multiple-chip"
           multiple
           displayEmpty
           value={Array.isArray(value) ? value : []}
           onChange={(event) => onChange(event.target.value)}
-          onClick={handleViewCategory}
+          onOpen={handleViewCategory}
           input={<OutlinedInput id="demo-multiple-chip" />}
           renderValue={() => {
             if (value.length === 0) {
@@ -171,7 +171,7 @@ const Title = styled.div`
 const StyledFormControl = styled(FormControl)`
   && {
     margin: 0;
-    width: 602px;
+    width: 709px;
     height: fit-content;
     margin-top: 0;
     border-radius: 10px;
@@ -185,8 +185,10 @@ const StyledFormControl = styled(FormControl)`
 
 const StyledSelect = styled(Select)`
   && {
-    height: fit-content;
+    height: 60px;
     display: flex;
     align-items: center;
+    font-size: 20px;
+    color: #9f9f9f;
   }
 `;

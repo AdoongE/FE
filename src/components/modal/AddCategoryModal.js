@@ -20,7 +20,7 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
   });
 
   const handleConfirm = async () => {
-    const newCategoryName = categoryName || '새로운 카테고리'; // 입력이 없을 때 추가 내용
+    const newCategoryName = categoryName || '새로운 카테고리';
     onConfirm(newCategoryName);
     setCategoryName('');
 
@@ -41,7 +41,7 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <ModalDiv>
           <TopDiv>

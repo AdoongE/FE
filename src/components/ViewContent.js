@@ -12,7 +12,7 @@ function ViewContent() {
     contentName: '',
     contentLink: '',
     contentImage: [],
-    contentDoc: '',
+    contentDoc: [],
     thumbnailImage: '',
     boardCategory: [],
     tags: [],
@@ -35,7 +35,7 @@ function ViewContent() {
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     setRemainingDays(dayDiff);
   };
-  console.log('gkldfajdk f', contentInfo.thumbnailImage);
+  console.log('썸네일 인덱스', contentInfo.thumbnailImage);
 
   const handleViewContent = async () => {
     const token = localStorage.getItem('jwtToken');
@@ -140,18 +140,13 @@ function ViewContent() {
               <ImagesWrapper>
                 {contentInfo.contentImage.map((image, index) => (
                   <ImageContainer key={image}>
-                    {/* <ImageBox onClick={() => handleSetRepresentative(index)}> */}
                     <ImageBox>
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
-                      <ImagePreview
-                        src={image}
-                        alt=""
-                        onClick={console.log(image)}
-                      />
+                      <ImagePreview src={image} alt="" />
                     </ImageBox>
-                    {/* <FileName></FileName> */}
+                    <FileName>{image.split('.com/')[1]}</FileName>
                   </ImageContainer>
                 ))}
               </ImagesWrapper>
@@ -160,9 +155,8 @@ function ViewContent() {
               <FilesWrapper>
                 {contentInfo.contentDoc.map((file, index) => (
                   <FileContainer key={file}>
-                    {/* <FileBox onClick={() => handleSetRepresentative(index)}> */}
                     <FileBox onClick={() => window.open(file, '_blank')}>
-                      {index === 0 && (
+                      {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
                       <FileIcon>
@@ -174,7 +168,7 @@ function ViewContent() {
                         />
                       </FileIcon>
                     </FileBox>
-                    {/* <FileName>파일이름</FileName> */}
+                    <FileName>{file.split('.com/')[1]}</FileName>
                   </FileContainer>
                 ))}
               </FilesWrapper>
@@ -454,17 +448,17 @@ const ImagePreview = styled.img`
   border-radius: 4px;
   object-fit: cover;
 `;
-// const FileName = styled.div`
-//   margin-top: 8px;
-//   font-size: 14px;
-//   color: #666;
-//   text-align: center;
-//   width: 140px; // 사진 크기에 맞게 조정
-//   max-width: 100%;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   white-space: nowrap;
-// `;
+const FileName = styled.div`
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  width: 140px; // 사진 크기에 맞게 조정
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
 // 링크 조회 관련 스타일
 const FilesWrapper = styled.div`

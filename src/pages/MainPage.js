@@ -25,6 +25,7 @@ const MainPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
+  const [categoryName, setCateName] = useState('');
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
@@ -117,8 +118,6 @@ const MainPage = () => {
     );
   };
 
-  const categoryName = sortedData.length > 0 ? sortedData[0].category : '';
-
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -127,6 +126,7 @@ const MainPage = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           setCategoryId={setCategoryId}
+          setCateName={setCateName}
         />
       </SidebarContainer>
       <MainContent>

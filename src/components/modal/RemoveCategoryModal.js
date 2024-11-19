@@ -5,18 +5,19 @@ import PropTypes from 'prop-types';
 export const RemoveCategoryModal = ({
   isOpen,
   onClose,
+  categoryId,
   categoryName,
   onConfirm,
 }) => {
   if (!isOpen) return null;
 
   const handleConfirmDelete = () => {
-    onConfirm(categoryName);
+    onConfirm(categoryId, categoryName);
     onClose();
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={onClose}>
       <ModalContent>
         <ModalTitle>카테고리를 삭제하시겠습니까?</ModalTitle>
         <ModalText>

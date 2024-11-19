@@ -22,7 +22,7 @@ function LinkUploader({ value, onChange }) {
     <div>
       <Inputs>
         <Name>링크 업로드*</Name>
-        <div>
+        <LinkDiv>
           <InputContainer>
             <Icon
               icon="ic:round-link"
@@ -46,27 +46,24 @@ function LinkUploader({ value, onChange }) {
                 color: '#4F4F4F',
               }}
             />
-            <InputButton type="button" onClick={() => showLinkModal()}>
-              + 링크 업로드
-            </InputButton>
-            <AddLinkModal ref={LinkRef} onConfirm={handleConfirm} />
           </InputContainer>
-          <Line />
-        </div>
+          <InputButton type="button" onClick={() => showLinkModal()}>
+            + 링크 업로드
+          </InputButton>
+          <AddLinkModal ref={LinkRef} onConfirm={handleConfirm} />
+        </LinkDiv>
       </Inputs>
     </div>
   );
 }
-
-const Line = styled.div`
-  width: 794px;
-  height: 0;
-  border: 1px solid #9f9f9f;
-  margin-left: 80px;
+const LinkDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 `;
 
 const InputButton = styled.button`
-  width: fit-content;
+  width: 153.19px;
   height: 44.19px;
   border-radius: 10px;
   display: flex;
@@ -78,7 +75,6 @@ const InputButton = styled.button`
   font-size: 20px;
   background-color: #9f9f9f;
   padding: 10px 16px;
-  margin-left: 16px;
 `;
 
 const InputContainer = styled.div`
@@ -86,15 +82,17 @@ const InputContainer = styled.div`
   margin-left: 86px;
   margin-bottom: 8.81px;
   align-items: center;
+  width: 709px;
+  border-bottom: 1px solid #9f9f9f;
+  justify-content: space-between;
 `;
 
 const LinkInput = styled.input`
-  margin-left: 10px;
   height: 44px;
   overflow-x: auto;
   display: flex;
   flex-wrap: wrap;
-  width: 570px;
+  width: 640px;
   color: #4f4f4f;
   font-size: 20px;
   font-weight: 400;

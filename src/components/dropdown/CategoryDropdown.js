@@ -1,19 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  /* top: 50;
-  right: 30%; */
+  left: 310px;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
   list-style: none;
   z-index: 1;
   width: 14.875rem;
-  /* padding: 9px; */
 `;
 
 const DropdownItem = styled.li`
@@ -47,6 +45,24 @@ const Dropdown = ({
   onEditCategory,
   onRemoveCategory,
 }) => {
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const toggleBookmark = () => {
@@ -69,7 +85,7 @@ const Dropdown = ({
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu ref={dropdownRef}>
       <DropdownItem onClick={toggleBookmark}>
         <Icons
           icon={

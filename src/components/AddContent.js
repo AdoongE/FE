@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import NewAddCategoryModal from './modal/NewAddCategoryModal';
 import AddTagModal from './modal/AddTagModal';
-// import ContentSaveModal from './modal/ContentSaveModal';
+import ContentSaveModal from './modal/ContentSaveModal';
 import LinkUploader from './LinkUploader';
 import PdfUploadComponent from './PdfUpload';
 import ImageUploadComponent from './ImageUpload';
@@ -25,6 +25,7 @@ function AddContent({ onSetRepresentativeImage }) {
   const [isFirstSelection, setIsFirstSelection] = useState(true);
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
+  const [isSubmitting, setIsSubmitting] = useState(false);
   console.log('엔터 입력 태그들', tags);
   const navigate = useNavigate();
 
@@ -80,7 +81,7 @@ function AddContent({ onSetRepresentativeImage }) {
 
   const dialogRef = useRef(null);
   const TagRef = useRef(null);
-  // const SaveRef = useRef(null);
+  const SaveRef = useRef(null);
 
   const showModal = () => {
     dialogRef.current?.showModal();
@@ -90,9 +91,9 @@ function AddContent({ onSetRepresentativeImage }) {
     TagRef.current?.showModal();
   };
 
-  // const showSaveModal = () => {
-  //   SaveRef.current?.showModal();
-  // };
+  const showSaveModal = () => {
+    SaveRef.current?.showModal();
+  };
 
   useEffect(() => {
     if (ChangeRef.current) {
@@ -180,7 +181,7 @@ function AddContent({ onSetRepresentativeImage }) {
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      dataType: '', // 초기값 설정
+      dataType: '',
       thumbnailImage: 0,
       contentName: '',
       boardCategory: [],
@@ -227,7 +228,6 @@ function AddContent({ onSetRepresentativeImage }) {
       setTags([]);
 
       setTimeout(() => {
-        // 특정 필드만 검증
         trigger([
           'dataType',
           'thumbnailImage',
@@ -253,15 +253,14 @@ function AddContent({ onSetRepresentativeImage }) {
   }, [dataType]);
 
   const onSubmit = (data) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     trigger(); // 유효성 검증 강제 실행
     if (!isValid) return;
     try {
-      const contentNameValue =
-        data.contentName.trim() === '' ? data.dday : data.contentName;
-
       let updateData = {
         dataType: data.dataType,
-        contentName: contentNameValue,
+        contentName: data.contentName,
         boardCategory: data.boardCategory,
         tags: data.tags,
         dday: data.dday || null,
@@ -281,7 +280,8 @@ function AddContent({ onSetRepresentativeImage }) {
       }
       navigate('/main');
     } catch (error) {
-      console.warn('에러 발생했는데 일부러 에러 안나게 함', error);
+      console.error(error);
+      throw error;
     }
   };
 
@@ -574,21 +574,21 @@ function AddContent({ onSetRepresentativeImage }) {
             <Buttons
               disabled={!isValid}
               type="button"
+              // onClick={() => {
+              //   if (isValid) {
+              //     handleSubmit(onSubmit)();
+              //   }
+              // }}
               onClick={() => {
                 if (isValid) {
-                  handleSubmit(onSubmit)();
+                  showSaveModal();
                 }
               }}
-              // onClick={() => {
-              //   // if (isValid) {
-              //   //   showSaveModal();
-              //   // }
-              // }}
             >
               저장하기
             </Buttons>
           </ButtonContainers>
-          {/* <ContentSaveModal ref={SaveRef} onSubmit={handleSubmit(onSubmit)} /> */}
+          <ContentSaveModal ref={SaveRef} onConfirm={handleSubmit(onSubmit)} />
         </ContentPage>
       )}
     </form>

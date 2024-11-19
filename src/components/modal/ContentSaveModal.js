@@ -40,8 +40,12 @@ const ContentSaveModal = forwardRef(({ onConfirm }, ref) => {
     <Dialog ref={ref}>
       <Alert>저장하시겠습니까?</Alert>
       <Buttons>
-        <No onClick={cloesModal}>아니오</No>
-        <Yes onClick={handleSave}>네</Yes>
+        <No type="button" onClick={cloesModal}>
+          아니오
+        </No>
+        <Yes type="submit" onClick={handleSave}>
+          네
+        </Yes>
       </Buttons>
     </Dialog>
   );

@@ -36,6 +36,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
       onConfirm(contentLinks);
       setErrorMessage('');
       closeModal();
+      setContentLinks('');
     }
   };
 

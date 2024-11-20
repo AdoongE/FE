@@ -110,7 +110,7 @@ export default function AddCategory({ value = [], onChange }) {
           MenuProps={MenuProps}
           inputProps={{ 'aria-label': 'Without label' }}
         >
-          <Title>내 카테고리</Title>
+          <Title disabled>내 카테고리</Title>
           {categories.map((field) => (
             <FormGroup
               key={field}

@@ -354,6 +354,7 @@ const Sidebar = ({
                     onMouseLeave={() => setHoveredBookmarkIndex(null)}
                   >
                     {bookmark}
+                    {` (${categoryCounts[bookmark] || 0})`}
                     {hoveredBookdmarkIndex === index && (
                       <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
                         <MoreVertIcon />

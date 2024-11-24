@@ -20,6 +20,7 @@ api.interceptors.request.use((config) => {
 });
 
 const MainPage = () => {
+  const [collectData, setCollectData] = useState([]); // 모아보기 전체 콘텐츠 수
   const [sortedData, setSortedData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,8 @@ const MainPage = () => {
       let url = '';
       if (activeTab == '모아보기') {
         url = '/api/v1/content/';
+        const response = await api.get(url);
+        setCollectData(response.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
       } else if (activeTab !== '모아보기' && categoryId) {
         url = `/api/v1/content/${categoryId}`;
       }
@@ -118,6 +121,11 @@ const MainPage = () => {
     );
   };
 
+  const categoryCounts = collectData.reduce((counts, item) => {
+    counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+    return counts;
+  }, {});
+
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -127,6 +135,7 @@ const MainPage = () => {
           setActiveTab={setActiveTab}
           setCategoryId={setCategoryId}
           setCateName={setCateName}
+          categoryCounts={categoryCounts}
         />
       </SidebarContainer>
       <MainContent>

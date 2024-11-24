@@ -13,7 +13,13 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import axios from 'axios';
 
-const Sidebar = ({ activeTab, setActiveTab, setCategoryId, setCateName }) => {
+const Sidebar = ({
+  activeTab,
+  setActiveTab,
+  setCategoryId,
+  setCateName,
+  categoryCounts,
+}) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
@@ -292,6 +298,10 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId, setCateName }) => {
     handleViewCategory('categoryClick');
   };
 
+  useEffect(() => {
+    handleViewCategory();
+  }, []);
+
   return (
     <StMainPage>
       <SideDiv>
@@ -319,7 +329,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId, setCateName }) => {
           </ExploreBtn>
         </BtnDiv>
         <CategoryDiv>
-          <CategoryP>모든 카테고리 (30)</CategoryP> {/*숫자 임시 지정*/}
+          <CategoryP>모든 카테고리 ({categoryIds.length})</CategoryP>
           <Accordion>
             <AccordionTitle onClick={handleViewBookmark}>
               <Icons icon="material-symbols:bookmark-outline" />
@@ -344,6 +354,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId, setCateName }) => {
                     onMouseLeave={() => setHoveredBookmarkIndex(null)}
                   >
                     {bookmark}
+                    {` (${categoryCounts[bookmark] || 0})`}
                     {hoveredBookdmarkIndex === index && (
                       <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
                         <MoreVertIcon />
@@ -400,6 +411,7 @@ const Sidebar = ({ activeTab, setActiveTab, setCategoryId, setCateName }) => {
                       onMouseLeave={() => setHoveredCategoryIndex(null)}
                     >
                       {category}
+                      {` (${categoryCounts[category] || 0})`}
                       {hoveredCategoryIndex === index && (
                         <DotBox onClick={() => setOpenDropdown(index)}>
                           <MoreVertIcon />

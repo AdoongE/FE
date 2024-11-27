@@ -23,16 +23,28 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
     nextArrow: <CustomArrow direction="right" />,
   };
 
-  const handleDownloadAll = (files) => {
-    files.forEach((file) => {
-      const blob = new Blob([file.content], { type: 'application/pdf' });
-      const a = document.createElement('a');
-      a.href = window.URL.createObjectURL(blob);
-      a.download = file.split('.com/')[1];
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
+  const handleDownloadAll = async (files) => {
+    for (const file of files) {
+      try {
+        const response = await fetch(file);
+        if (!response.ok) {
+          console.error(`Failed to fetch file: ${file}`);
+          continue;
+        }
+        const blob = await response.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+
+        const fileName = file.split('/').pop() || 'downloaded_file';
+        a.download = decodeURIComponent(fileName);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      } catch (error) {
+        console.error(`Error downloading file: ${file}`, error);
+      }
+    }
   };
 
   return (

@@ -11,7 +11,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
-const ViewImagePdfModal = ({ file, files, onClose }) => {
+const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
   const settings = {
     dots: false,
     infinite: false,
@@ -50,8 +50,8 @@ const ViewImagePdfModal = ({ file, files, onClose }) => {
         content: {
           position: 'relative',
           inset: 'auto',
-          width: '637px',
-          height: '893px',
+          width: '1047px',
+          height: '758px',
           maxWidth: '80%',
           maxHeight: '80%',
           margin: 'auto',
@@ -80,13 +80,19 @@ const ViewImagePdfModal = ({ file, files, onClose }) => {
       </ModalHeader>
       <SliderWrapper>
         <Slider {...settings}>
-          {files.map((file, index) => (
-            <DocumentWrapper key={index}>
-              <Document file={file}>
-                <Page pageNumber={1} />
-              </Document>
-            </DocumentWrapper>
-          ))}
+          {files.map((file, index) =>
+            contentDataType === 'PDF' ? (
+              <DocumentWrapper key={index}>
+                <Documents file={file}>
+                  <Page pageNumber={1} />
+                </Documents>
+              </DocumentWrapper>
+            ) : (
+              <ImageWrapper key={index}>
+                <img src={file} alt={`Preview ${index + 1}`} />
+              </ImageWrapper>
+            ),
+          )}
         </Slider>
       </SliderWrapper>
     </Modal>
@@ -137,21 +143,46 @@ const SaveButton = styled.button`
 `;
 
 const SliderWrapper = styled.div`
-  margin-top: 20px;
+  /* margin-top: 20px; */
 `;
 
 const DocumentWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 645px;
-  width: 600px;
+  /* height: 645px; */
+  /* width: 100px; */
 
   canvas {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain; // 할, 말??
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  }
+`;
+
+const Documents = styled(Document)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  img {
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    width: 593px;
+    height: 645px;
   }
 `;
 

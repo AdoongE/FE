@@ -145,7 +145,7 @@ function ViewContent() {
               <ImagesWrapper>
                 {contentInfo.contentImage.map((image, index) => (
                   <ImageContainer key={image}>
-                    <ImageBox>
+                    <ImageBox onClick={() => openModal(image)}>
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
@@ -181,8 +181,13 @@ function ViewContent() {
             {selectedFile && (
               <ViewImagePdfModal
                 file={selectedFile}
-                files={contentInfo.contentDoc}
+                files={
+                  contentInfo.contentDataType === 'PDF'
+                    ? contentInfo.contentDoc
+                    : contentInfo.contentImage
+                }
                 onClose={closeModal}
+                contentDataType={contentInfo.contentDataType}
               />
             )}
           </ContentDiv>

@@ -41,44 +41,46 @@ const ViewImagePdfModal = ({ file, files, onClose }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          zIndex: 1000,
         },
         content: {
           position: 'relative',
           inset: 'auto',
-          width: '70%',
-          maxWidth: '800px',
+          width: '637px',
+          height: '893px',
+          maxWidth: '80%',
           maxHeight: '80%',
           margin: 'auto',
           padding: '20px',
           background: '#fff',
-          borderRadius: '10px',
+          borderRadius: '20px',
           overflow: 'hidden',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         },
       }}
     >
       <ModalHeader>
         <SaveButton
+          top="0px"
           className="only"
           onClick={() => window.open(file, '_blank')}
         >
           이 파일만 저장
         </SaveButton>
-        <SaveButton className="all" onClick={handleSaveAllFiles}>
+        <SaveButton top="50px" className="all" onClick={handleSaveAllFiles}>
           모든 파일 저장
         </SaveButton>
       </ModalHeader>
       <SliderWrapper>
-        <CustomSlider {...settings}>
-          {files.map((file) => (
-            <Slide key={file}>
+        <Slider {...settings}>
+          {files.map((file, index) => (
+            <DocumentWrapper key={index}>
               <Document file={file}>
-                <Page pageNumber={1} width={600} />
+                <Page pageNumber={1} />
               </Document>
-            </Slide>
+            </DocumentWrapper>
           ))}
-        </CustomSlider>
+        </Slider>
       </SliderWrapper>
     </Modal>
   );
@@ -86,39 +88,37 @@ const ViewImagePdfModal = ({ file, files, onClose }) => {
 
 export default ViewImagePdfModal;
 
-// 사용자 정의 화살표 컴포넌트
 const CustomArrow = ({ direction, onClick }) => {
   return (
     <ArrowButton direction={direction} onClick={onClick}>
       {direction === 'left' ? (
-        <FaChevronLeft size={20} />
+        <FaChevronLeft size={40} />
       ) : (
-        <FaChevronRight size={20} />
+        <FaChevronRight size={40} />
       )}
     </ArrowButton>
   );
 };
 
-// 스타일 정의
 const ModalHeader = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: 8px;
+  width: 100%;
+  height: 112px;
+  gap: 10px;
 `;
 
 const SaveButton = styled.button`
+  position: absolute;
+  top: ${({ top }) => top || '10px'};
+  right: 0px;
   border: none;
   width: 170.92px;
   height: 39px;
-  padding: 8px 12px;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
-
-  &:hover {
-    background-color: #45a049;
-  }
   &.only {
     color: #9f9f9f;
     background-color: #dcdada;
@@ -133,36 +133,26 @@ const SliderWrapper = styled.div`
   margin-top: 20px;
 `;
 
-const CustomSlider = styled(Slider)`
-  .slick-list {
-    padding: 0 50px; // 화살표가 PDF에 겹치지 않도록 여백 추가
-  }
-`;
-
-const Slide = styled.div`
+const DocumentWrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100%;
+  justify-content: center;
+  height: 645px;
+  width: 600px;
+
+  canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; // 할, 말??
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const ArrowButton = styled.div`
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   z-index: 1000;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.7);
-  background-color: white;
-  border-radius: 50%;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  color: #9f9f9f;
   ${({ direction }) => (direction === 'left' ? `left: 10px;` : `right: 10px;`)}
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
 `;

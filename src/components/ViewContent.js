@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
+import ViewImagePdfModal from './modal/ViewImagePDFModal';
 
 function ViewContent() {
   const { state } = useLocation();
@@ -20,6 +21,10 @@ function ViewContent() {
     contentDetail: '',
   });
   const [remainingDays, setRemainingDays] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const openModal = (file) => setSelectedFile(file);
+  const closeModal = () => setSelectedFile(null);
 
   useEffect(() => {
     handleViewContent();
@@ -155,7 +160,7 @@ function ViewContent() {
               <FilesWrapper>
                 {contentInfo.contentDoc.map((file, index) => (
                   <FileContainer key={file}>
-                    <FileBox onClick={() => window.open(file, '_blank')}>
+                    <FileBox onClick={() => openModal(file)}>
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
@@ -172,6 +177,13 @@ function ViewContent() {
                   </FileContainer>
                 ))}
               </FilesWrapper>
+            )}
+            {selectedFile && (
+              <ViewImagePdfModal
+                file={selectedFile}
+                files={contentInfo.contentDoc}
+                onClose={closeModal}
+              />
             )}
           </ContentDiv>
           <ContentDiv>

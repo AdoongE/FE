@@ -23,12 +23,15 @@ const ViewImagePdfModal = ({ file, files, onClose }) => {
     nextArrow: <CustomArrow direction="right" />,
   };
 
-  const handleSaveAllFiles = () => {
+  const handleDownloadAll = (files) => {
     files.forEach((file) => {
-      const link = document.createElement('a');
-      link.href = file;
-      link.download = file.split('/').pop();
-      link.click();
+      const blob = new Blob([file.content], { type: 'application/pdf' });
+      const a = document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = file.split('.com/')[1];
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     });
   };
 
@@ -67,7 +70,11 @@ const ViewImagePdfModal = ({ file, files, onClose }) => {
         >
           이 파일만 저장
         </SaveButton>
-        <SaveButton top="50px" className="all" onClick={handleSaveAllFiles}>
+        <SaveButton
+          top="50px"
+          className="all"
+          onClick={() => handleDownloadAll(files)}
+        >
           모든 파일 저장
         </SaveButton>
       </ModalHeader>

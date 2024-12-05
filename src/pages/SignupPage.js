@@ -295,8 +295,9 @@ function SignupPage() {
                   <NewContent>
                     <Content>
                       {/* accordion mui 라이브러리 이용 */}
-                      <span style={{ color: 'red' }}>(필수)</span> 서비스
-                      이용약관 {'>'}
+                      <span style={{ color: 'red' }}>
+                        (필수)
+                      </span> 서비스 이용약관 {'>'}
                     </Content>
 
                     <FormControlLabel
@@ -312,8 +313,9 @@ function SignupPage() {
                   <NewContent>
                     <Content>
                       {/* accordion mui 라이브러리 이용 */}
-                      <span style={{ color: 'red' }}>(필수)</span> 개인정보 수집
-                      및 이용동의 {'>'}
+                      <span style={{ color: 'red' }}>
+                        (필수)
+                      </span> 개인정보 수집 및 이용동의 {'>'}
                     </Content>
                     <FormControlLabel
                       control={

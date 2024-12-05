@@ -5,7 +5,8 @@ import Logo from '../assets/icons/seedzip.png';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
-function Navbar({ activeTab, setActiveTab }) {
+function Navbar() {
+  const [activeTab, setActiveTab] = useState('모아보기'); // 상단바 내부 전용 상태
   const [activeBarWidth, setActiveBarWidth] = useState(0);
   const [activeBarLeft, setActiveBarLeft] = useState(0);
   const navbarMenuRef = useRef(null);
@@ -54,13 +55,6 @@ function Navbar({ activeTab, setActiveTab }) {
           active={activeTab === '관리하기'}
         >
           관리하기
-        </MenuButton>
-        <MenuButton
-          data-tab="탐색하기"
-          onClick={(e) => handleTabClick('탐색하기', e)}
-          active={activeTab === '탐색하기'}
-        >
-          탐색하기
         </MenuButton>
         <ActiveBar width={activeBarWidth} left={activeBarLeft} />
       </NavbarMenu>
@@ -146,6 +140,11 @@ const MenuButton = styled.button`
   font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
   color: ${(props) => (props.active ? '#000' : '#666')};
 
+  /*텍스트 겹치는 문제 해결*/
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   svg {
     margin-right: 10px; // 아이콘과 텍스트 간격
   }
@@ -167,6 +166,11 @@ const ActiveBar = styled.div`
 const NavbarRight = styled.div`
   display: flex;
   align-items: center;
+  gap: 16px;
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const NewContentButton = styled.button`

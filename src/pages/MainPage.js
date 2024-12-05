@@ -228,7 +228,6 @@ const ContentArea = styled.div`
   gap: 20px;
   width: 100%;
   box-sizing: border-box;
-  padding: 118px 0;
 `;
 
 const Pagination = styled.div`

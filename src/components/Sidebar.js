@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import seedIcon from '../assets/icons/seed.png';
-import treeIcon from '../assets/icons/tree.png';
-import forestIcon from '../assets/icons/forest.png';
+import seedIcon from '../assets/icons/seed_sidebar.png';
+import reminderIcon from '../assets/icons/reminder_sidebar.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -14,12 +13,11 @@ import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import axios from 'axios';
 
 const Sidebar = ({
-  activeTab,
-  setActiveTab,
   setCategoryId,
   setCateName,
   categoryCounts,
 }) => {
+  const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
@@ -307,26 +305,19 @@ const Sidebar = ({
       <SideDiv>
         <BtnDiv>
           <CollectBtn
-            active={activeTab === '모아보기'}
-            onClick={() => handleTabClick('모아보기')}
+            active={activeTab === '나의 씨드'}
+            onClick={() => handleTabClick('나의 씨드')}
           >
             <ImgIcon src={seedIcon} alt="seed icon" />
-            모아보기
+            나의 씨드
           </CollectBtn>
           <ManageBtn
-            active={activeTab === '관리하기'}
-            onClick={() => handleTabClick('관리하기')}
+            active={activeTab === '리마인더'}
+            onClick={() => handleTabClick('리마인더')}
           >
-            <ImgIcon src={treeIcon} alt="tree icon" />
-            관리하기
+            <ImgIcon src={reminderIcon} alt="reminder icon" />
+            리마인더
           </ManageBtn>
-          <ExploreBtn
-            active={activeTab === '탐색하기'}
-            onClick={() => handleTabClick('탐색하기')}
-          >
-            <ImgIcon src={forestIcon} alt="forest icon" />
-            탐색하기
-          </ExploreBtn>
         </BtnDiv>
         <CategoryDiv>
           <CategoryP>모든 카테고리 ({categoryIds.length})</CategoryP>
@@ -529,7 +520,6 @@ const Button = styled.button`
 
 const CollectBtn = styled(Button)``;
 const ManageBtn = styled(Button)``;
-const ExploreBtn = styled(Button)``;
 
 const ImgIcon = styled.img`
   width: 1.875rem;

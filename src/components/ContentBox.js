@@ -96,11 +96,10 @@ const ImageBox = styled.div`
 `;
 
 const ContentImage = styled.img`
-  width: 110px;
-  height: 110px;
+  width: ${({ src }) => (src === defaultImage ? '129px' : '110px')};
+  height: ${({ src }) => (src === defaultImage ? '129px' : '110px')};
   object-fit: cover;
   border-radius: 10px;
-  opacity: 0.2;
 `;
 
 const IconBox = styled.div`

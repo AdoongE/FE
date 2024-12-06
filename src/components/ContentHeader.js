@@ -15,10 +15,10 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
       <Title>
         {categoryId ? (
           <>
-            내 콘텐츠 모아보기<CategoryName>&gt; {categoryName}</CategoryName>
+            나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
           </>
         ) : (
-          '내 콘텐츠 모아보기'
+          '나의 씨드'
         )}
       </Title>
       <Bar>

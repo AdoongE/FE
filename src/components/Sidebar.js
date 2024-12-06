@@ -12,11 +12,7 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import axios from 'axios';
 
-const Sidebar = ({
-  setCategoryId,
-  setCateName,
-  categoryCounts,
-}) => {
+const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);

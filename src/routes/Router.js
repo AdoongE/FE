@@ -7,6 +7,7 @@ import KakaoRedirect from '../components/api/KakaoRedirect';
 import SignupPage from '../pages/SignupPage';
 import AddContent from '../components/AddContent';
 import ContentViewPage from '../pages/ContentViewPage';
+import ContentEditPage from '../pages/ContentEditPage';
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/content" element={<AddContent />} />
         <Route path="/content-add" element={<ContentAddPage />} />
         <Route path="/content-view" element={<ContentViewPage />} />
+        <Route path="/content-edit/:Id" element={<ContentEditPage />} />
       </Routes>
     </BrowserRouter>
   );

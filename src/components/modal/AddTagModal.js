@@ -8,7 +8,7 @@ import React, {
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
-const AddTagModal = forwardRef(({ onConfirm }, ref) => {
+const AddTagModal = forwardRef(({ onConfirm, originalTags = [] }, ref) => {
   const TagOption = [
     '기획/아이디어',
     '여행',
@@ -59,9 +59,17 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
     resetTags: () => setSelectedTags([]),
     removeTags: (tag) =>
       setSelectedTags((prevTags) => prevTags.filter((item) => item !== tag)),
-    showModal: () => dialogRef.current?.showModal(),
+    showModal: () => {
+      dialogRef.current?.showModal();
+    },
+
     close: () => dialogRef.current?.close(),
   }));
+
+  useEffect(() => {
+    // 컴포넌트 처음 렌더링 시 originalTags로 초기화
+    setSelectedTags(originalTags);
+  }, [originalTags]);
 
   const handleSelectTag = (tag) => {
     setSelectedTags((prevTags) =>
@@ -79,6 +87,7 @@ const AddTagModal = forwardRef(({ onConfirm }, ref) => {
   const handleApply = () => {
     onConfirm([...selectedTags]);
     dialogRef.current?.close();
+    console.log('모달 tag: ', selectedTags);
   };
 
   const handleReset = () => {

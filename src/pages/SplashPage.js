@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import SplashBar from '../components/bar/SplashBar';
 import LoginModal from '../components/modal/LoginModal';
+import splashImg from '../assets/icons/splashImg.png';
 
 function SplashPage() {
   const dialogRef = useRef(null);
@@ -25,7 +26,7 @@ function SplashPage() {
           </Long>
           <StartButton onClick={showModal}>seedzip 시작하기</StartButton>
         </Words>
-        <SplashImg src="/splashImg.png" alt="spashImg" />
+        <SplashImg src={splashImg} alt="splashImg" />
       </Page>
       <LoginModal ref={dialogRef} />
     </div>

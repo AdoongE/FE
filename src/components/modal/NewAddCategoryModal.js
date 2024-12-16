@@ -29,7 +29,7 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
     try {
       const response = await api.post('/api/v1/category', {
         name: newCategoryName,
-        visibility: isPublic ? 'PUBLIC' : 'PRIVATE',
+        isPublic: isPublic ? true : false,
       });
 
       if (response.status === 200) {

@@ -5,6 +5,7 @@ import ContentBox from '../components/ContentBox';
 import ContentBlank from '../components/ContentBlank';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import axios from 'axios';
 
 const api = axios.create({
@@ -30,6 +31,10 @@ const MainPage = () => {
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
+  const [selectedData, setSelectedData] = useState(null);
+
+  const openModal = (data) => setSelectedData(data);
+  const closeModal = () => setSelectedData(null);
 
   // 데이터 가져오기
   const fetchData = useCallback(async () => {
@@ -121,10 +126,12 @@ const MainPage = () => {
     );
   };
 
-  const categoryCounts = collectData.reduce((counts, item) => {
-    counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
-    return counts;
-  }, {});
+  const categoryCounts =
+    collectData &&
+    collectData.reduce((counts, item) => {
+      counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+      return counts;
+    }, {});
 
   return (
     <MainContainer>
@@ -151,16 +158,25 @@ const MainPage = () => {
             <ContentBlank />
           ) : (
             displayedContentBoxes.map((data) => (
-              <ContentBox
-                key={data.id}
-                contentId={data.id}
-                title={data.title}
-                user={data.user}
-                category={data.category}
-                tags={data.tags}
-                contentDateType={data.contentDateType}
-                thumbnailImage={data.thumbnailImage}
-              />
+              <React.Fragment key={data.id}>
+                <ContentBox
+                  contentId={data.id}
+                  title={data.title}
+                  user={data.user}
+                  category={data.category}
+                  tags={data.tags}
+                  contentDateType={data.contentDateType}
+                  thumbnailImage={data.thumbnailImage}
+                  open={() => openModal(data)}
+                />
+                {selectedData && selectedData.id === data.id && (
+                  <ViewThumbnailModal
+                    file={data.thumbnailImage}
+                    onClose={closeModal}
+                    contentDataType={selectedData.contentDateType}
+                  />
+                )}
+              </React.Fragment>
             ))
           )}
         </ContentArea>

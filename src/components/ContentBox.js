@@ -12,6 +12,7 @@ function ContentBox({
   tags,
   dDay,
   thumbnailImage,
+  open,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -21,7 +22,7 @@ function ContentBox({
 
   return (
     <Box>
-      <ImageBox>
+      <ImageBox onClick={open}>
         <ContentImage
           src={thumbnailImage || defaultImage}
           alt="content thumbnail"

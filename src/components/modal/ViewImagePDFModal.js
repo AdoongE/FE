@@ -19,9 +19,14 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    prevArrow: <CustomArrow direction="left" />,
-    nextArrow: <CustomArrow direction="right" />,
+    prevArrow: (
+      <CustomArrow direction="left" contentDataType={contentDataType} />
+    ),
+    nextArrow: (
+      <CustomArrow direction="right" contentDataType={contentDataType} />
+    ),
   };
+  console.log(contentDataType);
 
   const handleDownloadAll = async (files) => {
     for (const file of files) {
@@ -113,9 +118,13 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
 
 export default ViewImagePdfModal;
 
-const CustomArrow = ({ direction, onClick }) => {
+const CustomArrow = ({ contentDataType, direction, onClick }) => {
   return (
-    <ArrowButton direction={direction} onClick={onClick}>
+    <ArrowButton
+      contentDataType={contentDataType}
+      direction={direction}
+      onClick={onClick}
+    >
       {direction === 'left' ? (
         <FaChevronLeft size={40} />
       ) : (
@@ -132,6 +141,7 @@ const ModalHeader = styled.div`
   width: 100%;
   height: 112px;
   gap: 10px;
+  margin-bottom: 47px;
 `;
 
 const SaveButton = styled.button`
@@ -162,14 +172,14 @@ const DocumentWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* height: 645px; */
-  /* width: 100px; */
+  width: 100%;
+  height: 100%;
 
   canvas {
+    margin: auto;
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; // 할, 말??
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    object-fit: contain;
   }
 `;
 
@@ -190,17 +200,14 @@ const ImageWrapper = styled.div`
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
-    width: 593px;
-    height: 645px;
+    width: 60%;
+    height: 60%;
   }
 `;
 
 const ArrowButton = styled.div`
   position: absolute;
-  top: 50%;
+  top: ${({ contentDataType }) => (contentDataType === 'PDF' ? '43%' : '50%')};
   z-index: 1000;
   cursor: pointer;
   color: #9f9f9f;

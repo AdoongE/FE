@@ -3,6 +3,13 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 import defaultImage from '../assets/icons/seed_contentbox.png';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 function ContentBox({
   contentId,
@@ -13,6 +20,7 @@ function ContentBox({
   dDay,
   thumbnailImage,
   open,
+  contentDateType,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -23,10 +31,18 @@ function ContentBox({
   return (
     <Box>
       <ImageBox onClick={open}>
-        <ContentImage
-          src={thumbnailImage || defaultImage}
-          alt="content thumbnail"
-        />
+        {contentDateType === 'PDF' ? (
+          <PDFThumbnail>
+            <Document file={thumbnailImage} loading={<div>Loading PDF...</div>}>
+              <Page pageNumber={1} width={200} />
+            </Document>
+          </PDFThumbnail>
+        ) : (
+          <ContentImage
+            src={thumbnailImage || defaultImage}
+            alt="content thumbnail"
+          />
+        )}
         {dDay <= 0 && (
           <Dday dDay={dDay}>{`D-${dDay === 0 ? 'DAY' : Math.abs(dDay)}`}</Dday>
         )}
@@ -102,6 +118,12 @@ const ContentImage = styled.img`
   object-fit: cover;
   border-radius: 10px;
   opacity: 0.2;
+`;
+
+const PDFThumbnail = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const IconBox = styled.div`

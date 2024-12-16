@@ -19,8 +19,9 @@ function ContentDropdown({ contentId }) {
   };
 
   // 케밥 열고 닫기
-  const handleKebabToggle = () => {
+  const handleKebabToggle = (e) => {
     setIsKebabOpen((prevValue) => !prevValue);
+    e.stopPropagation();
   };
 
   const optionsRef = useRef(null);

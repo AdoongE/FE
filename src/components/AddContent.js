@@ -521,6 +521,7 @@ function AddContent({ onSetRepresentativeImage }) {
                           <AddTagModal
                             ref={TagRef}
                             originalTags={[]}
+                            title={'태그를 선택하세요.'}
                             onConfirm={(newTags) => {
                               setTags(newTags);
                               setValue('tags', newTags);
@@ -793,6 +794,9 @@ const Text = styled.textarea`
   padding-left: 27px;
   padding-top: 26px;
   padding-right: 27px;
+  &:focus {
+    outline: none;
+  }
 
   &::placeholder {
     color: #4f4f4f;
@@ -908,6 +912,10 @@ const TitleDiv = styled.input`
   border-bottom: 2px solid #9f9f9f;
   margin-bottom: 1.813rem;
   padding-bottom: 10px;
+
+  &:focus {
+    outline: none;
+  }
 
   &::placeholder {
     font-size: 40px;

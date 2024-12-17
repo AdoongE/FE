@@ -44,6 +44,8 @@ const MainPage = () => {
 
       if (activeTab === '모아보기') {
         url = '/api/v1/content/';
+        const response = await api.get(url);
+        setCollectData(response.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
       } else if (categoryId) {
         url = `/api/v1/content/${categoryId}`;
       }
@@ -77,10 +79,6 @@ const MainPage = () => {
               createdAt: content.createdAt || new Date(),
             })) ?? [],
         ) ?? [];
-
-      if (activeTab === '모아보기') {
-        setCollectData(results);
-      }
 
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
@@ -137,21 +135,14 @@ const MainPage = () => {
     );
   };
 
-  //   const categoryCounts =
-  //     collectData &&
-  //     collectData.reduce((counts, item) => {
-  //       counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
-  //       return counts;
-  //     }, {});
-
   const categoryCounts =
-    Array.isArray(collectData) && collectData.length > 0
-      ? collectData.reduce((counts, item) => {
-          const categoryName = item.categoryName?.[0] || '기타'; // categoryName이 없을 때 기본값 설정
-          counts[categoryName] = (counts[categoryName] || 0) + 1;
-          return counts;
-        }, {})
-      : {};
+    collectData &&
+    collectData.reduce((counts, item) => {
+      if (Array.isArray(item.categoryName) && item.categoryName[0]) {
+        counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+      }
+      return counts;
+    }, {});
 
   return (
     <MainContainer>

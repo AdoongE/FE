@@ -107,6 +107,7 @@ const Button = styled.button`
   color: black;
   border: 0px;
   position: relative;
+  background-color: transparent;
 `;
 
 const Open = styled.div`

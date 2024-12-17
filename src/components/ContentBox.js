@@ -41,6 +41,7 @@ function ContentBox({
           <ContentImage
             src={thumbnailImage || defaultImage}
             alt="content thumbnail"
+            isDefaultImage={!thumbnailImage}
           />
         )}
         {dDay <= 0 && (
@@ -113,17 +114,33 @@ const ImageBox = styled.div`
 `;
 
 const ContentImage = styled.img`
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 10px;
-  opacity: 0.2;
+  ${({ isDefaultImage }) =>
+    isDefaultImage
+      ? `
+    width: 129px;
+    height: 129px;
+    filter: invert(100%) sepia(4%) saturate(0%) hue-rotate(125deg) brightness(91%) contrast(90%);
+  `
+      : `
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  `}
 `;
 
 const PDFThumbnail = styled.div`
-  display: flex;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    border-radius: 10px;
+  }
 `;
 
 const IconBox = styled.div`

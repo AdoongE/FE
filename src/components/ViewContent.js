@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 import ViewImagePdfModal from './modal/ViewImagePDFModal';
 
 function ViewContent() {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const [contentInfo, setContentInfo] = useState({
     contentId: '',
@@ -83,6 +84,17 @@ function ViewContent() {
   const handleClose = () => {
     window.history.back();
   };
+
+  const editContent = () => {
+    navigate(`/content-edit/${contentInfo.contentId}`, {
+      replace: false,
+      state: {
+        Id: contentInfo.contentId,
+        dataType: contentInfo.contentDataType,
+      },
+    });
+  };
+
   return (
     <>
       <ContentPage>
@@ -237,7 +249,7 @@ function ViewContent() {
             <Text>{contentInfo.contentDetail}</Text>
           </Memo>
         </Contents>
-        <Button>수정하기</Button>
+        <Button onClick={editContent}>수정하기</Button>
       </ContentPage>
     </>
   );

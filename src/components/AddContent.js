@@ -124,6 +124,7 @@ function AddContent({ onSetRepresentativeImage }) {
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
+      .min(1, '카테고리를 최소 1개 선택해주세요.')
       .required(),
     thumbnailImage: yup
       .number()
@@ -519,13 +520,11 @@ function AddContent({ onSetRepresentativeImage }) {
                           />
                           <AddTagModal
                             ref={TagRef}
+                            originalTags={[]}
+                            title={'태그를 선택하세요.'}
                             onConfirm={(newTags) => {
-                              // 중복 제거 후 최소 2개 확인
-                              const uniqueTags = [
-                                ...new Set([...field.value, ...newTags]),
-                              ];
-                              setTags(uniqueTags);
-                              setValue('tags', uniqueTags);
+                              setTags(newTags);
+                              setValue('tags', newTags);
                             }}
                           />
                         </>
@@ -783,6 +782,7 @@ const TagDiv = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
+  align-items: center;
 `;
 
 const Text = styled.textarea`
@@ -794,6 +794,9 @@ const Text = styled.textarea`
   padding-left: 27px;
   padding-top: 26px;
   padding-right: 27px;
+  &:focus {
+    outline: none;
+  }
 
   &::placeholder {
     color: #4f4f4f;
@@ -909,6 +912,10 @@ const TitleDiv = styled.input`
   border-bottom: 2px solid #9f9f9f;
   margin-bottom: 1.813rem;
   padding-bottom: 10px;
+
+  &:focus {
+    outline: none;
+  }
 
   &::placeholder {
     font-size: 40px;

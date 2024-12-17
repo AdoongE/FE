@@ -41,20 +41,26 @@ const MainPage = () => {
     try {
       setLoading(true);
       let url = '';
-      if (activeTab == '모아보기') {
+
+      if (activeTab === '모아보기') {
         url = '/api/v1/content/';
-        const response = await api.get(url);
-        setCollectData(response.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
-      } else if (activeTab !== '모아보기' && categoryId) {
+      } else if (categoryId) {
         url = `/api/v1/content/${categoryId}`;
       }
-      console.log('너 뭐야', activeTab);
-      console.log(`GET 요청할 URL: ${url}`);
+
+      if (!url) {
+        console.warn('유효하지 않은 URL 요청입니다.');
+        return;
+      }
+
+      console.log('GET 요청할 URL:', url);
 
       const response = await api.get(url);
 
-      // 응답 데이터 전체 확인
+      // 응답 데이터 확인
       console.log('응답 데이터:', response.data);
+
+      // 데이터 유효성 검사
       const results =
         response.data.results?.flatMap(
           (item) =>
@@ -64,13 +70,18 @@ const MainPage = () => {
               user: item.nickname || '사용자 정보 없음',
               category: content.categoryName?.[0] || '카테고리 없음',
               tags: content.tagName || [],
-              dDay: content.dDay || 0, // dDay 추가
+              dDay: content.dDay || 0,
               contentDateType: content.contentDateType || '타입 없음',
-              thumbnailImage: content.thumbnailImage || '', // 기본 이미지를 ContentBox에서 처리
+              thumbnailImage: content.thumbnailImage || '',
               updatedDt: content.updatedDt || '업데이트 정보 없음',
-              createdAt: content.createdAt || new Date(), // 날짜 정렬을 위한 필드
+              createdAt: content.createdAt || new Date(),
             })) ?? [],
         ) ?? [];
+
+      if (activeTab === '모아보기') {
+        setCollectData(results);
+      }
+
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
     } catch (error) {
@@ -126,12 +137,21 @@ const MainPage = () => {
     );
   };
 
+//   const categoryCounts =
+//     collectData &&
+//     collectData.reduce((counts, item) => {
+//       counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+//       return counts;
+//     }, {});
+
   const categoryCounts =
-    collectData &&
-    collectData.reduce((counts, item) => {
-      counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
-      return counts;
-    }, {});
+    Array.isArray(collectData) && collectData.length > 0
+      ? collectData.reduce((counts, item) => {
+          const categoryName = item.categoryName?.[0] || '기타'; // categoryName이 없을 때 기본값 설정
+          counts[categoryName] = (counts[categoryName] || 0) + 1;
+          return counts;
+        }, {})
+      : {};
 
   return (
     <MainContainer>
@@ -244,7 +264,6 @@ const ContentArea = styled.div`
   gap: 20px;
   width: 100%;
   box-sizing: border-box;
-  padding: 118px 0;
 `;
 
 const Pagination = styled.div`

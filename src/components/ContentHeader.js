@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
+import TagFilterModal from './modal/TagFilterModal';
 
 function ContentHeader({ setSortOrder, categoryId, categoryName }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
+
+  const dialogRef = useRef(null);
+
+  const showModal = () => {
+    dialogRef.current?.showModal();
+  };
 
   const handleFilterClick = (filterOption) => {
     setSelectedFilter(filterOption);
@@ -15,10 +22,10 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
       <Title>
         {categoryId ? (
           <>
-            내 콘텐츠 모아보기<CategoryName>&gt; {categoryName}</CategoryName>
+            나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
           </>
         ) : (
-          '내 콘텐츠 모아보기'
+          '나의 씨드'
         )}
       </Title>
       <Bar>
@@ -39,26 +46,21 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
         </Filter>
         <SearchContainer>
           <Icon
-            icon="mage:filter"
-            style={{
-              width: '27px',
-              height: '27px',
-              marginLeft: '22px',
-              color: 'black',
-            }}
-          />
-          <Search placeholder="찾고 싶은 콘텐츠를 검색하세요." />
-          <Icon
             icon="stash:search-solid"
             style={{
               width: '24px',
               height: '24px',
-              marginRight: '13px',
+              marginLeft: '15px',
               color: 'black',
             }}
           />
+          <Search placeholder="찾고 싶은 콘텐츠를 검색하세요." />
+          <SearchButton type="button" onClick={() => showModal()}>
+            #태그 검색
+          </SearchButton>
         </SearchContainer>
       </Bar>
+      <TagFilterModal ref={dialogRef} />
     </Main>
   );
 }
@@ -106,22 +108,19 @@ const SearchContainer = styled.div`
   margin-right: 100px;
   background-color: (0, 0, 0, 0.3);
   border: 1px solid #9f9f9f;
-  padding-top: 5px;
   display: flex;
   position: relative;
 
   justify-content: space-around;
   align-items: center;
-  z-index: 0;
 `;
 
 const Search = styled.input`
-  width: 370px;
+  width: 300px;
   border: none;
   -webkit-appearance: none;
   appearance: none;
   text-align: start;
-  margin-left: 10px;
   overflow: auto;
   z-index: -1;
   font-size: 25px;
@@ -132,6 +131,26 @@ const Search = styled.input`
     color: #9f9f9f;
     transform: translateY(-4px);
   }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const SearchButton = styled.button`
+  width: 110px;
+  height: 40px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 40.32px;
+  background-color: #f2f2f2;
+  font-size: 16px;
+  font-weight: 500;
+  color: #9f9f9f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
 `;
 
 const Bar = styled.div`

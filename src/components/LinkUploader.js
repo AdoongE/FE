@@ -98,6 +98,9 @@ const LinkInput = styled.input`
   font-weight: 400;
   align-items: center;
   border: 0;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const Inputs = styled.div`

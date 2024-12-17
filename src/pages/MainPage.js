@@ -137,12 +137,12 @@ const MainPage = () => {
     );
   };
 
-//   const categoryCounts =
-//     collectData &&
-//     collectData.reduce((counts, item) => {
-//       counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
-//       return counts;
-//     }, {});
+  //   const categoryCounts =
+  //     collectData &&
+  //     collectData.reduce((counts, item) => {
+  //       counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+  //       return counts;
+  //     }, {});
 
   const categoryCounts =
     Array.isArray(collectData) && collectData.length > 0

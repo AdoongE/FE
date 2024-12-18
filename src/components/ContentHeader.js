@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import TagFilterModal from './modal/TagFilterModal';
+import AddTagModal from './modal/AddTagModal';
 
 function ContentHeader({ setSortOrder, categoryId, categoryName }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
@@ -60,7 +60,7 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
           </SearchButton>
         </SearchContainer>
       </Bar>
-      <TagFilterModal ref={dialogRef} />
+      <AddTagModal ref={dialogRef} title={'검색할 태그를 선택하세요.'} />
     </Main>
   );
 }

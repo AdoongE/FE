@@ -77,7 +77,7 @@ const AddTagModal = forwardRef(
     useEffect(() => {
       // 컴포넌트 처음 렌더링 시 originalTags로 초기화
       setSelectedTags(originalTags);
-    }, [originalTags]);
+    }, []);
 
     const handleSelectTag = (tag) => {
       setSelectedTags((prevTags) =>

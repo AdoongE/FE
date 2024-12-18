@@ -22,7 +22,9 @@ function ContentBox({
   const [showNewImage, setShowNewImage] = useState(false);
 
   // 제목이 없을 경우 업데이트 날짜로 대체
-  const displayTitle = title || (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
+  const displayTitle =
+    title ||
+    (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);

@@ -43,7 +43,9 @@ const MainPage = () => {
     const targetDate = new Date(updatedDt);
 
     const differenceInTime = targetDate - today; // 밀리초 단위 차이 계산
-    const differenceInDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24)); // 일 단위로 변환
+    const differenceInDays = Math.ceil(
+      differenceInTime / (1000 * 60 * 60 * 24),
+    ); // 일 단위로 변환
 
     return differenceInDays;
   };

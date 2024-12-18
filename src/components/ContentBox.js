@@ -40,8 +40,10 @@ function ContentBox({
             isDefaultImage={!thumbnailImage}
           />
         )}
-        {dDay <= 0 && (
-          <Dday dDay={dDay}>{`D-${dDay === 0 ? 'DAY' : Math.abs(dDay)}`}</Dday>
+        {dDay !== undefined && dDay <= 0 && (
+          <Dday dDay={dDay}>
+            {dDay === 0 ? 'D-DAY' : `D-${Math.abs(dDay)}`}
+          </Dday>
         )}
         <Dropdown>
           <ContentDropdown contentId={contentId} />

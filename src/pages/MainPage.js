@@ -164,31 +164,44 @@ const MainPage = () => {
         />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
-            <div>로딩 중...</div>
+            <div>로딩 중...</div> // 로딩 상태 표시
           ) : sortedData.length === 0 ? (
-            <ContentBlank />
+            <ContentBlank /> // 데이터가 없을 때
           ) : (
-            displayedContentBoxes.map((data) => (
-              <React.Fragment key={data.id}>
-                <ContentBox
-                  contentId={data.id}
-                  title={data.title}
-                  user={data.user}
-                  category={data.category}
-                  tags={data.tags}
-                  contentDateType={data.contentDateType}
-                  thumbnailImage={data.thumbnailImage}
-                  open={() => openModal(data)}
-                />
-                {selectedData && selectedData.id === data.id && (
-                  <ViewThumbnailModal
-                    file={data.thumbnailImage}
-                    onClose={closeModal}
-                    contentDataType={selectedData.contentDateType}
+            displayedContentBoxes.map((data) => {
+              const formattedDate = new Date(data.createdAt).toLocaleDateString(
+                'ko-KR',
+                {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                },
+              );
+
+              return (
+                <React.Fragment key={data.id}>
+                  <ContentBox
+                    key={data.id}
+                    contentId={data.id}
+                    title={data.title || formattedDate} // 제목이 없으면 생성 날짜 사용
+                    user={data.user}
+                    category={data.category}
+                    tags={data.tags}
+                    dDay={data.dDay}
+                    contentDateType={data.contentDateType}
+                    thumbnailImage={data.thumbnailImage}
+                    open={() => openModal(data)}
                   />
-                )}
-              </React.Fragment>
-            ))
+                  {selectedData && selectedData.id === data.id && (
+                    <ViewThumbnailModal
+                      file={data.thumbnailImage}
+                      onClose={closeModal}
+                      contentDataType={selectedData.contentDateType}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })
           )}
         </ContentArea>
 

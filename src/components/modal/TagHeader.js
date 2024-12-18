@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
 function TagHeader() {
   const [selectedTags, setSelectedTags] = useState([]);
-  
+
   return (
     <div>
       <Header>
@@ -59,9 +59,8 @@ function TagHeader() {
         <div>적절한 태그를 선택해보세요!</div>
       </Short>
     </div>
-  )
+  );
 }
-
 
 const Short = styled.div`
   display: flex;
@@ -108,4 +107,4 @@ const Title = styled.div`
   font-weight: 600;
 `;
 
-export default TagHeader
+export default TagHeader;

@@ -201,7 +201,7 @@ const TagFilterModal = forwardRef((_, ref) => {
   return (
     <Dialog ref={dialogRef}>
       <Head>
-        <Title>검색할 태그를 선택하세요.</Title>
+        <Title>맞춤 필터 조건 설정</Title>
         <Icons>
           <Icon
             icon="ri:reset-left-line"

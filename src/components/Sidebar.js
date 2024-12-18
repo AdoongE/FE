@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -10,13 +10,13 @@ import { Icon } from '@iconify/react';
 import AddCategoryModal from '../components/modal/AddCategoryModal';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
+import TagFilterModal from '../components/modal/TagFilterModal';
 import axios from 'axios';
 
 const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [hoveredBookdmarkIndex, setHoveredBookmarkIndex] = useState(null);
@@ -296,6 +296,12 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     handleViewCategory();
   }, []);
 
+  const dialogRef = useRef(null);
+
+  const showModal = () => {
+    dialogRef.current?.showModal();
+  };
+
   return (
     <StMainPage>
       <SideDiv>
@@ -419,18 +425,6 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
                 </>
               </>
             )}
-
-            <AccordionTitle
-              onClick={() => setIsSubscribeOpen(!isSubscribeOpen)}
-            >
-              <Icons icon="iconamoon:file-add-light" />
-              구독한 카테고리
-              <RightArrowIcon open={isSubscribeOpen} />
-            </AccordionTitle>
-
-            {isSubscribeOpen && (
-              <AccordionContent>카테고리를 구독하세요.</AccordionContent>
-            )}
           </Accordion>
         </CategoryDiv>
         {/* 카데고리 추가 모달 창 */}
@@ -472,6 +466,24 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             onConfirm={handleConfirmRemove}
           />
         )}
+        <CustomFilter>
+          <CategoryP>나의 맞춤 필터</CategoryP>
+          <CustomDiv>
+            <Custom onClick={() => showModal()}>
+              <Icon icon="ri:align-left" width="24px" height="24px" />
+              맞춤 조건 1
+            </Custom>
+            <Custom>
+              <Icon icon="ri:align-left" width="24px" height="24px" />
+              맞춤 조건 2
+            </Custom>
+            <Custom>
+              <Icon icon="ri:align-left" width="24px" height="24px" />
+              맞춤 조건 3
+            </Custom>
+          </CustomDiv>
+        </CustomFilter>
+        <TagFilterModal ref={dialogRef} />
       </SideDiv>
     </StMainPage>
   );
@@ -526,8 +538,11 @@ const ImgIcon = styled.img`
 `;
 
 const CategoryDiv = styled.div`
-  margin-top: 26px;
+  margin-top: 28px;
+  border-bottom: 1px solid #dcdada;
+  padding-bottom: 9px;
 `;
+
 const CategoryP = styled.p`
   font-size: 24px;
   font-weight: 600;
@@ -623,6 +638,24 @@ const DotBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const CustomFilter = styled.div`
+  margin-top: 30px;
+`;
+
+const CustomDiv = styled.div`
+  margin-top: 30px;
+`;
+
+const Custom = styled.div`
+  margin-left: 38px;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 18px;
 `;
 
 export default Sidebar;

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
+import ViewImagePdfModal from './modal/ViewImagePDFModal';
 
 function ViewContent() {
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ function ViewContent() {
     contentDetail: '',
   });
   const [remainingDays, setRemainingDays] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const openModal = (file) => setSelectedFile(file);
+  const closeModal = () => setSelectedFile(null);
 
   useEffect(() => {
     handleViewContent();
@@ -60,6 +65,7 @@ function ViewContent() {
         tags: results.tags,
         dday: results.dday,
         contentDetail: results.contentDetail,
+        filename: results.title,
       });
 
       if (response.status === 200) {
@@ -152,13 +158,17 @@ function ViewContent() {
               <ImagesWrapper>
                 {contentInfo.contentImage.map((image, index) => (
                   <ImageContainer key={image}>
-                    <ImageBox>
+                    <ImageBox onClick={() => openModal(image)}>
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
                       <ImagePreview src={image} alt="" />
                     </ImageBox>
-                    <FileName>{image.split('.com/')[1]}</FileName>
+                    {contentInfo.filename[index] && (
+                      <FileName key={contentInfo.filename[index]}>
+                        {contentInfo.filename[index]}
+                      </FileName>
+                    )}
                   </ImageContainer>
                 ))}
               </ImagesWrapper>
@@ -167,7 +177,7 @@ function ViewContent() {
               <FilesWrapper>
                 {contentInfo.contentDoc.map((file, index) => (
                   <FileContainer key={file}>
-                    <FileBox onClick={() => window.open(file, '_blank')}>
+                    <FileBox onClick={() => openModal(file)}>
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
@@ -184,6 +194,18 @@ function ViewContent() {
                   </FileContainer>
                 ))}
               </FilesWrapper>
+            )}
+            {selectedFile && (
+              <ViewImagePdfModal
+                file={selectedFile}
+                files={
+                  contentInfo.contentDataType === 'PDF'
+                    ? contentInfo.contentDoc
+                    : contentInfo.contentImage
+                }
+                onClose={closeModal}
+                contentDataType={contentInfo.contentDataType}
+              />
             )}
           </ContentDiv>
           <ContentDiv>

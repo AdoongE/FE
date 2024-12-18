@@ -298,7 +298,6 @@ function SignupPage() {
                       <span style={{ color: 'red' }}>
                         (필수)
                       </span> 서비스 이용약관 {'>'}
-
                     </Content>
 
                     <FormControlLabel

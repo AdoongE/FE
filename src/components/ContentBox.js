@@ -17,8 +17,12 @@ function ContentBox({
   thumbnailImage,
   open,
   contentDateType,
+  updatedDt,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
+
+  // 제목이 없을 경우 업데이트 날짜로 대체
+  const displayTitle = title || (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);
@@ -67,7 +71,7 @@ function ContentBox({
             onClick={handleIconClick}
           />
         </IconBox>
-        <ContentName>{title || '콘텐츠명'}</ContentName>
+        <ContentName>{displayTitle}</ContentName>
       </ContentTitle>
       <Filter>
         <div>{user || '사용자 이름'}</div>

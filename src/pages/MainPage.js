@@ -36,6 +36,18 @@ const MainPage = () => {
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
 
+  // D-Day 계산 함수
+  const calculateDday = (updatedDt) => {
+    if (!updatedDt) return null; // 날짜가 없으면 null 반환
+    const today = new Date();
+    const targetDate = new Date(updatedDt);
+
+    const differenceInTime = targetDate - today; // 밀리초 단위 차이 계산
+    const differenceInDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24)); // 일 단위로 변환
+
+    return differenceInDays;
+  };
+
   // 데이터 가져오기
   const fetchData = useCallback(async () => {
     try {
@@ -66,18 +78,24 @@ const MainPage = () => {
       const results =
         response.data.results?.flatMap(
           (item) =>
-            item.contentsInfoList?.map((content) => ({
-              id: content.contentId || 'ID 없음',
-              title: content.contentName || '제목 없음',
-              user: item.nickname || '사용자 정보 없음',
-              category: content.categoryName?.[0] || '카테고리 없음',
-              tags: content.tagName || [],
-              dDay: content.dDay || 0,
-              contentDateType: content.contentDateType || '타입 없음',
-              thumbnailImage: content.thumbnailImage || '',
-              updatedDt: content.updatedDt || '업데이트 정보 없음',
-              createdAt: content.createdAt || new Date(),
-            })) ?? [],
+            item.contentsInfoList?.map((content) => {
+              const formattedDate = content.updatedDt
+                ? new Date(content.updatedDt).toISOString().split('T')[0]
+                : '날짜 정보 없음'; // updatedDt가 없을 경우 기본값 설정
+
+              return {
+                id: content.contentId || 'ID 없음',
+                title: content.contentName || formattedDate, // contentName이 null일 경우 formattedDate 사용
+                user: item.nickname || '사용자 정보 없음',
+                category: content.categoryName?.[0] || '카테고리 없음',
+                tags: content.tagName || [],
+                dDay: calculateDday(content.updatedDt),
+                contentDateType: content.contentDateType || '타입 없음',
+                thumbnailImage: content.thumbnailImage || '',
+                updatedDt: content.updatedDt || '업데이트 정보 없음',
+                createdAt: content.createdAt || new Date(),
+              };
+            }) ?? [],
         ) ?? [];
 
       setOriginalData(results);
@@ -190,6 +208,7 @@ const MainPage = () => {
                     dDay={data.dDay}
                     contentDateType={data.contentDateType}
                     thumbnailImage={data.thumbnailImage}
+                    updatedDt={data.updatedDt}
                     open={() => openModal(data)}
                   />
                   {selectedData && selectedData.id === data.id && (

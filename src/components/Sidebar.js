@@ -6,6 +6,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Dropdown from '../components/dropdown/CategoryDropdown';
+import FilterDropdown from '../components/dropdown/FilterDropdown';
 import { Icon } from '@iconify/react';
 import AddCategoryModal from '../components/modal/AddCategoryModal';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
@@ -25,6 +26,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [categories, setCategories] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openFilterDropdown, setOpenFilterDropdown] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
@@ -307,6 +309,20 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     setCustomConditions((prev) => [...prev, `맞춤 조건 ${prev.length + 1}`]);
   };
 
+  const handleEditFilter = (index, newConditionName) => {
+    setCustomConditions((prevConditions) =>
+      prevConditions.map((condition, i) =>
+        i === index ? newConditionName : condition,
+      ),
+    );
+  };
+
+  const handleRemoveFilter = (index) => {
+    setCustomConditions((prevConditions) =>
+      prevConditions.filter((_, i) => i !== index),
+    );
+  };
+
   return (
     <StMainPage>
       <SideDiv>
@@ -484,9 +500,20 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
                 <Icon icon="ri:align-left" width="24px" height="24px" />
                 {condition}
                 <Right>
-                  <DotBox>
+                  <DotBox onClick={() => setOpenFilterDropdown(index)}>
                     <MoreVertIcon />
                   </DotBox>
+                  {openFilterDropdown === index && (
+                    <FilterDropdown
+                      isOpen={openFilterDropdown === index}
+                      onClose={() => setOpenFilterDropdown(null)}
+                      initialFilterName={condition}
+                      onEditFilter={(newName) =>
+                        handleEditFilter(index, newName)
+                      }
+                      onRemoveFilter={() => handleRemoveFilter(index)}
+                    />
+                  )}
                 </Right>
               </Custom>
             ))}

@@ -36,20 +36,6 @@ const MainPage = () => {
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
 
-  // D-Day 계산 함수
-  const calculateDday = (updatedDt) => {
-    if (!updatedDt) return null; // 날짜가 없으면 null 반환
-    const today = new Date();
-    const targetDate = new Date(updatedDt);
-
-    const differenceInTime = targetDate - today; // 밀리초 단위 차이 계산
-    const differenceInDays = Math.ceil(
-      differenceInTime / (1000 * 60 * 60 * 24),
-    ); // 일 단위로 변환
-
-    return differenceInDays;
-  };
-
   // 데이터 가져오기
   const fetchData = useCallback(async () => {
     try {
@@ -281,14 +267,21 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
-  display: ${({ $isBlank }) => ($isBlank ? 'flex' : 'grid')};
-  grid-template-columns: ${({ $isBlank }) =>
-    $isBlank ? 'none' : 'repeat(3, 1fr)'};
-  align-items: ${({ $isBlank }) => ($isBlank ? 'center' : 'start')};
-  justify-content: ${({ $isBlank }) => ($isBlank ? 'center' : 'stretch')};
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(440px, 1fr)
+  ); /* 컬럼 폭을 조정 */
+  justify-content: center; /* 가운데 정렬 */
   width: 100%;
   box-sizing: border-box;
+  padding: 0; /* 불필요한 패딩 제거 */
+
+  & > div {
+    aspect-ratio: 440 / 387; /* 콘텐츠 박스 비율 유지 */
+    width: 100%; /* 그리드에 맞춰 너비 조정 */
+    max-width: 600px; /* 화면이 너무 커질 경우 최대 크기 제한 (선택 사항) */
+  }
 `;
 
 const Pagination = styled.div`

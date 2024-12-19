@@ -106,19 +106,62 @@ const ModalButton = styled.button`
   }
 `;
 
+const ModalDelContent = styled.div`
+  background-color: white;
+  border-radius: 50px;
+  width: 39.813rem;
+  height: 21.875rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalDelTitle = styled.h2`
+  font-size: 32px;
+  font-weight: 850;
+  font-family: 'Pretendard-Regular';
+  margin-bottom: 3.563rem;
+`;
+
+const ButtonDelContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+`;
+
+const ModalDelButton = styled.button`
+  height: 3.375rem;
+  width: 8.125rem;
+  font-size: 22px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  &.ok {
+    background-color: #41c3ab;
+    color: white;
+  }
+  &.no {
+    background-color: #f2f2f2;
+    color: black;
+  }
+`;
+
 const FilterDropdown = ({
   isOpen,
   onClose,
-  initialFilterName, // 원본 필터 이름
+  initialFilterName,
   onEditFilter,
   onRemoveFilter,
 }) => {
   const dropdownRef = useRef();
-  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [newFilterName, setNewFilterName] = useState(initialFilterName);
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (showModal) return; // 모달이 열려있으면 이벤트 무시
+      if (showEditModal) return;
+      if (showDeleteModal) return;
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         onClose();
       }
@@ -131,17 +174,17 @@ const FilterDropdown = ({
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [isOpen, onClose, showModal]);
+  }, [isOpen, onClose, showEditModal, showDeleteModal]);
 
   if (!isOpen) return null;
 
   const handleEditConfirm = () => {
     if (newFilterName.trim()) {
       onEditFilter(newFilterName.trim());
-      setShowModal(false);
+      setShowEditModal(false);
     }
   };
-  const handleConfirmDelete = () => {
+  const handleDeleteConfirm = () => {
     onRemoveFilter();
     setShowDeleteModal(false);
   };
@@ -149,18 +192,18 @@ const FilterDropdown = ({
   return (
     <>
       <DropdownMenu ref={dropdownRef} onClick={(e) => e.stopPropagation()}>
-        <DropdownItem onClick={() => setShowModal(true)}>
+        <DropdownItem onClick={() => setShowEditModal(true)}>
           <Icons icon="iconamoon:edit-light" />
           이름 변경하기
         </DropdownItem>
-        <DropdownItem onClick={onRemoveFilter}>
+        <DropdownItem onClick={() => setShowDeleteModal(true)}>
           <Icons icon="mage:trash" />
           삭제하기
         </DropdownItem>
       </DropdownMenu>
 
-      {showModal && (
-        <ModalOverlay onClick={() => setShowModal(false)}>
+      {showEditModal && (
+        <ModalOverlay onClick={() => setShowEditModal(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <ModalDiv>
               <TopDiv>
@@ -172,17 +215,20 @@ const FilterDropdown = ({
                     height: '36px',
                     cursor: 'pointer',
                   }}
-                  onClick={() => setShowModal(false)}
+                  onClick={() => setShowEditModal(false)}
                 />
               </TopDiv>
               <Input
                 type="text"
                 value={newFilterName}
                 onChange={(e) => setNewFilterName(e.target.value)}
-                placeholder={initialFilterName} // 원본 이름이 placeholder로 표시
+                placeholder={initialFilterName}
               />
               <ButtonContainer>
-                <ModalButton className="no" onClick={() => setShowModal(false)}>
+                <ModalButton
+                  className="no"
+                  onClick={() => setShowEditModal(false)}
+                >
                   취소
                 </ModalButton>
                 <ModalButton className="ok" onClick={handleEditConfirm}>
@@ -193,6 +239,25 @@ const FilterDropdown = ({
           </ModalContent>
         </ModalOverlay>
       )}
+
+      {showDeleteModal && (
+        <ModalOverlay onClick={() => setShowDeleteModal(false)}>
+          <ModalDelContent onClick={(e) => e.stopPropagation()}>
+            <ModalDelTitle>정말 삭제하시겠습니까?</ModalDelTitle>
+            <ButtonDelContainer>
+              <ModalDelButton
+                className="no"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                아니오
+              </ModalDelButton>
+              <ModalDelButton className="ok" onClick={handleDeleteConfirm}>
+                네
+              </ModalDelButton>
+            </ButtonDelContainer>
+          </ModalDelContent>
+        </ModalOverlay>
+      )}
     </>
   );
 };
@@ -200,7 +265,7 @@ const FilterDropdown = ({
 FilterDropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  initialFilterName: PropTypes.string.isRequired, // 원본 이름 prop 타입 추가
+  initialFilterName: PropTypes.string.isRequired,
   onEditFilter: PropTypes.func.isRequired,
   onRemoveFilter: PropTypes.func.isRequired,
 };

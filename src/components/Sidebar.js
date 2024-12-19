@@ -496,6 +496,11 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             </AddButton>
           </CustomUp>
           <CustomDiv>
+            {customConditions.length === 0 && (
+              <FilterContent>
+                맞춤 조건은 최대 5개까지 설정 가능합니다.
+              </FilterContent>
+            )}
             {customConditions.map((condition, index) => (
               <Custom
                 key={index}
@@ -700,7 +705,14 @@ const CustomUp = styled.div`
 `;
 
 const CustomDiv = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
+`;
+
+const FilterContent = styled.div`
+  font-size: 16px;
+  font-family: 'Pretendard-Regular';
+  color: #9f9f9f;
+  margin-left: 31px;
 `;
 
 const Custom = styled.div`

@@ -69,7 +69,7 @@ const Bar = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  padding-left: 49px;
+  margin-left: 16px;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.05);
 `;
 

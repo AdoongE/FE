@@ -21,6 +21,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [hoveredBookdmarkIndex, setHoveredBookmarkIndex] = useState(null);
+  const [hoveredFilterIndex, setHoveredFilterIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
@@ -496,13 +497,19 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
           </CustomUp>
           <CustomDiv>
             {customConditions.map((condition, index) => (
-              <Custom key={index}>
+              <Custom
+                key={index}
+                onMouseEnter={() => setHoveredFilterIndex(index)}
+                onMouseLeave={() => setHoveredFilterIndex(null)}
+              >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
                 {condition}
                 <Right>
-                  <DotBox onClick={() => setOpenFilterDropdown(index)}>
-                    <MoreVertIcon />
-                  </DotBox>
+                  {hoveredFilterIndex === index && (
+                    <DotBox onClick={() => setOpenFilterDropdown(index)}>
+                      <MoreVertIcon />
+                    </DotBox>
+                  )}
                   {openFilterDropdown === index && (
                     <FilterDropdown
                       isOpen={openFilterDropdown === index}

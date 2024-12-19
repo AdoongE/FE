@@ -35,6 +35,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [bookmarkIds, setBookmarkIds] = useState([]);
   const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
+  const [customConditions, setCustomConditions] = useState([]);
 
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
@@ -302,6 +303,10 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     dialogRef.current?.showModal();
   };
 
+  const addCustomCondition = () => {
+    setCustomConditions((prev) => [...prev, `맞춤 조건 ${prev.length + 1}`]);
+  };
+
   return (
     <StMainPage>
       <SideDiv>
@@ -380,7 +385,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
               {`내 카테고리`}
               <RightArrowIcon open={isCategoryOpen} />
               {hoveredCategory && (
-                <AddButton onClick={openModal}>
+                <AddButton className="category" onClick={openModal}>
                   <AddRoundedIcon />
                 </AddButton>
               )}
@@ -467,23 +472,27 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
           />
         )}
         <CustomFilter>
-          <CategoryP>나의 맞춤 필터</CategoryP>
+          <CustomUp>
+            <CategoryP>나의 맞춤 필터</CategoryP>
+            <AddButton className="filter" onClick={() => showModal()}>
+              <AddRoundedIcon />
+            </AddButton>
+          </CustomUp>
           <CustomDiv>
-            <Custom onClick={() => showModal()}>
-              <Icon icon="ri:align-left" width="24px" height="24px" />
-              맞춤 조건 1
-            </Custom>
-            <Custom>
-              <Icon icon="ri:align-left" width="24px" height="24px" />
-              맞춤 조건 2
-            </Custom>
-            <Custom>
-              <Icon icon="ri:align-left" width="24px" height="24px" />
-              맞춤 조건 3
-            </Custom>
+            {customConditions.map((condition, index) => (
+              <Custom key={index}>
+                <Icon icon="ri:align-left" width="24px" height="24px" />
+                {condition}
+                <Right>
+                  <DotBox>
+                    <MoreVertIcon />
+                  </DotBox>
+                </Right>
+              </Custom>
+            ))}
           </CustomDiv>
         </CustomFilter>
-        <TagFilterModal ref={dialogRef} />
+        <TagFilterModal ref={dialogRef} onSave={addCustomCondition} />
       </SideDiv>
     </StMainPage>
   );
@@ -590,12 +599,19 @@ const AddButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background-color: #9f9f9f;
-  border-radius: 7px;
-  position: absolute;
   right: 8px;
+
+  &.category {
+    width: 32px;
+    height: 32px;
+    background-color: #9f9f9f;
+    border-radius: 7px;
+    position: absolute;
+  }
+  &.filter {
+    position: absolute;
+    padding-right: 15px;
+  }
 `;
 
 const AccordionContent = styled.div`
@@ -644,18 +660,42 @@ const CustomFilter = styled.div`
   margin-top: 30px;
 `;
 
+const CustomUp = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const CustomDiv = styled.div`
   margin-top: 30px;
 `;
 
 const Custom = styled.div`
-  margin-left: 38px;
+  margin-left: 31px;
   font-size: 20px;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 13px;
-  margin-bottom: 18px;
+  margin-bottom: 5px;
+  font-family: 'Pretendard-Regular';
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding-left: 7px;
+  margin-right: 17px;
+  height: 44px;
+
+  &:hover {
+    background-color: ${({ active }) => {
+      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
+    }};
+
+    border-radius: 10px;
+  }
+`;
+
+const Right = styled.div`
+  margin-left: 105px;
 `;
 
 export default Sidebar;

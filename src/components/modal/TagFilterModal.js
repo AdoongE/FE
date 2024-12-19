@@ -42,7 +42,7 @@ const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
     />
   </div>
 ));
-const TagFilterModal = forwardRef((_, ref) => {
+const TagFilterModal = forwardRef(({ onSave }, ref) => {
   const [selectedFilter, setSelectedFilter] = useState('기본 태그');
   const [usedTags, setUsedTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -197,6 +197,11 @@ const TagFilterModal = forwardRef((_, ref) => {
       };
     }
   }, [dialogRef]);
+
+  const handleSave = () => {
+    onSave();
+    dialogRef.current?.close();
+  };
 
   return (
     <Dialog ref={dialogRef}>
@@ -374,7 +379,9 @@ const TagFilterModal = forwardRef((_, ref) => {
         </Dday>
       </Date>
       <div style={{ display: 'flex', justifyContent: ' center' }}>
-        <Button disabled={!isValid}>저장하기</Button>
+        <Button disabled={!isValid} onClick={handleSave}>
+          저장하기
+        </Button>
       </div>
     </Dialog>
   );

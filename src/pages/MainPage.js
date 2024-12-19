@@ -91,7 +91,7 @@ const MainPage = () => {
                 user: item.nickname || '사용자 정보 없음',
                 category: content.categoryName?.[0] || '카테고리 없음',
                 tags: content.tagName || [],
-                dDay: calculateDday(content.updatedDt),
+                dDay: content.dday,
                 contentDateType: content.contentDateType || '타입 없음',
                 thumbnailImage: content.thumbnailImage || '',
                 updatedDt: content.updatedDt || '업데이트 정보 없음',

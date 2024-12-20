@@ -488,6 +488,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             onConfirm={handleConfirmRemove}
           />
         )}
+        <Line></Line>
         <CustomFilter>
           <CustomUp>
             <CategoryP>나의 맞춤 필터</CategoryP>
@@ -587,8 +588,6 @@ const ImgIcon = styled.img`
 
 const CategoryDiv = styled.div`
   margin-top: 28px;
-  border-bottom: 1px solid #dcdada;
-  padding-bottom: 9px;
 `;
 
 const CategoryP = styled.p`
@@ -694,7 +693,12 @@ const DotBox = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
+const Line = styled.div`
+  margin-top: 30px;
+  border-top: 1px solid #dcdada;
+  margin-left: 20px;
+  margin-right: 20px;
+`;
 const CustomFilter = styled.div`
   margin-top: 30px;
 `;
@@ -722,7 +726,6 @@ const Custom = styled.div`
   display: flex;
   align-items: center;
   gap: 13px;
-  margin-bottom: 5px;
   font-family: 'Pretendard-Regular';
   background: transparent;
   border: none;

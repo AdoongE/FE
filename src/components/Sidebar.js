@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
@@ -40,6 +40,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
   const [customConditions, setCustomConditions] = useState([]);
+  const [message, setMessage] = useState('');
 
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
@@ -340,11 +341,14 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     );
   };
 
-  const CustomFilterView = async () => {
+  const CustomFilterView = async (condition) => {
     try {
-      const response = await axiosInstance.get('/api/v1/filter/8');
+      const response = await axiosInstance.get('/api/v1/filter/9');
       if (response.status === 200) {
         console.log('Custom 필터 조회 성공:', response.data);
+        setMessage(`${condition}이(가) 적용되었습니다.`);
+        setTimeout(() => setMessage(''), 2000);
+        console.log('떴니 안 떳니');
       } else {
         console.error('Custom 필터 조회 실패:', response.data);
       }
@@ -531,12 +535,13 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
                 맞춤 조건은 최대 5개까지 설정 가능합니다.
               </FilterContent>
             )}
+            {message && <MessageBox>{message}</MessageBox>}
             {customConditions.map((condition, index) => (
               <Custom
                 key={index}
                 onMouseEnter={() => setHoveredFilterIndex(index)}
                 onMouseLeave={() => setHoveredFilterIndex(null)}
-                onClick={() => CustomFilterView()}
+                onClick={() => CustomFilterView(condition)}
               >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
                 {condition}
@@ -780,6 +785,32 @@ const Custom = styled.div`
 
 const Right = styled.div`
   margin-left: 105px;
+`;
+
+const fadeInOut = keyframes`
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+`;
+
+const MessageBox = styled.div`
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  background-color: #def3f1;
+  color: #333;
+  font-size: 30px;
+  padding: 10px 20px;
+  border: 1px solid #41c3ab;
+  border-radius: 12px;
+  z-index: 9999;
+  width: 467px;
+  height: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ${fadeInOut} 2s forwards;
 `;
 
 export default Sidebar;

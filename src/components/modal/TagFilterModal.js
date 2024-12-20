@@ -13,6 +13,7 @@ import checkIcon from '../../assets/icons/Check.png';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
+import { format } from 'date-fns';
 
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
@@ -42,7 +43,7 @@ const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
     />
   </div>
 ));
-const TagFilterModal = forwardRef((_, ref) => {
+const TagFilterModal = forwardRef(({ onSave }, ref) => {
   const [selectedFilter, setSelectedFilter] = useState('기본 태그');
   const [usedTags, setUsedTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -171,8 +172,8 @@ const TagFilterModal = forwardRef((_, ref) => {
     fetchTags();
   }, []);
 
-  console.log('시작일:', startDate);
-  console.log('종료일: ', endDate);
+  console.log('시작일:', format(startDate, 'yyyy-MM-dd'));
+  console.log('종료일:', format(endDate, 'yyyy-MM-dd'));
 
   useEffect(() => {
     const dialogElement = dialogRef.current;
@@ -198,10 +199,23 @@ const TagFilterModal = forwardRef((_, ref) => {
     }
   }, [dialogRef]);
 
+  const handleSave = async () => {
+    const modalData = {
+      storageFormats: dataType,
+      tags: selectedTags,
+      startDate: format(startDate, 'yyyy-MM-dd'),
+      endDate: format(endDate, 'yyyy-MM-dd'),
+      fromDDay: startDday,
+      toDDay: endDday,
+    };
+    onSave(modalData);
+    dialogRef.current?.close();
+  };
+
   return (
     <Dialog ref={dialogRef}>
       <Head>
-        <Title>검색할 태그를 선택하세요.</Title>
+        <Title>맞춤 필터 조건 설정</Title>
         <Icons>
           <Icon
             icon="ri:reset-left-line"
@@ -374,7 +388,9 @@ const TagFilterModal = forwardRef((_, ref) => {
         </Dday>
       </Date>
       <div style={{ display: 'flex', justifyContent: ' center' }}>
-        <Button disabled={!isValid}>저장하기</Button>
+        <Button disabled={!isValid} onClick={handleSave}>
+          저장하기
+        </Button>
       </div>
     </Dialog>
   );

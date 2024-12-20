@@ -1,30 +1,34 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Dropdown from '../components/dropdown/CategoryDropdown';
+import FilterDropdown from '../components/dropdown/FilterDropdown';
 import { Icon } from '@iconify/react';
 import AddCategoryModal from '../components/modal/AddCategoryModal';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
+import TagFilterModal from '../components/modal/TagFilterModal';
+import { axiosInstance } from './api/axios-instance';
 import axios from 'axios';
 
 const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [hoveredBookdmarkIndex, setHoveredBookmarkIndex] = useState(null);
+  const [hoveredFilterIndex, setHoveredFilterIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openFilterDropdown, setOpenFilterDropdown] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
@@ -35,6 +39,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [bookmarkIds, setBookmarkIds] = useState([]);
   const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
+  const [customConditions, setCustomConditions] = useState([]);
 
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
@@ -296,6 +301,45 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     handleViewCategory();
   }, []);
 
+  const dialogRef = useRef(null);
+
+  const showModal = () => {
+    dialogRef.current?.showModal();
+  };
+
+  const addCustomCondition = async (modalData) => {
+    const newCondition = `맞춤 조건 ${customConditions.length + 1}`;
+    setCustomConditions((prev) => [...prev, newCondition]);
+
+    try {
+      const response = await axiosInstance.post('api/v1/filter', {
+        name: newCondition,
+        ...modalData,
+      });
+      if (response.status === 200) {
+        console.log('맞춤 필터 생성 성공');
+      } else {
+        console.error('맞춤 필터 생성 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+
+  const handleEditFilter = (index, newConditionName) => {
+    setCustomConditions((prevConditions) =>
+      prevConditions.map((condition, i) =>
+        i === index ? newConditionName : condition,
+      ),
+    );
+  };
+
+  const handleRemoveFilter = (index) => {
+    setCustomConditions((prevConditions) =>
+      prevConditions.filter((_, i) => i !== index),
+    );
+  };
+
   return (
     <StMainPage>
       <SideDiv>
@@ -374,7 +418,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
               {`내 카테고리`}
               <RightArrowIcon open={isCategoryOpen} />
               {hoveredCategory && (
-                <AddButton onClick={openModal}>
+                <AddButton className="category" onClick={openModal}>
                   <AddRoundedIcon />
                 </AddButton>
               )}
@@ -419,18 +463,6 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
                 </>
               </>
             )}
-
-            <AccordionTitle
-              onClick={() => setIsSubscribeOpen(!isSubscribeOpen)}
-            >
-              <Icons icon="iconamoon:file-add-light" />
-              구독한 카테고리
-              <RightArrowIcon open={isSubscribeOpen} />
-            </AccordionTitle>
-
-            {isSubscribeOpen && (
-              <AccordionContent>카테고리를 구독하세요.</AccordionContent>
-            )}
           </Accordion>
         </CategoryDiv>
         {/* 카데고리 추가 모달 창 */}
@@ -472,6 +504,56 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             onConfirm={handleConfirmRemove}
           />
         )}
+        <Line></Line>
+        <CustomFilter>
+          <CustomUp>
+            <CategoryP>나의 맞춤 필터</CategoryP>
+            <AddButton className="filter" onClick={() => showModal()}>
+              <AddRoundedIcon />
+            </AddButton>
+          </CustomUp>
+          <CustomDiv>
+            {customConditions.length === 0 && (
+              <FilterContent>
+                맞춤 조건은 최대 5개까지 설정 가능합니다.
+              </FilterContent>
+            )}
+            {customConditions.map((condition, index) => (
+              <Custom
+                key={index}
+                onMouseEnter={() => setHoveredFilterIndex(index)}
+                onMouseLeave={() => setHoveredFilterIndex(null)}
+              >
+                <Icon icon="ri:align-left" width="24px" height="24px" />
+                {condition}
+                <Right>
+                  {hoveredFilterIndex === index && (
+                    <DotBox onClick={() => setOpenFilterDropdown(index)}>
+                      <MoreVertIcon />
+                    </DotBox>
+                  )}
+                  {openFilterDropdown === index && (
+                    <FilterDropdown
+                      isOpen={openFilterDropdown === index}
+                      onClose={() => setOpenFilterDropdown(null)}
+                      initialFilterName={condition}
+                      onEditFilter={(newName) =>
+                        handleEditFilter(index, newName)
+                      }
+                      onRemoveFilter={() => handleRemoveFilter(index)}
+                    />
+                  )}
+                </Right>
+              </Custom>
+            ))}
+          </CustomDiv>
+        </CustomFilter>
+        <TagFilterModal
+          ref={dialogRef}
+          onSave={(modalData) => {
+            addCustomCondition(modalData);
+          }}
+        />
       </SideDiv>
     </StMainPage>
   );
@@ -526,8 +608,9 @@ const ImgIcon = styled.img`
 `;
 
 const CategoryDiv = styled.div`
-  margin-top: 26px;
+  margin-top: 28px;
 `;
+
 const CategoryP = styled.p`
   font-size: 24px;
   font-weight: 600;
@@ -575,12 +658,19 @@ const AddButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background-color: #9f9f9f;
-  border-radius: 7px;
-  position: absolute;
   right: 8px;
+
+  &.category {
+    width: 32px;
+    height: 32px;
+    background-color: #9f9f9f;
+    border-radius: 7px;
+    position: absolute;
+  }
+  &.filter {
+    position: absolute;
+    padding-right: 15px;
+  }
 `;
 
 const AccordionContent = styled.div`
@@ -623,6 +713,59 @@ const DotBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+const Line = styled.div`
+  margin-top: 30px;
+  border-top: 1px solid #dcdada;
+  margin-left: 20px;
+  margin-right: 20px;
+`;
+const CustomFilter = styled.div`
+  margin-top: 30px;
+`;
+
+const CustomUp = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CustomDiv = styled.div`
+  margin-top: 20px;
+`;
+
+const FilterContent = styled.div`
+  font-size: 16px;
+  font-family: 'Pretendard-Regular';
+  color: #9f9f9f;
+  margin-left: 31px;
+`;
+
+const Custom = styled.div`
+  margin-left: 31px;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-family: 'Pretendard-Regular';
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding-left: 7px;
+  margin-right: 17px;
+  height: 44px;
+
+  &:hover {
+    background-color: ${({ active }) => {
+      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
+    }};
+
+    border-radius: 10px;
+  }
+`;
+
+const Right = styled.div`
+  margin-left: 105px;
 `;
 
 export default Sidebar;

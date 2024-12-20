@@ -5,13 +5,13 @@ import { Icon } from '@iconify/react';
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  left: 310px;
+  left: 330px;
   background-color: white;
-  border: 1px solid #ccc;
   border-radius: 10px;
   list-style: none;
   z-index: 1;
   width: 14.875rem;
+  box-shadow: 0 0 8px #dfdfdf;
 `;
 
 const DropdownItem = styled.li`

@@ -340,6 +340,19 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     );
   };
 
+  const CustomFilterView = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/filter/8');
+      if (response.status === 200) {
+        console.log('Custom 필터 조회 성공:', response.data);
+      } else {
+        console.error('Custom 필터 조회 실패:', response.data);
+      }
+    } catch (error) {
+      console.error('Custom 필터 조회 오류 발생:', error);
+    }
+  };
+
   return (
     <StMainPage>
       <SideDiv>
@@ -523,6 +536,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
                 key={index}
                 onMouseEnter={() => setHoveredFilterIndex(index)}
                 onMouseLeave={() => setHoveredFilterIndex(null)}
+                onClick={() => CustomFilterView()}
               >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
                 {condition}

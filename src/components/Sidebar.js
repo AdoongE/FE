@@ -12,6 +12,7 @@ import AddCategoryModal from '../components/modal/AddCategoryModal';
 import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import TagFilterModal from '../components/modal/TagFilterModal';
+import { axiosInstance } from './api/axios-instance';
 import axios from 'axios';
 
 const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
@@ -306,8 +307,23 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     dialogRef.current?.showModal();
   };
 
-  const addCustomCondition = () => {
-    setCustomConditions((prev) => [...prev, `맞춤 조건 ${prev.length + 1}`]);
+  const addCustomCondition = async (modalData) => {
+    const newCondition = `맞춤 조건 ${customConditions.length + 1}`;
+    setCustomConditions((prev) => [...prev, newCondition]);
+
+    try {
+      const response = await axiosInstance.post('api/v1/filter', {
+        name: newCondition,
+        ...modalData,
+      });
+      if (response.status === 200) {
+        console.log('맞춤 필터 생성 성공');
+      } else {
+        console.error('맞춤 필터 생성 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   const handleEditFilter = (index, newConditionName) => {
@@ -532,7 +548,12 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             ))}
           </CustomDiv>
         </CustomFilter>
-        <TagFilterModal ref={dialogRef} onSave={addCustomCondition} />
+        <TagFilterModal
+          ref={dialogRef}
+          onSave={(modalData) => {
+            addCustomCondition(modalData);
+          }}
+        />
       </SideDiv>
     </StMainPage>
   );

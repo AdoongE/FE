@@ -13,6 +13,7 @@ import checkIcon from '../../assets/icons/Check.png';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
+import { format } from 'date-fns';
 
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
@@ -171,8 +172,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     fetchTags();
   }, []);
 
-  console.log('시작일:', startDate);
-  console.log('종료일: ', endDate);
+  console.log('시작일:', format(startDate, 'yyyy-MM-dd'));
+  console.log('종료일:', format(endDate, 'yyyy-MM-dd'));
 
   useEffect(() => {
     const dialogElement = dialogRef.current;
@@ -198,8 +199,16 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     }
   }, [dialogRef]);
 
-  const handleSave = () => {
-    onSave();
+  const handleSave = async () => {
+    const modalData = {
+      storageFormats: dataType,
+      tags: selectedTags,
+      startDate: format(startDate, 'yyyy-MM-dd'),
+      endDate: format(endDate, 'yyyy-MM-dd'),
+      fromDDay: startDday,
+      toDDay: endDday,
+    };
+    onSave(modalData);
     dialogRef.current?.close();
   };
 

@@ -26,6 +26,7 @@ function AddContent({ onSetRepresentativeImage }) {
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [images, setImages] = useState([]);
   const navigate = useNavigate();
 
   const handleTagInput = (event) => {
@@ -47,10 +48,6 @@ function AddContent({ onSetRepresentativeImage }) {
       }
     }
   };
-
-  // const removeTag = (tagIdx) => {
-  //   setTags(tags.filter((tag, idx) => idx != tagIdx));
-  // };
 
   const ChangeRef = useRef(null);
 
@@ -195,11 +192,6 @@ function AddContent({ onSetRepresentativeImage }) {
     setPendingOption(null);
   };
 
-  // const handleDelete = (field, idx) => {
-  //   removeTag(idx);
-  //   onChange(tags.filter((item) => item !== field));
-  // };
-
   const handleCheckboxChange = (event) => {
     const option = event.target.name;
 
@@ -276,8 +268,7 @@ function AddContent({ onSetRepresentativeImage }) {
         updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
       }
 
-      console.log('콘텐츠 값', updateData);
-      ContentAddHandler(updateData);
+      ContentAddHandler(data.dataType, updateData, images);
       if (TagRef.current) {
         TagRef.current.resetTags();
       }
@@ -468,7 +459,11 @@ function AddContent({ onSetRepresentativeImage }) {
               />
             )}
             {dataType === 'IMAGE' && (
-              <ImageUploadComponent onSetRepresentative={handleImage} />
+              <ImageUploadComponent
+                onSetRepresentative={handleImage}
+                images={images}
+                setImages={setImages}
+              />
             )}
             {dataType === 'PDF' && (
               <PdfUploadComponent onSetRepresentative={handlePdf} />

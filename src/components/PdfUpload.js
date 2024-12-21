@@ -5,8 +5,7 @@ import { useDropzone } from 'react-dropzone';
 
 const MAX_FILES = 3;
 
-const PdfUploadComponent = ({ onSetRepresentative }) => {
-  const [files, setFiles] = useState([]);
+const PdfUploadComponent = ({ onSetRepresentative, files, setFiles }) => {
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 파일 인덱스
 
   const onDrop = (acceptedFiles) => {

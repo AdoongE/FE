@@ -17,7 +17,7 @@ const api_ = axios.create({
   },
 });
 
-export const ContentAddHandler = async (dataType, data, images) => {
+export const ContentAddHandler = async (dataType, data, images, pdfs) => {
   try {
     const response = await api.post('/api/v1/content/', data);
 
@@ -29,10 +29,18 @@ export const ContentAddHandler = async (dataType, data, images) => {
           const contentsId = response.data.results[0].contentId;
           const formData = new FormData();
 
-          for (const image of images) {
-            const blob = await fetch(image.preview).then((res) => res.blob());
-            const file = new File([blob], image.label, { type: blob.type });
-            formData.append('file', file);
+          if (dataType === 'IMAGE') {
+            for (const image of images) {
+              const blob = await fetch(image.preview).then((res) => res.blob());
+              const file = new File([blob], image.label, { type: blob.type });
+              formData.append('file', file);
+            }
+          } else if (dataType === 'PDF') {
+            for (const pdf of pdfs) {
+              const blob = await fetch(pdf.preview).then((res) => res.blob());
+              const file = new File([blob], pdf.label, { type: blob.type });
+              formData.append('file', file);
+            }
           }
 
           const res = await api_.post(

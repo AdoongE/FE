@@ -27,6 +27,8 @@ function AddContent({ onSetRepresentativeImage }) {
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [images, setImages] = useState([]);
+  const [files, setFiles] = useState([]);
+
   const navigate = useNavigate();
 
   const handleTagInput = (event) => {
@@ -268,7 +270,7 @@ function AddContent({ onSetRepresentativeImage }) {
         updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
       }
 
-      ContentAddHandler(data.dataType, updateData, images);
+      ContentAddHandler(data.dataType, updateData, images, files);
       if (TagRef.current) {
         TagRef.current.resetTags();
       }
@@ -466,7 +468,11 @@ function AddContent({ onSetRepresentativeImage }) {
               />
             )}
             {dataType === 'PDF' && (
-              <PdfUploadComponent onSetRepresentative={handlePdf} />
+              <PdfUploadComponent
+                onSetRepresentative={handlePdf}
+                file={files}
+                setFiles={setFiles}
+              />
             )}
             <Tag>
               <TagName>태그 (2개 이상)*</TagName>

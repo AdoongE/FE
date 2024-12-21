@@ -470,7 +470,7 @@ function AddContent({ onSetRepresentativeImage }) {
             {dataType === 'PDF' && (
               <PdfUploadComponent
                 onSetRepresentative={handlePdf}
-                file={files}
+                files={files}
                 setFiles={setFiles}
               />
             )}

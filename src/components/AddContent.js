@@ -266,7 +266,7 @@ function AddContent({ onSetRepresentativeImage }) {
 
       if (dataType === 'LINK') {
         updateData.contentLink = data.contentLink;
-      } else if (dataType === 'IMAGE') {
+      } else {
         updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
       }
 

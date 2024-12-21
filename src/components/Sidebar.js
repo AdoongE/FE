@@ -15,8 +15,15 @@ import TagFilterModal from '../components/modal/TagFilterModal';
 import { axiosInstance } from './api/axios-instance';
 import axios from 'axios';
 
-const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
-  const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
+const Sidebar = ({
+  setCategoryId,
+  setFilterId,
+  setCateName,
+  categoryCounts,
+  activeTab,
+  setActiveTab,
+}) => {
+  // const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
@@ -39,9 +46,10 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [bookmarkIds, setBookmarkIds] = useState([]);
   const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
-  const [customConditions, setCustomConditions] = useState([]);
+  const [customFilter, setCustomFilter] = useState([]);
+  const [customFilterId, setCustomFilterId] = useState([]);
   const [message, setMessage] = useState('');
-
+  console.log(customFilterId);
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
     baseURL: 'http://52.78.221.255',
@@ -105,9 +113,9 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
 
-  useEffect(() => {
-    setActiveTab('모아보기');
-  }, [setActiveTab]);
+  // useEffect(() => {
+  //   setActiveTab('모아보기');
+  // }, [setActiveTab]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -298,10 +306,6 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     handleViewCategory('categoryClick');
   };
 
-  useEffect(() => {
-    handleViewCategory();
-  }, []);
-
   const dialogRef = useRef(null);
 
   const showModal = () => {
@@ -309,8 +313,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   };
 
   const addCustomCondition = async (modalData) => {
-    const newCondition = `맞춤 조건 ${customConditions.length + 1}`;
-    setCustomConditions((prev) => [...prev, newCondition]);
+    const newCondition = `맞춤 조건 ${customFilter.length + 1}`;
 
     try {
       const response = await axiosInstance.post('api/v1/filter', {
@@ -328,7 +331,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   };
 
   const handleEditFilter = (index, newConditionName) => {
-    setCustomConditions((prevConditions) =>
+    setCustomFilter((prevConditions) =>
       prevConditions.map((condition, i) =>
         i === index ? newConditionName : condition,
       ),
@@ -336,19 +339,38 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   };
 
   const handleRemoveFilter = (index) => {
-    setCustomConditions((prevConditions) =>
+    setCustomFilter((prevConditions) =>
       prevConditions.filter((_, i) => i !== index),
     );
   };
 
   const CustomFilterView = async (condition) => {
+    setActiveTab('맞춤필터');
+    setFilterId(2);
+    setMessage(`${condition}이(가) 적용되었습니다.`);
+    setTimeout(() => setMessage(''), 2000);
+    // try {
+    //   const response = await axiosInstance.get('/api/v1/filter');
+    //   if (response.status === 200) {
+    //     console.log('Custom 필터 조회 성공:', response.data);
+    //   } else {
+    //     console.error('Custom 필터 조회 실패:', response.data);
+    //   }
+    // } catch (error) {
+    //   console.error('Custom 필터 조회 오류 발생:', error);
+    // }
+  };
+  const CustomFilterViews = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/filter/9');
+      const response = await axiosInstance.get('/api/v1/filter');
+
+      const filterId = response.data.results.map((item) => item.id);
+      const filterNames = response.data.results.map((item) => item.name);
+      setCustomFilterId(filterId);
+      setCustomFilter(filterNames);
+
       if (response.status === 200) {
         console.log('Custom 필터 조회 성공:', response.data);
-        setMessage(`${condition}이(가) 적용되었습니다.`);
-        setTimeout(() => setMessage(''), 2000);
-        console.log('떴니 안 떳니');
       } else {
         console.error('Custom 필터 조회 실패:', response.data);
       }
@@ -356,6 +378,11 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
       console.error('Custom 필터 조회 오류 발생:', error);
     }
   };
+
+  useEffect(() => {
+    handleViewCategory();
+    CustomFilterViews();
+  }, []);
 
   return (
     <StMainPage>
@@ -530,13 +557,13 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             </AddButton>
           </CustomUp>
           <CustomDiv>
-            {customConditions.length === 0 && (
+            {customFilter.length === 0 && (
               <FilterContent>
                 맞춤 조건은 최대 5개까지 설정 가능합니다.
               </FilterContent>
             )}
             {message && <MessageBox>{message}</MessageBox>}
-            {customConditions.map((condition, index) => (
+            {customFilter.map((condition, index) => (
               <Custom
                 key={index}
                 onMouseEnter={() => setHoveredFilterIndex(index)}
@@ -587,6 +614,7 @@ const SideDiv = styled.div`
   width: 21.563rem;
   background-color: #f8fbfb;
   display: inline-block;
+  position: relative;
 `;
 
 const BtnDiv = styled.div`

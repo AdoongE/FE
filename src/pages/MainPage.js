@@ -32,22 +32,26 @@ const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
   const [selectedData, setSelectedData] = useState(null);
+  const [filterId, setFilterId] = useState(null);
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
 
-  // 데이터 가져오기
+  console.log('activeTab : ', activeTab);
+
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       let url = '';
-
-      if (activeTab === '모아보기') {
+      if (activeTab === '모아보기' || activeTab === '나의 씨드') {
         url = '/api/v1/content/';
-        const response = await api.get(url);
-        setCollectData(response.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
-      } else if (categoryId) {
+        const res = await api.get(url);
+        setCollectData(res.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
+      } else if (activeTab === '카테고리') {
         url = `/api/v1/content/${categoryId}`;
+      } else if (activeTab === '맞춤필터') {
+        console.log('필터 ID :', filterId);
+        url = `/api/v1/filter/${filterId}`;
       }
 
       if (!url) {
@@ -56,7 +60,6 @@ const MainPage = () => {
       }
 
       console.log('GET 요청할 URL:', url);
-
       const response = await api.get(url);
 
       // 응답 데이터 확인
@@ -96,7 +99,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, categoryId]);
+  }, [activeTab, categoryId, filterId]);
 
   useEffect(() => {
     fetchData();
@@ -160,6 +163,8 @@ const MainPage = () => {
           setCategoryId={setCategoryId}
           setCateName={setCateName}
           categoryCounts={categoryCounts}
+          filterId={filterId}
+          setFilterId={setFilterId}
         />
       </SidebarContainer>
       <MainContent>

@@ -47,9 +47,9 @@ const Sidebar = ({
   const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
   const [customFilter, setCustomFilter] = useState([]);
-  const [customFilterId, setCustomFilterId] = useState([]);
+  const [customFilterIds, setCustomFilterIds] = useState([]);
   const [message, setMessage] = useState('');
-  console.log(customFilterId);
+
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
     baseURL: 'http://52.78.221.255',
@@ -345,28 +345,22 @@ const Sidebar = ({
   };
 
   const CustomFilterView = async (condition) => {
+    const filterIndex = customFilter.indexOf(condition);
+    const filterId = customFilterIds[filterIndex];
+
     setActiveTab('맞춤필터');
-    setFilterId(2);
+    setFilterId(filterId);
     setMessage(`${condition}이(가) 적용되었습니다.`);
     setTimeout(() => setMessage(''), 2000);
-    // try {
-    //   const response = await axiosInstance.get('/api/v1/filter');
-    //   if (response.status === 200) {
-    //     console.log('Custom 필터 조회 성공:', response.data);
-    //   } else {
-    //     console.error('Custom 필터 조회 실패:', response.data);
-    //   }
-    // } catch (error) {
-    //   console.error('Custom 필터 조회 오류 발생:', error);
-    // }
   };
+
   const CustomFilterViews = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/filter');
 
       const filterId = response.data.results.map((item) => item.id);
       const filterNames = response.data.results.map((item) => item.name);
-      setCustomFilterId(filterId);
+      setCustomFilterIds(filterId);
       setCustomFilter(filterNames);
 
       if (response.status === 200) {

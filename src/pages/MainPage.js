@@ -5,6 +5,7 @@ import ContentBox from '../components/ContentBox';
 import ContentBlank from '../components/ContentBlank';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import axios from 'axios';
 
 const api = axios.create({
@@ -30,6 +31,10 @@ const MainPage = () => {
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
+  const [selectedData, setSelectedData] = useState(null);
+
+  const openModal = (data) => setSelectedData(data);
+  const closeModal = () => setSelectedData(null);
 
   // 데이터 가져오기
   const fetchData = useCallback(async () => {
@@ -39,6 +44,8 @@ const MainPage = () => {
 
       if (activeTab === '모아보기') {
         url = '/api/v1/content/';
+        const response = await api.get(url);
+        setCollectData(response.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
       } else if (categoryId) {
         url = `/api/v1/content/${categoryId}`;
       }
@@ -59,23 +66,25 @@ const MainPage = () => {
       const results =
         response.data.results?.flatMap(
           (item) =>
-            item.contentsInfoList?.map((content) => ({
-              id: content.contentId || 'ID 없음',
-              title: content.contentName || '제목 없음',
-              user: item.nickname || '사용자 정보 없음',
-              category: content.categoryName?.[0] || '카테고리 없음',
-              tags: content.tagName || [],
-              dDay: content.dDay || 0,
-              contentDateType: content.contentDateType || '타입 없음',
-              thumbnailImage: content.thumbnailImage || '',
-              updatedDt: content.updatedDt || '업데이트 정보 없음',
-              createdAt: content.createdAt || new Date(),
-            })) ?? [],
-        ) ?? [];
+            item.contentsInfoList?.map((content) => {
+              const formattedDate = content.updatedDt
+                ? new Date(content.updatedDt).toISOString().split('T')[0]
+                : '날짜 정보 없음'; // updatedDt가 없을 경우 기본값 설정
 
-      if (activeTab === '모아보기') {
-        setCollectData(results);
-      }
+              return {
+                id: content.contentId || 'ID 없음',
+                title: content.contentName || formattedDate, // contentName이 null일 경우 formattedDate 사용
+                user: item.nickname || '사용자 정보 없음',
+                category: content.categoryName?.[0] || '카테고리 없음',
+                tags: content.tagName || [],
+                dDay: content.dday,
+                contentDateType: content.contentDateType || '타입 없음',
+                thumbnailImage: content.thumbnailImage || '',
+                updatedDt: content.updatedDt || '업데이트 정보 없음',
+                createdAt: content.createdAt || new Date(),
+              };
+            }) ?? [],
+        ) ?? [];
 
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
@@ -132,19 +141,14 @@ const MainPage = () => {
     );
   };
 
-  // const categoryCounts = collectData.reduce((counts, item) => {
-  //   counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
-  //   return counts;
-  // }, {});
-
   const categoryCounts =
-    Array.isArray(collectData) && collectData.length > 0
-      ? collectData.reduce((counts, item) => {
-          const categoryName = item.categoryName?.[0] || '기타'; // categoryName이 없을 때 기본값 설정
-          counts[categoryName] = (counts[categoryName] || 0) + 1;
-          return counts;
-        }, {})
-      : {};
+    collectData &&
+    collectData.reduce((counts, item) => {
+      if (Array.isArray(item.categoryName) && item.categoryName[0]) {
+        counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+      }
+      return counts;
+    }, {});
 
   return (
     <MainContainer>
@@ -166,22 +170,45 @@ const MainPage = () => {
         />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
-            <div>로딩 중...</div>
+            <div>로딩 중...</div> // 로딩 상태 표시
           ) : sortedData.length === 0 ? (
-            <ContentBlank />
+            <ContentBlank /> // 데이터가 없을 때
           ) : (
-            displayedContentBoxes.map((data) => (
-              <ContentBox
-                key={data.id}
-                contentId={data.id}
-                title={data.title}
-                user={data.user}
-                category={data.category}
-                tags={data.tags}
-                contentDateType={data.contentDateType}
-                thumbnailImage={data.thumbnailImage}
-              />
-            ))
+            displayedContentBoxes.map((data) => {
+              const formattedDate = new Date(data.createdAt).toLocaleDateString(
+                'ko-KR',
+                {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                },
+              );
+
+              return (
+                <React.Fragment key={data.id}>
+                  <ContentBox
+                    key={data.id}
+                    contentId={data.id}
+                    title={data.title || formattedDate} // 제목이 없으면 생성 날짜 사용
+                    user={data.user}
+                    category={data.category}
+                    tags={data.tags}
+                    dDay={data.dDay}
+                    contentDateType={data.contentDateType}
+                    thumbnailImage={data.thumbnailImage}
+                    updatedDt={data.updatedDt}
+                    open={() => openModal(data)}
+                  />
+                  {selectedData && selectedData.id === data.id && (
+                    <ViewThumbnailModal
+                      file={data.thumbnailImage}
+                      onClose={closeModal}
+                      contentDataType={selectedData.contentDateType}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })
           )}
         </ContentArea>
 
@@ -240,14 +267,21 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
-  display: ${({ $isBlank }) => ($isBlank ? 'flex' : 'grid')};
-  grid-template-columns: ${({ $isBlank }) =>
-    $isBlank ? 'none' : 'repeat(3, 1fr)'};
-  align-items: ${({ $isBlank }) => ($isBlank ? 'center' : 'start')};
-  justify-content: ${({ $isBlank }) => ($isBlank ? 'center' : 'stretch')};
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(440px, 1fr)
+  ); /* 컬럼 폭을 조정 */
+  justify-content: center; /* 가운데 정렬 */
   width: 100%;
   box-sizing: border-box;
+  padding: 0; /* 불필요한 패딩 제거 */
+
+  & > div {
+    aspect-ratio: 440 / 387; /* 콘텐츠 박스 비율 유지 */
+    width: 100%; /* 그리드에 맞춰 너비 조정 */
+    max-width: 600px; /* 화면이 너무 커질 경우 최대 크기 제한 (선택 사항) */
+  }
 `;
 
 const Pagination = styled.div`

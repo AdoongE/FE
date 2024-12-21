@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 import defaultImage from '../assets/icons/seed_contentbox.png';
+import { Document, Page, pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 function ContentBox({
   contentId,
@@ -12,8 +15,16 @@ function ContentBox({
   tags,
   dDay,
   thumbnailImage,
+  open,
+  contentDateType,
+  updatedDt,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
+
+  // 제목이 없을 경우 업데이트 날짜로 대체
+  const displayTitle =
+    title ||
+    (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);
@@ -21,13 +32,24 @@ function ContentBox({
 
   return (
     <Box>
-      <ImageBox>
-        <ContentImage
-          src={thumbnailImage || defaultImage}
-          alt="content thumbnail"
-        />
-        {dDay <= 0 && (
-          <Dday dDay={dDay}>{`D-${dDay === 0 ? 'DAY' : Math.abs(dDay)}`}</Dday>
+      <ImageBox onClick={open}>
+        {contentDateType === 'PDF' ? (
+          <PDFThumbnail>
+            <Document file={thumbnailImage} loading={<div>Loading PDF...</div>}>
+              <Page pageNumber={1} width={200} />
+            </Document>
+          </PDFThumbnail>
+        ) : (
+          <ContentImage
+            src={thumbnailImage || defaultImage}
+            alt="content thumbnail"
+            isDefaultImage={!thumbnailImage}
+          />
+        )}
+        {dDay !== undefined && dDay <= 0 && (
+          <Dday dDay={dDay}>
+            {dDay === 0 ? 'D-DAY' : `D-${Math.abs(dDay)}`}
+          </Dday>
         )}
         <Dropdown>
           <ContentDropdown contentId={contentId} />
@@ -51,7 +73,7 @@ function ContentBox({
             onClick={handleIconClick}
           />
         </IconBox>
-        <ContentName>{title || '콘텐츠명'}</ContentName>
+        <ContentName>{displayTitle}</ContentName>
       </ContentTitle>
       <Filter>
         <div>{user || '사용자 이름'}</div>
@@ -97,10 +119,33 @@ const ImageBox = styled.div`
 `;
 
 const ContentImage = styled.img`
-  width: ${({ src }) => (src === defaultImage ? '129px' : '110px')};
-  height: ${({ src }) => (src === defaultImage ? '129px' : '110px')};
-  object-fit: cover;
-  border-radius: 10px;
+  ${({ isDefaultImage }) =>
+    isDefaultImage
+      ? `
+    width: 129px;
+    height: 129px;
+    filter: invert(100%) sepia(4%) saturate(0%) hue-rotate(125deg) brightness(91%) contrast(90%);
+  `
+      : `
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  `}
+`;
+
+const PDFThumbnail = styled.div`
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    border-radius: 10px;
+  }
 `;
 
 const IconBox = styled.div`

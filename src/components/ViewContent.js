@@ -60,6 +60,7 @@ function ViewContent() {
         tags: results.tags,
         dday: results.dday,
         contentDetail: results.contentDetail,
+        filename: results.title,
       });
 
       if (response.status === 200) {
@@ -158,7 +159,9 @@ function ViewContent() {
                       )}
                       <ImagePreview src={image} alt="" />
                     </ImageBox>
-                    <FileName>{image.split('.com/')[1]}</FileName>
+                    <FileName key={contentInfo.filename[index]}>
+                      {contentInfo.filename[index]}
+                    </FileName>
                   </ImageContainer>
                 ))}
               </ImagesWrapper>
@@ -180,7 +183,9 @@ function ViewContent() {
                         />
                       </FileIcon>
                     </FileBox>
-                    <FileName>{file.split('.com/')[1]}</FileName>
+                    <FileName key={contentInfo.filename[index]}>
+                      {contentInfo.filename[index]}
+                    </FileName>
                   </FileContainer>
                 ))}
               </FilesWrapper>

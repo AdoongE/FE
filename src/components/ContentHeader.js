@@ -103,7 +103,6 @@ const Filter = styled.div`
 const SearchContainer = styled.div`
   width: 493px;
   height: 50px;
-  z-index: 1;
   border-radius: 25px;
   margin-right: 100px;
   background-color: (0, 0, 0, 0.3);
@@ -150,7 +149,6 @@ const SearchButton = styled.button`
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 2;
 `;
 
 const Bar = styled.div`

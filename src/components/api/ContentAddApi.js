@@ -22,14 +22,22 @@ export const ContentAddHandler = async (dataType, data, images) => {
     const response = await api.post('/api/v1/content/', data);
 
     if (response.data.status.code === 200) {
-      console.log('콘텐츠 LINK 생성 성공:', response.data.status.message);
+      console.log('콘텐츠 생성 성공:', response.data.status.message);
 
       if (dataType !== 'LINK') {
         try {
           const contentsId = response.data.results[0].contentId;
+          const formData = new FormData();
+
+          for (const image of images) {
+            const blob = await fetch(image.preview).then((res) => res.blob());
+            const file = new File([blob], image.label, { type: blob.type });
+            formData.append('file', file);
+          }
+
           const res = await api_.post(
             `/api/v1/content/upload/${contentsId}`,
-            images,
+            formData,
           );
           if (res.data.status.code === 200) {
             console.log('콘텐츠 file 생성 성공:', response.data.status.message);
@@ -43,10 +51,10 @@ export const ContentAddHandler = async (dataType, data, images) => {
       return response;
     } else {
       console.log(response.data.status.code);
-      console.log('콘텐츠 LINK 생성 실패:', response.data.status.message);
+      console.log('콘텐츠 생성 실패:', response.data.status.message);
     }
   } catch (error) {
-    console.error('콘텐츠 LINK 생성 중 오류 발생:', error);
+    console.error('콘텐츠 생성 중 오류 발생:', error);
     throw error;
   }
 };

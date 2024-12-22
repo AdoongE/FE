@@ -268,20 +268,13 @@ const MainContent = styled.div`
 
 const ContentArea = styled.div`
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(440px, 1fr)
-  ); /* 컬럼 폭을 조정 */
-  justify-content: center; /* 가운데 정렬 */
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  justify-content: center;
   width: 100%;
   box-sizing: border-box;
-  padding: 0; /* 불필요한 패딩 제거 */
+  padding: 0;
 
-  & > div {
-    aspect-ratio: 440 / 387; /* 콘텐츠 박스 비율 유지 */
-    width: 100%; /* 그리드에 맞춰 너비 조정 */
-    max-width: 600px; /* 화면이 너무 커질 경우 최대 크기 제한 (선택 사항) */
-  }
+  grid-row-gap: 40px; /* 위아래 간격 추가 */
 `;
 
 const Pagination = styled.div`

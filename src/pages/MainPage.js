@@ -75,7 +75,7 @@ const MainPage = () => {
                 id: content.contentId || 'ID 없음',
                 title: content.contentName || formattedDate, // contentName이 null일 경우 formattedDate 사용
                 user: item.nickname || '사용자 정보 없음',
-                category: content.categoryName?.[0] || '카테고리 없음',
+                category: content.categoryName || [],
                 tags: content.tagName || [],
                 dDay: content.dday,
                 contentDateType: content.contentDateType || '타입 없음',
@@ -190,7 +190,6 @@ const MainPage = () => {
                     key={data.id}
                     contentId={data.id}
                     title={data.title || formattedDate} // 제목이 없으면 생성 날짜 사용
-                    user={data.user}
                     category={data.category}
                     tags={data.tags}
                     dDay={data.dDay}

@@ -10,8 +10,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/l
 function ContentBox({
   contentId,
   title,
-  user,
-  category,
+  category = [],
   tags,
   dDay,
   thumbnailImage,
@@ -25,6 +24,10 @@ function ContentBox({
   const displayTitle =
     title ||
     (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
+
+  // 카테고리 텍스트 생성
+  const displayCategory =
+    category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : ''); // 최대 5개 표시 후 "..." 추가
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);
@@ -75,11 +78,9 @@ function ContentBox({
         </IconBox>
         <ContentName>{displayTitle}</ContentName>
       </ContentTitle>
-      <Filter>
-        <div>{user || '사용자 이름'}</div>
-        <div>|</div>
-        <div>{category || '카테고리명'}</div>
-      </Filter>
+      <CategoryDisplay title={displayCategory}>
+        {displayCategory}
+      </CategoryDisplay>
     </Box>
   );
 }
@@ -88,15 +89,6 @@ const Dropdown = styled.div`
   position: absolute;
   top: 10px;
   left: 400px;
-`;
-
-const Filter = styled.div`
-  display: flex;
-  column-gap: 6px;
-  text-align: center;
-  font-weight: 400;
-  font-size: 16px;
-  color: #4f4f4f;
 `;
 
 const Box = styled.div`
@@ -224,6 +216,16 @@ const ContentName = styled.div`
   font-size: 22px;
   line-height: 26.25px;
   color: #000000;
+`;
+
+const CategoryDisplay = styled.div`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #4f4f4f;
+  white-space: nowrap; /* 한 줄로 표시 */
+  overflow: hidden; /* 박스를 넘어가는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 말줄임표 처리 */
 `;
 
 export default ContentBox;

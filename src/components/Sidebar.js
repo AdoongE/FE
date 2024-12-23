@@ -20,11 +20,11 @@ const Sidebar = ({
   setCategoryId,
   setFilterId,
   setCateName,
+  setFilterName,
   categoryCounts,
   activeTab,
   setActiveTab,
 }) => {
-  // const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
@@ -113,10 +113,6 @@ const Sidebar = ({
       setHoveredBookmarkIndex(null);
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
-
-  // useEffect(() => {
-  //   setActiveTab('모아보기');
-  // }, [setActiveTab]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -349,6 +345,7 @@ const Sidebar = ({
     const filterIndex = customFilter.indexOf(condition);
     const filterId = customFilterIds[filterIndex];
 
+    setFilterName(condition);
     setActiveTab('맞춤필터');
     setFilterId(filterId);
     setMessage(`${condition}이(가) 적용되었습니다.`);

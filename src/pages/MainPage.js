@@ -33,6 +33,7 @@ const MainPage = () => {
   const contentPerPage = 9;
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
+  const [filterName, setFilterName] = useState('');
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
@@ -182,6 +183,7 @@ const MainPage = () => {
           categoryCounts={categoryCounts}
           filterId={filterId}
           setFilterId={setFilterId}
+          setFilterName={setFilterName}
         />
       </SidebarContainer>
       <MainContent>
@@ -189,6 +191,8 @@ const MainPage = () => {
           setSortOrder={setSortOrder}
           categoryId={categoryId}
           categoryName={categoryName}
+          filterId={filterId}
+          filterName={filterName}
         />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import { axiosInstance } from '../api/axios-instance';
 
 const DropdownMenu = styled.ul`
   position: absolute;
@@ -154,6 +155,8 @@ const FilterDropdown = ({
   initialFilterName,
   onEditFilter,
   onRemoveFilter,
+  customFilter,
+  filterIds,
 }) => {
   const dropdownRef = useRef();
   const [showEditModal, setShowEditModal] = useState(false);
@@ -179,10 +182,26 @@ const FilterDropdown = ({
 
   if (!isOpen) return null;
 
-  const handleEditConfirm = () => {
+  const handleEditConfirm = async () => {
+    const filterIndex = customFilter.indexOf(initialFilterName);
+    const filterId = filterIds[filterIndex];
+
     if (newFilterName.trim()) {
       onEditFilter(newFilterName.trim());
       setShowEditModal(false);
+    }
+    try {
+      const response = await axiosInstance.patch(`/api/v1/filter/${filterId}`, {
+        name: newFilterName,
+      });
+
+      if (response.status === 200) {
+        console.log('카테고리 편집 성공');
+      } else {
+        console.error('카테고리 편집 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
     }
   };
   const handleDeleteConfirm = () => {
@@ -208,7 +227,7 @@ const FilterDropdown = ({
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <ModalDiv>
               <TopDiv>
-                <ModalTitle>필터 이름 편집</ModalTitle>
+                <ModalTitle>맞춤 필터 이름 변경</ModalTitle>
                 <Icon
                   icon="line-md:close"
                   style={{

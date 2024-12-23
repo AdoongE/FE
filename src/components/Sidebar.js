@@ -581,6 +581,8 @@ const Sidebar = ({
                         handleEditFilter(index, newName)
                       }
                       onRemoveFilter={() => handleRemoveFilter(index)}
+                      customFilter={customFilter}
+                      filterIds={customFilterIds}
                     />
                   )}
                 </Right>

@@ -8,8 +8,52 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
   const [selectedFormat, setSelectedFormat] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [recentSearches, setRecentSearches] = useState(() => {
+    return JSON.parse(localStorage.getItem('recentSearches')) || [];
+  });
+  const [showRecentSearches, setShowRecentSearches] = useState(false);
 
   const dialogRef = useRef(null);
+
+  // 날짜 포맷 함수
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear().toString().slice(-2); // YY 형식
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // MM 형식
+    const day = String(date.getDate()).padStart(2, '0'); // DD 형식
+    return `${year}.${month}.${day}`;
+  };
+
+  // 검색어 저장
+  const saveSearchQuery = (query) => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    const newSearch = { query, date: currentDate };
+
+    const updatedSearches = [newSearch, ...recentSearches].slice(0, 6); // 최대 6개 저장
+    setRecentSearches(updatedSearches);
+    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+  };
+
+  // 검색어 삭제
+  const deleteSearch = (index) => {
+    const updatedSearches = recentSearches.filter((_, i) => i !== index);
+    setRecentSearches(updatedSearches);
+    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+  };
+
+  // 검색어 입력 핸들러
+  const handleSearchInput = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Enter로 검색
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      saveSearchQuery(searchQuery.trim());
+      setSearchQuery(''); // 검색 후 입력값 초기화
+    }
+  };
 
   const showModal = () => {
     dialogRef.current?.showModal();
@@ -96,10 +140,31 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
               color: 'black',
             }}
           />
-          <Search placeholder="찾고 싶은 콘텐츠를 검색하세요." />
+          <Search
+            placeholder="찾고 싶은 콘텐츠를 검색하세요."
+            value={searchQuery}
+            onChange={handleSearchInput}
+            onKeyPress={handleSearchKeyPress}
+            onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
+            onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)} // 클릭 해제 시 숨기기
+          />
           <SearchButton type="button" onClick={() => showModal()}>
             #태그 검색
           </SearchButton>
+          {showRecentSearches && (
+            <RecentSearchList>
+              <RecentSearchTitle>최근 검색어</RecentSearchTitle>
+              {recentSearches.map((search, index) => (
+                <RecentSearchItem key={index}>
+                  <span>{search.query}</span>
+                  <span>{formatDate(search.date)}</span>
+                  <DeleteButton onClick={() => deleteSearch(index)}>
+                    X
+                  </DeleteButton>
+                </RecentSearchItem>
+              ))}
+            </RecentSearchList>
+          )}
         </SearchContainer>
       </Bar>
       <AddTagModal ref={dialogRef} title={'검색할 태그를 선택하세요.'} />
@@ -192,6 +257,7 @@ const DropdownItem = styled.div`
 `;
 
 const SearchContainer = styled.div`
+  position: relative;
   width: 493px;
   height: 50px;
   z-index: 1;
@@ -241,6 +307,65 @@ const SearchButton = styled.button`
   align-items: center;
   position: relative;
   z-index: 2;
+`;
+
+const RecentSearchList = styled.div`
+  position: absolute;
+  top: 55px;
+  left: 0;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  z-index: 10;
+`;
+
+const RecentSearchTitle = styled.div`
+  font-weight: bold;
+  padding: 10px;
+  border-bottom: 1px solid #dcdcdc;
+  background: #f9f9f9;
+`;
+
+const RecentSearchItem = styled.div`
+  display: flex;
+  justify-content: space-between; /* 검색어와 날짜 간격 유지 */
+  align-items: center;
+  padding: 10px 12px;
+  font-size: 18px;
+  color: #333;
+
+  & > span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & > span:nth-child(2) {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #9f9f9f;
+    width: 80px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    font-weight: bold;
+  }
 `;
 
 export default ContentHeader;

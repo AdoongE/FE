@@ -2,6 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
+import circleCheckIcon from '../assets/icons/circleCheck.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -556,7 +557,16 @@ const Sidebar = ({
                 맞춤 조건은 최대 5개까지 설정 가능합니다.
               </FilterContent>
             )}
-            {message && <MessageBox>{message}</MessageBox>}
+            {message && (
+              <MessageBox>
+                <img
+                  src={circleCheckIcon}
+                  style={{ width: '4.188rem' }}
+                  alt="circle check icon"
+                />
+                {message}
+              </MessageBox>
+            )}
             {customFilter.map((condition, index) => (
               <Custom
                 key={index}
@@ -822,15 +832,16 @@ const MessageBox = styled.div`
   position: fixed;
   top: 12%;
   left: 50%;
-  background-color: #def3f1;
+  background-color: #f2f2f2;
   color: #333;
-  font-size: 30px;
-  padding: 10px 20px;
-  border: 1px solid #41c3ab;
+  font-size: 28px;
   border-radius: 12px;
+  box-shadow: 0 0 5px #4f4f4f;
   z-index: 9999;
-  width: 467px;
-  height: 95px;
+  width: 511px;
+  height: 99px;
+  gap: 20px;
+  padding: 8px 25px;
   display: flex;
   align-items: center;
   justify-content: center;

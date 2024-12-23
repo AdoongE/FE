@@ -21,7 +21,7 @@ const DropdownItem = styled.li`
   margin: 9px 7px;
   border-radius: 10px;
   cursor: pointer;
-  height: 44px;
+  height: 35px;
   display: flex;
   flex-direction: row;
   align-items: center;

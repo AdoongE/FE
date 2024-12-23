@@ -4,7 +4,10 @@ import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 
 function ContentHeader({ setSortOrder, categoryId, categoryName }) {
-  const [selectedFilter, setSelectedFilter] = useState('최신순');
+  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('');
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [showFormatDropdown, setShowFormatDropdown] = useState(false);
 
   const dialogRef = useRef(null);
 
@@ -12,9 +15,15 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
     dialogRef.current?.showModal();
   };
 
-  const handleFilterClick = (filterOption) => {
-    setSelectedFilter(filterOption);
-    setSortOrder(filterOption);
+  const handleSortChange = (option) => {
+    setSelectedFilter(option);
+    setSortOrder(option);
+    setShowSortDropdown(false);
+  };
+
+  const handleFormatChange = (option) => {
+    setSelectedFormat(option);
+    setShowFormatDropdown(false);
   };
 
   return (
@@ -29,21 +38,54 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
         )}
       </Title>
       <Bar>
-        <Filter>
-          <Option
-            $isSelected={selectedFilter === '최신순'}
-            onClick={() => handleFilterClick('최신순')}
-          >
-            최신순
-          </Option>
-          <div>|</div>
-          <Option
-            $isSelected={selectedFilter === '이름순'}
-            onClick={() => handleFilterClick('이름순')}
-          >
-            이름순
-          </Option>
-        </Filter>
+        <DropdownContainer>
+          <Dropdown>
+            <DropdownButton
+              onClick={() => setShowFormatDropdown(!showFormatDropdown)}
+              isDefault={
+                !selectedFormat
+              } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+              width="137px"
+            >
+              {selectedFormat || '저장형식'} ▼
+            </DropdownButton>
+            {showFormatDropdown && (
+              <DropdownMenu>
+                <DropdownItem onClick={() => handleFormatChange('링크')}>
+                  링크
+                </DropdownItem>
+                <DropdownItem onClick={() => handleFormatChange('이미지')}>
+                  이미지
+                </DropdownItem>
+                <DropdownItem onClick={() => handleFormatChange('PDF')}>
+                  PDF
+                </DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          <Dropdown>
+            <DropdownButton
+              onClick={() => setShowSortDropdown(!showSortDropdown)}
+              isDefault={
+                !selectedFilter
+              } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+              width="106px"
+            >
+              {selectedFilter || '정렬'} ▼
+            </DropdownButton>
+            {showSortDropdown && (
+              <DropdownMenu>
+                <DropdownItem onClick={() => handleSortChange('최신순')}>
+                  최신순
+                </DropdownItem>
+                <DropdownItem onClick={() => handleSortChange('이름순')}>
+                  이름순
+                </DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+        </DropdownContainer>
         <SearchContainer>
           <Icon
             icon="stash:search-solid"
@@ -64,11 +106,6 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
     </Main>
   );
 }
-
-const Option = styled.div`
-  cursor: pointer;
-  font-weight: ${(props) => (props.$isSelected ? 700 : 400)};
-`;
 
 const Main = styled.div`
   position: relative;
@@ -92,12 +129,66 @@ const CategoryName = styled.span`
   margin-left: 11px;
 `;
 
-const Filter = styled.div`
+const Bar = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   margin-top: 53px;
-  column-gap: 10px;
-  text-align: center;
-  font-size: 20px;
+`;
+
+const DropdownContainer = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const DropdownButton = styled.button`
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 22px; /* 글씨 크기 */
+  color: ${(props) =>
+    props.isDefault ? '#9f9f9f' : '#333'}; /* 기본값일 때 연한 색상 */
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 텍스트를 중앙에 정렬 */
+  height: 48px; /* 버튼 높이 */
+  width: ${(props) => props.width || '200px'}; /* 버튼 너비 */
+  position: relative; /* 화살표를 절대 위치로 배치하기 위해 설정 */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  &:hover {
+    background-color: #f9f9f9;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: calc(100% + 4px); /* 버튼 아래에 여백 추가 */
+  left: 0;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  width: 200px; /* 메뉴 너비를 버튼과 동일하게 설정 */
+`;
+
+const DropdownItem = styled.div`
+  padding: 10px 12px;
+  font-size: 22px;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  &:hover {
+    background-color: #f2f2f2;
+  }
 `;
 
 const SearchContainer = styled.div`
@@ -110,7 +201,6 @@ const SearchContainer = styled.div`
   border: 1px solid #9f9f9f;
   display: flex;
   position: relative;
-
   justify-content: space-around;
   align-items: center;
 `;
@@ -151,13 +241,6 @@ const SearchButton = styled.button`
   align-items: center;
   position: relative;
   z-index: 2;
-`;
-
-const Bar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-top: 53px;
 `;
 
 export default ContentHeader;

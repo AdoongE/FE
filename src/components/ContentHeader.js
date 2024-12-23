@@ -91,7 +91,8 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
               } /* 값이 선택되지 않았을 때 연한 색상 적용 */
               width="137px"
             >
-              {selectedFormat || '저장형식'} ▼
+              저장형식{' '}
+              <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
             </DropdownButton>
             {showFormatDropdown && (
               <DropdownMenu>
@@ -116,7 +117,7 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
               } /* 값이 선택되지 않았을 때 연한 색상 적용 */
               width="106px"
             >
-              {selectedFilter || '정렬'} ▼
+              정렬 <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
             </DropdownButton>
             {showSortDropdown && (
               <DropdownMenu>
@@ -245,12 +246,16 @@ const DropdownMenu = styled.div`
 const DropdownItem = styled.div`
   padding: 10px 12px;
   font-size: 22px;
-  color: #333;
+  color: ${(props) =>
+    props.isSelected ? '#333' : '#666'}; /* 선택된 항목 진하게 */
+  font-weight: ${(props) =>
+    props.isSelected ? '700' : '400'}; /* 선택된 항목 진하게 */
   cursor: pointer;
   text-align: left;
   height: 48px;
   display: flex;
   align-items: center;
+
   &:hover {
     background-color: #f2f2f2;
   }

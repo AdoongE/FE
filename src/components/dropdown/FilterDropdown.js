@@ -196,17 +196,33 @@ const FilterDropdown = ({
       });
 
       if (response.status === 200) {
-        console.log('카테고리 편집 성공');
+        console.log('필터 이름 수정 성공');
       } else {
-        console.error('카테고리 편집 실패');
+        console.error('필터 이름 수정 실패');
       }
     } catch (error) {
       console.error('에러 발생:', error);
     }
   };
-  const handleDeleteConfirm = () => {
+
+  const handleDeleteConfirm = async () => {
+    const filterIndex = customFilter.indexOf(initialFilterName);
+    const filterId = filterIds[filterIndex];
+
     onRemoveFilter();
     setShowDeleteModal(false);
+
+    try {
+      const response = await axiosInstance.delete(`/api/v1/filter/${filterId}`);
+
+      if (response.status === 200) {
+        console.log('필터 삭제 성공');
+      } else {
+        console.error('필터 삭제 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   return (

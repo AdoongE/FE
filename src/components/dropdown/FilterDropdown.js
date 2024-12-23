@@ -191,9 +191,12 @@ const FilterDropdown = ({
       setShowEditModal(false);
     }
     try {
-      const response = await axiosInstance.patch(`/api/v1/filter/${filterId}`, {
-        name: newFilterName,
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/filter/${filterId}/name`,
+        {
+          name: newFilterName,
+        },
+      );
 
       if (response.status === 200) {
         console.log('필터 이름 수정 성공');

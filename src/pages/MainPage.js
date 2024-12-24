@@ -40,6 +40,8 @@ const MainPage = () => {
 
   console.log('activeTab : ', activeTab);
 
+  /******************************************************************************************/
+  // fetchData : 메인페이지의 모든 콘텐츠들을 조회하는 api 요청 함수
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -122,6 +124,8 @@ const MainPage = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  // 문제 사례 : ContentDeleteModal.js에서 콘텐츠를 삭제했을 때, 새로고침을 하지 않으면 콘텐츠 삭제된 것이 반영되지 않음
+  /******************************************************************************************/
 
   // 정렬 처리
   useEffect(() => {

@@ -199,7 +199,7 @@ const Bar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 53px;
+  margin-top: 80px;
 `;
 
 const DropdownContainer = styled.div`

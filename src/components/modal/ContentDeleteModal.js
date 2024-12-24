@@ -10,7 +10,8 @@ const api = axios.create({
     Authorization: `${token}`, // 토큰을 템플릿 리터럴로 추가
   },
 });
-
+/******************************************************************************************/
+// 콘텐츠 삭제
 const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
   const cloesModal = () => {
     ref.current?.close();
@@ -19,9 +20,7 @@ const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
   const handleDelete = async () => {
     console.log('콘텐츠 삭제 id: ', contentId);
     try {
-      const response = await api.delete(
-        `/api/v1/content/api/v1/content/${contentId}`,
-      );
+      const response = await api.delete(`/api/v1/content/${contentId}`);
 
       console.log('삭제 성공: ', response?.data.results);
       cloesModal();
@@ -30,6 +29,7 @@ const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
       throw error;
     }
   };
+  /******************************************************************************************/
 
   useEffect(() => {
     if (ref.current) {

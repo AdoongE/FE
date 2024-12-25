@@ -1,10 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import filterEditIcon from '../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
+import TagFilterModal from '../components/modal/TagFilterModal';
 import { axiosInstance } from './api/axios-instance';
 
-function ContentHeader({ setSortOrder, categoryId, categoryName }) {
+function ContentHeader({
+  setSortOrder,
+  categoryId,
+  filterName,
+  categoryName,
+  filterId,
+}) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
   const [tags, setTags] = useState([]);
 
@@ -46,55 +54,76 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
 
   return (
     <Main>
-      <Title>
-        {categoryId ? (
-          <>
-            나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
-          </>
-        ) : (
-          '나의 씨드'
-        )}
-      </Title>
-      <Bar>
-        <Filter>
-          <Option
-            $isSelected={selectedFilter === '최신순'}
-            onClick={() => handleFilterClick('최신순')}
-          >
-            최신순
-          </Option>
-          <div>|</div>
-          <Option
-            $isSelected={selectedFilter === '이름순'}
-            onClick={() => handleFilterClick('이름순')}
-          >
-            이름순
-          </Option>
-        </Filter>
-        <SearchContainer>
-          <Icon
-            icon="stash:search-solid"
-            style={{
-              width: '24px',
-              height: '24px',
-              marginLeft: '15px',
-              color: 'black',
+      {filterId === null ? (
+        <>
+          <Title>
+            {categoryId ? (
+              <>
+                나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
+              </>
+            ) : (
+              '나의 씨드'
+            )}
+          </Title>
+          <Bar>
+            <Filter>
+              <Option
+                $isSelected={selectedFilter === '최신순'}
+                onClick={() => handleFilterClick('최신순')}
+              >
+                최신순
+              </Option>
+              <div>|</div>
+              <Option
+                $isSelected={selectedFilter === '이름순'}
+                onClick={() => handleFilterClick('이름순')}
+              >
+                이름순
+              </Option>
+            </Filter>
+            <SearchContainer>
+              <Icon
+                icon="stash:search-solid"
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  marginLeft: '15px',
+                  color: 'black',
+                }}
+              />
+              <Search placeholder="찾고 싶은 콘텐츠를 검색하세요." />
+              <SearchButton type="button" onClick={() => showModal()}>
+                #태그 검색
+              </SearchButton>
+            </SearchContainer>
+          </Bar>
+          <AddTagModal
+            ref={dialogRef}
+            title={'검색할 태그를 선택하세요.'}
+            onConfirm={(newTags) => {
+              setTags(newTags);
+              handleSubmit(newTags);
             }}
           />
-          <Search placeholder="찾고 싶은 콘텐츠를 검색하세요." />
-          <SearchButton type="button" onClick={() => showModal()}>
-            #태그 검색
-          </SearchButton>
-        </SearchContainer>
-      </Bar>
-      <AddTagModal
-        ref={dialogRef}
-        title={'검색할 태그를 선택하세요.'}
-        onConfirm={(newTags) => {
-          setTags(newTags);
-          handleSubmit(newTags);
-        }}
-      />
+        </>
+      ) : (
+        <FilterDiv>
+          <FilterTitle>나의 씨드</FilterTitle>
+          <FilterBtn onClick={() => showModal()}>
+            <FilterEditIcon
+              src={filterEditIcon}
+              alt="filter edit icon"
+            ></FilterEditIcon>
+            {filterName}
+          </FilterBtn>
+          <TagFilterModal
+            ref={dialogRef}
+            // onSave={(modalData) => {
+            //   addCustomCondition(modalData);
+            // }}
+          />
+        </FilterDiv>
+      )}
     </Main>
   );
 }
@@ -137,7 +166,6 @@ const Filter = styled.div`
 const SearchContainer = styled.div`
   width: 493px;
   height: 50px;
-  z-index: 1;
   border-radius: 25px;
   margin-right: 100px;
   background-color: (0, 0, 0, 0.3);
@@ -184,7 +212,6 @@ const SearchButton = styled.button`
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 2;
 `;
 
 const Bar = styled.div`
@@ -192,6 +219,36 @@ const Bar = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   margin-top: 53px;
+`;
+
+const FilterDiv = styled.div`
+  display: block;
+`;
+
+const FilterTitle = styled.div`
+  font-weight: 700;
+  font-size: 44px;
+`;
+
+const FilterBtn = styled.button`
+  margin-top: 50px;
+  width: 165px;
+  height: 44px;
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: #def3f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 550;
+  padding: 9px 2.5px;
+`;
+
+const FilterEditIcon = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-right: 13px;
 `;
 
 export default ContentHeader;

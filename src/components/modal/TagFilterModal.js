@@ -14,6 +14,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
 import { format } from 'date-fns';
+import tagImage from '../../assets/icons/tag.png';
 
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
@@ -407,6 +408,11 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
 
 TagFilterModal.displayName = 'TagFilterModal';
 CustomInput.displayName = 'CustomInput';
+
+const TagImage = styled.img`
+  width: 132px;
+  height: 132px;
+`;
 
 const Notag = styled.div`
   margin-left: 59px;

@@ -2,6 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
+import circleCheckIcon from '../assets/icons/circleCheck.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -15,8 +16,15 @@ import TagFilterModal from '../components/modal/TagFilterModal';
 import { axiosInstance } from './api/axios-instance';
 import axios from 'axios';
 
-const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
-  const [activeTab, setActiveTab] = useState('나의 씨드'); // Sidebar 전용 상태
+const Sidebar = ({
+  setCategoryId,
+  setFilterId,
+  setCateName,
+  setFilterName,
+  categoryCounts,
+  activeTab,
+  setActiveTab,
+}) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(false);
@@ -39,7 +47,8 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   const [bookmarkIds, setBookmarkIds] = useState([]);
   const [bookcateIds, setBookcateIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
-  const [customConditions, setCustomConditions] = useState([]);
+  const [customFilter, setCustomFilter] = useState([]);
+  const [customFilterIds, setCustomFilterIds] = useState([]);
   const [message, setMessage] = useState('');
 
   const token = localStorage.getItem('jwtToken');
@@ -104,10 +113,6 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
       setHoveredBookmarkIndex(null);
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
-
-  useEffect(() => {
-    setActiveTab('모아보기');
-  }, [setActiveTab]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -298,10 +303,6 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
     handleViewCategory('categoryClick');
   };
 
-  useEffect(() => {
-    handleViewCategory();
-  }, []);
-
   const dialogRef = useRef(null);
 
   const showModal = () => {
@@ -309,8 +310,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   };
 
   const addCustomCondition = async (modalData) => {
-    const newCondition = `맞춤 조건 ${customConditions.length + 1}`;
-    setCustomConditions((prev) => [...prev, newCondition]);
+    const newCondition = `맞춤 조건 ${customFilter.length + 1}`;
 
     try {
       const response = await axiosInstance.post('api/v1/filter', {
@@ -328,7 +328,7 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   };
 
   const handleEditFilter = (index, newConditionName) => {
-    setCustomConditions((prevConditions) =>
+    setCustomFilter((prevConditions) =>
       prevConditions.map((condition, i) =>
         i === index ? newConditionName : condition,
       ),
@@ -336,19 +336,33 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
   };
 
   const handleRemoveFilter = (index) => {
-    setCustomConditions((prevConditions) =>
+    setCustomFilter((prevConditions) =>
       prevConditions.filter((_, i) => i !== index),
     );
   };
 
   const CustomFilterView = async (condition) => {
+    const filterIndex = customFilter.indexOf(condition);
+    const filterId = customFilterIds[filterIndex];
+
+    setFilterName(condition);
+    setActiveTab('맞춤필터');
+    setFilterId(filterId);
+    setMessage(`${condition}이(가) 적용되었습니다.`);
+    setTimeout(() => setMessage(''), 2000);
+  };
+
+  const CustomFilterViews = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/filter/9');
+      const response = await axiosInstance.get('/api/v1/filter');
+
+      const filterId = response.data.results.map((item) => item.id);
+      const filterNames = response.data.results.map((item) => item.name);
+      setCustomFilterIds(filterId);
+      setCustomFilter(filterNames);
+
       if (response.status === 200) {
         console.log('Custom 필터 조회 성공:', response.data);
-        setMessage(`${condition}이(가) 적용되었습니다.`);
-        setTimeout(() => setMessage(''), 2000);
-        console.log('떴니 안 떳니');
       } else {
         console.error('Custom 필터 조회 실패:', response.data);
       }
@@ -356,6 +370,11 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
       console.error('Custom 필터 조회 오류 발생:', error);
     }
   };
+
+  useEffect(() => {
+    handleViewCategory();
+    CustomFilterViews();
+  }, []);
 
   return (
     <StMainPage>
@@ -530,13 +549,22 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
             </AddButton>
           </CustomUp>
           <CustomDiv>
-            {customConditions.length === 0 && (
+            {customFilter.length === 0 && (
               <FilterContent>
                 맞춤 조건은 최대 5개까지 설정 가능합니다.
               </FilterContent>
             )}
-            {message && <MessageBox>{message}</MessageBox>}
-            {customConditions.map((condition, index) => (
+            {message && (
+              <MessageBox>
+                <img
+                  src={circleCheckIcon}
+                  style={{ width: '4.188rem' }}
+                  alt="circle check icon"
+                />
+                {message}
+              </MessageBox>
+            )}
+            {customFilter.map((condition, index) => (
               <Custom
                 key={index}
                 onMouseEnter={() => setHoveredFilterIndex(index)}
@@ -560,6 +588,8 @@ const Sidebar = ({ setCategoryId, setCateName, categoryCounts }) => {
                         handleEditFilter(index, newName)
                       }
                       onRemoveFilter={() => handleRemoveFilter(index)}
+                      customFilter={customFilter}
+                      filterIds={customFilterIds}
                     />
                   )}
                 </Right>
@@ -587,6 +617,7 @@ const SideDiv = styled.div`
   width: 21.563rem;
   background-color: #f8fbfb;
   display: inline-block;
+  position: relative;
 `;
 
 const BtnDiv = styled.div`
@@ -798,15 +829,16 @@ const MessageBox = styled.div`
   position: fixed;
   top: 12%;
   left: 50%;
-  background-color: #def3f1;
+  background-color: #f2f2f2;
   color: #333;
-  font-size: 30px;
-  padding: 10px 20px;
-  border: 1px solid #41c3ab;
+  font-size: 28px;
   border-radius: 12px;
+  box-shadow: 0 0 5px #4f4f4f;
   z-index: 9999;
-  width: 467px;
-  height: 95px;
+  width: 511px;
+  height: 99px;
+  gap: 20px;
+  padding: 8px 25px;
   display: flex;
   align-items: center;
   justify-content: center;

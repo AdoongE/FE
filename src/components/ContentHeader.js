@@ -1,9 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import filterEditIcon from './../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
+import TagFilterModal from '../components/modal/TagFilterModal';
+import { axiosInstance } from './api/axios-instance';
 
-function ContentHeader({ setSortOrder, categoryId, categoryName }) {
+function ContentHeader({
+  setSortOrder,
+  categoryId,
+  filterName,
+  categoryName,
+  filterId,
+}) {
+  // 상태 관리
   const [selectedFilter, setSelectedFilter] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
@@ -13,7 +23,7 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
     return JSON.parse(localStorage.getItem('recentSearches')) || [];
   });
   const [showRecentSearches, setShowRecentSearches] = useState(false);
-
+  const [tags, setTags] = useState([]);
   const dialogRef = useRef(null);
 
   // 날짜 포맷 함수
@@ -23,6 +33,10 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
     const month = String(date.getMonth() + 1).padStart(2, '0'); // MM 형식
     const day = String(date.getDate()).padStart(2, '0'); // DD 형식
     return `${year}.${month}.${day}`;
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value); // 검색어 상태 업데이트
   };
 
   // 검색어 저장
@@ -42,11 +56,6 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // 검색어 입력 핸들러
-  const handleSearchInput = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
   // Enter로 검색
   const handleSearchKeyPress = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
@@ -55,120 +64,180 @@ function ContentHeader({ setSortOrder, categoryId, categoryName }) {
     }
   };
 
+  // 태그 검색 모달 열기
   const showModal = () => {
     dialogRef.current?.showModal();
   };
 
+  // 정렬 변경
   const handleSortChange = (option) => {
     setSelectedFilter(option);
     setSortOrder(option);
     setShowSortDropdown(false);
   };
 
+  // 저장 형식 변경
   const handleFormatChange = (option) => {
     setSelectedFormat(option);
     setShowFormatDropdown(false);
   };
 
+  // 태그 제출 처리
+  const handleSubmit = async (newTags) => {
+    try {
+      const data = { tags: newTags };
+      const response = await axiosInstance.post(
+        '/api/v1/content/filtering',
+        data,
+      );
+      if (response.data.status.code === 200) {
+        console.log('검색 태그 전송 성공:', response.data.status.message);
+        setTags([]); // 상태 초기화
+      }
+    } catch (error) {
+      console.error('검색 태그 전송 중 오류 발생:', error);
+      throw error;
+    }
+  };
+
+  // 태그 변경 시 처리
+  useEffect(() => {
+    if (tags.length > 0) {
+      handleSubmit(tags);
+    }
+  }, [tags]);
+
+  // 태그 상태 로그 확인
+  useEffect(() => console.log('선택한 태그: ', tags), [tags]);
+
   return (
     <Main>
-      <Title>
-        {categoryId ? (
-          <>
-            나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
-          </>
-        ) : (
-          '나의 씨드'
-        )}
-      </Title>
-      <Bar>
-        <DropdownContainer>
-          <Dropdown>
-            <DropdownButton
-              onClick={() => setShowFormatDropdown(!showFormatDropdown)}
-              isDefault={
-                !selectedFormat
-              } /* 값이 선택되지 않았을 때 연한 색상 적용 */
-              width="137px"
-            >
-              저장형식{' '}
-              <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
-            </DropdownButton>
-            {showFormatDropdown && (
-              <DropdownMenu>
-                <DropdownItem onClick={() => handleFormatChange('링크')}>
-                  링크
-                </DropdownItem>
-                <DropdownItem onClick={() => handleFormatChange('이미지')}>
-                  이미지
-                </DropdownItem>
-                <DropdownItem onClick={() => handleFormatChange('PDF')}>
-                  PDF
-                </DropdownItem>
-              </DropdownMenu>
+      {filterId === null ? (
+        <>
+          <Title>
+            {categoryId ? (
+              <>
+                나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
+              </>
+            ) : (
+              '나의 씨드'
             )}
-          </Dropdown>
+          </Title>
+          <Bar>
+            {/* 필터 옵션 */}
+            <DropdownContainer>
+              <Dropdown>
+                <DropdownButton
+                  onClick={() => setShowFormatDropdown(!showFormatDropdown)}
+                  isDefault={
+                    !selectedFormat
+                  } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+                  width="137px"
+                >
+                  저장형식{' '}
+                  <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
+                </DropdownButton>
+                {showFormatDropdown && (
+                  <DropdownMenu>
+                    <DropdownItem onClick={() => handleFormatChange('링크')}>
+                      링크
+                    </DropdownItem>
+                    <DropdownItem onClick={() => handleFormatChange('이미지')}>
+                      이미지
+                    </DropdownItem>
+                    <DropdownItem onClick={() => handleFormatChange('PDF')}>
+                      PDF
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </Dropdown>
 
-          <Dropdown>
-            <DropdownButton
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              isDefault={
-                !selectedFilter
-              } /* 값이 선택되지 않았을 때 연한 색상 적용 */
-              width="106px"
-            >
-              정렬 <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
-            </DropdownButton>
-            {showSortDropdown && (
-              <DropdownMenu>
-                <DropdownItem onClick={() => handleSortChange('최신순')}>
-                  최신순
-                </DropdownItem>
-                <DropdownItem onClick={() => handleSortChange('이름순')}>
-                  이름순
-                </DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-        </DropdownContainer>
-        <SearchContainer>
-          <Icon
-            icon="stash:search-solid"
-            style={{
-              width: '24px',
-              height: '24px',
-              marginLeft: '15px',
-              color: 'black',
+              <Dropdown>
+                <DropdownButton
+                  onClick={() => setShowSortDropdown(!showSortDropdown)}
+                  isDefault={
+                    !selectedFilter
+                  } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+                  width="106px"
+                >
+                  정렬{' '}
+                  <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
+                </DropdownButton>
+                {showSortDropdown && (
+                  <DropdownMenu>
+                    <DropdownItem onClick={() => handleSortChange('최신순')}>
+                      최신순
+                    </DropdownItem>
+                    <DropdownItem onClick={() => handleSortChange('이름순')}>
+                      이름순
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </Dropdown>
+            </DropdownContainer>
+            {/* 검색 영역 */}
+            <SearchContainer>
+              <Icon
+                icon="stash:search-solid"
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  marginLeft: '15px',
+                  color: 'black',
+                }}
+              />
+              <Search
+                placeholder="찾고 싶은 콘텐츠를 검색하세요."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                onKeyPress={handleSearchKeyPress}
+                onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
+                onBlur={() =>
+                  setTimeout(() => setShowRecentSearches(false), 200)
+                } // 클릭 해제 시 숨기기
+              />
+              <SearchButton type="button" onClick={() => showModal()}>
+                #태그 검색
+              </SearchButton>
+              {showRecentSearches && (
+                <RecentSearchList>
+                  <RecentSearchTitle>최근 검색어</RecentSearchTitle>
+                  {recentSearches.map((search, index) => (
+                    <RecentSearchItem key={index}>
+                      <span>{search.query}</span>
+                      <span>{formatDate(search.date)}</span>
+                      <DeleteButton onClick={() => deleteSearch(index)}>
+                        X
+                      </DeleteButton>
+                    </RecentSearchItem>
+                  ))}
+                </RecentSearchList>
+              )}
+            </SearchContainer>
+          </Bar>
+          {/* 태그 검색 모달 */}
+          <AddTagModal
+            ref={dialogRef}
+            title={'검색할 태그를 선택하세요.'}
+            onConfirm={(newTags) => {
+              setTags(newTags);
+              handleSubmit(newTags);
             }}
           />
-          <Search
-            placeholder="찾고 싶은 콘텐츠를 검색하세요."
-            value={searchQuery}
-            onChange={handleSearchInput}
-            onKeyPress={handleSearchKeyPress}
-            onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
-            onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)} // 클릭 해제 시 숨기기
-          />
-          <SearchButton type="button" onClick={() => showModal()}>
-            #태그 검색
-          </SearchButton>
-          {showRecentSearches && (
-            <RecentSearchList>
-              <RecentSearchTitle>최근 검색어</RecentSearchTitle>
-              {recentSearches.map((search, index) => (
-                <RecentSearchItem key={index}>
-                  <span>{search.query}</span>
-                  <span>{formatDate(search.date)}</span>
-                  <DeleteButton onClick={() => deleteSearch(index)}>
-                    X
-                  </DeleteButton>
-                </RecentSearchItem>
-              ))}
-            </RecentSearchList>
-          )}
-        </SearchContainer>
-      </Bar>
-      <AddTagModal ref={dialogRef} title={'검색할 태그를 선택하세요.'} />
+        </>
+      ) : (
+        <FilterDiv>
+          <FilterTitle>나의 씨드</FilterTitle>
+          <FilterBtn onClick={() => showModal()}>
+            <FilterEditIcon
+              src={filterEditIcon}
+              alt="filter edit icon"
+            ></FilterEditIcon>
+            {filterName}
+          </FilterBtn>
+          <TagFilterModal ref={dialogRef} />
+        </FilterDiv>
+      )}
     </Main>
   );
 }
@@ -193,13 +262,6 @@ const CategoryName = styled.span`
   font-weight: 400;
   font-size: 30px;
   margin-left: 11px;
-`;
-
-const Bar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-top: 80px;
 `;
 
 const DropdownContainer = styled.div`
@@ -262,16 +324,13 @@ const DropdownItem = styled.div`
 `;
 
 const SearchContainer = styled.div`
-  position: relative;
   width: 493px;
   height: 50px;
-  z-index: 1;
   border-radius: 25px;
   margin-right: 100px;
   background-color: (0, 0, 0, 0.3);
   border: 1px solid #9f9f9f;
   display: flex;
-  position: relative;
   justify-content: space-around;
   align-items: center;
 `;
@@ -279,18 +338,11 @@ const SearchContainer = styled.div`
 const Search = styled.input`
   width: 300px;
   border: none;
-  -webkit-appearance: none;
-  appearance: none;
   text-align: start;
-  overflow: auto;
-  z-index: -1;
   font-size: 25px;
-
   &::placeholder {
-    font-weight: 400;
     font-size: 18px;
     color: #9f9f9f;
-    transform: translateY(-4px);
   }
   &:focus {
     outline: none;
@@ -300,7 +352,6 @@ const Search = styled.input`
 const SearchButton = styled.button`
   width: 110px;
   height: 40px;
-  padding: 10px 20px;
   border: 0;
   border-radius: 40.32px;
   background-color: #f2f2f2;
@@ -310,8 +361,41 @@ const SearchButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  z-index: 2;
+`;
+
+const Bar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 80px;
+`;
+
+const FilterDiv = styled.div`
+  display: block;
+`;
+
+const FilterTitle = styled.div`
+  font-weight: 700;
+  font-size: 44px;
+`;
+
+const FilterBtn = styled.button`
+  margin-top: 50px;
+  width: 165px;
+  height: 44px;
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: #def3f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FilterEditIcon = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-right: 13px;
 `;
 
 const RecentSearchList = styled.div`
@@ -321,45 +405,20 @@ const RecentSearchList = styled.div`
   background: white;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  z-index: 10;
 `;
 
 const RecentSearchTitle = styled.div`
   font-weight: bold;
   padding: 10px;
-  border-bottom: 1px solid #dcdcdc;
-  background: #f9f9f9;
 `;
 
 const RecentSearchItem = styled.div`
   display: flex;
-  justify-content: space-between; /* 검색어와 날짜 간격 유지 */
+  justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
   font-size: 18px;
   color: #333;
-
-  & > span:first-child {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  & > span:nth-child(2) {
-    margin-left: 10px;
-    font-size: 14px;
-    color: #9f9f9f;
-    width: 80px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  &:hover {
-    background-color: #f2f2f2;
-  }
 `;
 
 const DeleteButton = styled.button`
@@ -368,9 +427,6 @@ const DeleteButton = styled.button`
   color: #ff4d4f;
   font-size: 16px;
   cursor: pointer;
-  &:hover {
-    font-weight: bold;
-  }
 `;
 
 export default ContentHeader;

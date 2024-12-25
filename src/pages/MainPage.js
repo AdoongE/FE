@@ -32,22 +32,29 @@ const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
   const [selectedData, setSelectedData] = useState(null);
+  const [filterId, setFilterId] = useState(null);
+  const [filterName, setFilterName] = useState('');
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
 
-  // 데이터 가져오기
+  console.log('activeTab : ', activeTab);
+
+  /******************************************************************************************/
+  // fetchData : 메인페이지의 모든 콘텐츠들을 조회하는 api 요청 함수
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       let url = '';
-
-      if (activeTab === '모아보기') {
+      if (activeTab === '모아보기' || activeTab === '나의 씨드') {
         url = '/api/v1/content/';
-        const response = await api.get(url);
-        setCollectData(response.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
-      } else if (categoryId) {
+        const res = await api.get(url);
+        setCollectData(res.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
+      } else if (activeTab === '카테고리') {
         url = `/api/v1/content/${categoryId}`;
+      } else if (activeTab === '맞춤필터') {
+        console.log('필터 ID :', filterId);
+        url = `/api/v1/filter/${filterId}`;
       }
 
       if (!url) {
@@ -56,24 +63,39 @@ const MainPage = () => {
       }
 
       console.log('GET 요청할 URL:', url);
-
       const response = await api.get(url);
 
       // 응답 데이터 확인
-      console.log('응답 데이터:', response.data);
+      console.log('응답 데이터:', response.data.results);
 
-      // 데이터 유효성 검사
       const results =
-        response.data.results?.flatMap(
-          (item) =>
-            item.contentsInfoList?.map((content) => {
+        response.data.results.flatMap((item) => {
+          if (activeTab === '맞춤필터') {
+            return {
+              id: item.contentId || 'ID 없음',
+              title:
+                item.contentName ||
+                (item.updatedDt
+                  ? new Date(item.updatedDt).toISOString().split('T')[0]
+                  : '날짜 정보 없음'),
+              categoryId: item.categoryId || [],
+              category: item.categoryName?.[0] || '카테고리 없음',
+              contentDateType: item.contentDateType || '타입 없음',
+              thumbnailImage: item.thumbnailImage || '',
+              updatedDt: item.updatedDt || '업데이트 정보 없음',
+              tagId: item.tagId || [],
+              tags: item.tagName || [],
+              dDay: item.dday,
+            };
+          } else {
+            return item.contentsInfoList?.map((content) => {
               const formattedDate = content.updatedDt
                 ? new Date(content.updatedDt).toISOString().split('T')[0]
-                : '날짜 정보 없음'; // updatedDt가 없을 경우 기본값 설정
+                : '날짜 정보 없음';
 
               return {
                 id: content.contentId || 'ID 없음',
-                title: content.contentName || formattedDate, // contentName이 null일 경우 formattedDate 사용
+                title: content.contentName || formattedDate,
                 user: item.nickname || '사용자 정보 없음',
                 category: content.categoryName || [],
                 tags: content.tagName || [],
@@ -83,8 +105,9 @@ const MainPage = () => {
                 updatedDt: content.updatedDt || '업데이트 정보 없음',
                 createdAt: content.createdAt || new Date(),
               };
-            }) ?? [],
-        ) ?? [];
+            });
+          }
+        }) ?? [];
 
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
@@ -96,11 +119,13 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, categoryId]);
+  }, [activeTab, categoryId, filterId]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  // 문제 사례 : ContentDeleteModal.js에서 콘텐츠를 삭제했을 때, 새로고침을 하지 않으면 콘텐츠 삭제된 것이 반영되지 않음
+  /******************************************************************************************/
 
   // 정렬 처리
   useEffect(() => {
@@ -160,6 +185,9 @@ const MainPage = () => {
           setCategoryId={setCategoryId}
           setCateName={setCateName}
           categoryCounts={categoryCounts}
+          filterId={filterId}
+          setFilterId={setFilterId}
+          setFilterName={setFilterName}
         />
       </SidebarContainer>
       <MainContent>
@@ -167,6 +195,8 @@ const MainPage = () => {
           setSortOrder={setSortOrder}
           categoryId={categoryId}
           categoryName={categoryName}
+          filterId={filterId}
+          filterName={filterName}
         />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
@@ -272,16 +302,15 @@ const ContentArea = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0;
-
   grid-row-gap: 40px; /* 위아래 간격 추가 */
 `;
 
 const Pagination = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  margin-top: 110px;
-  padding-bottom: 58px;
+  margin-top: 20px;
 `;
 
 const PageArrow = styled.button`

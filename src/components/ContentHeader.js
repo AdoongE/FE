@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import filterEditIcon from './../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 import TagFilterModal from '../components/modal/TagFilterModal';
+import { axiosInstance } from './api/axios-instance';
 
 function ContentHeader({
   setSortOrder,
@@ -13,6 +14,7 @@ function ContentHeader({
   filterId,
 }) {
   const [selectedFilter, setSelectedFilter] = useState('최신순');
+  const [tags, setTags] = useState([]);
 
   const dialogRef = useRef(null);
 
@@ -24,6 +26,31 @@ function ContentHeader({
     setSelectedFilter(filterOption);
     setSortOrder(filterOption);
   };
+
+  useEffect(() => console.log('선택한 태그: ', tags), [tags]);
+
+  const handleSubmit = async (newTags) => {
+    try {
+      const data = { tags: newTags };
+      const response = await axiosInstance.post(
+        '/api/v1/content/filtering',
+        data,
+      );
+      if (response.data.status.code === 200) {
+        console.log('검색 태그 전송 성공:', response.data.status.message);
+        setTags([]); // 상태 초기화
+      }
+    } catch (error) {
+      console.error('검색 태그 전송 중 오류 발생:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    if (tags.length > 0) {
+      handleSubmit(tags);
+    }
+  }, [tags]);
 
   return (
     <Main>
@@ -70,7 +97,14 @@ function ContentHeader({
               </SearchButton>
             </SearchContainer>
           </Bar>
-          <AddTagModal ref={dialogRef} title={'검색할 태그를 선택하세요.'} />
+          <AddTagModal
+            ref={dialogRef}
+            title={'검색할 태그를 선택하세요.'}
+            onConfirm={(newTags) => {
+              setTags(newTags);
+              handleSubmit(newTags);
+            }}
+          />
         </>
       ) : (
         <FilterDiv>

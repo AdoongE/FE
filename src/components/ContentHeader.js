@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import filterEditIcon from './../assets/icons/filterEdit.png';
+import filterEditIcon from '../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 import TagFilterModal from '../components/modal/TagFilterModal';

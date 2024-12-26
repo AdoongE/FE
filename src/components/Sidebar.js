@@ -114,6 +114,10 @@ const Sidebar = ({
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
 
+  useEffect(() => {
+    setActiveTab('나의 씨드');
+  }, [setActiveTab]);
+
   const openModal = () => {
     setIsModalOpen(true);
     setIsCategoryOpen(true);

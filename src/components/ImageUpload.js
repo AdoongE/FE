@@ -5,7 +5,8 @@ import { useDropzone } from 'react-dropzone';
 
 const MAX_IMAGES = 5;
 
-const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
+const ImageUploadComponent = ({ onSetRepresentative }) => {
+  const [images, setImages] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
 
   const { getRootProps, getInputProps } = useDropzone({

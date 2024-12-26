@@ -40,6 +40,8 @@ const MainPage = () => {
 
   console.log('activeTab : ', activeTab);
 
+  /******************************************************************************************/
+  // fetchData : 메인페이지의 모든 콘텐츠들을 조회하는 api 요청 함수
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -95,7 +97,7 @@ const MainPage = () => {
                 id: content.contentId || 'ID 없음',
                 title: content.contentName || formattedDate,
                 user: item.nickname || '사용자 정보 없음',
-                category: content.categoryName?.[0] || '카테고리 없음',
+                category: content.categoryName || [],
                 tags: content.tagName || [],
                 dDay: content.dday,
                 contentDateType: content.contentDateType || '타입 없음',
@@ -122,6 +124,8 @@ const MainPage = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  // 문제 사례 : ContentDeleteModal.js에서 콘텐츠를 삭제했을 때, 새로고침을 하지 않으면 콘텐츠 삭제된 것이 반영되지 않음
+  /******************************************************************************************/
 
   // 정렬 처리
   useEffect(() => {
@@ -216,7 +220,6 @@ const MainPage = () => {
                     key={data.id}
                     contentId={data.id}
                     title={data.title || formattedDate} // 제목이 없으면 생성 날짜 사용
-                    user={data.user}
                     category={data.category}
                     tags={data.tags}
                     dDay={data.dDay}
@@ -299,20 +302,15 @@ const ContentArea = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0;
-
-  & > div {
-    aspect-ratio: 440 / 387;
-    width: 100%;
-    max-width: 600px;
-  }
+  grid-row-gap: 40px; /* 위아래 간격 추가 */
 `;
 
 const Pagination = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  margin-top: 110px;
-  padding-bottom: 58px;
+  margin-top: 20px;
 `;
 
 const PageArrow = styled.button`

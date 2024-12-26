@@ -190,9 +190,7 @@ function ViewContent() {
                         />
                       </FileIcon>
                     </FileBox>
-                    <FileName key={contentInfo.filename[index]}>
-                      {contentInfo.filename[index]}
-                    </FileName>
+                    <FileName>{file.split('.com/')[1]}</FileName>
                   </FileContainer>
                 ))}
               </FilesWrapper>

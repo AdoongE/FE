@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
-import circleCheckIcon from '../assets/icons/circleCheck.png';
+import circleCheckIcon from './../assets/icons/circleCheck.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -113,6 +113,10 @@ const Sidebar = ({
       setHoveredBookmarkIndex(null);
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
+
+  useEffect(() => {
+    setActiveTab('나의 씨드');
+  }, [setActiveTab]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -352,6 +356,10 @@ const Sidebar = ({
     setTimeout(() => setMessage(''), 2000);
   };
 
+  /******************************************************************************************/
+  // 맨처음 페이지 렌더링 이후 '/api/v1/filter'로 요청을 보내지만
+  // 다음과 같은 오류 발생, Custom 필터 조회 오류 발생: TypeError: Cannot read properties of undefined (reading 'map') at CustomFilterViews
+  // 한번 새로고침을 해야지만 필터 조회 성공
   const CustomFilterViews = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/filter');
@@ -375,6 +383,7 @@ const Sidebar = ({
     handleViewCategory();
     CustomFilterViews();
   }, []);
+  /******************************************************************************************/
 
   return (
     <StMainPage>

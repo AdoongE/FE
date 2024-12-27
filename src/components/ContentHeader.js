@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import filterEditIcon from '../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
-import TagFilterModal from '../components/modal/TagFilterModal';
 import { axiosInstance } from './api/axios-instance';
+import EditFilterModal from './modal/EditFilterModal';
 
 function ContentHeader({
   setSortOrder,
   categoryId,
   filterName,
-  categoryName,
   filterId,
+  categoryName,
 }) {
   // 상태 관리
   const [selectedFilter, setSelectedFilter] = useState('');
@@ -235,7 +235,7 @@ function ContentHeader({
             ></FilterEditIcon>
             {filterName}
           </FilterBtn>
-          <TagFilterModal ref={dialogRef} />
+          <EditFilterModal filterId={filterId} ref={dialogRef} />
         </FilterDiv>
       )}
     </Main>

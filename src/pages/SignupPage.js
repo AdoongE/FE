@@ -48,16 +48,13 @@ function SignupPage() {
   const schema = yup.object().shape({
     nickname: yup
       .string()
-      .matches(
-        /^[가-힣a-zA-Z0-9\s]{1,10}$/,
-        '닉네임은 공백 포함 10자 이내로 가능합니다.',
-      )
-      .required('닉네임은 필수 항목입니다.'),
+      .matches(/^[가-힣a-zA-Z0-9\s]{1,10}$/, '*공백포함 10자 이내')
+      .required('*필수 항목입니다.'),
     birthday: yup
       .string()
-      .matches(/^\d{4}-\d{2}-\d{2}$/, '생년원일은 필수 항목입니다.')
-      .required('생년원일은 필수 항목입니다.'),
-    gender: yup.string().required('성별은 필수 항목입니다.'),
+      .matches(/^\d{4}-\d{2}-\d{2}$/, '*필수 항목입니다.')
+      .required('*필수 항목입니다.'),
+    gender: yup.string().required('*필수 항목입니다.'),
     occupation: yup.string(),
     field: yup.string(),
     consentToTermsOfService: yup
@@ -283,6 +280,12 @@ function SignupPage() {
                           style={{
                             transform: 'translateY(-10px)',
                           }}
+                          sx={{
+                            '& .MuiSvgIcon-root': { fontSize: 30 },
+                            '&.Mui-checked': {
+                              color: '#41C3AB',
+                            },
+                          }}
                           checked={checked[0] && checked[1] && checked[2]}
                           onChange={handleChange1}
                         />
@@ -295,9 +298,8 @@ function SignupPage() {
                   <NewContent>
                     <Content>
                       {/* accordion mui 라이브러리 이용 */}
-                      <span style={{ color: 'red' }}>
-                        (필수)
-                      </span> 서비스 이용약관 {'>'}
+                      <span style={{ color: 'red' }}>(필수)</span> 서비스
+                      이용약관 {'>'}
                     </Content>
 
                     <FormControlLabel
@@ -306,6 +308,12 @@ function SignupPage() {
                           style={{ transform: 'translateY(-10px)' }}
                           checked={checked[0]}
                           onChange={handleChange2}
+                          sx={{
+                            '& .MuiSvgIcon-root': { fontSize: 30 },
+                            '&.Mui-checked': {
+                              color: '#41C3AB',
+                            },
+                          }}
                         />
                       }
                     />
@@ -313,9 +321,8 @@ function SignupPage() {
                   <NewContent>
                     <Content>
                       {/* accordion mui 라이브러리 이용 */}
-                      <span style={{ color: 'red' }}>
-                        (필수)
-                      </span> 개인정보 수집 및 이용동의 {'>'}
+                      <span style={{ color: 'red' }}>(필수)</span> 개인정보 수집
+                      및 이용동의 {'>'}
                     </Content>
                     <FormControlLabel
                       control={
@@ -323,6 +330,12 @@ function SignupPage() {
                           style={{ transform: 'translateY(-10px)' }}
                           checked={checked[1]}
                           onChange={handleChange3}
+                          sx={{
+                            '& .MuiSvgIcon-root': { fontSize: 30 },
+                            '&.Mui-checked': {
+                              color: '#41C3AB',
+                            },
+                          }}
                         />
                       }
                     />
@@ -338,6 +351,12 @@ function SignupPage() {
                           style={{ transform: 'translateY(-10px)' }}
                           checked={checked[2]}
                           onChange={handleChange4}
+                          sx={{
+                            '& .MuiSvgIcon-root': { fontSize: 30 },
+                            '&.Mui-checked': {
+                              color: '#41C3AB',
+                            },
+                          }}
                         />
                       }
                     />
@@ -370,29 +389,34 @@ const Date = styled.input`
 `;
 
 const Button = styled.button`
-  width: 625px;
-  height: 85px;
-  font-weight: 400;
+  width: 704px;
+  height: 76px;
+  font-weight: 600;
   font-size: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 69px;
-  background-color: #97ff87;
+  background-color: #41c3ab;
   border: 0;
+  border-radius: 10px;
+  color: white;
+  margin-bottom: 121px;
 
   &:disabled {
-    background-color: #d9d9d9;
+    background-color: #dcdada;
+    color: #9f9f9f;
   }
 `;
 
 const NewContent = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ContentCheck = styled.div`
-  margin-top: 30px;
+  margin-top: 21px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -412,8 +436,8 @@ const Lines = styled.div`
 const Contents = styled.div`
   font-weight: 700;
   font-size: 20px;
-  color: #000000;
-  margin-bottom: 26px;
+  color: #4f4f4f;
+  margin-bottom: 20px;
 `;
 
 const Input = styled.input`
@@ -473,13 +497,12 @@ const Inputs = styled.input`
 const Name = styled.div`
   font-weight: 500;
   font-size: 24px;
-  margin-bottom: 13px;
+  margin-bottom: 20px;
 `;
 
 const Option = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 27px;
 `;
 
 const Page = styled.div`
@@ -492,7 +515,7 @@ const Page = styled.div`
 const Signup = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 48px;
+  row-gap: 80px;
   margin-top: 60px;
 `;
 

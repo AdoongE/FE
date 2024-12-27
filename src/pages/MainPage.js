@@ -70,58 +70,58 @@ const MainPage = () => {
       console.log('응답 데이터:', response.data.results);
 
       const results =
-      (response?.data?.results || []).flatMap((item) => {
-        if (activeTab === '맞춤필터') {
-          return {
-            id: item.contentId || 'ID 없음',
-            title:
-              item.contentName ||
-              (item.updatedDt
-                ? new Date(item.updatedDt).toISOString().split('T')[0]
-                : '날짜 정보 없음'),
-            categoryId: item.categoryId || [],
-            category: item.categoryName?.[0] || '카테고리 없음',
-            contentDateType: item.contentDateType || '타입 없음',
-            thumbnailImage: item.thumbnailImage || '',
-            updatedDt: item.updatedDt || '업데이트 정보 없음',
-            tagId: item.tagId || [],
-            tags: item.tagName || [],
-            dDay: item.dday || null,
-            createdAt: item.createdAt || Date.now(), // 기본값 설정
-          };
-        } else {
-          return (item.contentsInfoList || []).map((content) => {
-            const formattedDate = content.updatedDt
-              ? new Date(content.updatedDt).toISOString().split('T')[0]
-              : '날짜 정보 없음';
-
+        (response?.data?.results || []).flatMap((item) => {
+          if (activeTab === '맞춤필터') {
             return {
-              id: content.contentId || 'ID 없음',
-              title: content.contentName || formattedDate,
-              user: item.nickname || '사용자 정보 없음',
-              category: content.categoryName || [],
-              tags: content.tagName || [],
-              dDay: content.dday,
-              contentDateType: content.contentDateType || '타입 없음',
-              thumbnailImage: content.thumbnailImage || '',
-              updatedDt: content.updatedDt || '업데이트 정보 없음',
-              createdAt: content.createdAt || Date.now(), // 기본값 설정
+              id: item.contentId || 'ID 없음',
+              title:
+                item.contentName ||
+                (item.updatedDt
+                  ? new Date(item.updatedDt).toISOString().split('T')[0]
+                  : '날짜 정보 없음'),
+              categoryId: item.categoryId || [],
+              category: item.categoryName?.[0] || '카테고리 없음',
+              contentDateType: item.contentDateType || '타입 없음',
+              thumbnailImage: item.thumbnailImage || '',
+              updatedDt: item.updatedDt || '업데이트 정보 없음',
+              tagId: item.tagId || [],
+              tags: item.tagName || [],
+              dDay: item.dday || null,
+              createdAt: item.createdAt || Date.now(), // 기본값 설정
             };
-          });
-        }
-      }) ?? [];
+          } else {
+            return (item.contentsInfoList || []).map((content) => {
+              const formattedDate = content.updatedDt
+                ? new Date(content.updatedDt).toISOString().split('T')[0]
+                : '날짜 정보 없음';
 
-    setOriginalData(results);
-    setSortedData(results); // 초기 데이터 설정
-  } catch (error) {
-    console.error(
-      '데이터 가져오기 실패:',
-      error.response ? error.response.data : error,
-    );
-  } finally {
-    setLoading(false);
-  }
-}, [activeTab, categoryId, filterId]);
+              return {
+                id: content.contentId || 'ID 없음',
+                title: content.contentName || formattedDate,
+                user: item.nickname || '사용자 정보 없음',
+                category: content.categoryName || [],
+                tags: content.tagName || [],
+                dDay: content.dday,
+                contentDateType: content.contentDateType || '타입 없음',
+                thumbnailImage: content.thumbnailImage || '',
+                updatedDt: content.updatedDt || '업데이트 정보 없음',
+                createdAt: content.createdAt || Date.now(), // 기본값 설정
+              };
+            });
+          }
+        }) ?? [];
+
+      setOriginalData(results);
+      setSortedData(results); // 초기 데이터 설정
+    } catch (error) {
+      console.error(
+        '데이터 가져오기 실패:',
+        error.response ? error.response.data : error,
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [activeTab, categoryId, filterId]);
 
   useEffect(() => {
     fetchData();

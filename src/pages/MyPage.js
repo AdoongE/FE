@@ -110,13 +110,11 @@ function MyPage() {
     try {
       const result = await axiosInstance.patch(`/api/v1/member`, formData);
       if (result?.data?.status?.code === 200) {
-        alert('회원정보 수정 성공: ' + result.data.status.message);
-        navigate('/main');
+        console.log('회원정보 수정 성공');
+        navigate('/mypage');
       }
     } catch (error) {
-      alert(
-        `회원정보 수정 실패: ${error.message || '알 수 없는 오류가 발생했습니다.'}`,
-      );
+      console.error(`회원정보 수정 실패: `, error);
     }
   };
 
@@ -125,12 +123,12 @@ function MyPage() {
       const response = await axiosInstance.delete(`/api/v1/member`);
       if (response?.data?.status?.code === 200) {
         setOpen(false);
-        alert('회원정보 삭제 성공: ' + response.data.status.message);
+        console.log('회원정보 삭제 성공: ' + response.data.status.message);
         navigate('/');
       }
     } catch (error) {
       alert(
-        `회원정보 삭제 실패: ${error.message || '알 수 없는 오류가 발생했습니다.'}`,
+        `회원 탈퇴 실패: ${error.message || '알 수 없는 오류가 발생했습니다.'}`,
       );
     }
   };

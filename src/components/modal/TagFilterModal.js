@@ -172,8 +172,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     fetchTags();
   }, []);
 
-  console.log('시작일:', format(startDate, 'yyyy-MM-dd'));
-  console.log('종료일:', format(endDate, 'yyyy-MM-dd'));
+  console.log('시작일:', startDate ? format(startDate, 'yyyy-MM-dd') : '');
+  console.log('종료일:', endDate ? format(endDate, 'yyyy-MM-dd') : '');
 
   useEffect(() => {
     const dialogElement = dialogRef.current;
@@ -203,12 +203,13 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     const modalData = {
       storageFormats: dataType,
       tags: selectedTags,
-      startDate: format(startDate, 'yyyy-MM-dd'),
-      endDate: format(endDate, 'yyyy-MM-dd'),
+      startDate: startDate ? format(startDate, 'yyyy-MM-dd') : null,
+      endDate: endDate ? format(endDate, 'yyyy-MM-dd') : null,
       fromDDay: startDday,
       toDDay: endDday,
     };
     onSave(modalData);
+    console.log(modalData);
     dialogRef.current?.close();
   };
 
@@ -330,8 +331,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
       <Date>
         <DatePicker
           locale={ko}
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          selected={startDate || null}
+          onChange={(date) => setStartDate(date || null)}
           placeholderText="시작일"
           dateFormat="yyyy/MM/dd"
           selectsStart
@@ -343,8 +344,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         <span>~</span>
         <DatePicker
           locale={ko}
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
+          selected={endDate || null}
+          onChange={(date) => setEndDate(date || null)}
           selectsEnd
           startDate={startDate}
           endDate={endDate}

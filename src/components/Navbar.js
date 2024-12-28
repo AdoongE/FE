@@ -80,6 +80,7 @@ function Navbar() {
             width="40px"
             height="40px"
             style={{ color: '#9F9F9F' }}
+            onClick={() => navigate('/mypage')}
           />
         </ProfileIcon>
       </NavbarRight>

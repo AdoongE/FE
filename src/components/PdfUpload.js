@@ -5,19 +5,22 @@ import { useDropzone } from 'react-dropzone';
 
 const MAX_FILES = 3;
 
-const PdfUploadComponent = ({ onSetRepresentative }) => {
-  const [files, setFiles] = useState([]);
+const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 파일 인덱스
 
   const onDrop = (acceptedFiles) => {
-    const newFiles = acceptedFiles.map((file) => ({
-      id: file.name,
-      label: file.name,
-      type: file.type,
-    }));
+    const newFiles = acceptedFiles.map((file) => {
+      const preview = URL.createObjectURL(file);
+      return {
+        id: file.name,
+        label: file.name,
+        preview,
+      };
+    });
 
     if (files.length + newFiles.length <= MAX_FILES) {
-      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+      const updatedFiles = [...files, ...newFiles];
+      setFiles(updatedFiles);
 
       // 첫 번째 파일을 대표로 설정
       if (files.length === 0) {

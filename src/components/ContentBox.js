@@ -127,15 +127,14 @@ const ContentImage = styled.img`
 `;
 
 const PDFThumbnail = styled.div`
-  width: 100%;
-  height: 100%;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 
   canvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
+    width: 440px !important;
+    height: 284px !important;
+    object-fit: cover;
     border-radius: 10px;
   }
 `;

@@ -218,18 +218,20 @@ const MainPage = () => {
 
               return (
                 <React.Fragment key={data?.id || index}>
-                  <ContentBox
-                    key={data?.id || index} // 데이터가 없을 경우 index 사용
-                    contentId={data?.id || 'ID 없음'}
-                    title={data?.title || formattedDate} // 제목이 없으면 생성 날짜 사용
-                    category={data?.category || []} // 기본값 처리
-                    tags={data?.tags || []} // 기본값 처리
-                    dDay={data?.dDay ?? null} // 기본값 처리
-                    contentDateType={data?.contentDateType || '타입 없음'} // 기본값 처리
-                    thumbnailImage={data?.thumbnailImage || null} // 기본값 처리
-                    updatedDt={data?.updatedDt || '업데이트 정보 없음'} // 기본값 처리
-                    open={() => openModal(data)}
-                  />
+                  <StyledContentBox>
+                    <ContentBox
+                      key={data?.id || index} // 데이터가 없을 경우 index 사용
+                      contentId={data?.id || 'ID 없음'}
+                      title={data?.title || formattedDate} // 제목이 없으면 생성 날짜 사용
+                      category={data?.category || []} // 기본값 처리
+                      tags={data?.tags || []} // 기본값 처리
+                      dDay={data?.dDay ?? null} // 기본값 처리
+                      contentDateType={data?.contentDateType || '타입 없음'} // 기본값 처리
+                      thumbnailImage={data?.thumbnailImage || null} // 기본값 처리
+                      updatedDt={data?.updatedDt || '업데이트 정보 없음'} // 기본값 처리
+                      open={() => openModal(data)}
+                    />
+                  </StyledContentBox>
                   {selectedData && selectedData.id === data?.id && (
                     <ViewThumbnailModal
                       file={data?.thumbnailImage}
@@ -298,13 +300,16 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
   justify-content: center;
   width: 100%;
   box-sizing: border-box;
   padding: 0;
   grid-row-gap: 40px; /* 위아래 간격 추가 */
+`;
+
+const StyledContentBox = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
 `;
 
 const Pagination = styled.div`

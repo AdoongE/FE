@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
@@ -10,7 +10,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/l
 function ContentBox({
   contentId,
   title,
-  category = [],
   tags,
   dDay,
   thumbnailImage,
@@ -18,6 +17,7 @@ function ContentBox({
   contentDateType,
   updatedDt,
 }) {
+  const [category, setCategory] = useState([]); // category 상태 정의
   const [showNewImage, setShowNewImage] = useState(false);
 
   // 제목이 없을 경우 업데이트 날짜로 대체
@@ -26,8 +26,17 @@ function ContentBox({
     (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   // 카테고리 텍스트 생성
-  const displayCategory =
-    category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : ''); // 최대 5개 표시 후 "..." 추가
+  const displayCategory = Array.isArray(category)
+    ? category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : '')
+    : ''; // 배열이 아닌 경우 처리
+
+  useEffect(() => {
+    // category가 비정상적인 경우 기본값 설정
+    if (!Array.isArray(category)) {
+      console.error('Invalid category:', category);
+      setCategory([]); // 빈 배열로 초기화
+    }
+  }, [category]);
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);

@@ -13,7 +13,7 @@ import checkIcon from '../../assets/icons/Check.png';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
@@ -43,7 +43,8 @@ const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
     />
   </div>
 ));
-const TagFilterModal = forwardRef(({ onSave }, ref) => {
+
+const EditFilterModal = forwardRef(({ filterId }, ref) => {
   const [selectedFilter, setSelectedFilter] = useState('기본 태그');
   const [usedTags, setUsedTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -56,6 +57,36 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
   const [startDday, setStartDday] = useState(null);
   const [endDday, setEndDday] = useState(null);
   const [isValid, setIsValid] = useState(false);
+  //   const [originalFilterDetail, setOriginalFilterDetail] = useState({});
+
+  const getFilterData = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/filter/${filterId}/info`,
+      );
+      const results = response.data.results[0];
+      console.log('수정 전 data: ', results);
+      //   setOriginalFilterDetail(results);
+      setDataType(results.storageFormats || []);
+      setSelectedTags(results.tags || []);
+      setStartDate(results.startDate ? parseISO(results.startDate) : null);
+      setEndDate(results.endDate ? parseISO(results.endDate) : null);
+      setStartDday(results.fromDDay || null);
+      setEndDday(results.toDDay || null);
+
+      if (response.status === 200) {
+        console.log('맞춤 필터 조회 성공');
+      } else {
+        console.error('맞춤 필터 조회 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    getFilterData();
+  }, [filterId]);
 
   useEffect(() => {
     if (startDday <= -1 || endDday <= -1 || endDday < startDday) {
@@ -208,9 +239,19 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
       fromDDay: startDday,
       toDDay: endDday,
     };
-    onSave(modalData);
-    console.log(modalData);
-    dialogRef.current?.close();
+    try {
+      const result = await axiosInstance.patch(
+        `/api/v1/filter/${filterId}`,
+        modalData,
+      );
+      console.log(modalData);
+      if (result?.data?.status?.code === 200) {
+        console.log('맞춤 필터 수정 성공');
+        dialogRef.current?.close();
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   return (
@@ -331,7 +372,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
       <Date>
         <DatePicker
           locale={ko}
-          selected={startDate || null}
+          selected={startDate}
           onChange={(date) => setStartDate(date || null)}
           placeholderText="시작일"
           dateFormat="yyyy/MM/dd"
@@ -344,7 +385,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         <span>~</span>
         <DatePicker
           locale={ko}
-          selected={endDate || null}
+          selected={endDate}
           onChange={(date) => setEndDate(date || null)}
           selectsEnd
           startDate={startDate}
@@ -372,6 +413,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
           <span>D-</span>
           <DdayInput
             placeholder="직접입력"
+            value={startDday}
             type="number"
             min={0}
             onChange={handleChangeStartDay}
@@ -381,6 +423,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         <Dday>
           <span>D-</span>
           <DdayInput
+            value={endDday}
             placeholder="직접입력"
             type="number"
             min={0}
@@ -397,7 +440,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
   );
 });
 
-TagFilterModal.displayName = 'TagFilterModal';
+EditFilterModal.displayName = 'EditFilterModal';
 CustomInput.displayName = 'CustomInput';
 
 const Button = styled.button`
@@ -588,4 +631,4 @@ const Dialog = styled.dialog`
   position: absolute !important;
 `;
 
-export default TagFilterModal;
+export default EditFilterModal;

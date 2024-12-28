@@ -49,7 +49,8 @@ const MainPage = () => {
       if (activeTab === '모아보기' || activeTab === '나의 씨드') {
         url = '/api/v1/content/';
         const res = await api.get(url);
-        setCollectData(res.data.results[0].contentsInfoList); // 오로지 카테고리 내 콘텐츠 갯수를 알기위해서
+        const responseData = res.data.results?.[0]?.contentsInfoList || [];
+        setCollectData(responseData); // null 방지
       } else if (activeTab === '카테고리') {
         url = `/api/v1/content/${categoryId}`;
       } else if (activeTab === '맞춤필터') {
@@ -69,7 +70,7 @@ const MainPage = () => {
       console.log('응답 데이터:', response.data.results);
 
       const results =
-        response.data.results.flatMap((item) => {
+        (response?.data?.results || []).flatMap((item) => {
           if (activeTab === '맞춤필터') {
             return {
               id: item.contentId || 'ID 없음',
@@ -85,10 +86,11 @@ const MainPage = () => {
               updatedDt: item.updatedDt || '업데이트 정보 없음',
               tagId: item.tagId || [],
               tags: item.tagName || [],
-              dDay: item.dday,
+              dDay: item.dday || null,
+              createdAt: item.createdAt || Date.now(), // 기본값 설정
             };
           } else {
-            return item.contentsInfoList?.map((content) => {
+            return (item.contentsInfoList || []).map((content) => {
               const formattedDate = content.updatedDt
                 ? new Date(content.updatedDt).toISOString().split('T')[0]
                 : '날짜 정보 없음';
@@ -97,13 +99,13 @@ const MainPage = () => {
                 id: content.contentId || 'ID 없음',
                 title: content.contentName || formattedDate,
                 user: item.nickname || '사용자 정보 없음',
-                category: content.categoryName?.[0] || '카테고리 없음',
+                category: content.categoryName || [],
                 tags: content.tagName || [],
                 dDay: content.dday,
                 contentDateType: content.contentDateType || '타입 없음',
                 thumbnailImage: content.thumbnailImage || '',
                 updatedDt: content.updatedDt || '업데이트 정보 없음',
-                createdAt: content.createdAt || new Date(),
+                createdAt: content.createdAt || Date.now(), // 기본값 설정
               };
             });
           }
@@ -204,34 +206,33 @@ const MainPage = () => {
           ) : sortedData.length === 0 ? (
             <ContentBlank /> // 데이터가 없을 때
           ) : (
-            displayedContentBoxes.map((data) => {
-              const formattedDate = new Date(data.createdAt).toLocaleDateString(
-                'ko-KR',
-                {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                },
-              );
+            (displayedContentBoxes || []).map((data, index) => {
+              // 데이터가 없을 경우 기본값 설정
+              const formattedDate = data?.createdAt
+                ? new Date(data.createdAt).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })
+                : '날짜 정보 없음';
 
               return (
-                <React.Fragment key={data.id}>
+                <React.Fragment key={data?.id || index}>
                   <ContentBox
-                    key={data.id}
-                    contentId={data.id}
-                    title={data.title || formattedDate} // 제목이 없으면 생성 날짜 사용
-                    user={data.user}
-                    category={data.category}
-                    tags={data.tags}
-                    dDay={data.dDay}
-                    contentDateType={data.contentDateType}
-                    thumbnailImage={data.thumbnailImage}
-                    updatedDt={data.updatedDt}
+                    key={data?.id || index} // 데이터가 없을 경우 index 사용
+                    contentId={data?.id || 'ID 없음'}
+                    title={data?.title || formattedDate} // 제목이 없으면 생성 날짜 사용
+                    category={data?.category || []} // 기본값 처리
+                    tags={data?.tags || []} // 기본값 처리
+                    dDay={data?.dDay ?? null} // 기본값 처리
+                    contentDateType={data?.contentDateType || '타입 없음'} // 기본값 처리
+                    thumbnailImage={data?.thumbnailImage || null} // 기본값 처리
+                    updatedDt={data?.updatedDt || '업데이트 정보 없음'} // 기본값 처리
                     open={() => openModal(data)}
                   />
-                  {selectedData && selectedData.id === data.id && (
+                  {selectedData && selectedData.id === data?.id && (
                     <ViewThumbnailModal
-                      file={data.thumbnailImage}
+                      file={data?.thumbnailImage}
                       onClose={closeModal}
                       contentDataType={selectedData.contentDateType}
                     />
@@ -303,20 +304,15 @@ const ContentArea = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0;
-
-  & > div {
-    aspect-ratio: 440 / 387;
-    width: 100%;
-    max-width: 600px;
-  }
+  grid-row-gap: 40px; /* 위아래 간격 추가 */
 `;
 
 const Pagination = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  margin-top: 110px;
-  padding-bottom: 58px;
+  margin-top: 20px;
 `;
 
 const PageArrow = styled.button`

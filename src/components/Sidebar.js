@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
-import circleCheckIcon from './../assets/icons/circleCheck.png';
+import circleCheckIcon from '../assets/icons/circleCheck.png';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -113,6 +113,10 @@ const Sidebar = ({
       setHoveredBookmarkIndex(null);
     }
   }, [isAddingBookmark, isEditModalOpen, isDeleteModalOpen]);
+
+  useEffect(() => {
+    setActiveTab('나의 씨드');
+  }, [setActiveTab]);
 
   const openModal = () => {
     setIsModalOpen(true);

@@ -10,8 +10,7 @@ const api = axios.create({
     Authorization: `${token}`, // 토큰을 템플릿 리터럴로 추가
   },
 });
-/******************************************************************************************/
-// 콘텐츠 삭제
+
 const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
   const cloesModal = () => {
     ref.current?.close();
@@ -29,7 +28,6 @@ const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
       throw error;
     }
   };
-  /******************************************************************************************/
 
   useEffect(() => {
     if (ref.current) {

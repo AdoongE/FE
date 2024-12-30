@@ -9,8 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import NewAddCategoryModal from '../components/modal/NewAddCategoryModal';
 import AddTagModal from '../components/modal/AddTagModal';
 import LinkUploader from '../components/LinkUploader';
-import PdfUploadComponent from '../components/PdfUpload';
-import EditImageUploadComponent from '../components/EditImageUpload';
+import EditImageUpload from '../components/EditImageUpload';
+import EditPdfUpload from '../components/EditPdfUpload';
 import { ContentEditHandler } from '../components/api/ContentEditApi';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
@@ -375,17 +375,17 @@ function ContentEditPage() {
               />
             )}
             {dataType === 'IMAGE' && (
-              <EditImageUploadComponent
+              <EditImageUpload
                 onSetRepresentative={handleImage}
                 setImages={setImages}
                 Id={Id}
               />
             )}
             {dataType === 'PDF' && (
-              <PdfUploadComponent
+              <EditPdfUpload
                 onSetRepresentative={handlePdf}
-                files={files}
                 setFiles={setFiles}
+                Id={Id}
               />
             )}
 

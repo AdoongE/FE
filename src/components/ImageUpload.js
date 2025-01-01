@@ -3,10 +3,8 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
-const MAX_IMAGES = 5;
-
 const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
-  const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
+  const [representativeIndex, setRepresentativeIndex] = useState(null); // 대표 이미지 인덱스
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -19,15 +17,13 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
         };
       });
 
-      if (images.length + newImages.length <= MAX_IMAGES) {
-        const updatedImages = [...images, ...newImages];
-        setImages(updatedImages);
+      const updatedImages = [...images, ...newImages];
+      setImages(updatedImages);
 
-        // 첫 이미지 업로드 시 자동으로 대표 이미지 설정
-        if (images.length === 0) {
-          setRepresentativeIndex(0);
-          onSetRepresentative(newImages[0]);
-        }
+      // 첫 이미지 업로드 시 자동으로 대표 이미지 설정 및 서버 전송
+      if (updatedImages.length > 0 && representativeIndex === null) {
+        setRepresentativeIndex(0);
+        onSetRepresentative(updatedImages[0]);
       }
     },
     accept: 'image/jpeg, image/png, image/svg+xml',
@@ -91,20 +87,18 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
               <FileName>{image.label}</FileName>
             </ImageContainer>
           ))}
-          {images.length < MAX_IMAGES && (
-            <AddImageBox {...getRootProps()}>
-              <input {...getInputProps()} />
-              <AddCircle>
-                <Icon
-                  icon="iconoir:plus"
-                  width="35"
-                  height="35"
-                  style={{ color: '#aaa' }}
-                />
-              </AddCircle>
-              <AddText>이미지 추가하기</AddText>
-            </AddImageBox>
-          )}
+          <AddImageBox {...getRootProps()}>
+            <input {...getInputProps()} />
+            <AddCircle>
+              <Icon
+                icon="iconoir:plus"
+                width="35"
+                height="35"
+                style={{ color: '#aaa' }}
+              />
+            </AddCircle>
+            <AddText>이미지 추가하기</AddText>
+          </AddImageBox>
         </ImagesWrapper>
       )}
     </Wrapper>

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import filterEditIcon from '../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
-// import { axiosInstance } from './api/axios-instance';
 import EditFilterModal from './modal/EditFilterModal';
 import filterIcon from '../assets/icons/filter.png';
 
@@ -17,19 +16,16 @@ function ContentHeader({
   tags = [],
   setTags,
 }) {
-  // 상태 관리
   const [selectedFilter, setSelectedFilter] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
-  // const [contentIds, setContentIds] = useState([]);
   const [recentSearches, setRecentSearches] = useState(() => {
     return JSON.parse(localStorage.getItem('recentSearches')) || [];
   });
   const [showRecentSearches, setShowRecentSearches] = useState(false);
-  // const [tags, setTags] = useState([]);
   const dialogRef = useRef(null);
   const visibleTags = isExpanded ? tags : tags.slice(0, 4);
 
@@ -101,12 +97,7 @@ function ContentHeader({
     }
   }, []);
 
-  // 태그 상태 로그 확인
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
-
-  // const handleRemoveTag = (tag) => {
-  //   setTags((prevTags) => prevTags.filter((t) => t !== tag)); // 태그 제거
-  // };
 
   return (
     <Main>
@@ -224,7 +215,7 @@ function ContentHeader({
           />
           {/* 검색 필터링 */}
           <FilterContainer>
-            <Header>
+            <ParentContainer>
               <SearchTitle>
                 <img
                   src={filterIcon}
@@ -252,11 +243,10 @@ function ContentHeader({
                   </Tag>
                 ))}
               </TagContainer>
-              <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
-                {isExpanded ? '닫기' : '전체보기'}
-                <Underline />
-              </ToggleButton>
-            </Header>
+            </ParentContainer>
+            <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? '닫기' : '전체보기'}
+            </ToggleButton>
           </FilterContainer>
         </>
       ) : (
@@ -465,20 +455,31 @@ const FilterContainer = styled.div`
   background-color: #f2f2f2;
   border-radius: 10px;
   width: 632px;
-  height: 50px;
+  min-height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* align-items: center; */
+  /* align-items: flex-start; */
+  margin-top: 24px;
+  padding: 4px 16px;
+  transition: height 0.3s ease;
+  overflow: hidden;
 `;
 
-const Header = styled.div`
+const ParentContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 24px;
+  gap: 28px;
 `;
 
 const SearchTitle = styled.span`
   font-weight: bold;
   font-size: 16px;
   color: #9f9f9f;
+  display: flex;
+  align-items: center;
+  /* flex-shrink: 0; */
 `;
 
 const ToggleButton = styled.button`
@@ -487,36 +488,36 @@ const ToggleButton = styled.button`
   color: #9f9f9f;
   cursor: pointer;
   position: relative;
-  font-size: 14px;
-  font-weight: bold;
-`;
+  font-size: 16px;
+  /* flex-shrink: 0; */
 
-const Underline = styled.div`
-  width: 100%;
-  height: 2px;
-  background-color: #9f9f9f;
-  position: absolute;
-  bottom: -4px;
-  left: 0;
+  &:after {
+    content: '';
+    display: block;
+    width: calc(100% - 10px);
+    height: 1px;
+    background-color: #9f9f9f;
+    position: absolute;
+    left: 5px;
+  }
 `;
 
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-height: ${({ isExpanded }) => (isExpanded ? 'none' : '44px')};
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  width: 428px;
 `;
+
 const Tag = styled.div`
-  padding: 4px 6px;
+  padding: 3px 12px;
   background-color: #ffffff;
   border-radius: 10px;
   font-size: 16px;
   color: #4f4f4f;
-  width: 79px;
+  display: inline-flex;
   height: 34.33px;
-  display: flex;
   justify-content: center;
   align-items: center;
 `;

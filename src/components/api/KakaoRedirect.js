@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // axios 인스턴스 생성
 const api = axios.create({
-  baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+  baseURL: 'http://210.107.205.122:20011', // 백엔드 서버 주소로 설정
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded', // 필요 시 헤더 추가
   },

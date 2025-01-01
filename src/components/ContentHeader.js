@@ -327,7 +327,7 @@ const SearchContainer = styled.div`
   width: 493px;
   height: 50px;
   border-radius: 25px;
-  margin-right: 100px;
+  margin-right: 101px;
   background-color: (0, 0, 0, 0.3);
   border: 1px solid #9f9f9f;
   display: flex;

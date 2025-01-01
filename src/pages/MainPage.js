@@ -6,6 +6,7 @@ import ContentBlank from '../components/ContentBlank';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
+import noSearchContent from '../assets/icons/noSearchContent.png';
 import axios from 'axios';
 import { axiosInstance } from '../components/api/axios-instance';
 
@@ -36,6 +37,7 @@ const MainPage = () => {
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
   const [tags, setTags] = useState([]); // 검색 필터링을 위한
+  const [searchState, setSearchState] = useState(false);
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
@@ -57,6 +59,9 @@ const MainPage = () => {
 
         if (response.data.status.code === 200) {
           console.log('검색 태그 전송 성공:', response.data.status.message);
+          if (response.data.metadata.resultCount === 0) {
+            setSearchState(true);
+          }
 
           results = response.data.results.map((item) => ({
             id: item.contentId || 'ID 없음',
@@ -75,6 +80,7 @@ const MainPage = () => {
           }));
         }
       } else {
+        setSearchState(false);
         if (activeTab === '모아보기' || activeTab === '나의 씨드') {
           url = '/api/v1/content/';
           const res = await api.get(url);
@@ -231,12 +237,29 @@ const MainPage = () => {
         />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (
-            <div>로딩 중...</div> // 로딩 상태 표시
+            <div>로딩 중...</div>
           ) : sortedData.length === 0 ? (
-            <ContentBlank /> // 데이터가 없을 때
+            <ContentBlank />
+          ) : searchState ? (
+            <NoSearchContent>
+              <img
+                src={noSearchContent}
+                alt="noSearch"
+                style={{
+                  width: '268px',
+                  height: '190px',
+                  marginBottom: '22.24px',
+                }}
+              />
+              <div style={{ fontSize: '30px', marginBottom: '4px' }}>
+                해당 조건에 맞는 콘텐츠가 없어요
+              </div>
+              <div style={{ fontSize: '20px', color: '#9f9f9f' }}>
+                다른 키워드로 검색해보세요
+              </div>
+            </NoSearchContent>
           ) : (
             (displayedContentBoxes || []).map((data, index) => {
-              // 데이터가 없을 경우 기본값 설정
               const formattedDate = data?.createdAt
                 ? new Date(data.createdAt).toLocaleDateString('ko-KR', {
                     year: 'numeric',
@@ -248,15 +271,15 @@ const MainPage = () => {
               return (
                 <React.Fragment key={data?.id || index}>
                   <ContentBox
-                    key={data?.id || index} // 데이터가 없을 경우 index 사용
+                    key={data?.id || index}
                     contentId={data?.id || 'ID 없음'}
-                    title={data?.title || formattedDate} // 제목이 없으면 생성 날짜 사용
-                    category={data?.category || []} // 기본값 처리
-                    tags={data?.tags || []} // 기본값 처리
-                    dDay={data?.dDay ?? null} // 기본값 처리
-                    contentDateType={data?.contentDateType || '타입 없음'} // 기본값 처리
-                    thumbnailImage={data?.thumbnailImage || null} // 기본값 처리
-                    updatedDt={data?.updatedDt || '업데이트 정보 없음'} // 기본값 처리
+                    title={data?.title || formattedDate}
+                    category={data?.category || []}
+                    tags={data?.tags || []}
+                    dDay={data?.dDay ?? null}
+                    contentDateType={data?.contentDateType || '타입 없음'}
+                    thumbnailImage={data?.thumbnailImage || null}
+                    updatedDt={data?.updatedDt || '업데이트 정보 없음'}
                     open={() => openModal(data)}
                   />
                   {selectedData && selectedData.id === data?.id && (
@@ -333,7 +356,14 @@ const ContentArea = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0;
-  grid-row-gap: 40px; /* 위아래 간격 추가 */
+  grid-row-gap: 40px;
+`;
+
+const NoSearchContent = styled.div`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Pagination = styled.div`

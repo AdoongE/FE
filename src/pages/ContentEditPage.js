@@ -9,8 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import NewAddCategoryModal from '../components/modal/NewAddCategoryModal';
 import AddTagModal from '../components/modal/AddTagModal';
 import LinkUploader from '../components/LinkUploader';
-import PdfUploadComponent from '../components/PdfUpload';
-import ImageUploadComponent from '../components/ImageUpload';
+import EditImageUpload from '../components/EditImageUpload';
+import EditPdfUpload from '../components/EditPdfUpload';
 import { ContentEditHandler } from '../components/api/ContentEditApi';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
@@ -23,6 +23,8 @@ function ContentEditPage() {
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [images, setImages] = useState([]);
+  const [files, setFiles] = useState([]);
 
   const { Id } = useParams();
   const [originalContentDetail, setOriginalContentDetail] = useState({
@@ -32,7 +34,7 @@ function ContentEditPage() {
   const location = useLocation();
   const { dataType } = location.state || {};
 
-  console.log('dataType:', dataType);
+  console.log('dataType, images :', dataType, images);
 
   const handleTagInput = (event) => {
     if (isComposing) return;
@@ -228,16 +230,15 @@ function ContentEditPage() {
         thumbnailImage: representativeIndex || null,
       };
 
-      // if (dataType === 'LINK') {
-      //   updateData.contentLink = data.contentLink;
-      // } else if (dataType === 'IMAGE') {
-      //   updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
-      // }
+      if (dataType === 'LINK') {
+        updateData.contentLink = data.contentLink;
+      } else {
+        updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
+      }
 
       console.log('콘텐츠 값:', updateData);
 
-      // API 호출
-      await ContentEditHandler(updateData, Id);
+      await ContentEditHandler(dataType, updateData, images, files, Id);
 
       if (TagRef.current) {
         TagRef.current.resetTags();
@@ -374,10 +375,18 @@ function ContentEditPage() {
               />
             )}
             {dataType === 'IMAGE' && (
-              <ImageUploadComponent onSetRepresentative={handleImage} />
+              <EditImageUpload
+                onSetRepresentative={handleImage}
+                setImages={setImages}
+                Id={Id}
+              />
             )}
             {dataType === 'PDF' && (
-              <PdfUploadComponent onSetRepresentative={handlePdf} />
+              <EditPdfUpload
+                onSetRepresentative={handlePdf}
+                setFiles={setFiles}
+                Id={Id}
+              />
             )}
 
             {originalContentDetail && originalContentDetail.tags && (

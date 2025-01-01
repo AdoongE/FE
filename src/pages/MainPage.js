@@ -9,7 +9,7 @@ import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://52.78.221.255',
+  baseURL: 'http://210.107.205.122:20011',
 });
 
 api.interceptors.request.use((config) => {
@@ -159,7 +159,10 @@ const MainPage = () => {
   );
 
   const getPaginationNumbers = () => {
-    const totalPages = Math.ceil(sortedData.length / contentPerPage);
+    const totalPages = Math.max(
+      1,
+      Math.ceil(sortedData.length / contentPerPage),
+    );
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(startPage + 4, totalPages);
     return Array.from(
@@ -265,7 +268,8 @@ const MainPage = () => {
           <PageArrow
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={
-              currentPage === Math.ceil(sortedData.length / contentPerPage)
+              currentPage === Math.ceil(sortedData.length / contentPerPage) ||
+              sortedData.length === 0
             }
           >
             {'>'}
@@ -301,7 +305,6 @@ const MainContent = styled.div`
 
 const ContentArea = styled.div`
   justify-content: center;
-  width: 100%;
   box-sizing: border-box;
   padding: 0;
   grid-row-gap: 40px; /* 위아래 간격 추가 */
@@ -317,7 +320,9 @@ const Pagination = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 20px;
+  position: fixed;
+  bottom: 50px;
+  left: 56%;
 `;
 
 const PageArrow = styled.button`

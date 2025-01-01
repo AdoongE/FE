@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
@@ -19,12 +19,6 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
 
       const updatedImages = [...images, ...newImages];
       setImages(updatedImages);
-
-      // 첫 이미지 업로드 시 자동으로 대표 이미지 설정 및 서버 전송
-      if (updatedImages.length > 0 && representativeIndex === null) {
-        setRepresentativeIndex(0);
-        onSetRepresentative(updatedImages[0]);
-      }
     },
     accept: 'image/jpeg, image/png, image/svg+xml',
     maxSize: 10 * 1024 * 1024, // 10 MB 제한
@@ -42,8 +36,16 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
 
   const handleSetRepresentative = (index) => {
     setRepresentativeIndex(index);
-    onSetRepresentative(index);
+    onSetRepresentative(images[index]);
   };
+
+  // 첫 번째 이미지 자동 설정
+  useEffect(() => {
+    if (images.length > 0 && representativeIndex === null) {
+      setRepresentativeIndex(0);
+      onSetRepresentative(images[0]);
+    }
+  }, [images, representativeIndex, onSetRepresentative]);
 
   return (
     <Wrapper>

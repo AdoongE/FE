@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import axios from 'axios';
+import { axiosInstance } from '../components/api/axios-instance';
 
 const api = axios.create({
   baseURL: 'http://52.78.221.255',
@@ -34,6 +35,7 @@ const MainPage = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
+  const [tags, setTags] = useState([]); // 검색 필터링을 위한
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
@@ -44,71 +46,99 @@ const MainPage = () => {
     try {
       setLoading(true);
       let url = '';
-      if (activeTab === '모아보기' || activeTab === '나의 씨드') {
-        url = '/api/v1/content/';
-        const res = await api.get(url);
-        const responseData = res.data.results?.[0]?.contentsInfoList || [];
-        setCollectData(responseData); // null 방지
-      } else if (activeTab === '카테고리') {
-        url = `/api/v1/content/${categoryId}`;
-      } else if (activeTab === '맞춤필터') {
-        console.log('필터 ID :', filterId);
-        url = `/api/v1/filter/${filterId}`;
-      }
+      let results = [];
 
-      if (!url) {
-        console.warn('유효하지 않은 URL 요청입니다.');
-        return;
-      }
+      if (activeTab === '검색필터') {
+        const data = { tags: tags };
+        const response = await axiosInstance.post(
+          '/api/v1/content/filtering',
+          data,
+        );
 
-      console.log('GET 요청할 URL:', url);
-      const response = await api.get(url);
+        if (response.data.status.code === 200) {
+          console.log('검색 태그 전송 성공:', response.data.status.message);
 
-      // 응답 데이터 확인
-      console.log('응답 데이터:', response.data.results);
+          results = response.data.results.map((item) => ({
+            id: item.contentId || 'ID 없음',
+            title:
+              item.contentName ||
+              (item.updatedDt
+                ? new Date(item.updatedDt).toISOString().split('T')[0]
+                : '날짜 정보 없음'),
+            categoryId: item.categoryId || [],
+            category: item.categoryName || [],
+            tags: item.tagName || [],
+            dDay: item.dday,
+            contentDateType: item.contentDateType || '타입 없음',
+            thumbnailImage: item.thumbnailImage || '',
+            updatedDt: item.updatedDt || '업데이트 정보 없음',
+          }));
+        }
+      } else {
+        if (activeTab === '모아보기' || activeTab === '나의 씨드') {
+          url = '/api/v1/content/';
+          const res = await api.get(url);
+          const responseData = res.data.results?.[0]?.contentsInfoList || [];
+          setCollectData(responseData); // null 방지
+        } else if (activeTab === '카테고리') {
+          url = `/api/v1/content/${categoryId}`;
+        } else if (activeTab === '맞춤필터') {
+          console.log('필터 ID :', filterId);
+          url = `/api/v1/filter/${filterId}`;
+        }
 
-      const results =
-        (response?.data?.results || []).flatMap((item) => {
-          if (activeTab === '맞춤필터') {
-            return {
-              id: item.contentId || 'ID 없음',
-              title:
-                item.contentName ||
-                (item.updatedDt
-                  ? new Date(item.updatedDt).toISOString().split('T')[0]
-                  : '날짜 정보 없음'),
-              categoryId: item.categoryId || [],
-              category: item.categoryName?.[0] || '카테고리 없음',
-              contentDateType: item.contentDateType || '타입 없음',
-              thumbnailImage: item.thumbnailImage || '',
-              updatedDt: item.updatedDt || '업데이트 정보 없음',
-              tagId: item.tagId || [],
-              tags: item.tagName || [],
-              dDay: item.dday || null,
-              createdAt: item.createdAt || Date.now(), // 기본값 설정
-            };
-          } else {
-            return (item.contentsInfoList || []).map((content) => {
-              const formattedDate = content.updatedDt
-                ? new Date(content.updatedDt).toISOString().split('T')[0]
-                : '날짜 정보 없음';
+        if (!url) {
+          console.warn('유효하지 않은 URL 요청입니다.');
+          return;
+        }
 
+        console.log('GET 요청할 URL:', url);
+        const response = await api.get(url);
+        console.log('응답 데이터:', response.data.results);
+
+        results =
+          (response?.data?.results || []).flatMap((item) => {
+            if (activeTab === '맞춤필터') {
               return {
-                id: content.contentId || 'ID 없음',
-                title: content.contentName || formattedDate,
-                user: item.nickname || '사용자 정보 없음',
-                category: content.categoryName || [],
-                tags: content.tagName || [],
-                dDay: content.dday,
-                contentDateType: content.contentDateType || '타입 없음',
-                thumbnailImage: content.thumbnailImage || '',
-                updatedDt: content.updatedDt || '업데이트 정보 없음',
-                createdAt: content.createdAt || Date.now(), // 기본값 설정
+                id: item.contentId || 'ID 없음',
+                title:
+                  item.contentName ||
+                  (item.updatedDt
+                    ? new Date(item.updatedDt).toISOString().split('T')[0]
+                    : '날짜 정보 없음'),
+                categoryId: item.categoryId || [],
+                category: item.categoryName?.[0] || '카테고리 없음',
+                contentDateType: item.contentDateType || '타입 없음',
+                thumbnailImage: item.thumbnailImage || '',
+                updatedDt: item.updatedDt || '업데이트 정보 없음',
+                tagId: item.tagId || [],
+                tags: item.tagName || [],
+                dDay: item.dday || null,
+                createdAt: item.createdAt || Date.now(), // 기본값 설정
               };
-            });
-          }
-        }) ?? [];
+            } else {
+              return (item.contentsInfoList || []).map((content) => {
+                const formattedDate = content.updatedDt
+                  ? new Date(content.updatedDt).toISOString().split('T')[0]
+                  : '날짜 정보 없음';
 
+                return {
+                  id: content.contentId || 'ID 없음',
+                  title: content.contentName || formattedDate,
+                  user: item.nickname || '사용자 정보 없음',
+                  category: content.categoryName || [],
+                  tags: content.tagName || [],
+                  dDay: content.dday,
+                  contentDateType: content.contentDateType || '타입 없음',
+                  thumbnailImage: content.thumbnailImage || '',
+                  updatedDt: content.updatedDt || '업데이트 정보 없음',
+                  createdAt: content.createdAt || Date.now(), // 기본값 설정
+                };
+              });
+            }
+          }) ?? [];
+      }
+      console.log('에러', results);
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
     } catch (error) {
@@ -119,7 +149,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, categoryId, filterId]);
+  }, [activeTab, categoryId, filterId, tags]);
 
   useEffect(() => {
     fetchData();
@@ -190,11 +220,14 @@ const MainPage = () => {
       </SidebarContainer>
       <MainContent>
         <ContentHeader
+          setActiveTab={setActiveTab}
           setSortOrder={setSortOrder}
           categoryId={categoryId}
           categoryName={categoryName}
           filterId={filterId}
           filterName={filterName}
+          tags={tags}
+          setTags={setTags}
         />
         <ContentArea $isBlank={sortedData.length === 0}>
           {loading ? (

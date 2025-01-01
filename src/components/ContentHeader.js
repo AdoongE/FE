@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import filterEditIcon from '../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
-import { axiosInstance } from './api/axios-instance';
+// import { axiosInstance } from './api/axios-instance';
 import EditFilterModal from './modal/EditFilterModal';
 import filterIcon from '../assets/icons/filter.png';
 
@@ -13,6 +13,9 @@ function ContentHeader({
   filterName,
   filterId,
   categoryName,
+  setActiveTab,
+  tags = [],
+  setTags,
 }) {
   // 상태 관리
   const [selectedFilter, setSelectedFilter] = useState('');
@@ -21,11 +24,12 @@ function ContentHeader({
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
+  // const [contentIds, setContentIds] = useState([]);
   const [recentSearches, setRecentSearches] = useState(() => {
     return JSON.parse(localStorage.getItem('recentSearches')) || [];
   });
   const [showRecentSearches, setShowRecentSearches] = useState(false);
-  const [tags, setTags] = useState([]);
+  // const [tags, setTags] = useState([]);
   const dialogRef = useRef(null);
   const visibleTags = isExpanded ? tags : tags.slice(0, 4);
 
@@ -86,21 +90,8 @@ function ContentHeader({
   };
 
   // 태그 제출 처리
-  const handleSubmit = async (newTags) => {
-    try {
-      const data = { tags: newTags };
-      const response = await axiosInstance.post(
-        '/api/v1/content/filtering',
-        data,
-      );
-      if (response.data.status.code === 200) {
-        console.log('검색 태그 전송 성공:', response.data.status.message);
-        // setTags([]); // 상태 초기화
-      }
-    } catch (error) {
-      console.error('검색 태그 전송 중 오류 발생:', error);
-      throw error;
-    }
+  const handleSubmit = () => {
+    setActiveTab('검색필터');
   };
 
   // 태그 변경 시 처리

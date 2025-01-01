@@ -12,6 +12,7 @@ function ContentHeader({
   filterName,
   filterId,
   categoryName,
+  activeTab,
   setActiveTab,
   tags = [],
   setTags,
@@ -95,7 +96,11 @@ function ContentHeader({
     if (tags.length > 0) {
       handleSubmit(tags);
     }
-  }, []);
+  }, [tags]);
+
+  const removeTag = (tagToRemove) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
 
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
 
@@ -214,40 +219,41 @@ function ContentHeader({
             }}
           />
           {/* 검색 필터링 */}
-          <FilterContainer>
-            <ParentContainer>
-              <SearchTitle>
-                <img
-                  src={filterIcon}
-                  style={{ width: '1.25rem', marginRight: '0.5rem' }}
-                  alt="circle check icon"
-                />
-                검색 필터
-              </SearchTitle>
-              <TagContainer>
-                {visibleTags.map((tag, index) => (
-                  <Tag key={index}>
-                    {tag}
-                    <button
-                      style={{
-                        width: '1.25rem',
-                        marginLeft: '0.25rem',
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        color: '#9f9f9f',
-                      }}
-                      onClick={() => setTags(tags.filter((t) => t !== tag))}
-                    >
-                      X
-                    </button>
-                  </Tag>
-                ))}
-              </TagContainer>
-            </ParentContainer>
-            <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
-              {isExpanded ? '닫기' : '전체보기'}
-            </ToggleButton>
-          </FilterContainer>
+          {activeTab === '검색필터' && (
+            <FilterContainer>
+              <ParentContainer>
+                <SearchTitle>
+                  <img
+                    src={filterIcon}
+                    style={{ width: '1.25rem', marginRight: '0.5rem' }}
+                    alt="circle check icon"
+                  />
+                  검색 필터
+                </SearchTitle>
+                <TagContainer>
+                  {visibleTags.map((tag, index) => (
+                    <Tag key={index}>
+                      {tag}
+                      <Icon
+                        icon="ic:round-close"
+                        style={{
+                          width: '1.25rem',
+                          marginLeft: '0.25rem',
+                          border: 'none',
+                          backgroundColor: 'transparent',
+                          color: '#9f9f9f',
+                        }}
+                        onClick={() => removeTag(tag)}
+                      />
+                    </Tag>
+                  ))}
+                </TagContainer>
+              </ParentContainer>
+              <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+                {isExpanded ? '닫기' : '전체보기'}
+              </ToggleButton>
+            </FilterContainer>
+          )}
         </>
       ) : (
         <FilterDiv>

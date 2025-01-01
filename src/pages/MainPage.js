@@ -59,6 +59,7 @@ const MainPage = () => {
 
         if (response.data.status.code === 200) {
           console.log('검색 태그 전송 성공:', response.data.status.message);
+          console.log('검색 필터링 결과', response.data);
           if (response.data.metadata.resultCount === 0) {
             setSearchState(true);
           }
@@ -80,7 +81,6 @@ const MainPage = () => {
           }));
         }
       } else {
-        setSearchState(false);
         if (activeTab === '모아보기' || activeTab === '나의 씨드') {
           url = '/api/v1/content/';
           const res = await api.get(url);
@@ -147,6 +147,7 @@ const MainPage = () => {
       console.log('에러', results);
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
+      setSearchState(false);
     } catch (error) {
       console.error(
         '데이터 가져오기 실패:',
@@ -226,6 +227,7 @@ const MainPage = () => {
       </SidebarContainer>
       <MainContent>
         <ContentHeader
+          activeTab={activeTab}
           setActiveTab={setActiveTab}
           setSortOrder={setSortOrder}
           categoryId={categoryId}
@@ -235,7 +237,7 @@ const MainPage = () => {
           tags={tags}
           setTags={setTags}
         />
-        <ContentArea $isBlank={sortedData.length === 0}>
+        <ContentArea $isBlank={searchState || sortedData.length === 0}>
           {loading ? (
             <div>로딩 중...</div>
           ) : sortedData.length === 0 ? (

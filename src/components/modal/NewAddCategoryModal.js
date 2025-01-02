@@ -18,7 +18,7 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
 
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
-    baseURL: 'http://52.78.221.255',
+    baseURL: 'http://210.107.205.122:20011',
     headers: { Authorization: `${token}` },
   });
 

@@ -5,19 +5,19 @@ import axios from 'axios';
 const token = localStorage.getItem('jwtToken');
 
 const api = axios.create({
-  baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+  baseURL: 'http://210.107.205.122:20011', // 백엔드 서버 주소로 설정
   headers: {
     Authorization: `${token}`, // 토큰을 템플릿 리터럴로 추가
   },
 });
-/******************************************************************************************/
-// 콘텐츠 삭제
+
 const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
   const cloesModal = () => {
     ref.current?.close();
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.stopPropagation();
     console.log('콘텐츠 삭제 id: ', contentId);
     try {
       const response = await api.delete(`/api/v1/content/${contentId}`);
@@ -29,7 +29,6 @@ const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
       throw error;
     }
   };
-  /******************************************************************************************/
 
   useEffect(() => {
     if (ref.current) {

@@ -9,7 +9,7 @@ import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://52.78.221.255',
+  baseURL: 'http://210.107.205.122:20011',
 });
 
 api.interceptors.request.use((config) => {

@@ -12,6 +12,7 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
 
   return (
     <Modal
+      ariaHideApp={false}
       isOpen={!!file}
       onRequestClose={onClose}
       style={{

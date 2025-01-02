@@ -32,7 +32,8 @@ function ContentDropdown({ contentId }) {
     }
   };
 
-  const handleDetail = () => {
+  const handleDetail = (e) => {
+    e.stopPropagation();
     navigate('/content-view', { state: { contentId: contentId } });
     setIsKebabOpen(false);
   };
@@ -63,7 +64,8 @@ function ContentDropdown({ contentId }) {
           </Options>
           <div>
             <Options
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setIsKebabOpen(false);
                 showModal();
               }}

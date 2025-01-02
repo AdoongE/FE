@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import filterEditIcon from '../assets/icons/filterEdit.png';
 import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
-import { axiosInstance } from './api/axios-instance';
 import EditFilterModal from './modal/EditFilterModal';
+import filterIcon from '../assets/icons/filter.png';
 
 function ContentHeader({
   setSortOrder,
@@ -12,19 +12,23 @@ function ContentHeader({
   filterName,
   filterId,
   categoryName,
+  activeTab,
+  setActiveTab,
+  tags = [],
+  setTags,
 }) {
-  // 상태 관리
   const [selectedFilter, setSelectedFilter] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
   const [recentSearches, setRecentSearches] = useState(() => {
     return JSON.parse(localStorage.getItem('recentSearches')) || [];
   });
   const [showRecentSearches, setShowRecentSearches] = useState(false);
-  const [tags, setTags] = useState([]);
   const dialogRef = useRef(null);
+  const visibleTags = isExpanded ? tags : tags.slice(0, 4);
 
   // 날짜 포맷 함수
   const formatDate = (dateString) => {
@@ -83,21 +87,8 @@ function ContentHeader({
   };
 
   // 태그 제출 처리
-  const handleSubmit = async (newTags) => {
-    try {
-      const data = { tags: newTags };
-      const response = await axiosInstance.post(
-        '/api/v1/content/filtering',
-        data,
-      );
-      if (response.data.status.code === 200) {
-        console.log('검색 태그 전송 성공:', response.data.status.message);
-        setTags([]); // 상태 초기화
-      }
-    } catch (error) {
-      console.error('검색 태그 전송 중 오류 발생:', error);
-      throw error;
-    }
+  const handleSubmit = () => {
+    setActiveTab('검색필터');
   };
 
   // 태그 변경 시 처리
@@ -107,7 +98,10 @@ function ContentHeader({
     }
   }, [tags]);
 
-  // 태그 상태 로그 확인
+  const removeTag = (tagToRemove) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
 
   return (
@@ -224,6 +218,42 @@ function ContentHeader({
               handleSubmit(newTags);
             }}
           />
+          {/* 검색 필터링 */}
+          {activeTab === '검색필터' && (
+            <FilterContainer>
+              <ParentContainer>
+                <SearchTitle>
+                  <img
+                    src={filterIcon}
+                    style={{ width: '1.25rem', marginRight: '0.5rem' }}
+                    alt="circle check icon"
+                  />
+                  검색 필터
+                </SearchTitle>
+                <TagContainer>
+                  {visibleTags.map((tag, index) => (
+                    <Tag key={index}>
+                      {tag}
+                      <Icon
+                        icon="ic:round-close"
+                        style={{
+                          width: '1.25rem',
+                          marginLeft: '0.25rem',
+                          border: 'none',
+                          backgroundColor: 'transparent',
+                          color: '#9f9f9f',
+                        }}
+                        onClick={() => removeTag(tag)}
+                      />
+                    </Tag>
+                  ))}
+                </TagContainer>
+              </ParentContainer>
+              <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+                {isExpanded ? '닫기' : '전체보기'}
+              </ToggleButton>
+            </FilterContainer>
+          )}
         </>
       ) : (
         <FilterDiv>
@@ -277,16 +307,15 @@ const DropdownButton = styled.button`
   background: white;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
-  font-size: 22px; /* 글씨 크기 */
-  color: ${(props) =>
-    props.isDefault ? '#9f9f9f' : '#333'}; /* 기본값일 때 연한 색상 */
+  font-size: 22px;
+  color: ${(props) => (props.isDefault ? '#9f9f9f' : '#333')};
   cursor: pointer;
   display: flex;
-  align-items: center; /* 수직 중앙 정렬 */
-  justify-content: center; /* 텍스트를 중앙에 정렬 */
-  height: 48px; /* 버튼 높이 */
-  width: ${(props) => props.width || '200px'}; /* 버튼 너비 */
-  position: relative; /* 화살표를 절대 위치로 배치하기 위해 설정 */
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  width: ${(props) => props.width || '200px'};
+  position: relative;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   &:hover {
     background-color: #f9f9f9;
@@ -295,23 +324,21 @@ const DropdownButton = styled.button`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: calc(100% + 4px); /* 버튼 아래에 여백 추가 */
+  top: calc(100% + 4px);
   left: 0;
   background: white;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  width: 200px; /* 메뉴 너비를 버튼과 동일하게 설정 */
+  width: 200px;
 `;
 
 const DropdownItem = styled.div`
   padding: 10px 12px;
   font-size: 22px;
-  color: ${(props) =>
-    props.isSelected ? '#333' : '#666'}; /* 선택된 항목 진하게 */
-  font-weight: ${(props) =>
-    props.isSelected ? '700' : '400'}; /* 선택된 항목 진하게 */
+  color: ${(props) => (props.isSelected ? '#333' : '#666')};
+  font-weight: ${(props) => (props.isSelected ? '700' : '400')};
   cursor: pointer;
   text-align: left;
   height: 48px;
@@ -427,6 +454,78 @@ const DeleteButton = styled.button`
   color: #ff4d4f;
   font-size: 16px;
   cursor: pointer;
+`;
+
+// 검색 필터 스타일
+const FilterContainer = styled.div`
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  width: 632px;
+  min-height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* align-items: center; */
+  /* align-items: flex-start; */
+  margin-top: 24px;
+  padding: 4px 16px;
+  transition: height 0.3s ease;
+  overflow: hidden;
+`;
+
+const ParentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 28px;
+`;
+
+const SearchTitle = styled.span`
+  font-weight: bold;
+  font-size: 16px;
+  color: #9f9f9f;
+  display: flex;
+  align-items: center;
+  /* flex-shrink: 0; */
+`;
+
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  color: #9f9f9f;
+  cursor: pointer;
+  position: relative;
+  font-size: 16px;
+  /* flex-shrink: 0; */
+
+  &:after {
+    content: '';
+    display: block;
+    width: calc(100% - 10px);
+    height: 1px;
+    background-color: #9f9f9f;
+    position: absolute;
+    left: 5px;
+  }
+`;
+
+const TagContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow: hidden;
+  width: 428px;
+`;
+
+const Tag = styled.div`
+  padding: 3px 12px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #4f4f4f;
+  display: inline-flex;
+  height: 34.33px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default ContentHeader;

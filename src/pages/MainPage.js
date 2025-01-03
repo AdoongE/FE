@@ -28,7 +28,7 @@ const MainPage = () => {
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCateName] = useState('');
-  const [selectedFormat, setSelectedFormat] = useState('');
+  const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
@@ -126,26 +126,44 @@ const MainPage = () => {
     fetchData();
   }, [fetchData]);
 
-  // 저장 형식 필터링 처리
+  const contentTypeMapping = {
+    IMAGE: '이미지',
+    LINK: '링크',
+    PDF: 'PDF',
+  };
+
+  // 데이터 필터링 및 정렬
   useEffect(() => {
     let filteredData = [...originalData];
-    if (selectedFormat) {
-      filteredData = filteredData.filter(
-        (item) => item.contentDateType === selectedFormat.toUpperCase(),
-      );
+
+    console.log('originalData:', originalData); // 원본 데이터 확인
+
+    // 저장형식 필터링
+    if (localSelectedFormat) {
+      filteredData = filteredData.filter((item) => {
+        const koreanType = contentTypeMapping[item.contentDateType]; // 매핑된 한국어 값
+        console.log('item.contentDateType:', item.contentDateType); // 데이터 타입 확인
+        console.log('koreanType:', koreanType); // 매핑된 한국어 타입 확인
+        console.log('localSelectedFormat:', localSelectedFormat); // 선택된 필터 값
+        console.log('매칭 여부:', koreanType === localSelectedFormat); // 비교 결과
+        return koreanType === localSelectedFormat;
+      });
+      console.log('필터링 후 데이터:', filteredData); // 필터링 결과 확인
     }
 
-    // 정렬 적용
-    if (sortOrder === '최신순') {
-      filteredData.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      );
-    } else if (sortOrder === '이름순') {
-      filteredData.sort((a, b) => a.title.localeCompare(b.title));
-    }
+    // 정렬
+    filteredData.sort((a, b) => {
+      if (sortOrder === '최신순') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      if (sortOrder === '이름순') {
+        return a.title.localeCompare(b.title);
+      }
+      return 0;
+    });
 
     setSortedData(filteredData);
-  }, [selectedFormat, sortOrder, originalData]);
+  }, [originalData, localSelectedFormat, sortOrder]);
 
   useEffect(() => {
     fetchData(); // 데이터 초기 로드
@@ -206,7 +224,7 @@ const MainPage = () => {
       <MainContent>
         <ContentHeader
           setSortOrder={setSortOrder}
-          setSelectedFormat={setSelectedFormat}
+          setSelectedFormat={setLocalSelectedFormat}
           categoryId={categoryId}
           categoryName={categoryName}
           filterId={filterId}

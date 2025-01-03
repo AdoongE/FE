@@ -10,7 +10,9 @@ function ContentViewPage() {
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <SidebarContainer>
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      </SidebarContainer>
       <Content>
         <ViewContent />
       </Content>
@@ -21,11 +23,20 @@ const MainContainer = styled.div`
   display: flex;
   height: 100vh;
 `;
+
+const SidebarContainer = styled.div`
+  position: fixed;
+  left: 0;
+  width: 345px;
+  height: 100vh;
+  z-index: 1;
+`;
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 14vh;
-  padding-left: 10vh;
+  padding-left: 40vh;
 `;
 
 export default ContentViewPage;

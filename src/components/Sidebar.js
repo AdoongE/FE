@@ -510,6 +510,7 @@ const Sidebar = ({
           <AddCategoryModal
             onClose={() => setIsModalOpen(false)}
             onConfirm={handleConfirm}
+            categories={categories}
           />
         )}
         {/* 편집 모달 창 */}

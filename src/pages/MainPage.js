@@ -204,8 +204,10 @@ const MainPage = () => {
   const categoryCounts =
     collectData &&
     collectData.reduce((counts, item) => {
-      if (Array.isArray(item.categoryName) && item.categoryName[0]) {
-        counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+      if (Array.isArray(item.categoryName)) {
+        item.categoryName.forEach((category) => {
+          counts[category] = (counts[category] || 0) + 1;
+        });
       }
       return counts;
     }, {});

@@ -198,11 +198,19 @@ function ContentHeader({
                   <RecentSearchTitle>최근 검색어</RecentSearchTitle>
                   {recentSearches.map((search, index) => (
                     <RecentSearchItem key={index}>
-                      <span>{search.query}</span>
-                      <span>{formatDate(search.date)}</span>
-                      <DeleteButton onClick={() => deleteSearch(index)}>
-                        X
-                      </DeleteButton>
+                      <span>
+                        <Icon
+                          icon="ion:search-outline"
+                          style={{ fontSize: '20px', color: '#666' }}
+                        />
+                        {search.query}
+                      </span>
+                      <div>
+                        <span>{formatDate(search.date)}</span>
+                        <DeleteButton onClick={() => deleteSearch(index)}>
+                          X
+                        </DeleteButton>
+                      </div>
                     </RecentSearchItem>
                   ))}
                 </RecentSearchList>
@@ -355,11 +363,11 @@ const SearchContainer = styled.div`
   height: 50px;
   border-radius: 25px;
   margin-right: 101px;
-  background-color: (0, 0, 0, 0.3);
   border: 1px solid #9f9f9f;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: relative; /* 부모 요소 기준 위치 설정 */
 `;
 
 const Search = styled.input`
@@ -384,7 +392,6 @@ const SearchButton = styled.button`
   background-color: #f2f2f2;
   font-size: 16px;
   font-weight: 500;
-  color: #9f9f9f;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -427,31 +434,63 @@ const FilterEditIcon = styled.img`
 
 const RecentSearchList = styled.div`
   position: absolute;
-  top: 55px;
-  left: 0;
+  top: calc(100% + 5px);
+  left: 50%; /* 가운데 정렬 */
+  transform: translateX(-50%);
   background: white;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
+  width: 445px;
+  max-height: 315px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 `;
 
 const RecentSearchTitle = styled.div`
   font-weight: bold;
-  padding: 10px;
+  font-size: 20px;
+  padding: 19px;
+  position: relative; /* border 조정을 위해 relative 추가 */
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    right: 5%;
+    height: 1px;
+    background-color: #eaeaea; /* 구분선 색상 */
+  }
 `;
 
 const RecentSearchItem = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* 검색어와 오른쪽 요소를 양쪽 정렬 */
   align-items: center;
-  padding: 10px 12px;
+  padding: 15px 19px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   font-size: 18px;
-  color: #333;
+  color: #666;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* 아이콘과 텍스트 간격 */
+  }
+
+  /* 오른쪽 영역 (날짜와 삭제 버튼) */
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 6px; /* 날짜와 삭제 버튼 간 간격 */
+  }
 `;
 
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  color: #ff4d4f;
   font-size: 16px;
   cursor: pointer;
 `;

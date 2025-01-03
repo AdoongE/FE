@@ -28,6 +28,7 @@ const MainPage = () => {
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCateName] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('');
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
@@ -40,8 +41,6 @@ const MainPage = () => {
 
   console.log('activeTab : ', activeTab);
 
-  /******************************************************************************************/
-  // fetchData : 메인페이지의 모든 콘텐츠들을 조회하는 api 요청 함수
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -126,22 +125,31 @@ const MainPage = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  // 문제 사례 : ContentDeleteModal.js에서 콘텐츠를 삭제했을 때, 새로고침을 하지 않으면 콘텐츠 삭제된 것이 반영되지 않음
-  /******************************************************************************************/
 
-  // 정렬 처리
+  // 저장 형식 필터링 처리
   useEffect(() => {
-    const sorted = [...originalData].sort((a, b) => {
-      if (sortOrder === '최신순') {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      }
-      if (sortOrder === '이름순') {
-        return a.title.localeCompare(b.title);
-      }
-      return 0;
-    });
-    setSortedData(sorted);
-  }, [sortOrder, originalData]);
+    let filteredData = [...originalData];
+    if (selectedFormat) {
+      filteredData = filteredData.filter(
+        (item) => item.contentDateType === selectedFormat.toUpperCase(),
+      );
+    }
+
+    // 정렬 적용
+    if (sortOrder === '최신순') {
+      filteredData.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+    } else if (sortOrder === '이름순') {
+      filteredData.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    setSortedData(filteredData);
+  }, [selectedFormat, sortOrder, originalData]);
+
+  useEffect(() => {
+    fetchData(); // 데이터 초기 로드
+  }, []);
 
   // 페이지네이션 처리
   const handlePageChange = (newPage) => {
@@ -198,6 +206,7 @@ const MainPage = () => {
       <MainContent>
         <ContentHeader
           setSortOrder={setSortOrder}
+          setSelectedFormat={setSelectedFormat}
           categoryId={categoryId}
           categoryName={categoryName}
           filterId={filterId}

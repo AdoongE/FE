@@ -9,6 +9,7 @@ import axios from 'axios';
 
 function ContentHeader({
   setSortOrder,
+  setSelectedFormat,
   categoryId,
   filterName,
   filterId,
@@ -18,8 +19,8 @@ function ContentHeader({
   tags = [],
   setTags,
 }) {
+  const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
-  const [selectedFormat, setSelectedFormat] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -122,8 +123,9 @@ function ContentHeader({
 
   // 저장 형식 변경
   const handleFormatChange = (option) => {
-    setSelectedFormat(option);
-    setShowFormatDropdown(false);
+    setLocalSelectedFormat(option); // 내부 상태 업데이트
+    setSelectedFormat(option); // 부모로 전달
+    setShowFormatDropdown(false); // 드롭다운 닫기
   };
 
   // 태그 제출 처리
@@ -164,7 +166,7 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
                   isDefault={
-                    !selectedFormat
+                    !localSelectedFormat
                   } /* 값이 선택되지 않았을 때 연한 색상 적용 */
                   width="137px"
                 >
@@ -173,6 +175,9 @@ function ContentHeader({
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
+                    <DropdownItem onClick={() => handleFormatChange('')}>
+                      전체보기
+                    </DropdownItem>
                     <DropdownItem onClick={() => handleFormatChange('링크')}>
                       링크
                     </DropdownItem>

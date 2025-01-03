@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 import EditFilterModal from './modal/EditFilterModal';
 import filterIcon from '../assets/icons/filter.png';
+import axios from 'axios';
 
 function ContentHeader({
   setSortOrder,
@@ -60,10 +61,35 @@ function ContentHeader({
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // Enter로 검색
+  // API 호출 함수
+  const fetchSearchResults = async () => {
+    try {
+      const token = localStorage.getItem('jwkToken'); // JWT 토큰 가져오기
+      const headers = {
+        Authorization: token,
+      };
+
+      // 요청 바디 설정
+      const body = {
+        ...(selectedFormat && { dataType: selectedFormat }), // 선택된 데이터타입
+        ...(tags.length > 0 && { tags }), // 선택된 태그
+        ...(searchQuery && { keyword: searchQuery.trim() }), // 검색어
+      };
+
+      const response = await axios.post('/api/v1/content/filtering', body, {
+        headers,
+      });
+      console.log('검색 결과:', response.data);
+    } catch (error) {
+      console.error('검색 요청 실패:', error);
+    }
+  };
+
+  // 검색 실행 로직
   const handleSearchKeyPress = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       saveSearchQuery(searchQuery.trim());
+      fetchSearchResults(); // 검색 API 호출
       setSearchQuery(''); // 검색 후 입력값 초기화
     }
   };

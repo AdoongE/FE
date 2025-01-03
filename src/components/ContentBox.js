@@ -17,6 +17,7 @@ function ContentBox({
   open,
   contentDateType,
   updatedDt,
+  memo,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -81,6 +82,7 @@ function ContentBox({
       <CategoryDisplay title={displayCategory}>
         {displayCategory}
       </CategoryDisplay>
+      {memo && <MemoText>{memo}</MemoText>}
     </Box>
   );
 }
@@ -225,6 +227,12 @@ const CategoryDisplay = styled.div`
   white-space: nowrap; /* 한 줄로 표시 */
   overflow: hidden; /* 박스를 넘어가는 텍스트 숨김 */
   text-overflow: ellipsis; /* 말줄임표 처리 */
+`;
+
+const MemoText = styled.div`
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
 `;
 
 export default ContentBox;

@@ -65,8 +65,13 @@ function ContentHeader({
   const fetchSearchResults = async () => {
     try {
       const token = localStorage.getItem('jwkToken'); // JWT 토큰 가져오기
+
+      if (!token) {
+        throw new Error('JWT 토큰이 없습니다. 로그인이 필요합니다.');
+      }
+
       const headers = {
-        Authorization: token,
+        Authorization: `Bearer ${token}`, // Bearer 접두어 추가
       };
 
       // 요청 바디 설정
@@ -76,9 +81,13 @@ function ContentHeader({
         ...(searchQuery && { keyword: searchQuery.trim() }), // 검색어
       };
 
-      const response = await axios.post('/api/v1/content/filtering', body, {
-        headers,
-      });
+      const response = await axios.post(
+        'http://210.107.205.122:20011/api/v1/content/filtering',
+        body,
+        {
+          headers,
+        },
+      );
       console.log('검색 결과:', response.data);
     } catch (error) {
       console.error('검색 요청 실패:', error);
@@ -92,6 +101,11 @@ function ContentHeader({
       fetchSearchResults(); // 검색 API 호출
       setSearchQuery(''); // 검색 후 입력값 초기화
     }
+  };
+
+  const handleRecentSearchClick = (query) => {
+    fetchSearchResults(query); // 최근 검색어 클릭 시 API 호출
+    setSearchQuery(query); // 검색어 업데이트
   };
 
   // 태그 검색 모달 열기
@@ -224,13 +238,26 @@ function ContentHeader({
                   <RecentSearchTitle>최근 검색어</RecentSearchTitle>
                   {recentSearches.map((search, index) => (
                     <RecentSearchItem key={index}>
-                      <span>
+                      <button
+                        onClick={() => handleRecentSearchClick(search.query)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: 'none',
+                          border: 'none',
+                          padding: '0',
+                          fontSize: 'inherit',
+                          cursor: 'pointer',
+                          color: '#666',
+                        }}
+                      >
                         <Icon
                           icon="ion:search-outline"
-                          style={{ fontSize: '20px', color: '#666' }}
+                          style={{ fontSize: '20px' }}
                         />
                         {search.query}
-                      </span>
+                      </button>
                       <div>
                         <span>{formatDate(search.date)}</span>
                         <DeleteButton onClick={() => deleteSearch(index)}>

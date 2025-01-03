@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
+const MAX_IMAGES = 5;
+
 const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
-  const [representativeIndex, setRepresentativeIndex] = useState(null); // 대표 이미지 인덱스
+  const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -17,8 +19,16 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
         };
       });
 
-      const updatedImages = [...images, ...newImages];
-      setImages(updatedImages);
+      if (images.length + newImages.length <= MAX_IMAGES) {
+        const updatedImages = [...images, ...newImages];
+        setImages(updatedImages);
+
+        // 첫 이미지 업로드 시 자동으로 대표 이미지 설정
+        if (images.length === 0) {
+          setRepresentativeIndex(0);
+          onSetRepresentative(newImages[0]);
+        }
+      }
     },
     accept: 'image/jpeg, image/png, image/svg+xml',
     maxSize: 10 * 1024 * 1024, // 10 MB 제한
@@ -36,16 +46,8 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
 
   const handleSetRepresentative = (index) => {
     setRepresentativeIndex(index);
-    onSetRepresentative(images[index]);
+    onSetRepresentative(index);
   };
-
-  // 첫 번째 이미지 자동 설정
-  useEffect(() => {
-    if (images.length > 0 && representativeIndex === null) {
-      setRepresentativeIndex(0);
-      onSetRepresentative(images[0]);
-    }
-  }, [images, representativeIndex, onSetRepresentative]);
 
   return (
     <Wrapper>
@@ -89,18 +91,20 @@ const ImageUploadComponent = ({ onSetRepresentative, images, setImages }) => {
               <FileName>{image.label}</FileName>
             </ImageContainer>
           ))}
-          <AddImageBox {...getRootProps()}>
-            <input {...getInputProps()} />
-            <AddCircle>
-              <Icon
-                icon="iconoir:plus"
-                width="35"
-                height="35"
-                style={{ color: '#aaa' }}
-              />
-            </AddCircle>
-            <AddText>이미지 추가하기</AddText>
-          </AddImageBox>
+          {images.length < MAX_IMAGES && (
+            <AddImageBox {...getRootProps()}>
+              <input {...getInputProps()} />
+              <AddCircle>
+                <Icon
+                  icon="iconoir:plus"
+                  width="35"
+                  height="35"
+                  style={{ color: '#aaa' }}
+                />
+              </AddCircle>
+              <AddText>이미지 추가하기</AddText>
+            </AddImageBox>
+          )}
         </ImagesWrapper>
       )}
     </Wrapper>

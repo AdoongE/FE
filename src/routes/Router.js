@@ -16,6 +16,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<SplashPage />} />
         <Route path="/main" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} /> {/* "/" 도 MainPage로 연결 */}
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/kakao/callback" element={<KakaoRedirect />} />

@@ -11,7 +11,7 @@ const api = axios.create({
   },
 });
 
-const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
+const ContentDeleteModal = forwardRef(({ contentId, fetchData }, ref) => {
   const cloesModal = () => {
     ref.current?.close();
   };
@@ -24,6 +24,7 @@ const ContentDeleteModal = forwardRef(({ contentId }, ref) => {
 
       console.log('삭제 성공: ', response?.data.results);
       cloesModal();
+      fetchData();
     } catch (error) {
       console.error(error);
       throw error;

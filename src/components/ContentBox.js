@@ -17,6 +17,7 @@ function ContentBox({
   open,
   contentDateType,
   updatedDt,
+  fetchData,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -55,7 +56,7 @@ function ContentBox({
           </Dday>
         )}
         <Dropdown>
-          <ContentDropdown contentId={contentId} />
+          <ContentDropdown contentId={contentId} fetchData={fetchData} />
         </Dropdown>
       </ImageBox>
       <TagContainer>

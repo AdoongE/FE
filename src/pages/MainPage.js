@@ -285,6 +285,7 @@ const MainPage = () => {
                     thumbnailImage={data?.thumbnailImage || null}
                     updatedDt={data?.updatedDt || '업데이트 정보 없음'}
                     open={() => openModal(data)}
+                    fetchData={fetchData}
                   />
                   {selectedData && selectedData.id === data?.id && (
                     <ViewThumbnailModal

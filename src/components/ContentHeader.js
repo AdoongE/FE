@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 import EditFilterModal from './modal/EditFilterModal';
 import filterIcon from '../assets/icons/filter.png';
-import axios from 'axios';
+import { axiosInstance } from './api/axios-instance';
 
 function ContentHeader({
   setSortOrder,
@@ -62,51 +62,60 @@ function ContentHeader({
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // API 호출 함수
-  const fetchSearchResults = async () => {
-    try {
-      const token = localStorage.getItem('jwkToken'); // JWT 토큰 가져오기
-
-      if (!token) {
-        throw new Error('JWT 토큰이 없습니다. 로그인이 필요합니다.');
-      }
-
-      const headers = {
-        Authorization: `Bearer ${token}`, // Bearer 접두어 추가
-      };
-
-      // 요청 바디 설정
-      const body = {
-        ...(selectedFormat && { dataType: selectedFormat }), // 선택된 데이터타입
-        ...(tags.length > 0 && { tags }), // 선택된 태그
-        ...(searchQuery && { keyword: searchQuery.trim() }), // 검색어
-      };
-
-      const response = await axios.post(
-        'http://210.107.205.122:20011/api/v1/content/filtering',
-        body,
-        {
-          headers,
-        },
-      );
-      console.log('검색 결과:', response.data);
-    } catch (error) {
-      console.error('검색 요청 실패:', error);
-    }
-  };
-
   // 검색 실행 로직
   const handleSearchKeyPress = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim());
+      saveSearchQuery(searchQuery.trim()); // 검색어 저장
       fetchSearchResults(); // 검색 API 호출
-      setSearchQuery(''); // 검색 후 입력값 초기화
+      setSearchQuery(''); // 입력값 초기화
     }
   };
 
   const handleRecentSearchClick = (query) => {
     fetchSearchResults(query); // 최근 검색어 클릭 시 API 호출
     setSearchQuery(query); // 검색어 업데이트
+  };
+
+  const fetchSearchResults = async () => {
+    // 요청 데이터 구성
+    const requestData = {};
+
+    // 사용자가 선택한 dataType이 있는 경우 추가
+    if (localSelectedFormat) {
+      requestData.dataType = localSelectedFormat;
+    }
+
+    // 사용자가 입력한 검색어가 있는 경우 추가
+    if (searchQuery && searchQuery.trim() !== '') {
+      requestData.keyword = searchQuery.trim();
+    }
+
+    // 사용자가 선택한 태그가 있는 경우 추가
+    if (tags.length > 0) {
+      requestData.tags = tags;
+    }
+
+    // 필터링 없는 검색 요청
+    if (!requestData.dataType && !requestData.tags && !requestData.keyword) {
+      console.error('검색 조건이 없습니다.');
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post(
+        '/api/v1/content/filtering',
+        requestData,
+      );
+      console.log('응답 데이터:', response.data);
+    } catch (error) {
+      if (error.response) {
+        console.error('응답 오류:', error.response.data);
+      } else if (error.request) {
+        console.error('요청 오류:', error.request);
+      } else {
+        console.error('알 수 없는 오류:', error.message);
+      }
+    }
   };
 
   // 태그 검색 모달 열기
@@ -136,9 +145,9 @@ function ContentHeader({
   // 태그 변경 시 처리
   useEffect(() => {
     if (tags.length > 0) {
-      handleSubmit(tags);
+      setActiveTab('검색필터');
     }
-  }, [tags]);
+  }, [tags, setActiveTab]);
 
   const removeTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));

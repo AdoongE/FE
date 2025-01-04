@@ -17,7 +17,7 @@ function ContentBox({
   open,
   contentDateType,
   updatedDt,
-  memo,
+  message,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -82,7 +82,7 @@ function ContentBox({
       <CategoryDisplay title={displayCategory}>
         {displayCategory}
       </CategoryDisplay>
-      {memo && <MemoText>{memo}</MemoText>}
+      {message && <MemoText>{message}</MemoText>}
     </Box>
   );
 }

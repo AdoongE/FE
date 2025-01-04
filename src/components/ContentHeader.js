@@ -77,26 +77,27 @@ function ContentHeader({
   };
 
   const fetchSearchResults = async () => {
-    // 요청 데이터 구성
+    console.log('현재 검색 조건:');
+    console.log('DataType:', localSelectedFormat);
+    console.log('Keyword:', searchQuery);
+    console.log('Tags:', tags);
+
     const requestData = {};
 
-    // 사용자가 선택한 dataType이 있는 경우 추가
     if (localSelectedFormat) {
       requestData.dataType = localSelectedFormat;
     }
 
-    // 사용자가 입력한 검색어가 있는 경우 추가
     if (searchQuery && searchQuery.trim() !== '') {
       requestData.keyword = searchQuery.trim();
     }
 
-    // 사용자가 선택한 태그가 있는 경우 추가
     if (tags.length > 0) {
       requestData.tags = tags;
     }
 
-    // 필터링 없는 검색 요청
     if (!requestData.dataType && !requestData.tags && !requestData.keyword) {
+      alert('검색 조건을 하나 이상 입력해주세요.');
       console.error('검색 조건이 없습니다.');
       return;
     }
@@ -108,13 +109,7 @@ function ContentHeader({
       );
       console.log('응답 데이터:', response.data);
     } catch (error) {
-      if (error.response) {
-        console.error('응답 오류:', error.response.data);
-      } else if (error.request) {
-        console.error('요청 오류:', error.request);
-      } else {
-        console.error('알 수 없는 오류:', error.message);
-      }
+      console.error('에러 발생:', error);
     }
   };
 

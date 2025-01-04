@@ -185,6 +185,7 @@ const Dday = styled.div`
 
 const TagContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 `;
 

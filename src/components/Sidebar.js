@@ -323,6 +323,7 @@ const Sidebar = ({
       });
       if (response.status === 200) {
         console.log('맞춤 필터 생성 성공');
+        CustomFilterView();
       } else {
         console.error('맞춤 필터 생성 실패');
       }
@@ -345,7 +346,7 @@ const Sidebar = ({
     );
   };
 
-  const CustomFilterView = async (condition) => {
+  const CustomFilterClick = async (condition) => {
     const filterIndex = customFilter.indexOf(condition);
     const filterId = customFilterIds[filterIndex];
 
@@ -356,7 +357,7 @@ const Sidebar = ({
     setTimeout(() => setMessage(''), 2000);
   };
 
-  const CustomFilterViews = async () => {
+  const CustomFilterView = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/filter');
 
@@ -377,7 +378,7 @@ const Sidebar = ({
 
   useEffect(() => {
     handleViewCategory();
-    CustomFilterViews();
+    CustomFilterView();
   }, []);
 
   return (
@@ -574,7 +575,7 @@ const Sidebar = ({
                 key={index}
                 onMouseEnter={() => setHoveredFilterIndex(index)}
                 onMouseLeave={() => setHoveredFilterIndex(null)}
-                onClick={() => CustomFilterView(condition)}
+                onClick={() => CustomFilterClick(condition)}
               >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
                 {condition}

@@ -339,7 +339,7 @@ const ContentArea = styled.div`
     props.$isBlank ? 'flex-start' : 'stretch'}; /* 세로 정렬 위로 이동 */
   grid-template-columns: ${(props) =>
     !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
-  grid-row-gap: 40px; /* 위아래 간격 추가 */
+  grid-row-gap: 50px; /* 위아래 간격 추가 */
   box-sizing: border-box;
   height: ${(props) =>
     props.$isBlank ? '100%' : 'auto'}; /* 데이터 없을 때 전체 화면 차지 */

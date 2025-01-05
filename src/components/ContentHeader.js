@@ -71,16 +71,12 @@ function ContentHeader({
     }
   };
 
-  const handleRecentSearchClick = (query) => {
-    fetchSearchResults(query); // 최근 검색어 클릭 시 API 호출
-    setSearchQuery(query); // 검색어 업데이트
-  };
-
-  const fetchSearchResults = async () => {
+  const fetchSearchResults = async (query = searchQuery) => {
     console.log('현재 검색 조건:');
-    console.log('DataType:', localSelectedFormat);
-    console.log('Keyword:', searchQuery);
-    console.log('Tags:', tags);
+    console.log('DataType:', localSelectedFormat || '없음');
+    console.log('Keyword:', query || '없음');
+    console.log('Tags:', tags.length > 0 ? tags : '없음');
+    console.log('Sort Order:', selectedFilter || '없음'); // 정렬 정보 출력
 
     const requestData = {};
 
@@ -88,19 +84,20 @@ function ContentHeader({
       requestData.dataType = localSelectedFormat;
     }
 
-    if (searchQuery && searchQuery.trim() !== '') {
-      requestData.keyword = searchQuery.trim();
+    if (query && query.trim() !== '') {
+      requestData.keyword = query.trim();
     }
 
     if (tags.length > 0) {
       requestData.tags = tags;
     }
 
-    if (!requestData.dataType && !requestData.tags && !requestData.keyword) {
-      alert('검색 조건을 하나 이상 입력해주세요.');
-      console.error('검색 조건이 없습니다.');
-      return;
+    // 정렬 옵션 추가
+    if (selectedFilter) {
+      requestData.sortOrder = selectedFilter; // 예: 최신순 또는 이름순
     }
+
+    console.log('최종 요청 데이터:', requestData);
 
     try {
       const response = await axiosInstance.post(
@@ -109,8 +106,20 @@ function ContentHeader({
       );
       console.log('응답 데이터:', response.data);
     } catch (error) {
-      console.error('에러 발생:', error);
+      if (error.response) {
+        console.error('응답 오류:', error.response.data);
+      } else if (error.request) {
+        console.error('요청 오류:', error.request);
+      } else {
+        console.error('알 수 없는 오류:', error.message);
+      }
     }
+  };
+
+  // 최근 검색어 클릭 핸들러 수정
+  const handleRecentSearchClick = (query) => {
+    setSearchQuery(query); // 검색어 업데이트
+    fetchSearchResults(query); // API 호출
   };
 
   // 태그 검색 모달 열기

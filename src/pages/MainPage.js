@@ -269,6 +269,7 @@ const MainPage = () => {
           setFilteredData={setFilteredData}
           setSortOrder={setSortOrder}
           setSelectedFormat={setLocalSelectedFormat}
+          setSearchState={setSearchState}
           categoryId={categoryId}
           categoryName={categoryName}
           filterId={filterId}

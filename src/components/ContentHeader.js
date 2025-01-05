@@ -19,6 +19,7 @@ function ContentHeader({
   tags = [],
   setTags,
   setFilteredData,
+  setSearchState,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
@@ -74,7 +75,7 @@ function ContentHeader({
   // 검색 실행 로직
   const handleSearchKeyPress = async (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim()); // 검색어 저장 함수 호출
+      saveSearchQuery(searchQuery.trim());
       try {
         const requestData = {
           keyword: searchQuery.trim(),
@@ -88,8 +89,19 @@ function ContentHeader({
           requestData,
         );
 
-        setFilteredData(response.data.results || []); // 검색 결과 전달
-        setSearchQuery(''); // 입력값 초기화
+        const results = response.data.results || [];
+
+        // 검색 결과를 부모로 전달
+        setFilteredData(results);
+
+        // 검색 상태 업데이트
+        if (results.length === 0) {
+          setSearchState(true);
+        } else {
+          setSearchState(false);
+        }
+
+        setSearchQuery(''); // 입력 초기화
       } catch (error) {
         console.error('검색 실패:', error);
       }

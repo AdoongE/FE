@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import { IOSSwitch } from '../switch/PublicCategorySwitch';
 import axios from 'axios';
 
-export const AddCategoryModal = ({ onClose, onConfirm }) => {
+export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
   const [categoryName, setCategoryName] = useState('');
   const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
 
@@ -15,12 +15,15 @@ export const AddCategoryModal = ({ onClose, onConfirm }) => {
 
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
-    baseURL: 'http://52.78.221.255',
+    baseURL: 'http://210.107.205.122:20011',
     headers: { Authorization: `${token}` },
   });
 
   const handleConfirm = async () => {
-    const newCategoryName = categoryName || '새로운 카테고리';
+    const count = categories.filter((category) =>
+      category.startsWith('새로운 카테고리'),
+    ).length;
+    const newCategoryName = categoryName || `새로운 카테고리 ${count + 1}`;
     onConfirm(newCategoryName);
     setCategoryName('');
 

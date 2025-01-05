@@ -53,7 +53,7 @@ const Sidebar = ({
 
   const token = localStorage.getItem('jwtToken');
   const api = axios.create({
-    baseURL: 'http://52.78.221.255',
+    baseURL: 'http://210.107.205.122:20011',
     headers: { Authorization: `${token}` },
   });
 
@@ -323,6 +323,7 @@ const Sidebar = ({
       });
       if (response.status === 200) {
         console.log('맞춤 필터 생성 성공');
+        CustomFilterView();
       } else {
         console.error('맞춤 필터 생성 실패');
       }
@@ -345,7 +346,7 @@ const Sidebar = ({
     );
   };
 
-  const CustomFilterView = async (condition) => {
+  const CustomFilterClick = async (condition) => {
     const filterIndex = customFilter.indexOf(condition);
     const filterId = customFilterIds[filterIndex];
 
@@ -356,11 +357,7 @@ const Sidebar = ({
     setTimeout(() => setMessage(''), 2000);
   };
 
-  /******************************************************************************************/
-  // 맨처음 페이지 렌더링 이후 '/api/v1/filter'로 요청을 보내지만
-  // 다음과 같은 오류 발생, Custom 필터 조회 오류 발생: TypeError: Cannot read properties of undefined (reading 'map') at CustomFilterViews
-  // 한번 새로고침을 해야지만 필터 조회 성공
-  const CustomFilterViews = async () => {
+  const CustomFilterView = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/filter');
 
@@ -381,9 +378,8 @@ const Sidebar = ({
 
   useEffect(() => {
     handleViewCategory();
-    CustomFilterViews();
+    CustomFilterView();
   }, []);
-  /******************************************************************************************/
 
   return (
     <StMainPage>
@@ -515,6 +511,7 @@ const Sidebar = ({
           <AddCategoryModal
             onClose={() => setIsModalOpen(false)}
             onConfirm={handleConfirm}
+            categories={categories}
           />
         )}
         {/* 편집 모달 창 */}
@@ -578,7 +575,7 @@ const Sidebar = ({
                 key={index}
                 onMouseEnter={() => setHoveredFilterIndex(index)}
                 onMouseLeave={() => setHoveredFilterIndex(null)}
-                onClick={() => CustomFilterView(condition)}
+                onClick={() => CustomFilterClick(condition)}
               >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
                 {condition}

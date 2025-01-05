@@ -8,6 +8,7 @@ import React, {
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { MyTag } from '../api/MyTagApi';
+import tagImage from '../../assets/icons/tag.png';
 
 const AddTagModal = forwardRef(
   ({ onConfirm, title, originalTags = [] }, ref) => {
@@ -205,19 +206,28 @@ const AddTagModal = forwardRef(
             ))}
           </TagContainer>
         ) : (
-          <TagContainer>
-            {Array.isArray(tags) &&
-              tags.map((tag) => (
-                <TagItem
-                  type="button"
-                  key={tag.id}
-                  onClick={() => handleSelectTag(tag.name)}
-                  $isSelected={selectedTags.includes(tag.name)}
-                >
-                  {tag.name}
-                </TagItem>
-              ))}
-          </TagContainer>
+          <div>
+            {Array.isArray(tags) && tags.length > 0 ? (
+              <TagContainer>
+                {tags.map((tag) => (
+                  <TagItem
+                    type="button"
+                    key={tag.id}
+                    onClick={() => handleSelectTag(tag.name)}
+                    $isSelected={selectedTags.includes(tag.name)}
+                  >
+                    {tag.name}
+                  </TagItem>
+                ))}
+              </TagContainer>
+            ) : (
+              <Notag>
+                <TagImage src={tagImage} alt="tagImage" />
+                <div>나만의 태그를</div>
+                <div>직접 만들어보세요!</div>
+              </Notag>
+            )}
+          </div>
         )}
 
         <Line />
@@ -230,6 +240,24 @@ const AddTagModal = forwardRef(
 );
 
 AddTagModal.displayName = 'AddTagModal';
+
+const TagImage = styled.img`
+  width: 132px;
+  height: 132px;
+`;
+
+const Notag = styled.div`
+  margin-left: 59px;
+  width: 640px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 10px;
+  font-weight: 500;
+  font-size: 32px;
+`;
 
 const OptionContainer = styled.div`
   margin-left: 58px;

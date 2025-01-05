@@ -14,6 +14,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
 import { format } from 'date-fns';
+import tagImage from '../../assets/icons/tag.png';
 
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
@@ -283,19 +284,28 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
             ))}
         </TagContainer>
       ) : (
-        <TagContainer>
-          {Array.isArray(tags) &&
-            tags.map((tag) => (
-              <TagItem
-                type="button"
-                key={tag.id}
-                onClick={() => handleSelectTag(tag.name)}
-                $isSelected={selectedTags.includes(tag.name)}
-              >
-                {tag.name}
-              </TagItem>
-            ))}
-        </TagContainer>
+        <div>
+          {Array.isArray(tags) && tags.length > 0 ? (
+            <TagContainer>
+              {tags.map((tag) => (
+                <TagItem
+                  type="button"
+                  key={tag.id}
+                  onClick={() => handleSelectTag(tag.name)}
+                  $isSelected={selectedTags.includes(tag.name)}
+                >
+                  {tag.name}
+                </TagItem>
+              ))}
+            </TagContainer>
+          ) : (
+            <Notag>
+              <TagImage src={tagImage} alt="tagImage" />
+              <div>나만의 태그를</div>
+              <div>직접 만들어보세요!</div>
+            </Notag>
+          )}
+        </div>
       )}
       <Word>저장 형식</Word>
       <Group>
@@ -399,6 +409,24 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
 
 TagFilterModal.displayName = 'TagFilterModal';
 CustomInput.displayName = 'CustomInput';
+
+const TagImage = styled.img`
+  width: 132px;
+  height: 132px;
+`;
+
+const Notag = styled.div`
+  margin-left: 59px;
+  width: 640px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 10px;
+  font-weight: 500;
+  font-size: 32px;
+`;
 
 const Button = styled.button`
   width: 222px;

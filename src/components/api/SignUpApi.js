@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://52.78.221.255', // 백엔드 서버 주소로 설정
+  baseURL: 'http://210.107.205.122:20011', // 백엔드 서버 주소로 설정
 });
 
 export const SignUpHandler = async (data) => {

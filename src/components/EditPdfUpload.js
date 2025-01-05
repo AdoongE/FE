@@ -1,12 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
+import { axiosInstance } from './api/axios-instance';
 
 const MAX_FILES = 3;
 
-const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
+const EditPdfUpload = ({ onSetRepresentative, setFiles, Id }) => {
+  const [blobImage, setBlobUrls] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 파일 인덱스
+  const [contentInfo, setContentInfo] = useState({
+    filename: [],
+    contentDoc: [],
+  });
+
+  useEffect(() => {
+    const fetchContentInfo = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/v1/content/all/${Id}`);
+        const results = response.data.results[0];
+        console.log('결과', results);
+
+        setContentInfo({
+          filename: results.title,
+          contentDoc: results.contentDoc,
+        });
+
+        if (response.status === 200) {
+          console.log('콘텐츠 상세 조회 성공');
+        } else {
+          console.error('콘텐츠 상세 조회 실패');
+        }
+      } catch (error) {
+        console.error('에러 발생:', error);
+      }
+    };
+    fetchContentInfo();
+  }, []);
+
+  async function s3pdf2blob(images) {
+    try {
+      const blobUrls = await Promise.all(
+        images.map(async (imageUrl, index) => {
+          const response = await axios.get(imageUrl, {
+            responseType: 'blob',
+            withCredentials: true,
+            headers: {
+              'Cache-Control': 'no-cache',
+            },
+          });
+          const blob = response.data;
+          return {
+            id: contentInfo.filename[index],
+            preview: URL.createObjectURL(blob),
+          };
+        }),
+      );
+      return blobUrls;
+    } catch (error) {
+      console.error('이미지를 Blob URL로 변환하는 데 실패했습니다:', error);
+      return [];
+    }
+  }
+  useEffect(() => {
+    async function fetchBlob() {
+      console.log('pdf 배열:', contentInfo.contentDoc);
+      const blob = await s3pdf2blob(contentInfo.contentDoc);
+      const formattedImages = contentInfo.contentDoc.map((image, index) => ({
+        id: contentInfo.filename[index],
+        label: contentInfo.filename[index],
+        preview: blob[index]?.preview || image.preview,
+      }));
+      setFiles(formattedImages);
+      setBlobUrls(formattedImages);
+    }
+    fetchBlob();
+  }, [contentInfo.contentDoc]);
 
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.map((file) => {
@@ -18,12 +88,13 @@ const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
       };
     });
 
-    if (files.length + newFiles.length <= MAX_FILES) {
-      const updatedFiles = [...files, ...newFiles];
+    if (blobImage.length + newFiles.length <= MAX_FILES) {
+      const updatedFiles = [...blobImage, ...newFiles];
+      setBlobUrls(updatedFiles);
       setFiles(updatedFiles);
 
       // 첫 번째 파일을 대표로 설정
-      if (files.length === 0) {
+      if (blobImage.length === 0) {
         setRepresentativeIndex(0);
         if (onSetRepresentative) {
           onSetRepresentative(0);
@@ -39,10 +110,14 @@ const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
   });
 
   const handleDeleteFile = (id) => {
-    const updatedFiles = files.filter((file) => file.id !== id);
-    setFiles(updatedFiles);
+    const updatedBlobImages = blobImage.filter((file) => file.id !== id);
+    const updatedImages = contentInfo.contentDoc.filter(
+      (image) => image.id !== id,
+    );
+    setBlobUrls(updatedBlobImages);
+    setFiles(updatedBlobImages);
 
-    if (representativeIndex >= updatedFiles.length) {
+    if (representativeIndex >= updatedImages.length) {
       setRepresentativeIndex(0);
       if (onSetRepresentative) {
         onSetRepresentative(0);
@@ -63,7 +138,7 @@ const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
         PDF 파일 업로드*{' '}
         <span>최대 10MB 이하의 PDF 파일만 첨부할 수 있습니다.</span>
       </Instructions>
-      {files.length === 0 ? (
+      {blobImage.length === 0 ? (
         <DropArea {...getRootProps()}>
           <input {...getInputProps()} />
           <IconWrapper>
@@ -78,7 +153,7 @@ const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
         </DropArea>
       ) : (
         <FilesWrapper>
-          {files.map((file, index) => (
+          {blobImage.map((file, index) => (
             <FileContainer key={file.id}>
               <FileBox onClick={() => handleSetRepresentative(index)}>
                 {index === representativeIndex && (
@@ -104,7 +179,7 @@ const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
               <FileName>{file.label}</FileName>
             </FileContainer>
           ))}
-          {files.length < MAX_FILES && (
+          {blobImage.length < MAX_FILES && (
             <AddFileBox {...getRootProps()}>
               <input {...getInputProps()} />
               <AddCircle>
@@ -124,7 +199,7 @@ const PdfUploadComponent = ({ onSetRepresentative, files = [], setFiles }) => {
   );
 };
 
-export default PdfUploadComponent;
+export default EditPdfUpload;
 
 // 스타일 컴포넌트
 const Wrapper = styled.div`

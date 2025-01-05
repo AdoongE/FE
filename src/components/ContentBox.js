@@ -17,6 +17,8 @@ function ContentBox({
   open,
   contentDateType,
   updatedDt,
+  message,
+  fetchData,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -55,7 +57,7 @@ function ContentBox({
           </Dday>
         )}
         <Dropdown>
-          <ContentDropdown contentId={contentId} />
+          <ContentDropdown contentId={contentId} fetchData={fetchData} />
         </Dropdown>
       </ImageBox>
       <TagContainer>
@@ -81,6 +83,7 @@ function ContentBox({
       <CategoryDisplay title={displayCategory}>
         {displayCategory}
       </CategoryDisplay>
+      {message && <MemoText>{message}</MemoText>}
     </Box>
   );
 }
@@ -93,7 +96,7 @@ const Dropdown = styled.div`
 
 const Box = styled.div`
   width: 440px;
-  height: 387px;
+  min-height: 387px;
   z-index: 0;
 `;
 
@@ -127,15 +130,14 @@ const ContentImage = styled.img`
 `;
 
 const PDFThumbnail = styled.div`
-  width: 100%;
-  height: 100%;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 
   canvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
+    width: 440px !important;
+    height: 284px !important;
+    object-fit: cover;
     border-radius: 10px;
   }
 `;
@@ -184,6 +186,7 @@ const Dday = styled.div`
 
 const TagContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 `;
 
@@ -223,9 +226,15 @@ const CategoryDisplay = styled.div`
   font-size: 16px;
   line-height: 19px;
   color: #4f4f4f;
-  white-space: nowrap; /* 한 줄로 표시 */
-  overflow: hidden; /* 박스를 넘어가는 텍스트 숨김 */
-  text-overflow: ellipsis; /* 말줄임표 처리 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const MemoText = styled.div`
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
 `;
 
 export default ContentBox;

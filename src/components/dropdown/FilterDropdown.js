@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import { axiosInstance } from '../api/axios-instance';
 
 const DropdownMenu = styled.ul`
   position: absolute;
@@ -20,7 +21,7 @@ const DropdownItem = styled.li`
   margin: 9px 7px;
   border-radius: 10px;
   cursor: pointer;
-  height: 44px;
+  height: 35px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -154,6 +155,8 @@ const FilterDropdown = ({
   initialFilterName,
   onEditFilter,
   onRemoveFilter,
+  customFilter,
+  filterIds,
 }) => {
   const dropdownRef = useRef();
   const [showEditModal, setShowEditModal] = useState(false);
@@ -179,15 +182,50 @@ const FilterDropdown = ({
 
   if (!isOpen) return null;
 
-  const handleEditConfirm = () => {
+  const handleEditConfirm = async () => {
+    const filterIndex = customFilter.indexOf(initialFilterName);
+    const filterId = filterIds[filterIndex];
+
     if (newFilterName.trim()) {
       onEditFilter(newFilterName.trim());
       setShowEditModal(false);
     }
+    try {
+      const response = await axiosInstance.patch(
+        `/api/v1/filter/${filterId}/name`,
+        {
+          name: newFilterName,
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('필터 이름 수정 성공');
+      } else {
+        console.error('필터 이름 수정 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
-  const handleDeleteConfirm = () => {
+
+  const handleDeleteConfirm = async () => {
+    const filterIndex = customFilter.indexOf(initialFilterName);
+    const filterId = filterIds[filterIndex];
+
     onRemoveFilter();
     setShowDeleteModal(false);
+
+    try {
+      const response = await axiosInstance.delete(`/api/v1/filter/${filterId}`);
+
+      if (response.status === 200) {
+        console.log('필터 삭제 성공');
+      } else {
+        console.error('필터 삭제 실패');
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   return (
@@ -208,7 +246,7 @@ const FilterDropdown = ({
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <ModalDiv>
               <TopDiv>
-                <ModalTitle>필터 이름 편집</ModalTitle>
+                <ModalTitle>맞춤 필터 이름 변경</ModalTitle>
                 <Icon
                   icon="line-md:close"
                   style={{

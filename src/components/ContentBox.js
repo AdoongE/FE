@@ -17,6 +17,7 @@ function ContentBox({
   open,
   contentDateType,
   updatedDt,
+  message,
   fetchData,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
@@ -82,6 +83,7 @@ function ContentBox({
       <CategoryDisplay title={displayCategory}>
         {displayCategory}
       </CategoryDisplay>
+      {message && <MemoText>{message}</MemoText>}
     </Box>
   );
 }
@@ -94,7 +96,7 @@ const Dropdown = styled.div`
 
 const Box = styled.div`
   width: 440px;
-  height: 387px;
+  min-height: 387px;
   z-index: 0;
 `;
 
@@ -184,6 +186,7 @@ const Dday = styled.div`
 
 const TagContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 `;
 
@@ -226,6 +229,12 @@ const CategoryDisplay = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const MemoText = styled.div`
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
 `;
 
 export default ContentBox;

@@ -38,23 +38,36 @@ function Navbar() {
   return (
     <NavbarContainer>
       <LogoContainer>
-        <StyledLogoImage src={LogoImage} alt="seedzip_logo" />
-        <StyledLogo src={Logo} alt="seedzip" />
+        <StyledLogoImage
+          src={LogoImage}
+          alt="seedzip_logo"
+          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+          style={{ cursor: 'pointer' }} // 클릭 가능 표시
+        />
+        <StyledLogo
+          src={Logo}
+          alt="seedzip"
+          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+          style={{ cursor: 'pointer' }} // 클릭 가능 표시
+        />
       </LogoContainer>
       <NavbarMenu ref={navbarMenuRef}>
         <MenuButton
           data-tab="모아보기"
-          onClick={(e) => handleTabClick('모아보기', e)}
+          onClick={(e) => {
+            handleTabClick('모아보기', e);
+            navigate('/main'); // "모아보기" 클릭 시 메인 페이지 이동
+          }}
           active={activeTab === '모아보기'}
         >
           모아보기
         </MenuButton>
         <MenuButton
-          data-tab="관리하기"
-          onClick={(e) => handleTabClick('관리하기', e)}
-          active={activeTab === '관리하기'}
+          data-tab="탐색하기"
+          onClick={(e) => handleTabClick('탐색하기', e)}
+          active={activeTab === '탐색하기'}
         >
-          관리하기
+          탐색하기
         </MenuButton>
         <ActiveBar width={activeBarWidth} left={activeBarLeft} />
       </NavbarMenu>

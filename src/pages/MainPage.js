@@ -30,12 +30,14 @@ const MainPage = () => {
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCateName] = useState('');
+  const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
 
@@ -144,7 +146,6 @@ const MainPage = () => {
             }
           }) ?? [];
       }
-      console.log('에러', results);
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
       setSearchState(false);
@@ -162,9 +163,33 @@ const MainPage = () => {
     fetchData();
   }, [fetchData]);
 
-  // 정렬 처리
+  const contentTypeMapping = {
+    IMAGE: '이미지',
+    LINK: '링크',
+    PDF: 'PDF',
+  };
+
+  // 데이터 필터링 및 정렬
   useEffect(() => {
-    const sorted = [...originalData].sort((a, b) => {
+    let filteredData = [...originalData];
+
+    console.log('originalData:', originalData); // 원본 데이터 확인
+
+    // 저장형식 필터링
+    if (localSelectedFormat) {
+      filteredData = filteredData.filter((item) => {
+        const koreanType = contentTypeMapping[item.contentDateType]; // 매핑된 한국어 값
+        console.log('item.contentDateType:', item.contentDateType); // 데이터 타입 확인
+        console.log('koreanType:', koreanType); // 매핑된 한국어 타입 확인
+        console.log('localSelectedFormat:', localSelectedFormat); // 선택된 필터 값
+        console.log('매칭 여부:', koreanType === localSelectedFormat); // 비교 결과
+        return koreanType === localSelectedFormat;
+      });
+      console.log('필터링 후 데이터:', filteredData); // 필터링 결과 확인
+    }
+
+    // 정렬
+    filteredData.sort((a, b) => {
       if (sortOrder === '최신순') {
         return new Date(b.createdAt) - new Date(a.createdAt);
       }
@@ -173,8 +198,20 @@ const MainPage = () => {
       }
       return 0;
     });
-    setSortedData(sorted);
-  }, [sortOrder, originalData]);
+
+    setSortedData(filteredData);
+  }, [originalData, localSelectedFormat, sortOrder]);
+
+  useEffect(() => {
+    fetchData(); // 데이터 초기 로드
+  }, []);
+
+  const dataToRender = filteredData.length > 0 ? filteredData : sortedData;
+
+  const displayedContentBoxes = dataToRender.slice(
+    (currentPage - 1) * contentPerPage,
+    currentPage * contentPerPage,
+  );
 
   // 페이지네이션 처리
   const handlePageChange = (newPage) => {
@@ -186,13 +223,11 @@ const MainPage = () => {
     }
   };
 
-  const displayedContentBoxes = sortedData.slice(
-    (currentPage - 1) * contentPerPage,
-    currentPage * contentPerPage,
-  );
-
   const getPaginationNumbers = () => {
-    const totalPages = Math.ceil(sortedData.length / contentPerPage);
+    const totalPages = Math.max(
+      1,
+      Math.ceil(sortedData.length / contentPerPage),
+    );
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(startPage + 4, totalPages);
     return Array.from(
@@ -231,7 +266,9 @@ const MainPage = () => {
         <ContentHeader
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          setFilteredData={setFilteredData}
           setSortOrder={setSortOrder}
+          setSelectedFormat={setLocalSelectedFormat}
           categoryId={categoryId}
           categoryName={categoryName}
           filterId={filterId}
@@ -274,19 +311,21 @@ const MainPage = () => {
 
               return (
                 <React.Fragment key={data?.id || index}>
-                  <ContentBox
-                    key={data?.id || index}
-                    contentId={data?.id || 'ID 없음'}
-                    title={data?.title || formattedDate}
-                    category={data?.category || []}
-                    tags={data?.tags || []}
-                    dDay={data?.dDay ?? null}
-                    contentDateType={data?.contentDateType || '타입 없음'}
-                    thumbnailImage={data?.thumbnailImage || null}
-                    updatedDt={data?.updatedDt || '업데이트 정보 없음'}
-                    open={() => openModal(data)}
-                    fetchData={fetchData}
-                  />
+                  <StyledContentBox>
+                    <ContentBox
+                      key={data?.id || index}
+                      contentId={data?.id || 'ID 없음'}
+                      title={data?.title || formattedDate}
+                      category={data?.category || []}
+                      tags={data?.tags || []}
+                      dDay={data?.dDay ?? null}
+                      contentDateType={data?.contentDateType || '타입 없음'}
+                      thumbnailImage={data?.thumbnailImage || null}
+                      updatedDt={data?.updatedDt || '업데이트 정보 없음'}
+                      open={() => openModal(data)}
+                      fetchData={fetchData}
+                    />
+                  </StyledContentBox>
                   {selectedData && selectedData.id === data?.id && (
                     <ViewThumbnailModal
                       file={data?.thumbnailImage}
@@ -320,7 +359,8 @@ const MainPage = () => {
           <PageArrow
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={
-              currentPage === Math.ceil(sortedData.length / contentPerPage)
+              currentPage === Math.ceil(sortedData.length / contentPerPage) ||
+              sortedData.length === 0
             }
           >
             {'>'}
@@ -355,13 +395,21 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
+  display: ${(props) => (props.$isBlank ? 'flex' : 'grid')};
+  justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
+  align-items: ${(props) => (props.$isBlank ? 'flex-start' : 'stretch')};
+  grid-template-columns: ${(props) =>
+    !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
+  grid-row-gap: 40px;
+  box-sizing: border-box;
+  height: ${(props) => (props.$isBlank ? '100%' : 'auto')};
+  padding: ${(props) =>
+    props.$isBlank ? `${props.$gap || 300}px 0 0 0` : 'inherit'};
+`;
+
+const StyledContentBox = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0;
-  grid-row-gap: 40px;
 `;
 
 const NoSearchContent = styled.div`
@@ -376,7 +424,9 @@ const Pagination = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 20px;
+  position: fixed;
+  bottom: 50px;
+  left: 58%;
 `;
 
 const PageArrow = styled.button`

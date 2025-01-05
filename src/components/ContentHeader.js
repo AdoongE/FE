@@ -5,9 +5,11 @@ import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 import EditFilterModal from './modal/EditFilterModal';
 import filterIcon from '../assets/icons/filter.png';
+import { axiosInstance } from './api/axios-instance';
 
 function ContentHeader({
   setSortOrder,
+  setSelectedFormat,
   categoryId,
   filterName,
   filterId,
@@ -16,9 +18,10 @@ function ContentHeader({
   setActiveTab,
   tags = [],
   setTags,
+  setFilteredData,
 }) {
+  const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
-  const [selectedFormat, setSelectedFormat] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,16 +42,24 @@ function ContentHeader({
     return `${year}.${month}.${day}`;
   };
 
-  const handleSearchInputChange = (e) => {
-    setSearchQuery(e.target.value); // 검색어 상태 업데이트
-  };
-
   // 검색어 저장
   const saveSearchQuery = (query) => {
     const currentDate = new Date().toISOString().split('T')[0];
     const newSearch = { query, date: currentDate };
 
-    const updatedSearches = [newSearch, ...recentSearches].slice(0, 6); // 최대 6개 저장
+    // 중복 검색어 방지
+    const existingSearchIndex = recentSearches.findIndex(
+      (item) => item.query === query,
+    );
+
+    const updatedSearches =
+      existingSearchIndex >= 0
+        ? [
+            newSearch,
+            ...recentSearches.filter((_, i) => i !== existingSearchIndex),
+          ].slice(0, 6)
+        : [newSearch, ...recentSearches].slice(0, 6);
+
     setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
@@ -60,12 +71,85 @@ function ContentHeader({
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // Enter로 검색
-  const handleSearchKeyPress = (e) => {
+  // 검색 실행 로직
+  const handleSearchKeyPress = async (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim());
-      setSearchQuery(''); // 검색 후 입력값 초기화
+      saveSearchQuery(searchQuery.trim()); // 검색어 저장 함수 호출
+      try {
+        const requestData = {
+          keyword: searchQuery.trim(),
+          sortOrder: selectedFilter || undefined,
+          dataType: localSelectedFormat || undefined,
+          tags: tags.length > 0 ? tags : undefined,
+        };
+
+        const response = await axiosInstance.post(
+          '/api/v1/content/filtering',
+          requestData,
+        );
+
+        setFilteredData(response.data.results || []); // 검색 결과 전달
+        setSearchQuery(''); // 입력값 초기화
+      } catch (error) {
+        console.error('검색 실패:', error);
+      }
     }
+  };
+
+  const fetchSearchResults = async (query = searchQuery) => {
+    console.log('현재 검색 조건:');
+    console.log('DataType:', localSelectedFormat || '없음');
+    console.log('Keyword:', query || '없음');
+    console.log('Tags:', tags.length > 0 ? tags : '없음');
+    console.log('Sort Order:', selectedFilter || '없음'); // 정렬 정보 출력
+
+    const requestData = {};
+
+    if (localSelectedFormat) {
+      requestData.dataType = localSelectedFormat;
+    }
+
+    if (query && query.trim() !== '') {
+      requestData.keyword = query.trim();
+    }
+
+    if (tags.length > 0) {
+      requestData.tags = tags;
+    }
+
+    // 정렬 옵션 추가
+    if (selectedFilter) {
+      requestData.sortOrder = selectedFilter; // 예: 최신순 또는 이름순
+    }
+
+    console.log('최종 요청 데이터:', requestData);
+
+    try {
+      const response = await axiosInstance.post(
+        '/api/v1/content/filtering',
+        requestData,
+      );
+      console.log('응답 데이터:', response.data);
+
+      // 검색 결과를 setFilteredData로 업데이트
+      setFilteredData(response.data.results || []);
+    } catch (error) {
+      if (error.response) {
+        console.error('응답 오류:', error.response.data);
+      } else if (error.request) {
+        console.error('요청 오류:', error.request);
+      } else {
+        console.error('알 수 없는 오류:', error.message);
+      }
+    }
+  };
+
+  // 최근 검색어 클릭 핸들러
+  const handleRecentSearchClick = async (query) => {
+    setSearchQuery(query); // 검색어 업데이트
+    saveSearchQuery(query); // 검색어 저장
+
+    await fetchSearchResults(query);
   };
 
   // 태그 검색 모달 열기
@@ -82,8 +166,9 @@ function ContentHeader({
 
   // 저장 형식 변경
   const handleFormatChange = (option) => {
-    setSelectedFormat(option);
-    setShowFormatDropdown(false);
+    setLocalSelectedFormat(option); // 내부 상태 업데이트
+    setSelectedFormat(option); // 부모로 전달
+    setShowFormatDropdown(false); // 드롭다운 닫기
   };
 
   // 태그 제출 처리
@@ -124,7 +209,7 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
                   isDefault={
-                    !selectedFormat
+                    !localSelectedFormat
                   } /* 값이 선택되지 않았을 때 연한 색상 적용 */
                   width="137px"
                 >
@@ -133,6 +218,9 @@ function ContentHeader({
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
+                    <DropdownItem onClick={() => handleFormatChange('')}>
+                      전체보기
+                    </DropdownItem>
                     <DropdownItem onClick={() => handleFormatChange('링크')}>
                       링크
                     </DropdownItem>
@@ -183,7 +271,7 @@ function ContentHeader({
               <Search
                 placeholder="찾고 싶은 콘텐츠를 검색하세요."
                 value={searchQuery}
-                onChange={handleSearchInputChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleSearchKeyPress}
                 onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
                 onBlur={() =>
@@ -198,11 +286,32 @@ function ContentHeader({
                   <RecentSearchTitle>최근 검색어</RecentSearchTitle>
                   {recentSearches.map((search, index) => (
                     <RecentSearchItem key={index}>
-                      <span>{search.query}</span>
-                      <span>{formatDate(search.date)}</span>
-                      <DeleteButton onClick={() => deleteSearch(index)}>
-                        X
-                      </DeleteButton>
+                      <button
+                        onClick={() => handleRecentSearchClick(search.query)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: 'none',
+                          border: 'none',
+                          padding: '0',
+                          fontSize: 'inherit',
+                          cursor: 'pointer',
+                          color: '#666',
+                        }}
+                      >
+                        <Icon
+                          icon="ion:search-outline"
+                          style={{ fontSize: '20px' }}
+                        />
+                        {search.query}
+                      </button>
+                      <div>
+                        <span>{formatDate(search.date)}</span>
+                        <DeleteButton onClick={() => deleteSearch(index)}>
+                          X
+                        </DeleteButton>
+                      </div>
                     </RecentSearchItem>
                   ))}
                 </RecentSearchList>
@@ -354,12 +463,12 @@ const SearchContainer = styled.div`
   width: 493px;
   height: 50px;
   border-radius: 25px;
-  margin-right: 100px;
-  background-color: (0, 0, 0, 0.3);
+  margin-right: 101px;
   border: 1px solid #9f9f9f;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: relative; /* 부모 요소 기준 위치 설정 */
 `;
 
 const Search = styled.input`
@@ -384,7 +493,6 @@ const SearchButton = styled.button`
   background-color: #f2f2f2;
   font-size: 16px;
   font-weight: 500;
-  color: #9f9f9f;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -440,31 +548,63 @@ const FilterEditIcon = styled.img`
 
 const RecentSearchList = styled.div`
   position: absolute;
-  top: 55px;
-  left: 0;
+  top: calc(100% + 5px);
+  left: 50%; /* 가운데 정렬 */
+  transform: translateX(-50%);
   background: white;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
+  width: 445px;
+  max-height: 315px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 `;
 
 const RecentSearchTitle = styled.div`
   font-weight: bold;
-  padding: 10px;
+  font-size: 20px;
+  padding: 19px;
+  position: relative; /* border 조정을 위해 relative 추가 */
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    right: 5%;
+    height: 1px;
+    background-color: #eaeaea; /* 구분선 색상 */
+  }
 `;
 
 const RecentSearchItem = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* 검색어와 오른쪽 요소를 양쪽 정렬 */
   align-items: center;
-  padding: 10px 12px;
+  padding: 15px 19px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   font-size: 18px;
-  color: #333;
+  color: #666;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* 아이콘과 텍스트 간격 */
+  }
+
+  /* 오른쪽 영역 (날짜와 삭제 버튼) */
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 6px; /* 날짜와 삭제 버튼 간 간격 */
+  }
 `;
 
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  color: #ff4d4f;
   font-size: 16px;
   cursor: pointer;
 `;

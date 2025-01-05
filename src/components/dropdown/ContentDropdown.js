@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import ContentDeleteModal from '../modal/ContentDeleteModal';
 import { useNavigate } from 'react-router-dom';
 
-function ContentDropdown({ contentId }) {
+function ContentDropdown({ contentId, fetchData }) {
   const [isKebabOpen, setIsKebabOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -84,7 +84,11 @@ function ContentDropdown({ contentId }) {
           </div>
         </Open>
       )}
-      <ContentDeleteModal ref={dialogRef} contentId={contentId} />
+      <ContentDeleteModal
+        ref={dialogRef}
+        contentId={contentId}
+        fetchData={fetchData}
+      />
     </div>
   );
 }

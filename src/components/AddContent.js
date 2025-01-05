@@ -695,11 +695,11 @@ const Backdrop = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* 배경보다 위로 오도록 설정 */
+  z-index: 999;
 `;
 
 const Count = styled.div`

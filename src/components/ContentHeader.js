@@ -130,6 +130,9 @@ function ContentHeader({
         requestData,
       );
       console.log('응답 데이터:', response.data);
+
+      // 검색 결과를 setFilteredData로 업데이트
+      setFilteredData(response.data.results || []);
     } catch (error) {
       if (error.response) {
         console.error('응답 오류:', error.response.data);
@@ -141,10 +144,12 @@ function ContentHeader({
     }
   };
 
-  // 최근 검색어 클릭 핸들러 수정
-  const handleRecentSearchClick = (query) => {
+  // 최근 검색어 클릭 핸들러
+  const handleRecentSearchClick = async (query) => {
     setSearchQuery(query); // 검색어 업데이트
-    fetchSearchResults(query); // API 호출
+    saveSearchQuery(query); // 검색어 저장
+
+    await fetchSearchResults(query);
   };
 
   // 태그 검색 모달 열기

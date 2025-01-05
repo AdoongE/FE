@@ -18,6 +18,7 @@ function ContentHeader({
   setActiveTab,
   tags = [],
   setTags,
+  setFilteredData,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
@@ -41,16 +42,24 @@ function ContentHeader({
     return `${year}.${month}.${day}`;
   };
 
-  const handleSearchInputChange = (e) => {
-    setSearchQuery(e.target.value); // 검색어 상태 업데이트
-  };
-
   // 검색어 저장
   const saveSearchQuery = (query) => {
     const currentDate = new Date().toISOString().split('T')[0];
     const newSearch = { query, date: currentDate };
 
-    const updatedSearches = [newSearch, ...recentSearches].slice(0, 6); // 최대 6개 저장
+    // 중복 검색어 방지
+    const existingSearchIndex = recentSearches.findIndex(
+      (item) => item.query === query,
+    );
+
+    const updatedSearches =
+      existingSearchIndex >= 0
+        ? [
+            newSearch,
+            ...recentSearches.filter((_, i) => i !== existingSearchIndex),
+          ].slice(0, 6)
+        : [newSearch, ...recentSearches].slice(0, 6);
+
     setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
@@ -63,11 +72,27 @@ function ContentHeader({
   };
 
   // 검색 실행 로직
-  const handleSearchKeyPress = (e) => {
+  const handleSearchKeyPress = async (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim()); // 검색어 저장
-      fetchSearchResults(); // 검색 API 호출
-      setSearchQuery(''); // 입력값 초기화
+      saveSearchQuery(searchQuery.trim()); // 검색어 저장 함수 호출
+      try {
+        const requestData = {
+          keyword: searchQuery.trim(),
+          sortOrder: selectedFilter || undefined,
+          dataType: localSelectedFormat || undefined,
+          tags: tags.length > 0 ? tags : undefined,
+        };
+
+        const response = await axiosInstance.post(
+          '/api/v1/content/filtering',
+          requestData,
+        );
+
+        setFilteredData(response.data.results || []); // 검색 결과 전달
+        setSearchQuery(''); // 입력값 초기화
+      } catch (error) {
+        console.error('검색 실패:', error);
+      }
     }
   };
 
@@ -241,7 +266,7 @@ function ContentHeader({
               <Search
                 placeholder="찾고 싶은 콘텐츠를 검색하세요."
                 value={searchQuery}
-                onChange={handleSearchInputChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleSearchKeyPress}
                 onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
                 onBlur={() =>

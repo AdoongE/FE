@@ -35,6 +35,7 @@ const MainPage = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
@@ -169,6 +170,13 @@ const MainPage = () => {
     fetchData(); // 데이터 초기 로드
   }, []);
 
+  const dataToRender = filteredData.length > 0 ? filteredData : sortedData;
+
+  const displayedContentBoxes = dataToRender.slice(
+    (currentPage - 1) * contentPerPage,
+    currentPage * contentPerPage,
+  );
+
   // 페이지네이션 처리
   const handlePageChange = (newPage) => {
     if (
@@ -178,11 +186,6 @@ const MainPage = () => {
       setCurrentPage(newPage);
     }
   };
-
-  const displayedContentBoxes = sortedData.slice(
-    (currentPage - 1) * contentPerPage,
-    currentPage * contentPerPage,
-  );
 
   const getPaginationNumbers = () => {
     const totalPages = Math.max(
@@ -223,6 +226,7 @@ const MainPage = () => {
       </SidebarContainer>
       <MainContent>
         <ContentHeader
+          setFilteredData={setFilteredData}
           setSortOrder={setSortOrder}
           setSelectedFormat={setLocalSelectedFormat}
           categoryId={categoryId}

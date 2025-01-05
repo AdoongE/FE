@@ -6,7 +6,9 @@ import ContentBlank from '../components/ContentBlank';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
+import noSearchContent from '../assets/icons/noSearchContent.png';
 import axios from 'axios';
+import { axiosInstance } from '../components/api/axios-instance';
 
 const api = axios.create({
   baseURL: 'http://210.107.205.122:20011',
@@ -36,6 +38,8 @@ const MainPage = () => {
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [tags, setTags] = useState([]); // 검색 필터링을 위한
+  const [searchState, setSearchState] = useState(false);
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
@@ -46,73 +50,105 @@ const MainPage = () => {
     try {
       setLoading(true);
       let url = '';
-      if (activeTab === '모아보기' || activeTab === '나의 씨드') {
-        url = '/api/v1/content/';
-        const res = await api.get(url);
-        const responseData = res.data.results?.[0]?.contentsInfoList || [];
-        setCollectData(responseData); // null 방지
-      } else if (activeTab === '카테고리') {
-        url = `/api/v1/content/${categoryId}`;
-      } else if (activeTab === '맞춤필터') {
-        console.log('필터 ID :', filterId);
-        url = `/api/v1/filter/${filterId}`;
-      }
+      let results = [];
 
-      if (!url) {
-        console.warn('유효하지 않은 URL 요청입니다.');
-        return;
-      }
+      if (activeTab === '검색필터') {
+        const data = { tags: tags };
+        const response = await axiosInstance.post(
+          '/api/v1/content/filtering',
+          data,
+        );
 
-      console.log('GET 요청할 URL:', url);
-      const response = await api.get(url);
-
-      // 응답 데이터 확인
-      console.log('응답 데이터:', response.data.results);
-
-      const results =
-        (response?.data?.results || []).flatMap((item) => {
-          if (activeTab === '맞춤필터') {
-            return {
-              id: item.contentId || 'ID 없음',
-              title:
-                item.contentName ||
-                (item.updatedDt
-                  ? new Date(item.updatedDt).toISOString().split('T')[0]
-                  : '날짜 정보 없음'),
-              categoryId: item.categoryId || [],
-              category: item.categoryName?.[0] || '카테고리 없음',
-              contentDateType: item.contentDateType || '타입 없음',
-              thumbnailImage: item.thumbnailImage || '',
-              updatedDt: item.updatedDt || '업데이트 정보 없음',
-              tagId: item.tagId || [],
-              tags: item.tagName || [],
-              dDay: item.dday || null,
-              createdAt: item.createdAt || Date.now(), // 기본값 설정
-            };
-          } else {
-            return (item.contentsInfoList || []).map((content) => {
-              const formattedDate = content.updatedDt
-                ? new Date(content.updatedDt).toISOString().split('T')[0]
-                : '날짜 정보 없음';
-
-              return {
-                id: content.contentId || 'ID 없음',
-                title: content.contentName || formattedDate,
-                user: item.nickname || '사용자 정보 없음',
-                category: content.categoryName || [],
-                tags: content.tagName || [],
-                dDay: content.dday,
-                contentDateType: content.contentDateType || '타입 없음',
-                thumbnailImage: content.thumbnailImage || '',
-                updatedDt: content.updatedDt || '업데이트 정보 없음',
-                createdAt: content.createdAt || Date.now(), // 기본값 설정
-              };
-            });
+        if (response.data.status.code === 200) {
+          console.log('검색 태그 전송 성공:', response.data.status.message);
+          console.log('검색 필터링 결과', response.data);
+          if (response.data.metadata.resultCount === 0) {
+            setSearchState(true);
           }
-        }) ?? [];
 
+          results = response.data.results.map((item) => ({
+            id: item.contentId || 'ID 없음',
+            title:
+              item.contentName ||
+              (item.updatedDt
+                ? new Date(item.updatedDt).toISOString().split('T')[0]
+                : '날짜 정보 없음'),
+            categoryId: item.categoryId || [],
+            category: item.categoryName || [],
+            tags: item.tagName || [],
+            dDay: item.dday,
+            contentDateType: item.contentDateType || '타입 없음',
+            thumbnailImage: item.thumbnailImage || '',
+            updatedDt: item.updatedDt || '업데이트 정보 없음',
+          }));
+        }
+      } else {
+        if (activeTab === '모아보기' || activeTab === '나의 씨드') {
+          url = '/api/v1/content/';
+          const res = await api.get(url);
+          const responseData = res.data.results?.[0]?.contentsInfoList || [];
+          setCollectData(responseData); // null 방지
+        } else if (activeTab === '카테고리') {
+          url = `/api/v1/content/${categoryId}`;
+        } else if (activeTab === '맞춤필터') {
+          console.log('필터 ID :', filterId);
+          url = `/api/v1/filter/${filterId}`;
+        }
+
+        if (!url) {
+          console.warn('유효하지 않은 URL 요청입니다.');
+          return;
+        }
+
+        console.log('GET 요청할 URL:', url);
+        const response = await api.get(url);
+        console.log('응답 데이터:', response.data.results);
+
+        results =
+          (response?.data?.results || []).flatMap((item) => {
+            if (activeTab === '맞춤필터') {
+              return {
+                id: item.contentId || 'ID 없음',
+                title:
+                  item.contentName ||
+                  (item.updatedDt
+                    ? new Date(item.updatedDt).toISOString().split('T')[0]
+                    : '날짜 정보 없음'),
+                categoryId: item.categoryId || [],
+                category: item.categoryName?.[0] || '카테고리 없음',
+                contentDateType: item.contentDateType || '타입 없음',
+                thumbnailImage: item.thumbnailImage || '',
+                updatedDt: item.updatedDt || '업데이트 정보 없음',
+                tagId: item.tagId || [],
+                tags: item.tagName || [],
+                dDay: item.dday || null,
+                createdAt: item.createdAt || Date.now(), // 기본값 설정
+              };
+            } else {
+              return (item.contentsInfoList || []).map((content) => {
+                const formattedDate = content.updatedDt
+                  ? new Date(content.updatedDt).toISOString().split('T')[0]
+                  : '날짜 정보 없음';
+
+                return {
+                  id: content.contentId || 'ID 없음',
+                  title: content.contentName || formattedDate,
+                  user: item.nickname || '사용자 정보 없음',
+                  category: content.categoryName || [],
+                  tags: content.tagName || [],
+                  dDay: content.dday,
+                  contentDateType: content.contentDateType || '타입 없음',
+                  thumbnailImage: content.thumbnailImage || '',
+                  updatedDt: content.updatedDt || '업데이트 정보 없음',
+                  createdAt: content.createdAt || Date.now(), // 기본값 설정
+                };
+              });
+            }
+          }) ?? [];
+      }
       setOriginalData(results);
       setSortedData(results); // 초기 데이터 설정
+      setSearchState(false);
     } catch (error) {
       console.error(
         '데이터 가져오기 실패:',
@@ -121,7 +157,7 @@ const MainPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, categoryId, filterId]);
+  }, [activeTab, categoryId, filterId, tags]);
 
   useEffect(() => {
     fetchData();
@@ -203,8 +239,10 @@ const MainPage = () => {
   const categoryCounts =
     collectData &&
     collectData.reduce((counts, item) => {
-      if (Array.isArray(item.categoryName) && item.categoryName[0]) {
-        counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+      if (Array.isArray(item.categoryName)) {
+        item.categoryName.forEach((category) => {
+          counts[category] = (counts[category] || 0) + 1;
+        });
       }
       return counts;
     }, {});
@@ -226,6 +264,8 @@ const MainPage = () => {
       </SidebarContainer>
       <MainContent>
         <ContentHeader
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           setFilteredData={setFilteredData}
           setSortOrder={setSortOrder}
           setSelectedFormat={setLocalSelectedFormat}
@@ -233,15 +273,34 @@ const MainPage = () => {
           categoryName={categoryName}
           filterId={filterId}
           filterName={filterName}
+          tags={tags}
+          setTags={setTags}
         />
-        <ContentArea $isBlank={sortedData.length === 0}>
+        <ContentArea $isBlank={searchState || sortedData.length === 0}>
           {loading ? (
-            <div>로딩 중...</div> // 로딩 상태 표시
+            <div>로딩 중...</div>
           ) : sortedData.length === 0 ? (
-            <ContentBlank /> // 데이터가 없을 때
+            <ContentBlank />
+          ) : searchState ? (
+            <NoSearchContent>
+              <img
+                src={noSearchContent}
+                alt="noSearch"
+                style={{
+                  width: '268px',
+                  height: '190px',
+                  marginBottom: '22.24px',
+                }}
+              />
+              <div style={{ fontSize: '30px', marginBottom: '4px' }}>
+                해당 조건에 맞는 콘텐츠가 없어요
+              </div>
+              <div style={{ fontSize: '20px', color: '#9f9f9f' }}>
+                다른 키워드로 검색해보세요
+              </div>
+            </NoSearchContent>
           ) : (
             (displayedContentBoxes || []).map((data, index) => {
-              // 데이터가 없을 경우 기본값 설정
               const formattedDate = data?.createdAt
                 ? new Date(data.createdAt).toLocaleDateString('ko-KR', {
                     year: 'numeric',
@@ -254,16 +313,17 @@ const MainPage = () => {
                 <React.Fragment key={data?.id || index}>
                   <StyledContentBox>
                     <ContentBox
-                      key={data?.id || index} // 데이터가 없을 경우 index 사용
+                      key={data?.id || index}
                       contentId={data?.id || 'ID 없음'}
-                      title={data?.title || formattedDate} // 제목이 없으면 생성 날짜 사용
-                      category={data?.category || []} // 기본값 처리
-                      tags={data?.tags || []} // 기본값 처리
-                      dDay={data?.dDay ?? null} // 기본값 처리
-                      contentDateType={data?.contentDateType || '타입 없음'} // 기본값 처리
-                      thumbnailImage={data?.thumbnailImage || null} // 기본값 처리
-                      updatedDt={data?.updatedDt || '업데이트 정보 없음'} // 기본값 처리
+                      title={data?.title || formattedDate}
+                      category={data?.category || []}
+                      tags={data?.tags || []}
+                      dDay={data?.dDay ?? null}
+                      contentDateType={data?.contentDateType || '타입 없음'}
+                      thumbnailImage={data?.thumbnailImage || null}
+                      updatedDt={data?.updatedDt || '업데이트 정보 없음'}
                       open={() => openModal(data)}
+                      fetchData={fetchData}
                     />
                   </StyledContentBox>
                   {selectedData && selectedData.id === data?.id && (
@@ -335,18 +395,14 @@ const MainContent = styled.div`
 `;
 
 const ContentArea = styled.div`
-  display: ${(props) =>
-    props.$isBlank ? 'flex' : 'grid'}; /* 데이터 없을 때 flex */
-  justify-content: ${(props) =>
-    props.$isBlank ? 'center' : 'normal'}; /* 가로 정렬 */
-  align-items: ${(props) =>
-    props.$isBlank ? 'flex-start' : 'stretch'}; /* 세로 정렬 위로 이동 */
+  display: ${(props) => (props.$isBlank ? 'flex' : 'grid')};
+  justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
+  align-items: ${(props) => (props.$isBlank ? 'flex-start' : 'stretch')};
   grid-template-columns: ${(props) =>
     !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
-  grid-row-gap: 40px; /* 위아래 간격 추가 */
+  grid-row-gap: 40px;
   box-sizing: border-box;
-  height: ${(props) =>
-    props.$isBlank ? '100%' : 'auto'}; /* 데이터 없을 때 전체 화면 차지 */
+  height: ${(props) => (props.$isBlank ? '100%' : 'auto')};
   padding: ${(props) =>
     props.$isBlank ? `${props.$gap || 300}px 0 0 0` : 'inherit'};
 `;
@@ -354,6 +410,13 @@ const ContentArea = styled.div`
 const StyledContentBox = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+`;
+
+const NoSearchContent = styled.div`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Pagination = styled.div`

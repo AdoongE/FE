@@ -95,7 +95,7 @@ const Dropdown = styled.div`
 
 const Box = styled.div`
   width: 440px;
-  height: 387px;
+  min-height: 387px;
   z-index: 0;
 `;
 

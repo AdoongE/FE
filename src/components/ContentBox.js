@@ -17,6 +17,7 @@ function ContentBox({
   open,
   contentDateType,
   updatedDt,
+  fetchData,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
 
@@ -55,7 +56,7 @@ function ContentBox({
           </Dday>
         )}
         <Dropdown>
-          <ContentDropdown contentId={contentId} />
+          <ContentDropdown contentId={contentId} fetchData={fetchData} />
         </Dropdown>
       </ImageBox>
       <TagContainer>
@@ -222,9 +223,9 @@ const CategoryDisplay = styled.div`
   font-size: 16px;
   line-height: 19px;
   color: #4f4f4f;
-  white-space: nowrap; /* 한 줄로 표시 */
-  overflow: hidden; /* 박스를 넘어가는 텍스트 숨김 */
-  text-overflow: ellipsis; /* 말줄임표 처리 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default ContentBox;

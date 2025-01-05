@@ -204,8 +204,10 @@ const MainPage = () => {
   const categoryCounts =
     collectData &&
     collectData.reduce((counts, item) => {
-      if (Array.isArray(item.categoryName) && item.categoryName[0]) {
-        counts[item.categoryName[0]] = (counts[item.categoryName[0]] || 0) + 1;
+      if (Array.isArray(item.categoryName)) {
+        item.categoryName.forEach((category) => {
+          counts[category] = (counts[category] || 0) + 1;
+        });
       }
       return counts;
     }, {});
@@ -283,6 +285,7 @@ const MainPage = () => {
                     thumbnailImage={data?.thumbnailImage || null}
                     updatedDt={data?.updatedDt || '업데이트 정보 없음'}
                     open={() => openModal(data)}
+                    fetchData={fetchData}
                   />
                   {selectedData && selectedData.id === data?.id && (
                     <ViewThumbnailModal

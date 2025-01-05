@@ -259,11 +259,11 @@ function ContentHeader({
         <FilterDiv>
           <FilterTitle>나의 씨드</FilterTitle>
           <FilterBtn onClick={() => showModal()}>
+            {filterName}
             <FilterEditIcon
               src={filterEditIcon}
               alt="filter edit icon"
             ></FilterEditIcon>
-            {filterName}
           </FilterBtn>
           <EditFilterModal filterId={filterId} ref={dialogRef} />
         </FilterDiv>
@@ -417,12 +417,25 @@ const FilterBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
+
+  &:hover {
+    background-color: #21a58c;
+    color: #def3f1;
+  }
 `;
 
 const FilterEditIcon = styled.img`
   width: 24px;
   height: 24px;
-  margin-right: 13px;
+  margin-left: 13px;
+  filter: invert(48%) sepia(59%) saturate(518%) hue-rotate(119deg)
+    brightness(98%) contrast(89%);
+
+  ${FilterBtn}:hover & {
+    filter: invert(95%) sepia(7%) saturate(308%) hue-rotate(125deg)
+      brightness(98%) contrast(98%);
+  }
 `;
 
 const RecentSearchList = styled.div`

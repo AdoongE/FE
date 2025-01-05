@@ -174,9 +174,9 @@ function ContentHeader({
   // 태그 변경 시 처리
   useEffect(() => {
     if (tags.length > 0) {
-      setActiveTab('검색필터');
+      handleSubmit(tags);
     }
-  }, [tags, setActiveTab]);
+  }, [tags]);
 
   const removeTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));

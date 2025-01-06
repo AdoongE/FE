@@ -30,6 +30,16 @@ function Navbar() {
     setIsModalOpen(false); // 모달 닫기
   };
 
+  const handleModalConfirm = (images, representativeIndex) => {
+    setIsModalOpen(false);
+    navigate('/content-add', {
+      state: {
+        images,
+        representativeIndex,
+      },
+    });
+  };
+
   useEffect(() => {
     const activeButton = navbarMenuRef.current.querySelector(
       `[data-tab="${activeTab}"]`,
@@ -108,7 +118,7 @@ function Navbar() {
       {isModalOpen && (
         <ImageUploadModal
           onClose={handleModalClose}
-          onConfirm={(data) => console.log(data)}
+          onConfirm={handleModalConfirm}
         />
       )}
     </>

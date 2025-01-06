@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
+import { useNavigate } from 'react-router-dom';
 
-const ImageUploadModal = ({ onClose, onConfirm }) => {
+function ImageUploadModal({ onClose }) {
   const [images, setImages] = useState([]);
-  const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
+  const [representativeIndex, setRepresentativeIndex] = useState(null); // 대표 이미지 인덱스 초기값 null
   const [error, setError] = useState(false); // 에러 메시지 상태
+  const navigate = useNavigate();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -15,7 +17,6 @@ const ImageUploadModal = ({ onClose, onConfirm }) => {
         label: file.name,
         preview: URL.createObjectURL(file),
       }));
-
       setImages([...images, ...newImages]);
       setError(false); // 파일 업로드 시 에러 상태 초기화
     },
@@ -40,10 +41,16 @@ const ImageUploadModal = ({ onClose, onConfirm }) => {
   const handleConfirm = () => {
     if (images.length === 0) {
       setError(true); // 이미지 업로드 에러 메시지 표시
-    } else {
-      onConfirm(images, representativeIndex); // 대표 이미지 인덱스와 함께 확인
-      onClose();
+      return;
     }
+
+    const finalRepresentativeIndex =
+      representativeIndex !== null ? representativeIndex : 0;
+
+    navigate('/content-add', {
+      state: { images, representativeIndex: finalRepresentativeIndex },
+    });
+    onClose(); // 모달 닫기
   };
 
   return (
@@ -113,7 +120,7 @@ const ImageUploadModal = ({ onClose, onConfirm }) => {
       </ModalContent>
     </ModalOverlay>
   );
-};
+}
 
 export default ImageUploadModal;
 

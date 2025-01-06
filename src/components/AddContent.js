@@ -13,7 +13,7 @@ import LinkUploader from './LinkUploader';
 import PdfUploadComponent from './PdfUpload';
 import ImageUploadComponent from './ImageUpload';
 import { ContentAddHandler } from './api/ContentAddApi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function AddContent({ onSetRepresentativeImage }) {
   const [dataType, setDataType] = useState(null);
@@ -24,8 +24,9 @@ function AddContent({ onSetRepresentativeImage }) {
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
+  const location = useLocation();
+  const [images, setImages] = useState(location.state?.images || []); // Navbar에서 전달된 이미지 데이터
 
   const navigate = useNavigate();
 

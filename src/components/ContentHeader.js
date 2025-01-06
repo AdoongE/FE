@@ -19,6 +19,7 @@ function ContentHeader({
   tags = [],
   setTags,
   setFilteredData,
+  setSearchState,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
@@ -74,7 +75,7 @@ function ContentHeader({
   // 검색 실행 로직
   const handleSearchKeyPress = async (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim()); // 검색어 저장 함수 호출
+      saveSearchQuery(searchQuery.trim());
       try {
         const requestData = {
           keyword: searchQuery.trim(),
@@ -88,8 +89,27 @@ function ContentHeader({
           requestData,
         );
 
-        setFilteredData(response.data.results || []); // 검색 결과 전달
-        setSearchQuery(''); // 입력값 초기화
+        const results = response.data.results || [];
+
+        if (results.length === 0) {
+          setSearchState(true); // 검색 결과 없음 상태로 설정
+          setFilteredData([]); // filteredData 초기화
+        } else {
+          setSearchState(false); // 검색 결과 있음
+          setFilteredData(
+            results.map((item) => ({
+              id: item.contentId || 'ID 없음',
+              title: item.contentName || '제목 없음',
+              categoryName: item.categoryName || [],
+              tagName: item.tagName || [],
+              dDay: item.dday ?? null,
+              contentDateType: item.contentDateType || '타입 없음',
+              thumbnailImage: item.thumbnailImage || null,
+              updatedDt: item.updatedDt || '업데이트 정보 없음',
+            })),
+          );
+        }
+        setSearchQuery(''); // 입력 초기화
       } catch (error) {
         console.error('검색 실패:', error);
       }
@@ -97,50 +117,45 @@ function ContentHeader({
   };
 
   const fetchSearchResults = async (query = searchQuery) => {
-    console.log('현재 검색 조건:');
-    console.log('DataType:', localSelectedFormat || '없음');
-    console.log('Keyword:', query || '없음');
-    console.log('Tags:', tags.length > 0 ? tags : '없음');
-    console.log('Sort Order:', selectedFilter || '없음'); // 정렬 정보 출력
-
-    const requestData = {};
-
-    if (localSelectedFormat) {
-      requestData.dataType = localSelectedFormat;
-    }
-
-    if (query && query.trim() !== '') {
-      requestData.keyword = query.trim();
-    }
-
-    if (tags.length > 0) {
-      requestData.tags = tags;
-    }
-
-    // 정렬 옵션 추가
-    if (selectedFilter) {
-      requestData.sortOrder = selectedFilter; // 예: 최신순 또는 이름순
-    }
-
-    console.log('최종 요청 데이터:', requestData);
-
     try {
+      console.log('검색 요청 시작 - 키워드:', query); // 검색 키워드 확인
+
+      const requestData = {
+        keyword: query.trim(), // 검색어
+        sortOrder: selectedFilter || undefined,
+        dataType: localSelectedFormat || undefined,
+        tags: tags.length > 0 ? tags : undefined,
+      };
+
       const response = await axiosInstance.post(
         '/api/v1/content/filtering',
         requestData,
       );
-      console.log('응답 데이터:', response.data);
 
-      // 검색 결과를 setFilteredData로 업데이트
-      setFilteredData(response.data.results || []);
-    } catch (error) {
-      if (error.response) {
-        console.error('응답 오류:', error.response.data);
-      } else if (error.request) {
-        console.error('요청 오류:', error.request);
+      console.log('검색 응답 데이터:', response.data); // API 응답 확인
+
+      const results = response.data.results.map((item) => ({
+        id: item.contentId || 'ID 없음',
+        title: item.contentName || '제목 없음',
+        category: item.categoryName || [],
+        tags: item.tagName || [],
+        dDay: item.dday ?? null,
+        contentDateType: item.contentDateType || '타입 없음',
+        thumbnailImage: item.thumbnailImage || null,
+        updatedDt: item.updatedDt || '업데이트 정보 없음',
+      }));
+
+      if (results.length === 0) {
+        setSearchState(true); // 검색 결과 없음
+        setFilteredData([]); // 빈 결과로 설정
       } else {
-        console.error('알 수 없는 오류:', error.message);
+        setSearchState(false); // 검색 결과 있음
+        setFilteredData(results); // 검색 결과 저장
       }
+
+      console.log('검색 후 매핑된 데이터:', results);
+    } catch (error) {
+      console.error('검색 실패:', error);
     }
   };
 

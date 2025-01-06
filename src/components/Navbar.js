@@ -4,11 +4,13 @@ import LogoImage from '../assets/icons/seedzip_logo.png';
 import Logo from '../assets/icons/seedzip.png';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import ImageUploadModal from '../components/modal/ImageUploadModal';
 
 function Navbar() {
   const [activeTab, setActiveTab] = useState('모아보기'); // 상단바 내부 전용 상태
   const [activeBarWidth, setActiveBarWidth] = useState(0);
   const [activeBarLeft, setActiveBarLeft] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navbarMenuRef = useRef(null);
   const navigate = useNavigate();
 
@@ -21,7 +23,11 @@ function Navbar() {
   };
 
   const handleNewContentClick = () => {
-    navigate('/content-add');
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false); // 모달 닫기
   };
 
   useEffect(() => {
@@ -36,68 +42,76 @@ function Navbar() {
   }, [activeTab]);
 
   return (
-    <NavbarContainer>
-      <LogoContainer>
-        <StyledLogoImage
-          src={LogoImage}
-          alt="seedzip_logo"
-          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
-          style={{ cursor: 'pointer' }} // 클릭 가능 표시
-        />
-        <StyledLogo
-          src={Logo}
-          alt="seedzip"
-          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
-          style={{ cursor: 'pointer' }} // 클릭 가능 표시
-        />
-      </LogoContainer>
-      <NavbarMenu ref={navbarMenuRef}>
-        <MenuButton
-          data-tab="모아보기"
-          onClick={(e) => {
-            handleTabClick('모아보기', e);
-            navigate('/main'); // "모아보기" 클릭 시 메인 페이지 이동
-          }}
-          active={activeTab === '모아보기'}
-        >
-          모아보기
-        </MenuButton>
-        <MenuButton
-          data-tab="탐색하기"
-          onClick={(e) => handleTabClick('탐색하기', e)}
-          active={activeTab === '탐색하기'}
-        >
-          탐색하기
-        </MenuButton>
-        <ActiveBar width={activeBarWidth} left={activeBarLeft} />
-      </NavbarMenu>
-      <NavbarRight>
-        <Icon
-          icon="iconoir:bell"
-          width="30"
-          height="30"
-          style={{ color: 'black' }}
-        />
-        <NewContentButton onClick={handleNewContentClick}>
-          <Icon
-            icon="iconoir:plus"
-            width="24"
-            height="24"
-            style={{ color: '#00000' }}
+    <>
+      <NavbarContainer>
+        <LogoContainer>
+          <StyledLogoImage
+            src={LogoImage}
+            alt="seedzip_logo"
+            onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+            style={{ cursor: 'pointer' }} // 클릭 가능 표시
           />
-          새 콘텐츠
-        </NewContentButton>
-        <ProfileIcon>
-          <Icon
-            icon="ix:user-profile-filled"
-            width="40px"
-            height="40px"
-            style={{ color: '#9F9F9F' }}
-            onClick={() => navigate('/mypage')}
+          <StyledLogo
+            src={Logo}
+            alt="seedzip"
+            onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+            style={{ cursor: 'pointer' }} // 클릭 가능 표시
           />
-        </ProfileIcon>
-      </NavbarRight>
-    </NavbarContainer>
+        </LogoContainer>
+        <NavbarMenu ref={navbarMenuRef}>
+          <MenuButton
+            data-tab="모아보기"
+            onClick={(e) => {
+              handleTabClick('모아보기', e);
+              navigate('/main'); // "모아보기" 클릭 시 메인 페이지 이동
+            }}
+            active={activeTab === '모아보기'}
+          >
+            모아보기
+          </MenuButton>
+          <MenuButton
+            data-tab="탐색하기"
+            onClick={(e) => handleTabClick('탐색하기', e)}
+            active={activeTab === '탐색하기'}
+          >
+            탐색하기
+          </MenuButton>
+          <ActiveBar width={activeBarWidth} left={activeBarLeft} />
+        </NavbarMenu>
+        <NavbarRight>
+          <Icon
+            icon="iconoir:bell"
+            width="30"
+            height="30"
+            style={{ color: 'black' }}
+          />
+          <NewContentButton onClick={handleNewContentClick}>
+            <Icon
+              icon="iconoir:plus"
+              width="24"
+              height="24"
+              style={{ color: '#00000' }}
+            />
+            새 콘텐츠
+          </NewContentButton>
+          <ProfileIcon>
+            <Icon
+              icon="ix:user-profile-filled"
+              width="40px"
+              height="40px"
+              style={{ color: '#9F9F9F' }}
+              onClick={() => navigate('/mypage')}
+            />
+          </ProfileIcon>
+        </NavbarRight>
+      </NavbarContainer>
+      {isModalOpen && (
+        <ImageUploadModal
+          onClose={handleModalClose}
+          onConfirm={(data) => console.log(data)}
+        />
+      )}
+    </>
   );
 }
 

@@ -134,7 +134,7 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background: white;
   width: 680px;
-  height: 634px;
+  height: 620px;
   padding: 50px;
   border-radius: 20px;
   display: flex;
@@ -155,6 +155,7 @@ const Title = styled.h2`
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 60px;
 `;
 
 const DescriptionText = styled.p`
@@ -255,7 +256,7 @@ const Footer = styled.div`
 `;
 
 const Button = styled.button`
-  margin-top: 90px;
+  margin-top: 120px;
   background-color: #41c3ab;
   width: 99px;
   height: 54px;

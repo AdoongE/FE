@@ -6,6 +6,7 @@ import { useDropzone } from 'react-dropzone';
 const ImageUploadModal = ({ onClose, onConfirm }) => {
   const [images, setImages] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(0); // 대표 이미지 인덱스
+  const [error, setError] = useState(false); // 에러 메시지 상태
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -16,11 +17,7 @@ const ImageUploadModal = ({ onClose, onConfirm }) => {
       }));
 
       setImages([...images, ...newImages]);
-
-      // 첫 이미지 업로드 시 자동으로 대표 이미지 설정
-      if (images.length === 0) {
-        setRepresentativeIndex(0);
-      }
+      setError(false); // 파일 업로드 시 에러 상태 초기화
     },
     accept: 'image/jpeg, image/png, image/svg+xml',
     maxSize: 10 * 1024 * 1024, // 10MB 제한
@@ -30,18 +27,23 @@ const ImageUploadModal = ({ onClose, onConfirm }) => {
     const updatedImages = images.filter((image) => image.id !== id);
     setImages(updatedImages);
 
-    if (representativeIndex >= updatedImages.length) {
+    // 대표 이미지가 삭제되었을 경우 첫 번째 이미지를 대표로 설정
+    if (updatedImages.length > 0 && id === images[representativeIndex]?.id) {
       setRepresentativeIndex(0);
     }
   };
 
   const handleSetRepresentative = (index) => {
-    setRepresentativeIndex(index);
+    setRepresentativeIndex(index); // 클릭한 이미지를 대표 이미지로 설정
   };
 
   const handleConfirm = () => {
-    onConfirm(images);
-    onClose();
+    if (images.length === 0) {
+      setError(true); // 이미지 업로드 에러 메시지 표시
+    } else {
+      onConfirm(images, representativeIndex); // 대표 이미지 인덱스와 함께 확인
+      onClose();
+    }
   };
 
   return (
@@ -56,54 +58,54 @@ const ImageUploadModal = ({ onClose, onConfirm }) => {
           />
         </Header>
         <Body>
-          {images.length === 0 ? (
-            <DropArea {...getRootProps()}>
-              <input {...getInputProps()} />
-              <IconWrapper>
+          <DescriptionText>
+            이미지를 업로드하고 썸네일을 지정하세요.
+          </DescriptionText>
+          <DescriptionNote>
+            *썸네일을 기준으로 제목과 태그, 요약 내용이 자동 입력됩니다.
+          </DescriptionNote>
+          <DropArea {...getRootProps()} hasError={error}>
+            <input {...getInputProps()} />
+            {images.length === 0 ? (
+              <>
                 <Icon
-                  icon="iconoir:upload"
-                  width="40"
-                  height="40"
-                  style={{ color: '#aaa' }}
+                  icon="material-symbols:upload-rounded"
+                  style={{ width: '59px', height: '59px', color: '#4F4F4F' }}
                 />
-              </IconWrapper>
-              <DropText>이미지 선택 혹은 여기로 파일을 끌어오세요.</DropText>
-            </DropArea>
-          ) : (
-            <ImagesWrapper>
-              {images.map((image, index) => (
-                <ImageBox
-                  key={image.id}
-                  onClick={() => handleSetRepresentative(index)}
-                >
-                  {index === representativeIndex && (
-                    <RepresentativeLabel>대표</RepresentativeLabel>
-                  )}
-                  <ImagePreview src={image.preview} alt={image.label} />
-                  <DeleteButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteImage(image.id);
-                    }}
+                <DropText>
+                  이미지 선택
+                  <br />
+                  혹은 여기로 파일을 끌어오세요.
+                </DropText>
+              </>
+            ) : (
+              <ImagesWrapper>
+                {images.map((image, index) => (
+                  <ImageBox
+                    key={image.id}
+                    onClick={() => handleSetRepresentative(index)}
                   >
-                    ×
-                  </DeleteButton>
-                </ImageBox>
-              ))}
-              <AddImageBox {...getRootProps()}>
-                <input {...getInputProps()} />
-                <AddCircle>
-                  <Icon
-                    icon="iconoir:plus"
-                    width="35"
-                    height="35"
-                    style={{ color: '#aaa' }}
-                  />
-                </AddCircle>
-                <AddText>이미지 추가하기</AddText>
-              </AddImageBox>
-            </ImagesWrapper>
-          )}
+                    {representativeIndex === index && (
+                      <RepresentativeLabel>대표</RepresentativeLabel>
+                    )}
+                    <ImagePreview src={image.preview} alt={image.label} />
+                    <DeleteButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteImage(image.id);
+                      }}
+                    >
+                      ×
+                    </DeleteButton>
+                  </ImageBox>
+                ))}
+              </ImagesWrapper>
+            )}
+          </DropArea>
+          <FileLimit>
+            최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
+          </FileLimit>
+          {error && <ErrorMessage>이미지를 업로드하세요</ErrorMessage>}
         </Body>
         <Footer>
           <Button onClick={handleConfirm}>완료</Button>
@@ -131,12 +133,12 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  width: 500px;
-  padding: 24px;
+  width: 680px;
+  height: 634px;
+  padding: 50px;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 `;
 
 const Header = styled.div`
@@ -146,53 +148,77 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 18px;
+  font-size: 32px;
   font-weight: bold;
 `;
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+`;
+
+const DescriptionText = styled.p`
+  color: var(--Color-4, #4f4f4f);
+  font-family: 'Pretendard Variable';
+  font-size: 24px;
+  font-style: normal;
+  margin-bottom: 8px;
+`;
+
+const DescriptionNote = styled.small`
+  color: var(--Color-5, #9f9f9f);
+  font-family: 'Pretendard Variable';
+  font-size: 16px;
+  font-style: normal;
+  margin-bottom: 20px;
 `;
 
 const DropArea = styled.div`
   width: 100%;
-  height: 200px;
-  border: 2px dashed #ddd;
-  border-radius: 8px;
+  height: 240px;
+  border-radius: 10px;
+  background-color: #f6f6f6;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-`;
-
-const IconWrapper = styled.div`
-  margin-bottom: 10px;
+  overflow-x: auto;
 `;
 
 const DropText = styled.div`
   color: #aaa;
+  margin-top: 12px;
   font-size: 16px;
+  text-align: center;
+`;
+
+const FileLimit = styled.p`
+  font-size: 16px;
+  color: #9f9f9f;
+  margin-top: 20px;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 16px;
+  color: #ff6b6b;
+  margin-top: 6px;
 `;
 
 const ImagesWrapper = styled.div`
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  overflow-x: auto; /* 가로 스크롤 활성화 */
+  padding: 10px 0;
 `;
 
 const ImageBox = styled.div`
-  width: 159px;
-  height: 177px;
+  width: 130px;
+  height: 130px;
   position: relative;
   background-color: #f0f0f0;
-  border-radius: 4px;
+  border-radius: 5px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
 `;
 
 const RepresentativeLabel = styled.div`
@@ -204,12 +230,13 @@ const RepresentativeLabel = styled.div`
   padding: 2px 6px;
   font-size: 12px;
   border-radius: 12px;
+  font-weight: bold;
 `;
 
 const ImagePreview = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 4px;
+  border-radius: 5px;
   object-fit: cover;
 `;
 
@@ -224,45 +251,22 @@ const DeleteButton = styled.button`
   font-size: 20px;
 `;
 
-const AddImageBox = styled.div`
-  width: 159px;
-  height: 177px;
-  border: 1px dashed #ccc;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 4px;
-`;
-
-const AddCircle = styled.div`
-  width: 76px;
-  height: 76px;
-  border: 1px dashed #aaa;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-
-const AddText = styled.div`
-  color: #aaa;
-  font-size: 12px;
-`;
-
 const Footer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
 `;
 
 const Button = styled.button`
+  position: absolute;
+  top: 90px;
   background-color: #41c3ab;
+  width: 99px;
+  height: 54px;
   color: white;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 50px;
+  font-size: 22px;
   cursor: pointer;
 `;

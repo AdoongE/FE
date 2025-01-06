@@ -159,7 +159,6 @@ const Body = styled.div`
 
 const DescriptionText = styled.p`
   color: var(--Color-4, #4f4f4f);
-  font-family: 'Pretendard Variable';
   font-size: 24px;
   font-style: normal;
   margin-bottom: 8px;
@@ -167,14 +166,12 @@ const DescriptionText = styled.p`
 
 const DescriptionNote = styled.small`
   color: var(--Color-5, #9f9f9f);
-  font-family: 'Pretendard Variable';
   font-size: 16px;
   font-style: normal;
   margin-bottom: 20px;
 `;
 
 const DropArea = styled.div`
-  width: 100%;
   height: 240px;
   border-radius: 10px;
   background-color: #f6f6f6;
@@ -202,7 +199,8 @@ const FileLimit = styled.p`
 const ErrorMessage = styled.p`
   font-size: 16px;
   color: #ff6b6b;
-  margin-top: 6px;
+  margin-top: 8px;
+  margin-bottom: -30px;
 `;
 
 const ImagesWrapper = styled.div`
@@ -252,19 +250,16 @@ const DeleteButton = styled.button`
 `;
 
 const Footer = styled.div`
-  position: relative;
   display: flex;
   justify-content: center;
 `;
 
 const Button = styled.button`
-  position: absolute;
-  top: 90px;
+  margin-top: 90px;
   background-color: #41c3ab;
   width: 99px;
   height: 54px;
   color: white;
-  padding: 10px 20px;
   border: none;
   border-radius: 50px;
   font-size: 22px;

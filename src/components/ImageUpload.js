@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 
 const ImageUploadComponent = ({ representativeIndex, images }) => {
@@ -11,34 +10,19 @@ const ImageUploadComponent = ({ representativeIndex, images }) => {
           최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
         </span>
       </Instructions>
-      {images.length === 0 ? (
-        <DropArea>
-          <input />
-          <IconWrapper>
-            <Icon
-              icon="iconoir:upload"
-              width="40"
-              height="40"
-              style={{ color: '#aaa' }}
-            />
-          </IconWrapper>
-          <DropText>이미지 선택 혹은 여기로 파일을 끌어오세요.</DropText>
-        </DropArea>
-      ) : (
-        <ImagesWrapper>
-          {images.map((image, index) => (
-            <ImageContainer key={image.id}>
-              <ImageBox>
-                {index === representativeIndex && (
-                  <RepresentativeLabel>대표</RepresentativeLabel>
-                )}
-                <ImagePreview src={image.preview} alt={image.label} />
-              </ImageBox>
-              <FileName>{image.label}</FileName>
-            </ImageContainer>
-          ))}
-        </ImagesWrapper>
-      )}
+      <ImagesWrapper>
+        {images.map((image, index) => (
+          <ImageContainer key={image.id}>
+            <ImageBox>
+              {index === representativeIndex && (
+                <RepresentativeLabel>대표</RepresentativeLabel>
+              )}
+              <ImagePreview src={image.preview} alt={image.label} />
+            </ImageBox>
+            <FileName>{image.label}</FileName>
+          </ImageContainer>
+        ))}
+      </ImagesWrapper>
     </Wrapper>
   );
 };
@@ -60,28 +44,6 @@ const Instructions = styled.p`
     color: #999;
     font-weight: normal;
   }
-`;
-
-const DropArea = styled.div`
-  width: 100%;
-  max-width: 1100px;
-  height: 200px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const IconWrapper = styled.div`
-  margin-bottom: 10px;
-`;
-
-const DropText = styled.div`
-  color: #aaa;
-  font-size: 16px;
 `;
 
 const ImagesWrapper = styled.div`

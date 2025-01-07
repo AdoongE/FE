@@ -19,21 +19,18 @@ function AddContent() {
   const location = useLocation();
   const [dataType, setDataType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [representativeIndex, setRepresentativeIndex] = useState(
-    location.state?.representativeIndex || 0,
-  );
+  const representativeIndex = location.state?.representativeIndex || 0;
   const [pendingOption, setPendingOption] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
   const images = location.state?.images || [];
-  // const files = location.state?.files || [];
-  const [files, setFiles] = useState([]);
+  const files = location.state?.files || [];
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('생성 이미지', images, representativeIndex);
+    console.log('생성 이미지', images, files, representativeIndex);
     if (images.length > 0) {
       setDataType('IMAGE');
     } else if (files.length > 0) {
@@ -66,12 +63,6 @@ function AddContent() {
   };
 
   const ChangeRef = useRef(null);
-
-  const handlePdf = (index) => {
-    setRepresentativeIndex(index); // 대표 파일 인덱스 관리
-    setValue('thumbnailImage', index, { shouldValidate: true }); // Form 값 설정
-    trigger('thumbnailImage');
-  };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -422,9 +413,8 @@ function AddContent() {
           )}
           {dataType === 'PDF' && (
             <PdfUploadComponent
-              onSetRepresentative={handlePdf}
-              files={files}
-              setFiles={setFiles}
+              representativeIndex={representativeIndex}
+              images={files}
             />
           )}
           <Tag>

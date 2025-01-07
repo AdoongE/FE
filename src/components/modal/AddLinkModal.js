@@ -1,17 +1,17 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { axiosInstance } from '../api/axios-instance';
 import { useNavigate } from 'react-router-dom';
 
-const AddLinkModal = forwardRef((_, ref) => {
+const AddLinkModal = ({ onClose }) => {
   const navigate = useNavigate();
   const [contentLinks, setContentLinks] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const closeModal = () => {
-    ref.current?.close();
-    setContentLinks('');
+    onClose(); // 부모 컴포넌트에서 전달된 onClose 호출
+    setContentLinks(''); // 상태 초기화
   };
 
   const handleAddLink = async () => {
@@ -109,60 +109,62 @@ const AddLinkModal = forwardRef((_, ref) => {
     }
   };
 
-  useEffect(() => {
-    if (ref.current) {
-      const dialogElement = ref.current;
-      const handleClickOutside = (event) => {
-        const dialogArea = dialogElement.getBoundingClientRect();
-        if (
-          event.clientX < dialogArea.left ||
-          event.clientX > dialogArea.right ||
-          event.clientY < dialogArea.top ||
-          event.clientY > dialogArea.bottom
-        ) {
-          dialogElement.close();
-          setContentLinks('');
-        }
-      };
-      dialogElement.addEventListener('click', handleClickOutside);
-      return () => {
-        dialogElement.removeEventListener('click', handleClickOutside);
-      };
-    }
-  }, []);
-
   return (
-    <Dialog ref={ref}>
-      <TopDiv>
-        <ModalTitle>씨드 추가</ModalTitle>
-        <Icon
-          icon="line-md:close"
-          style={{ width: '36px', height: '36px', cursor: 'pointer' }}
-          onClick={() => closeModal()}
-        />
-      </TopDiv>
-      <Title>링크를 입력하세요.</Title>
+    <ModalOverlay onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        <TopDiv>
+          <ModalTitle>씨드 추가</ModalTitle>
+          <Icon
+            icon="line-md:close"
+            style={{ width: '36px', height: '36px', cursor: 'pointer' }}
+            onClick={() => closeModal()}
+          />
+        </TopDiv>
+        <Title>링크를 입력하세요.</Title>
 
-      <Input
-        value={contentLinks}
-        onChange={(event) => setContentLinks(event.target.value)}
-        placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
-      />
-      {errorMessage === '링크를 입력해주세요.' ? (
-        <Error>{errorMessage}</Error>
-      ) : errorMessage === '' ? (
-        <Error></Error>
-      ) : (
-        <Error>유효하지 않은 링크입니다.</Error>
-      )}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button onClick={handleAddLink}>완료</Button>
-      </div>
-    </Dialog>
+        <Input
+          value={contentLinks}
+          onChange={(event) => setContentLinks(event.target.value)}
+          placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
+        />
+        {errorMessage === '링크를 입력해주세요.' ? (
+          <Error>{errorMessage}</Error>
+        ) : errorMessage === '' ? (
+          <Error></Error>
+        ) : (
+          <Error>유효하지 않은 링크입니다.</Error>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button onClick={handleAddLink}>완료</Button>
+        </div>
+      </ModalContent>
+    </ModalOverlay>
   );
-});
+};
 
 AddLinkModal.displayName = 'AddLinkModal';
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  width: 580px;
+  padding: 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+`;
 
 const Error = styled.div`
   color: #f00;
@@ -233,26 +235,6 @@ const Title = styled.div`
   font-weight: 500;
   line-height: normal;
   margin-bottom: 21px;
-`;
-
-const Dialog = styled.dialog`
-  // block 활성화하면 체크박스 모달이랑 동시에 화면에 나옴
-  // display: block;
-  position: fixed;
-  z-index: 1000;
-  visibility: visible;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 580px;
-  height: 280px;
-  border-radius: 50px;
-  background: #fff;
-  border: 0;
-  padding: 40px 50px;
-  ::backdrop {
-    background-color: rgba(0, 0, 0, 0.55);
-  }
 `;
 
 export default AddLinkModal;

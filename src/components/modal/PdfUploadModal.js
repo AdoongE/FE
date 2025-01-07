@@ -111,7 +111,7 @@ function PdfUploadModal({ onClose }) {
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <Header>
           <Title>PDF 추가</Title>

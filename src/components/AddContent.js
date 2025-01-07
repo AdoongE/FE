@@ -15,20 +15,35 @@ import ImageUploadComponent from './ImageUpload';
 import { ContentAddHandler } from './api/ContentAddApi';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function AddContent({ onSetRepresentativeImage }) {
+function AddContent() {
+  const location = useLocation();
   const [dataType, setDataType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
+  const [representativeIndex, setRepresentativeIndex] = useState(
+    location.state?.representativeIndex || 0,
+  );
   const [pendingOption, setPendingOption] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const images = location.state?.images || [];
+  // const files = location.state?.files || [];
   const [files, setFiles] = useState([]);
-  const location = useLocation();
-  const [images, setImages] = useState(location.state?.images || []); // Navbar에서 전달된 이미지 데이터
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('생성 이미지', images, representativeIndex);
+    if (images.length > 0) {
+      setDataType('IMAGE');
+    } else if (files.length > 0) {
+      setDataType('PDF');
+    } else {
+      setDataType('LINK');
+    }
+    setValue('thumbnailImage', representativeIndex, { shouldValidate: true });
+    trigger('thumbnailImage');
+  }, []);
 
   const handleTagInput = (event) => {
     if (isComposing) return;
@@ -51,15 +66,6 @@ function AddContent({ onSetRepresentativeImage }) {
   };
 
   const ChangeRef = useRef(null);
-
-  const handleImage = (index) => {
-    setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
-    setValue('thumbnailImage', index, { shouldValidate: true });
-    trigger('thumbnailImage');
-    if (onSetRepresentativeImage) {
-      onSetRepresentativeImage(index); // 부모 컴포넌트로 콜백 전달
-    }
-  };
 
   const handlePdf = (index) => {
     setRepresentativeIndex(index); // 대표 파일 인덱스 관리
@@ -192,20 +198,6 @@ function AddContent({ onSetRepresentativeImage }) {
     setIsModalVisible(false);
     setPendingOption(null);
   };
-
-  // const handleCheckboxChange = (event) => {
-  //   const option = event.target.name;
-
-  //   if (isFirstSelection) {
-  //     setDataType(option);
-  //     setIsFirstSelection(false);
-  //     setValue('dataType', option, { shouldValidate: true });
-  //     trigger('dataType');
-  //   } else if (dataType !== option) {
-  //     setPendingOption(option);
-  //     setIsModalVisible(true);
-  //   }
-  // };
 
   const handleConfirmChange = () => {
     if (pendingOption && pendingOption !== dataType) {
@@ -424,9 +416,8 @@ function AddContent({ onSetRepresentativeImage }) {
           )}
           {dataType === 'IMAGE' && (
             <ImageUploadComponent
-              onSetRepresentative={handleImage}
+              representativeIndex={representativeIndex}
               images={images}
-              setImages={setImages}
             />
           )}
           {dataType === 'PDF' && (

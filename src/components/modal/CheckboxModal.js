@@ -3,15 +3,10 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import checkIcon from '../../assets/icons/Check.png';
 import AddLinkModal from './AddLinkModal';
-import ImageUploadModal from './ImageUploadModal';
-import PdfUploadModal from './PdfUploadModal';
 
 const CheckboxModal = forwardRef((_, ref) => {
   const [dataType, setDataType] = useState(null);
-
-  const linkDialogRef = useRef(null);
-  const imageDialogRef = useRef(null);
-  const pdfDialogRef = useRef(null);
+  const dialogRef = useRef(null);
   //   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -29,29 +24,20 @@ const CheckboxModal = forwardRef((_, ref) => {
   }, [dataType]);
 
   const handleChangeModal = () => {
-    if (dataType) {
-      closeModal(); // 체크박스 모달 닫기
+    if (dataType === 'LINK') {
+      closeModal();
       setTimeout(() => {
-        // 데이터 타입에 따라 선택한 모달 열기
-        if (dataType === 'LINK') {
-          linkDialogRef.current?.showModal();
-        } else if (dataType === 'IMAGE') {
-          imageDialogRef.current?.showModal();
-        } else if (dataType === 'PDF') {
-          pdfDialogRef.current?.showModal();
-        }
+        // setIsOpen(true);
+        dialogRef.current?.showModal();
+        console.log(dialogRef.current.open);
       }, 200);
+      console.log('새로운 모달');
     }
   };
 
-  const closeNextModal = (ref) => {
-    ref.current?.close(); // 현재 열려 있는 모달 닫기
-    setDataType(null); // 상태 초기화
-  };
-
   useEffect(() => {
-    if (ref.current) {
-      const dialogElement = ref.current;
+    if (dialogRef.current) {
+      const dialogElement = dialogRef.current;
 
       const handleClickOutside = (event) => {
         const dialogArea = dialogElement.getBoundingClientRect();
@@ -64,72 +50,58 @@ const CheckboxModal = forwardRef((_, ref) => {
           dialogElement.close();
         }
       };
-
       dialogElement.addEventListener('mousedown', handleClickOutside);
       return () => {
         dialogElement.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [ref]);
+  }, []);
 
   return (
-    <>
-      <Dialog ref={ref}>
-        <TopDiv>
-          <ModalTitle>씨드 추가</ModalTitle>
-          <Icon
-            icon="line-md:close"
-            style={{ width: '36px', height: '36px', cursor: 'pointer' }}
-            onClick={() => closeModal()}
+    <Dialog ref={ref}>
+      <TopDiv>
+        <ModalTitle>씨드 추가</ModalTitle>
+        <Icon
+          icon="line-md:close"
+          style={{ width: '36px', height: '36px', cursor: 'pointer' }}
+          onClick={() => closeModal()}
+        />
+      </TopDiv>
+      <Title>저장 형식을 선택하세요.</Title>
+      <Group>
+        <CheckboxLabel>
+          <TypeBox
+            type="checkbox"
+            name="LINK"
+            checked={dataType === 'LINK'}
+            onChange={handleCheckboxChange}
           />
-        </TopDiv>
-        <Title>저장 형식을 선택하세요.</Title>
-        <Group>
-          <CheckboxLabel>
-            <TypeBox
-              type="checkbox"
-              name="LINK"
-              checked={dataType === 'LINK'}
-              onChange={handleCheckboxChange}
-            />
-            <span>링크</span>
-          </CheckboxLabel>
-          <CheckboxLabel>
-            <TypeBox
-              type="checkbox"
-              name="IMAGE"
-              checked={dataType === 'IMAGE'}
-              onChange={handleCheckboxChange}
-            />
-            <span>이미지</span>
-          </CheckboxLabel>
-          <CheckboxLabel>
-            <TypeBox
-              type="checkbox"
-              name="PDF"
-              checked={dataType === 'PDF'}
-              onChange={handleCheckboxChange}
-            />
-            <span>PDF</span>
-          </CheckboxLabel>
-        </Group>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button onClick={handleChangeModal}>다음</Button>
-        </div>
-      </Dialog>
-      <AddLinkModal
-        ref={linkDialogRef}
-        onClose={() => closeNextModal(linkDialogRef)}
-      />
-      <ImageUploadModal
-        ref={imageDialogRef}
-        onClose={() => closeNextModal(imageDialogRef)}
-      />
-      <PdfUploadModal
-        ref={pdfDialogRef}
-        onClose={() => closeNextModal(pdfDialogRef)}
-      />
-    </>
+          <span>링크</span>
+        </CheckboxLabel>
+        <CheckboxLabel>
+          <TypeBox
+            type="checkbox"
+            name="IMAGE"
+            checked={dataType === 'IMAGE'}
+            onChange={handleCheckboxChange}
+          />
+          <span>이미지</span>
+        </CheckboxLabel>
+        <CheckboxLabel>
+          <TypeBox
+            type="checkbox"
+            name="PDF"
+            checked={dataType === 'PDF'}
+            onChange={handleCheckboxChange}
+          />
+          <span>PDF</span>
+        </CheckboxLabel>
+      </Group>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Button onClick={handleChangeModal}>다음</Button>
+      </div>
+      <AddLinkModal ref={dialogRef} />
+    </Dialog>
   );
 });
 

@@ -46,12 +46,14 @@ const AddLinkModal = forwardRef((_, ref) => {
             console.log('summary: ', simplificationInfo.summary || '');
             console.log('tags: ', simplificationInfo.tags || '');
             console.log('link: ', contentLinks);
+            const tagsString = simplificationInfo.tags || '';
+            const tagsArray = tagsString.split(/,\s*/);
             navigate('/content-add', {
               state: {
                 status: 200,
                 title: simplificationInfo.title || '',
                 summary: simplificationInfo.summary || '',
-                tags: simplificationInfo.tags || '',
+                tags: tagsArray || [],
                 link: contentLinks,
               },
             });

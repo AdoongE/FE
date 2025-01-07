@@ -14,10 +14,14 @@ function PdfUploadModal({ onClose }) {
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop: (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) => ({
-        id: file.name,
-        label: file.name,
-      }));
+      const newFiles = acceptedFiles.map((file) => {
+        const preview = URL.createObjectURL(file);
+        return {
+          id: file.name,
+          label: file.name,
+          preview,
+        };
+      });
       setFiles((prevFiles) => {
         const updatedFiles = [...prevFiles, ...newFiles];
         if (updatedFiles.length === newFiles.length) {
@@ -357,7 +361,7 @@ const AddButton = styled.button`
   padding: 10px 20px;
   border-radius: 10px;
   background: var(--Color-5, #9f9f9f);
-  font-color: white;
+  color: white;
   border-radius: 10px;
   cursor: pointer;
   font-size: 16px;

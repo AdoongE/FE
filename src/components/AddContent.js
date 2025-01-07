@@ -28,14 +28,14 @@ function AddContent() {
   const navigate = useNavigate();
 
   const { title } = location.state || '';
-  // const { summary } = location.state || '';
+  const { summary } = location.state || '';
   const recoTags = location.state?.tags || [];
-  // const { link } = location.state || '';
-  // const { status } = location.state || 0; // 200 ok 인지, 400 유효하지 않은 링크인지
+  const { link } = location.state || '';
 
   useEffect(() => {
     console.log(
       '콘텐츠 생성 페이지로',
+      link,
       tags,
       title,
       images,
@@ -49,13 +49,15 @@ function AddContent() {
     } else if (files.length > 0) {
       setDataType('PDF');
       option = 'PDF';
-    } else {
+    } else if (link !== '') {
       setDataType('LINK');
       option = 'LINK';
     }
     setValue('dataType', option, { shouldValidate: true });
     setValue('contentName', title);
+    setValue('contentLink', link);
     setValue('thumbnailImage', representativeIndex, { shouldValidate: true });
+    setValue('contentDetail', summary);
     trigger('thumbnailImage');
   }, []);
 
@@ -362,7 +364,7 @@ function AddContent() {
                   label="contentLink"
                   $error={fieldState.error ? true : undefined}
                   $helperText={fieldState.error && fieldState.error.message}
-                  value={field.value || []}
+                  value={link || ''}
                   onChange={(value) => {
                     field.onChange(value);
                     trigger('contentLink');
@@ -380,7 +382,7 @@ function AddContent() {
           {dataType === 'PDF' && (
             <PdfUploadComponent
               representativeIndex={representativeIndex}
-              images={files}
+              files={files}
             />
           )}
           <Tag>

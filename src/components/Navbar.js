@@ -4,15 +4,15 @@ import LogoImage from '../assets/icons/seedzip_logo.png';
 import Logo from '../assets/icons/seedzip.png';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import ImageUploadModal from '../components/modal/ImageUploadModal';
+import CheckboxModal from './modal/CheckboxModal';
 
 function Navbar() {
   const [activeTab, setActiveTab] = useState('모아보기'); // 상단바 내부 전용 상태
   const [activeBarWidth, setActiveBarWidth] = useState(0);
   const [activeBarLeft, setActiveBarLeft] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navbarMenuRef = useRef(null);
   const navigate = useNavigate();
+  const dialogRef = useRef();
 
   const handleTabClick = (tabName, event) => {
     setActiveTab(tabName);
@@ -23,21 +23,10 @@ function Navbar() {
   };
 
   const handleNewContentClick = () => {
-    setIsModalOpen(true); // 모달 열기
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false); // 모달 닫기
-  };
-
-  const handleModalConfirm = (images, representativeIndex) => {
-    setIsModalOpen(false);
-    navigate('/content-add', {
-      state: {
-        images,
-        representativeIndex,
-      },
-    });
+    if (dialogRef.current) {
+      dialogRef.current.showModal();
+      console.log('모달 열기');
+    }
   };
 
   useEffect(() => {
@@ -51,77 +40,100 @@ function Navbar() {
     }
   }, [activeTab]);
 
+  useEffect(() => {
+    if (dialogRef.current) {
+      console.log('dialogRef:', dialogRef.current);
+    } else {
+      console.error('dialogRef가 올바르게 연결되지 않았습니다.');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (dialogRef.current) {
+      const dialogElement = dialogRef.current;
+
+      const handleClickOutside = (event) => {
+        const dialogArea = dialogElement.getBoundingClientRect();
+        if (
+          event.clientX < dialogArea.left ||
+          event.clientX > dialogArea.right ||
+          event.clientY < dialogArea.top ||
+          event.clientY > dialogArea.bottom
+        ) {
+          dialogElement.close();
+        }
+      };
+      dialogElement.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        dialogElement.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, []);
+
   return (
-    <>
-      <NavbarContainer>
-        <LogoContainer>
-          <StyledLogoImage
-            src={LogoImage}
-            alt="seedzip_logo"
-            onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
-            style={{ cursor: 'pointer' }} // 클릭 가능 표시
-          />
-          <StyledLogo
-            src={Logo}
-            alt="seedzip"
-            onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
-            style={{ cursor: 'pointer' }} // 클릭 가능 표시
-          />
-        </LogoContainer>
-        <NavbarMenu ref={navbarMenuRef}>
-          <MenuButton
-            data-tab="모아보기"
-            onClick={(e) => {
-              handleTabClick('모아보기', e);
-              navigate('/main'); // "모아보기" 클릭 시 메인 페이지 이동
-            }}
-            active={activeTab === '모아보기'}
-          >
-            모아보기
-          </MenuButton>
-          <MenuButton
-            data-tab="탐색하기"
-            onClick={(e) => handleTabClick('탐색하기', e)}
-            active={activeTab === '탐색하기'}
-          >
-            탐색하기
-          </MenuButton>
-          <ActiveBar width={activeBarWidth} left={activeBarLeft} />
-        </NavbarMenu>
-        <NavbarRight>
-          <Icon
-            icon="iconoir:bell"
-            width="30"
-            height="30"
-            style={{ color: 'black' }}
-          />
-          <NewContentButton onClick={handleNewContentClick}>
-            <Icon
-              icon="iconoir:plus"
-              width="24"
-              height="24"
-              style={{ color: '#00000' }}
-            />
-            새 콘텐츠
-          </NewContentButton>
-          <ProfileIcon>
-            <Icon
-              icon="ix:user-profile-filled"
-              width="40px"
-              height="40px"
-              style={{ color: '#9F9F9F' }}
-              onClick={() => navigate('/mypage')}
-            />
-          </ProfileIcon>
-        </NavbarRight>
-      </NavbarContainer>
-      {isModalOpen && (
-        <ImageUploadModal
-          onClose={handleModalClose}
-          onConfirm={handleModalConfirm}
+    <NavbarContainer>
+      <LogoContainer>
+        <StyledLogoImage
+          src={LogoImage}
+          alt="seedzip_logo"
+          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+          style={{ cursor: 'pointer' }} // 클릭 가능 표시
         />
-      )}
-    </>
+        <StyledLogo
+          src={Logo}
+          alt="seedzip"
+          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+          style={{ cursor: 'pointer' }} // 클릭 가능 표시
+        />
+      </LogoContainer>
+      <NavbarMenu ref={navbarMenuRef}>
+        <MenuButton
+          data-tab="모아보기"
+          onClick={(e) => {
+            handleTabClick('모아보기', e);
+            navigate('/main'); // "모아보기" 클릭 시 메인 페이지 이동
+          }}
+          active={activeTab === '모아보기'}
+        >
+          모아보기
+        </MenuButton>
+        <MenuButton
+          data-tab="탐색하기"
+          onClick={(e) => handleTabClick('탐색하기', e)}
+          active={activeTab === '탐색하기'}
+        >
+          탐색하기
+        </MenuButton>
+        <ActiveBar width={activeBarWidth} left={activeBarLeft} />
+      </NavbarMenu>
+      <NavbarRight>
+        <Icon
+          icon="iconoir:bell"
+          width="30"
+          height="30"
+          style={{ color: 'black' }}
+        />
+        <NewContentButton onClick={handleNewContentClick}>
+          <Icon
+            icon="iconoir:plus"
+            width="24"
+            height="24"
+            style={{ color: '#00000' }}
+          />
+          새 콘텐츠
+        </NewContentButton>
+        <ProfileIcon>
+          <Icon
+            icon="ix:user-profile-filled"
+            width="40px"
+            height="40px"
+            style={{ color: '#9F9F9F' }}
+            onClick={() => navigate('/mypage')}
+          />
+        </ProfileIcon>
+      </NavbarRight>
+      <CheckboxModal ref={dialogRef} />
+    </NavbarContainer>
   );
 }
 

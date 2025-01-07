@@ -8,6 +8,7 @@ function ImageUploadModal({ onClose }) {
   const [images, setImages] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(null); // 대표 이미지 인덱스 초기값 null
   const [error, setError] = useState(false); // 에러 메시지 상태
+  const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -17,7 +18,14 @@ function ImageUploadModal({ onClose }) {
         label: file.name,
         preview: URL.createObjectURL(file),
       }));
-      setImages([...images, ...newImages]);
+      setImages((prevImages) => {
+        const updatedImages = [...prevImages, ...newImages];
+        // 첫 이미지 업로드 시 대표 이미지 설정
+        if (updatedImages.length === newImages.length) {
+          setRepresentativeIndex(0);
+        }
+        return updatedImages;
+      });
       setError(false); // 파일 업로드 시 에러 상태 초기화
     },
     accept: 'image/jpeg, image/png, image/svg+xml',
@@ -34,8 +42,9 @@ function ImageUploadModal({ onClose }) {
     }
   };
 
-  const handleSetRepresentative = (index) => {
-    setRepresentativeIndex(index); // 클릭한 이미지를 대표 이미지로 설정
+  const handleSetRepresentative = (index, event) => {
+    event.stopPropagation(); // 이벤트 버블링 방지
+    setRepresentativeIndex(index);
   };
 
   const handleConfirm = () => {
@@ -51,6 +60,18 @@ function ImageUploadModal({ onClose }) {
       state: { images, representativeIndex: finalRepresentativeIndex },
     });
     onClose(); // 모달 닫기
+  };
+
+  const handleScrollLeft = () => {
+    if (scrollIndex > 0) {
+      setScrollIndex(scrollIndex - 1);
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (scrollIndex < images.length - 1) {
+      setScrollIndex(scrollIndex + 1);
+    }
   };
 
   return (
@@ -87,25 +108,45 @@ function ImageUploadModal({ onClose }) {
               </>
             ) : (
               <ImagesWrapper>
-                {images.map((image, index) => (
-                  <ImageBox
-                    key={image.id}
-                    onClick={() => handleSetRepresentative(index)}
+                {images.length > 4 && (
+                  <ScrollButtonLeft
+                    onClick={handleScrollLeft}
+                    disabled={scrollIndex === 0}
                   >
-                    {representativeIndex === index && (
-                      <RepresentativeLabel>대표</RepresentativeLabel>
-                    )}
-                    <ImagePreview src={image.preview} alt={image.label} />
-                    <DeleteButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteImage(image.id);
-                      }}
+                    {'<'}
+                  </ScrollButtonLeft>
+                )}
+                {images
+                  .slice(scrollIndex, scrollIndex + 4)
+                  .map((image, index) => (
+                    <ImageBox
+                      key={image.id}
+                      onClick={(event) =>
+                        handleSetRepresentative(scrollIndex + index, event)
+                      }
                     >
-                      ×
-                    </DeleteButton>
-                  </ImageBox>
-                ))}
+                      {representativeIndex === index && (
+                        <RepresentativeLabel>대표</RepresentativeLabel>
+                      )}
+                      <ImagePreview src={image.preview} alt={image.label} />
+                      <DeleteButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteImage(image.id);
+                        }}
+                      >
+                        ×
+                      </DeleteButton>
+                    </ImageBox>
+                  ))}
+                {images.length > 4 && (
+                  <ScrollButtonRight
+                    onClick={handleScrollRight}
+                    disabled={scrollIndex + 4 >= images.length}
+                  >
+                    {'>'}
+                  </ScrollButtonRight>
+                )}
               </ImagesWrapper>
             )}
           </DropArea>
@@ -188,7 +229,7 @@ const DropArea = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  overflow-x: auto;
+  overflow: hidden;
 `;
 
 const DropText = styled.div`
@@ -213,9 +254,30 @@ const ErrorMessage = styled.p`
 
 const ImagesWrapper = styled.div`
   display: flex;
+  position: relative;
   gap: 10px;
-  overflow-x: auto; /* 가로 스크롤 활성화 */
   padding: 10px 0;
+`;
+
+const ScrollButton = styled.button`
+  border: none;
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  margin-top: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 1;
+`;
+
+const ScrollButtonLeft = styled(ScrollButton)`
+  left: -20px;
+`;
+
+const ScrollButtonRight = styled(ScrollButton)`
+  right: -20px;
 `;
 
 const ImageBox = styled.div`
@@ -240,8 +302,8 @@ const RepresentativeLabel = styled.div`
 `;
 
 const ImagePreview = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 130px;
+  height: 130px;
   border-radius: 5px;
   object-fit: cover;
 `;

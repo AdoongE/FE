@@ -8,6 +8,7 @@ function PdfUploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
   const [representativeIndex, setRepresentativeIndex] = useState(null);
   const [error, setError] = useState(false);
+  const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -58,6 +59,16 @@ function PdfUploadModal({ onClose }) {
     onClose();
   };
 
+  const handleScrollLeft = () => {
+    setScrollIndex((prevIndex) => Math.max(0, prevIndex - 1)); // 스크롤 인덱스 감소
+  };
+
+  const handleScrollRight = () => {
+    setScrollIndex((prevIndex) =>
+      Math.min(prevIndex + 1, Math.max(0, files.length - 4)),
+    ); // 스크롤 인덱스 증가, 파일 개수를 초과하지 않도록 제한
+  };
+
   return (
     <ModalOverlay>
       <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -71,8 +82,11 @@ function PdfUploadModal({ onClose }) {
         </Header>
         <Body>
           <DescriptionText>
-            PDF 파일을 업로드하고 대표 파일을 지정하세요.
+            PDF를 업로드하고 썸네일을 지정하세요.
           </DescriptionText>
+          <DescriptionNote>
+            *썸네일을 기준으로 제목과 태그, 요약 내용이 자동 입력됩니다.
+          </DescriptionNote>
           <DropArea {...getRootProps()} hasError={error}>
             <input {...getInputProps()} />
             {files.length === 0 ? (
@@ -89,37 +103,57 @@ function PdfUploadModal({ onClose }) {
               </>
             ) : (
               <FilesWrapper>
-                {files.map((file, index) => (
-                  <FileContainer
-                    key={file.id}
-                    onClick={(event) => handleSetRepresentative(index, event)}
-                  >
-                    {index === representativeIndex && (
-                      <RepresentativeLabel>대표</RepresentativeLabel>
-                    )}
-                    <FileIcon>
-                      <Icon
-                        icon="mdi-light:file"
-                        width="50"
-                        height="50"
-                        style={{ color: '#9F9F9F' }}
-                      />
-                    </FileIcon>
-                    <FileName>{file.label}</FileName>
-                    <DeleteButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteFile(file.id);
-                      }}
+                {scrollIndex > 0 && (
+                  <ScrollButtonLeft onClick={handleScrollLeft}>
+                    <Icon
+                      icon="material-symbols:arrow-back-ios"
+                      style={{ fontSize: '20px', color: '#666' }}
+                    />
+                  </ScrollButtonLeft>
+                )}
+                {files
+                  .slice(scrollIndex, scrollIndex + 4)
+                  .map((file, index) => (
+                    <FileContainer
+                      key={file.id}
+                      onClick={(event) =>
+                        handleSetRepresentative(scrollIndex + index, event)
+                      }
                     >
-                      ×
-                    </DeleteButton>
-                  </FileContainer>
-                ))}
+                      {index + scrollIndex === representativeIndex && (
+                        <RepresentativeLabel>대표</RepresentativeLabel>
+                      )}
+                      <FileIcon>
+                        <Icon
+                          icon="mdi-light:file"
+                          width="50"
+                          height="50"
+                          style={{ color: '#9F9F9F' }}
+                        />
+                      </FileIcon>
+                      <FileName>{file.label}</FileName>
+                      <DeleteButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteFile(file.id);
+                        }}
+                      >
+                        ×
+                      </DeleteButton>
+                    </FileContainer>
+                  ))}
+                {scrollIndex + 4 < files.length && (
+                  <ScrollButtonRight onClick={handleScrollRight}>
+                    <Icon
+                      icon="material-symbols:arrow-forward-ios"
+                      style={{ fontSize: '20px', color: '#666' }}
+                    />
+                  </ScrollButtonRight>
+                )}
               </FilesWrapper>
             )}
           </DropArea>
-          <FileLimit>최대 10MB 이하의 PDF 파일만 첨부할 수 있습니다.</FileLimit>
+          <FileLimit>최대 OOMB 이하의 PDF 파일만 첨부할 수 있습니다.</FileLimit>
           {error && <ErrorMessage>PDF 파일을 업로드하세요</ErrorMessage>}
         </Body>
         <Footer>
@@ -180,6 +214,13 @@ const DescriptionText = styled.p`
   margin-bottom: 8px;
 `;
 
+const DescriptionNote = styled.small`
+  color: var(--Color-5, #9f9f9f);
+  font-size: 16px;
+  font-style: normal;
+  margin-bottom: 20px;
+`;
+
 const DropArea = styled.div`
   height: 240px;
   border-radius: 10px;
@@ -204,6 +245,33 @@ const FilesWrapper = styled.div`
   gap: 10px;
   padding: 10px 0;
   overflow-x: auto;
+`;
+
+const ScrollButton = styled.button`
+  border: none;
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  margin-top: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 1;
+`;
+
+const ScrollButtonLeft = styled(ScrollButton)`
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const ScrollButtonRight = styled(ScrollButton)`
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const FileContainer = styled.div`
@@ -269,6 +337,7 @@ const ErrorMessage = styled.p`
   font-size: 16px;
   color: #ff6b6b;
   margin-top: 8px;
+  margin-bottom: -30px;
 `;
 
 const Footer = styled.div`

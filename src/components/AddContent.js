@@ -20,8 +20,6 @@ function AddContent() {
   const [dataType, setDataType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const representativeIndex = location.state?.representativeIndex || 0;
-  const [pendingOption, setPendingOption] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,6 +66,15 @@ function AddContent() {
       setTags(updatedTags);
       setValue('tags', updatedTags);
     }
+  };
+
+  const handleAddTag = (newTags) => {
+    const updatedTags = [
+      ...tags,
+      ...newTags.filter((tag) => !tags.includes(tag)),
+    ];
+    setTags(updatedTags);
+    setValue('tags', updatedTags);
   };
 
   const handleTagInput = (event) => {
@@ -138,10 +145,6 @@ function AddContent() {
   }, []);
 
   const schema = yup.object().shape({
-    // dataType: yup
-    //   .string()
-    //   .required('콘텐츠 형식을 선택하세요.')
-    //   .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
     contentName: yup.string(),
     boardCategory: yup
       .array()
@@ -190,7 +193,6 @@ function AddContent() {
   });
 
   const {
-    reset,
     register,
     handleSubmit,
     control,
@@ -212,46 +214,6 @@ function AddContent() {
       contentDetail: null,
     },
   });
-
-  const closeChangeOption = () => {
-    setIsModalVisible(false);
-    setPendingOption(null);
-  };
-
-  const handleConfirmChange = () => {
-    if (pendingOption && pendingOption !== dataType) {
-      setDataType(pendingOption);
-      reset({
-        dataType: pendingOption,
-        thumbnailImage: 0,
-        contentName: '',
-        boardCategory: [],
-        contentLink: '',
-        tags: [],
-        dday: null,
-        contentDetail: null,
-      });
-
-      setTags([]);
-
-      setTimeout(() => {
-        trigger([
-          'dataType',
-          'thumbnailImage',
-          'boardCategory',
-          'contentLink',
-          'tags',
-        ]);
-      }, 0);
-
-      setPendingOption(null);
-      setIsModalVisible(false);
-
-      if (TagRef.current) {
-        TagRef.current.resetTags();
-      }
-    }
-  };
 
   useEffect(() => {
     if (dataType) {
@@ -316,30 +278,6 @@ function AddContent() {
             name="contentName"
             {...register('contentName')}
           />
-
-          <Group>
-            {isModalVisible && (
-              <Backdrop onClick={() => setIsModalOpen(false)}>
-                <OptionDialog ref={ChangeRef}>
-                  <ChangeTitle>
-                    {pendingOption === 'LINK'
-                      ? '링크'
-                      : pendingOption === 'IMAGE'
-                        ? '이미지'
-                        : 'PDF'}{' '}
-                    모드로 변경하시겠습니까?
-                  </ChangeTitle>
-                  <ShortTitle>
-                    지금까지 설정한 모든 항목이 초기화됩니다.
-                  </ShortTitle>
-                  <ChangeButtons>
-                    <No onClick={closeChangeOption}>취소</No>
-                    <Yes onClick={handleConfirmChange}>확인</Yes>
-                  </ChangeButtons>
-                </OptionDialog>
-              </Backdrop>
-            )}
-          </Group>
         </LeftDiv>
         <RightDiv>
           <Button type="button" onClick={openModal}>
@@ -494,10 +432,7 @@ function AddContent() {
                           ref={TagRef}
                           originalTags={[]}
                           title={'태그를 선택하세요.'}
-                          onConfirm={(newTags) => {
-                            setTags(newTags);
-                            setValue('tags', newTags);
-                          }}
+                          onConfirm={handleAddTag}
                         />
                       </>
                     )}
@@ -608,80 +543,6 @@ const ButtonContainers = styled.div`
   align-items: center;
 `;
 
-const ShortTitle = styled.div`
-  font-weight: 400;
-  font-size: 26px;
-  color: #4f4f4f;
-  margin-bottom: 53px;
-`;
-const ChangeButtons = styled.div`
-  display: flex;
-  column-gap: 17px;
-`;
-
-const No = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 130px;
-  height: 54px;
-  background-color: #f2f2f2;
-  color: #4f4f4f;
-  font-size: 22px;
-  font-weight: 500;
-  border-radius: 10px;
-  border: 0;
-`;
-
-const Yes = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 130px;
-  height: 54px;
-  background-color: #41c3ab;
-  color: white;
-  font-size: 22px;
-  font-weight: 500;
-  border-radius: 10px;
-  border: 0;
-`;
-
-const ChangeTitle = styled.div`
-  font-weight: 600;
-  font-size: 40px;
-  margin-bottom: 16px;
-`;
-
-const OptionDialog = styled.dialog`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 74px 202px;
-  width: 650px;
-  height: 280px;
-  background-color: white;
-  border: 0;
-  border-radius: 50px;
-
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-`;
-
-const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-`;
-
 const Count = styled.div`
   width: fit-content;
   font-weight: 400;
@@ -689,20 +550,6 @@ const Count = styled.div`
   color: #9f9f9f;
   transform: translateX(1268px) translateY(-40px);
 `;
-
-// const RecommendBox = styled.button`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 393px;
-//   height: 31px;
-//   border-radius: 5px;
-//   background-color: #eeeeee;
-//   border: 0;
-//   color: #4f4f4f;
-//   font-weight: 400;
-//   font-size: 15px;
-// `;
 
 const Recommend = styled.div`
   font-weight: 400;
@@ -902,12 +749,6 @@ const TitleDiv = styled.input`
     font-size: 40px;
     color: #9f9f9f;
   }
-`;
-
-const Group = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
 `;
 
 const RightDiv = styled.div`

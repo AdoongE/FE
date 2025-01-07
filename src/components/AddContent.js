@@ -29,18 +29,46 @@ function AddContent() {
   const files = location.state?.files || [];
   const navigate = useNavigate();
 
+  const { title } = location.state || '';
+  // const { summary } = location.state || '';
+  const recoTags = location.state?.tags || [];
+  // const { link } = location.state || '';
+  // const { status } = location.state || 0; // 200 ok 인지, 400 유효하지 않은 링크인지
+
   useEffect(() => {
-    console.log('생성 이미지', images, files, representativeIndex);
+    console.log(
+      '콘텐츠 생성 페이지로',
+      tags,
+      title,
+      images,
+      files,
+      representativeIndex,
+    );
+    let option = '';
     if (images.length > 0) {
       setDataType('IMAGE');
+      option = 'IMAGE';
     } else if (files.length > 0) {
       setDataType('PDF');
+      option = 'PDF';
     } else {
       setDataType('LINK');
+      option = 'LINK';
     }
+    setValue('dataType', option, { shouldValidate: true });
+    setValue('contentName', title);
     setValue('thumbnailImage', representativeIndex, { shouldValidate: true });
     trigger('thumbnailImage');
   }, []);
+
+  const handleRecoTagClick = (event, tag) => {
+    event.preventDefault();
+    if (!tags.includes(tag)) {
+      const updatedTags = [...tags, tag];
+      setTags(updatedTags);
+      setValue('tags', updatedTags);
+    }
+  };
 
   const handleTagInput = (event) => {
     if (isComposing) return;
@@ -110,10 +138,10 @@ function AddContent() {
   }, []);
 
   const schema = yup.object().shape({
-    dataType: yup
-      .string()
-      .required('콘텐츠 형식을 선택하세요.')
-      .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
+    // dataType: yup
+    //   .string()
+    //   .required('콘텐츠 형식을 선택하세요.')
+    //   .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
     contentName: yup.string(),
     boardCategory: yup
       .array()
@@ -481,18 +509,28 @@ function AddContent() {
               </TagDiv>
               <Recommends>
                 <Recommend>추천</Recommend>
-                <RecommendBox>
-                  <Icon
-                    icon="ri:reset-left-line"
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                      marginRight: '10px',
-                      color: '#4F4F4F',
-                    }}
-                  />
-                  태크 추천받기
-                </RecommendBox>
+                <div>
+                  {recoTags.map((tag, idx) => (
+                    <button
+                      key={idx}
+                      style={{
+                        display: 'inline-block',
+                        padding: '5px 12px',
+                        margin: '5px',
+                        backgroundColor: '#dcdada',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        color: '#4f4f4f',
+                        fontWeight: '600',
+                        fontSize: '16px',
+                        border: 'none',
+                      }}
+                      onClick={(event) => handleRecoTagClick(event, tag)}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
               </Recommends>
             </TagInputs>
           </Tag>
@@ -652,19 +690,19 @@ const Count = styled.div`
   transform: translateX(1268px) translateY(-40px);
 `;
 
-const RecommendBox = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 393px;
-  height: 31px;
-  border-radius: 5px;
-  background-color: #eeeeee;
-  border: 0;
-  color: #4f4f4f;
-  font-weight: 400;
-  font-size: 15px;
-`;
+// const RecommendBox = styled.button`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 393px;
+//   height: 31px;
+//   border-radius: 5px;
+//   background-color: #eeeeee;
+//   border: 0;
+//   color: #4f4f4f;
+//   font-weight: 400;
+//   font-size: 15px;
+// `;
 
 const Recommend = styled.div`
   font-weight: 400;

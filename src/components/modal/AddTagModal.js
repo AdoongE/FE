@@ -94,7 +94,10 @@ const AddTagModal = forwardRef(
     };
 
     const handleApply = () => {
-      onConfirm([...selectedTags]);
+      onConfirm([
+        ...originalTags,
+        ...selectedTags.filter((tag) => !originalTags.includes(tag)),
+      ]);
       dialogRef.current?.close();
       console.log('모달 tag: ', selectedTags);
     };

@@ -11,6 +11,7 @@ const AddLinkModal = forwardRef((_, ref) => {
 
   const closeModal = () => {
     ref.current?.close();
+    setContentLinks('');
   };
 
   const handleAddLink = async () => {
@@ -102,7 +103,6 @@ const AddLinkModal = forwardRef((_, ref) => {
         });
       }
       setErrorMessage('');
-      setContentLinks('');
       closeModal();
     }
   };

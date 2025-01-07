@@ -11,7 +11,7 @@ function PdfUploadModal({ onClose }) {
   const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop: (acceptedFiles) => {
       const newFiles = acceptedFiles.map((file) => ({
         id: file.name,
@@ -28,6 +28,8 @@ function PdfUploadModal({ onClose }) {
     },
     accept: 'application/pdf',
     maxSize: 10 * 1024 * 1024,
+    noClick: files.length > 0, // 파일이 있을 때 클릭 비활성화
+    noKeyboard: true, // 키보드 동작 비활성화
   });
 
   const handleDeleteFile = (id) => {
@@ -106,7 +108,7 @@ function PdfUploadModal({ onClose }) {
                 {scrollIndex > 0 && (
                   <ScrollButtonLeft onClick={handleScrollLeft}>
                     <Icon
-                      icon="material-symbols:arrow-back-ios"
+                      icon="fa-solid:angle-left"
                       style={{ fontSize: '20px', color: '#666' }}
                     />
                   </ScrollButtonLeft>
@@ -116,8 +118,8 @@ function PdfUploadModal({ onClose }) {
                   .map((file, index) => (
                     <FileContainer
                       key={file.id}
-                      onClick={(event) =>
-                        handleSetRepresentative(scrollIndex + index, event)
+                      onClick={(e) =>
+                        handleSetRepresentative(index + scrollIndex, e)
                       }
                     >
                       {index + scrollIndex === representativeIndex && (
@@ -126,17 +128,12 @@ function PdfUploadModal({ onClose }) {
                       <FileIcon>
                         <Icon
                           icon="mdi-light:file"
-                          width="50"
-                          height="50"
-                          style={{ color: '#9F9F9F' }}
+                          style={{ fontSize: '50px', color: '#666' }}
                         />
                       </FileIcon>
                       <FileName>{file.label}</FileName>
                       <DeleteButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteFile(file.id);
-                        }}
+                        onClick={(e) => handleDeleteFile(file.id, e)}
                       >
                         ×
                       </DeleteButton>
@@ -145,7 +142,7 @@ function PdfUploadModal({ onClose }) {
                 {scrollIndex + 4 < files.length && (
                   <ScrollButtonRight onClick={handleScrollRight}>
                     <Icon
-                      icon="material-symbols:arrow-forward-ios"
+                      icon="fa-solid:angle-right"
                       style={{ fontSize: '20px', color: '#666' }}
                     />
                   </ScrollButtonRight>
@@ -153,7 +150,8 @@ function PdfUploadModal({ onClose }) {
               </FilesWrapper>
             )}
           </DropArea>
-          <FileLimit>최대 OOMB 이하의 PDF 파일만 첨부할 수 있습니다.</FileLimit>
+          {files.length > 0 && <AddButton onClick={open}>+ PDF 추가</AddButton>}
+          <FileLimit>최대 1OMB 이하의 PDF 파일만 첨부할 수 있습니다.</FileLimit>
           {error && <ErrorMessage>PDF 파일을 업로드하세요</ErrorMessage>}
         </Body>
         <Footer>
@@ -227,7 +225,6 @@ const DropArea = styled.div`
   background-color: #f6f6f6;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   cursor: pointer;
   overflow: hidden;
@@ -241,60 +238,53 @@ const DropText = styled.div`
 `;
 
 const FilesWrapper = styled.div`
+  position: relative;
   display: flex;
   gap: 10px;
   padding: 10px 0;
-  overflow-x: auto;
+  overflow-x: hidden;
 `;
 
 const ScrollButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
   border: none;
-  font-size: 24px;
-  color: black;
   cursor: pointer;
-  display: flex;
-  margin-top: 40px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  z-index: 1;
+  font-size: 20px;
 `;
 
 const ScrollButtonLeft = styled(ScrollButton)`
-  position: absolute;
   left: -40px;
-  top: 50%;
-  transform: translateY(-50%);
 `;
 
 const ScrollButtonRight = styled(ScrollButton)`
-  position: absolute;
   right: -40px;
-  top: 50%;
-  transform: translateY(-50%);
 `;
 
 const FileContainer = styled.div`
   width: 130px;
   height: 130px;
-  position: relative;
-  background-color: #eaf4f4;
+  margin-top: 20px;
+  background: #eaf4f4;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  position: relative;
 `;
 
 const RepresentativeLabel = styled.div`
   position: absolute;
   top: 5px;
   left: 5px;
-  background-color: #47c28b;
+  background: #47c28b;
   color: white;
   padding: 2px 6px;
+  border-radius: 10px;
   font-size: 12px;
-  border-radius: 12px;
   font-weight: bold;
 `;
 
@@ -327,10 +317,24 @@ const DeleteButton = styled.button`
   font-size: 20px;
 `;
 
+const AddButton = styled.button`
+  margin: -60px auto;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: var(--Color-5, #9f9f9f);
+  font-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  color: white;
+  border: none;
+`;
+
 const FileLimit = styled.p`
   font-size: 16px;
   color: #9f9f9f;
-  margin-top: 20px;
+  margin-top: 100px;
 `;
 
 const ErrorMessage = styled.p`

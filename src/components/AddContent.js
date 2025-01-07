@@ -445,26 +445,41 @@ function AddContent() {
               <Recommends>
                 <Recommend>추천</Recommend>
                 <div>
-                  {recoTags.map((tag, idx) => (
-                    <button
-                      key={idx}
+                  {recoTags.length === 0 ? (
+                    <div
                       style={{
-                        display: 'inline-block',
                         padding: '5px 12px',
-                        margin: '5px',
                         backgroundColor: '#dcdada',
+                        color: '#ff0000',
                         borderRadius: '5px',
-                        cursor: 'pointer',
-                        color: '#4f4f4f',
-                        fontWeight: '600',
+                        textAlign: 'center',
                         fontSize: '16px',
-                        border: 'none',
                       }}
-                      onClick={(event) => handleRecoTagClick(event, tag)}
                     >
-                      {tag}
-                    </button>
-                  ))}
+                      태그 추천 불가
+                    </div>
+                  ) : (
+                    recoTags.map((tag, idx) => (
+                      <button
+                        key={idx}
+                        style={{
+                          display: 'inline-block',
+                          padding: '5px 12px',
+                          margin: '5px',
+                          backgroundColor: '#dcdada',
+                          borderRadius: '5px',
+                          cursor: 'pointer',
+                          color: '#4f4f4f',
+                          fontWeight: '600',
+                          fontSize: '16px',
+                          border: 'none',
+                        }}
+                        onClick={(event) => handleRecoTagClick(event, tag)}
+                      >
+                        {tag}
+                      </button>
+                    ))
+                  )}
                 </div>
               </Recommends>
             </TagInputs>

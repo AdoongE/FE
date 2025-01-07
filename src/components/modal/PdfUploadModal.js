@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../api/axios-instance';
 
 function PdfUploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
@@ -46,7 +47,7 @@ function PdfUploadModal({ onClose }) {
     setRepresentativeIndex(index);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (files.length === 0) {
       setError(true);
       return;
@@ -55,10 +56,44 @@ function PdfUploadModal({ onClose }) {
     const finalRepresentativeIndex =
       representativeIndex !== null ? representativeIndex : 0;
 
-    navigate('/content-add', {
-      state: { files, representativeIndex: finalRepresentativeIndex },
+    const formData = new FormData();
+
+    // FormData에 File 객체 추가
+    files.forEach(({ file }) => {
+      if (file instanceof File) {
+        formData.append('files', file);
+      } else {
+        console.warn('Invalid file object:', file);
+      }
     });
-    onClose();
+
+    formData.append('thumbnailIdx', finalRepresentativeIndex);
+
+    // FormData 디버깅 출력
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+
+    try {
+      const response = await axiosInstance.post(
+        '/api/v1/simplification/pdf/v2',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      console.log('Response:', response.data);
+
+      navigate('/content-add', {
+        state: { files, representativeIndex: finalRepresentativeIndex },
+      });
+      onClose();
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      setError(true);
+    }
   };
 
   const handleScrollLeft = () => {

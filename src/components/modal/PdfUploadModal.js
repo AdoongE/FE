@@ -4,52 +4,49 @@ import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
 
-function ImageUploadModal({ onClose }) {
-  const [images, setImages] = useState([]);
-  const [representativeIndex, setRepresentativeIndex] = useState(null); // 대표 이미지 인덱스 초기값 null
-  const [error, setError] = useState(false); // 에러 메시지 상태
+function PdfUploadModal({ onClose }) {
+  const [files, setFiles] = useState([]);
+  const [representativeIndex, setRepresentativeIndex] = useState(null);
+  const [error, setError] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
-      const newImages = acceptedFiles.map((file) => ({
+      const newFiles = acceptedFiles.map((file) => ({
         id: file.name,
         label: file.name,
-        preview: URL.createObjectURL(file),
       }));
-      setImages((prevImages) => {
-        const updatedImages = [...prevImages, ...newImages];
-        // 첫 이미지 업로드 시 대표 이미지 설정
-        if (updatedImages.length === newImages.length) {
+      setFiles((prevFiles) => {
+        const updatedFiles = [...prevFiles, ...newFiles];
+        if (updatedFiles.length === newFiles.length) {
           setRepresentativeIndex(0);
         }
-        return updatedImages;
+        return updatedFiles;
       });
-      setError(false); // 파일 업로드 시 에러 상태 초기화
+      setError(false);
     },
-    accept: 'image/jpeg, image/png, image/svg+xml',
-    maxSize: 10 * 1024 * 1024, // 10MB 제한
+    accept: 'application/pdf',
+    maxSize: 10 * 1024 * 1024,
   });
 
-  const handleDeleteImage = (id) => {
-    const updatedImages = images.filter((image) => image.id !== id);
-    setImages(updatedImages);
+  const handleDeleteFile = (id) => {
+    const updatedFiles = files.filter((file) => file.id !== id);
+    setFiles(updatedFiles);
 
-    // 대표 이미지가 삭제되었을 경우 첫 번째 이미지를 대표로 설정
-    if (updatedImages.length > 0 && id === images[representativeIndex]?.id) {
+    if (updatedFiles.length > 0 && id === files[representativeIndex]?.id) {
       setRepresentativeIndex(0);
     }
   };
 
   const handleSetRepresentative = (index, event) => {
-    event.stopPropagation(); // 이벤트 버블링 방지
+    event.stopPropagation();
     setRepresentativeIndex(index);
   };
 
   const handleConfirm = () => {
-    if (images.length === 0) {
-      setError(true); // 이미지 업로드 에러 메시지 표시
+    if (files.length === 0) {
+      setError(true);
       return;
     }
 
@@ -57,28 +54,26 @@ function ImageUploadModal({ onClose }) {
       representativeIndex !== null ? representativeIndex : 0;
 
     navigate('/content-add', {
-      state: { images, representativeIndex: finalRepresentativeIndex },
+      state: { files, representativeIndex: finalRepresentativeIndex },
     });
-    onClose(); // 모달 닫기
+    onClose();
   };
 
   const handleScrollLeft = () => {
-    if (scrollIndex > 0) {
-      setScrollIndex(scrollIndex - 1);
-    }
+    setScrollIndex((prevIndex) => Math.max(0, prevIndex - 1)); // 스크롤 인덱스 감소
   };
 
   const handleScrollRight = () => {
-    if (scrollIndex < images.length - 1) {
-      setScrollIndex(scrollIndex + 1);
-    }
+    setScrollIndex((prevIndex) =>
+      Math.min(prevIndex + 1, Math.max(0, files.length - 4)),
+    ); // 스크롤 인덱스 증가, 파일 개수를 초과하지 않도록 제한
   };
 
   return (
     <ModalOverlay>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <Header>
-          <Title>씨드 추가</Title>
+          <Title>PDF 추가</Title>
           <Icon
             icon="line-md:close"
             style={{ width: '24px', height: '24px', cursor: 'pointer' }}
@@ -87,73 +82,79 @@ function ImageUploadModal({ onClose }) {
         </Header>
         <Body>
           <DescriptionText>
-            이미지를 업로드하고 썸네일을 지정하세요.
+            PDF를 업로드하고 썸네일을 지정하세요.
           </DescriptionText>
           <DescriptionNote>
             *썸네일을 기준으로 제목과 태그, 요약 내용이 자동 입력됩니다.
           </DescriptionNote>
           <DropArea {...getRootProps()} hasError={error}>
             <input {...getInputProps()} />
-            {images.length === 0 ? (
+            {files.length === 0 ? (
               <>
                 <Icon
                   icon="material-symbols:upload-rounded"
                   style={{ width: '59px', height: '59px', color: '#4F4F4F' }}
                 />
                 <DropText>
-                  이미지 선택
+                  PDF 파일 선택
                   <br />
                   혹은 여기로 파일을 끌어오세요.
                 </DropText>
               </>
             ) : (
-              <ImagesWrapper>
-                {images.length > 4 && (
-                  <ScrollButtonLeft
-                    onClick={handleScrollLeft}
-                    disabled={scrollIndex === 0}
-                  >
-                    {'<'}
+              <FilesWrapper>
+                {scrollIndex > 0 && (
+                  <ScrollButtonLeft onClick={handleScrollLeft}>
+                    <Icon
+                      icon="material-symbols:arrow-back-ios"
+                      style={{ fontSize: '20px', color: '#666' }}
+                    />
                   </ScrollButtonLeft>
                 )}
-                {images
+                {files
                   .slice(scrollIndex, scrollIndex + 4)
-                  .map((image, index) => (
-                    <ImageBox
-                      key={image.id}
+                  .map((file, index) => (
+                    <FileContainer
+                      key={file.id}
                       onClick={(event) =>
                         handleSetRepresentative(scrollIndex + index, event)
                       }
                     >
-                      {representativeIndex === index && (
+                      {index + scrollIndex === representativeIndex && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
-                      <ImagePreview src={image.preview} alt={image.label} />
+                      <FileIcon>
+                        <Icon
+                          icon="mdi-light:file"
+                          width="50"
+                          height="50"
+                          style={{ color: '#9F9F9F' }}
+                        />
+                      </FileIcon>
+                      <FileName>{file.label}</FileName>
                       <DeleteButton
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteImage(image.id);
+                          handleDeleteFile(file.id);
                         }}
                       >
                         ×
                       </DeleteButton>
-                    </ImageBox>
+                    </FileContainer>
                   ))}
-                {images.length > 4 && (
-                  <ScrollButtonRight
-                    onClick={handleScrollRight}
-                    disabled={scrollIndex + 4 >= images.length}
-                  >
-                    {'>'}
+                {scrollIndex + 4 < files.length && (
+                  <ScrollButtonRight onClick={handleScrollRight}>
+                    <Icon
+                      icon="material-symbols:arrow-forward-ios"
+                      style={{ fontSize: '20px', color: '#666' }}
+                    />
                   </ScrollButtonRight>
                 )}
-              </ImagesWrapper>
+              </FilesWrapper>
             )}
           </DropArea>
-          <FileLimit>
-            최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
-          </FileLimit>
-          {error && <ErrorMessage>이미지를 업로드하세요</ErrorMessage>}
+          <FileLimit>최대 OOMB 이하의 PDF 파일만 첨부할 수 있습니다.</FileLimit>
+          {error && <ErrorMessage>PDF 파일을 업로드하세요</ErrorMessage>}
         </Body>
         <Footer>
           <Button onClick={handleConfirm}>완료</Button>
@@ -163,7 +164,7 @@ function ImageUploadModal({ onClose }) {
   );
 }
 
-export default ImageUploadModal;
+export default PdfUploadModal;
 
 // 스타일 컴포넌트
 const ModalOverlay = styled.div`
@@ -239,24 +240,11 @@ const DropText = styled.div`
   text-align: center;
 `;
 
-const FileLimit = styled.p`
-  font-size: 16px;
-  color: #9f9f9f;
-  margin-top: 20px;
-`;
-
-const ErrorMessage = styled.p`
-  font-size: 16px;
-  color: #ff6b6b;
-  margin-top: 8px;
-  margin-bottom: -30px;
-`;
-
-const ImagesWrapper = styled.div`
+const FilesWrapper = styled.div`
   display: flex;
-  position: relative;
   gap: 10px;
   padding: 10px 0;
+  overflow-x: auto;
 `;
 
 const ScrollButton = styled.button`
@@ -273,20 +261,29 @@ const ScrollButton = styled.button`
 `;
 
 const ScrollButtonLeft = styled(ScrollButton)`
-  left: -20px;
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const ScrollButtonRight = styled(ScrollButton)`
-  right: -20px;
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
-const ImageBox = styled.div`
+const FileContainer = styled.div`
   width: 130px;
   height: 130px;
   position: relative;
-  background-color: #f0f0f0;
+  background-color: #eaf4f4;
   border-radius: 5px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const RepresentativeLabel = styled.div`
@@ -301,11 +298,22 @@ const RepresentativeLabel = styled.div`
   font-weight: bold;
 `;
 
-const ImagePreview = styled.img`
-  width: 130px;
-  height: 130px;
-  border-radius: 5px;
-  object-fit: cover;
+const FileIcon = styled.div`
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FileName = styled.div`
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const DeleteButton = styled.button`
@@ -317,6 +325,19 @@ const DeleteButton = styled.button`
   color: #666;
   cursor: pointer;
   font-size: 20px;
+`;
+
+const FileLimit = styled.p`
+  font-size: 16px;
+  color: #9f9f9f;
+  margin-top: 20px;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 16px;
+  color: #ff6b6b;
+  margin-top: 8px;
+  margin-bottom: -30px;
 `;
 
 const Footer = styled.div`

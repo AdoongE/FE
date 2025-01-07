@@ -382,7 +382,7 @@ function AddContent() {
           {dataType === 'PDF' && (
             <PdfUploadComponent
               representativeIndex={representativeIndex}
-              images={files}
+              files={files}
             />
           )}
           <Tag>

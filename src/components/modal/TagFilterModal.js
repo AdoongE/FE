@@ -415,10 +415,24 @@ const TagImage = styled.img`
   height: 132px;
 `;
 
+const TagContainer = styled.div`
+  width: 979px;
+  height: 498px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 16px;
+  overflow-y: auto;
+  background-color: #fafafa;
+  border: 0;
+  border-radius: 20px;
+  padding: 53px 47px;
+  margin-bottom: 60px;
+`;
+
 const Notag = styled.div`
-  margin-left: 59px;
-  width: 640px;
-  height: 400px;
+  width: 979px;
+  height: 498px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -426,6 +440,12 @@ const Notag = styled.div`
   row-gap: 10px;
   font-weight: 500;
   font-size: 32px;
+  overflow-y: auto;
+  background-color: #fafafa;
+  margin-bottom: 60px;
+  border: 0;
+  border-radius: 20px;
+  padding: 53px 47px;
 `;
 
 const Button = styled.button`
@@ -549,21 +569,6 @@ const TagItem = styled.button`
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
   border: ${(props) => (props.$isSelected ? 0 : '1px solid #9F9F9F')};
-`;
-
-const TagContainer = styled.div`
-  width: 979px;
-  height: 498px;
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 8px;
-  row-gap: 16px;
-  overflow-y: auto;
-  background-color: #fafafa;
-  border: 0;
-  border-radius: 20px;
-  padding: 53px 47px;
-  margin-bottom: 60px;
 `;
 
 const Option = styled.div`

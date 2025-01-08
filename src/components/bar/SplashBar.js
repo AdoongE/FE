@@ -71,6 +71,9 @@ const Bar = styled.div`
   align-items: center;
   margin-left: 16px;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.05);
+  top: 0;
+  left: 0;
+  width: 100%;
 `;
 
 export default SplashBar;

@@ -1,13 +1,38 @@
 import styled from 'styled-components';
-import { React } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { React, useRef, useEffect } from 'react';
+import CheckboxModal from './modal/CheckboxModal';
 
 function ContentBlank() {
-  const navigate = useNavigate();
+  const dialogRef = useRef();
 
   const handleNewContentClick = () => {
-    navigate('/content-add');
+    if (dialogRef.current) {
+      dialogRef.current.showModal();
+      console.log('모달 열기');
+    }
   };
+
+  useEffect(() => {
+    if (dialogRef.current) {
+      const dialogElement = dialogRef.current;
+
+      const handleClickOutside = (event) => {
+        const dialogArea = dialogElement.getBoundingClientRect();
+        if (
+          event.clientX < dialogArea.left ||
+          event.clientX > dialogArea.right ||
+          event.clientY < dialogArea.top ||
+          event.clientY > dialogArea.bottom
+        ) {
+          dialogElement.close();
+        }
+      };
+      dialogElement.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        dialogElement.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, []);
 
   return (
     <Blank>
@@ -19,6 +44,7 @@ function ContentBlank() {
       <NewContentButton onClick={handleNewContentClick}>
         + 새 콘텐츠 저장하기
       </NewContentButton>
+      <CheckboxModal ref={dialogRef} />
     </Blank>
   );
 }

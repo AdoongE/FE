@@ -4,6 +4,7 @@ import LogoImage from '../assets/icons/seedzip_logo.png';
 import Logo from '../assets/icons/seedzip.png';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import CheckboxModal from './modal/CheckboxModal';
 
 function Navbar() {
   const [activeTab, setActiveTab] = useState('모아보기'); // 상단바 내부 전용 상태
@@ -11,6 +12,7 @@ function Navbar() {
   const [activeBarLeft, setActiveBarLeft] = useState(0);
   const navbarMenuRef = useRef(null);
   const navigate = useNavigate();
+  const dialogRef = useRef();
 
   const handleTabClick = (tabName, event) => {
     setActiveTab(tabName);
@@ -21,7 +23,10 @@ function Navbar() {
   };
 
   const handleNewContentClick = () => {
-    navigate('/content-add');
+    if (dialogRef.current) {
+      dialogRef.current.showModal();
+      console.log('모달 열기');
+    }
   };
 
   useEffect(() => {
@@ -34,6 +39,36 @@ function Navbar() {
       setActiveBarLeft(offsetLeft);
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (dialogRef.current) {
+      console.log('dialogRef:', dialogRef.current);
+    } else {
+      console.error('dialogRef가 올바르게 연결되지 않았습니다.');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (dialogRef.current) {
+      const dialogElement = dialogRef.current;
+
+      const handleClickOutside = (event) => {
+        const dialogArea = dialogElement.getBoundingClientRect();
+        if (
+          event.clientX < dialogArea.left ||
+          event.clientX > dialogArea.right ||
+          event.clientY < dialogArea.top ||
+          event.clientY > dialogArea.bottom
+        ) {
+          dialogElement.close();
+        }
+      };
+      dialogElement.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        dialogElement.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, []);
 
   return (
     <NavbarContainer>
@@ -97,6 +132,7 @@ function Navbar() {
           />
         </ProfileIcon>
       </NavbarRight>
+      <CheckboxModal ref={dialogRef} />
     </NavbarContainer>
   );
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import AddCategory from './dropdown/AddCategoryDropdown';
-import checkIcon from '../assets/icons/Check.png';
 import { FaArrowRight } from 'react-icons/fa';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -14,22 +13,71 @@ import LinkUploader from './LinkUploader';
 import PdfUploadComponent from './PdfUpload';
 import ImageUploadComponent from './ImageUpload';
 import { ContentAddHandler } from './api/ContentAddApi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-function AddContent({ onSetRepresentativeImage }) {
+function AddContent() {
+  const location = useLocation();
   const [dataType, setDataType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
-  const [pendingOption, setPendingOption] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isFirstSelection, setIsFirstSelection] = useState(true);
+  const representativeIndex = location.state?.representativeIndex || 0;
   const [tags, setTags] = useState([]);
   const [isComposing, setIsComposing] = useState(false); // 한국어 태그 이슈 해결을 위한
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [images, setImages] = useState([]);
-  const [files, setFiles] = useState([]);
-
+  const images = location.state?.images || [];
+  const files = location.state?.files || [];
   const navigate = useNavigate();
+
+  const { title } = location.state || '';
+  const { summary } = location.state || '';
+  const recoTags = location.state?.tags || [];
+  const { link } = location.state || '';
+
+  useEffect(() => {
+    console.log(
+      '콘텐츠 생성 페이지로',
+      link,
+      tags,
+      title,
+      images,
+      files,
+      representativeIndex,
+    );
+    let option = '';
+    if (images.length > 0) {
+      setDataType('IMAGE');
+      option = 'IMAGE';
+    } else if (files.length > 0) {
+      setDataType('PDF');
+      option = 'PDF';
+    } else if (link !== '') {
+      setDataType('LINK');
+      option = 'LINK';
+    }
+    setValue('dataType', option, { shouldValidate: true });
+    setValue('contentName', title);
+    setValue('contentLink', link);
+    setValue('thumbnailImage', representativeIndex, { shouldValidate: true });
+    setValue('contentDetail', summary);
+    trigger('thumbnailImage');
+  }, []);
+
+  const handleRecoTagClick = (event, tag) => {
+    event.preventDefault();
+    if (!tags.includes(tag)) {
+      const updatedTags = [...tags, tag];
+      setTags(updatedTags);
+      setValue('tags', updatedTags);
+    }
+  };
+
+  const handleAddTag = (newTags) => {
+    const updatedTags = [
+      ...tags,
+      ...newTags.filter((tag) => !tags.includes(tag)),
+    ];
+    setTags(updatedTags);
+    setValue('tags', updatedTags);
+  };
 
   const handleTagInput = (event) => {
     if (isComposing) return;
@@ -52,21 +100,6 @@ function AddContent({ onSetRepresentativeImage }) {
   };
 
   const ChangeRef = useRef(null);
-
-  const handleImage = (index) => {
-    setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
-    setValue('thumbnailImage', index, { shouldValidate: true });
-    trigger('thumbnailImage');
-    if (onSetRepresentativeImage) {
-      onSetRepresentativeImage(index); // 부모 컴포넌트로 콜백 전달
-    }
-  };
-
-  const handlePdf = (index) => {
-    setRepresentativeIndex(index); // 대표 파일 인덱스 관리
-    setValue('thumbnailImage', index, { shouldValidate: true }); // Form 값 설정
-    trigger('thumbnailImage');
-  };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -114,10 +147,6 @@ function AddContent({ onSetRepresentativeImage }) {
   }, []);
 
   const schema = yup.object().shape({
-    dataType: yup
-      .string()
-      .required('콘텐츠 형식을 선택하세요.')
-      .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
     contentName: yup.string(),
     boardCategory: yup
       .array()
@@ -166,7 +195,6 @@ function AddContent({ onSetRepresentativeImage }) {
   });
 
   const {
-    reset,
     register,
     handleSubmit,
     control,
@@ -188,60 +216,6 @@ function AddContent({ onSetRepresentativeImage }) {
       contentDetail: null,
     },
   });
-
-  const closeChangeOption = () => {
-    setIsModalVisible(false);
-    setPendingOption(null);
-  };
-
-  const handleCheckboxChange = (event) => {
-    const option = event.target.name;
-
-    if (isFirstSelection) {
-      setDataType(option);
-      setIsFirstSelection(false);
-      setValue('dataType', option, { shouldValidate: true });
-      trigger('dataType');
-    } else if (dataType !== option) {
-      setPendingOption(option);
-      setIsModalVisible(true);
-    }
-  };
-
-  const handleConfirmChange = () => {
-    if (pendingOption && pendingOption !== dataType) {
-      setDataType(pendingOption);
-      reset({
-        dataType: pendingOption,
-        thumbnailImage: 0,
-        contentName: '',
-        boardCategory: [],
-        contentLink: '',
-        tags: [],
-        dday: null,
-        contentDetail: null,
-      });
-
-      setTags([]);
-
-      setTimeout(() => {
-        trigger([
-          'dataType',
-          'thumbnailImage',
-          'boardCategory',
-          'contentLink',
-          'tags',
-        ]);
-      }, 0);
-
-      setPendingOption(null);
-      setIsModalVisible(false);
-
-      if (TagRef.current) {
-        TagRef.current.resetTags();
-      }
-    }
-  };
 
   useEffect(() => {
     if (dataType) {
@@ -306,58 +280,6 @@ function AddContent({ onSetRepresentativeImage }) {
             name="contentName"
             {...register('contentName')}
           />
-
-          <Label>저장할 콘텐츠의 형식을 선택하세요.</Label>
-          <Group>
-            <CheckboxLabel>
-              <TypeBox
-                type="checkbox"
-                name="LINK"
-                checked={dataType === 'LINK'}
-                onChange={handleCheckboxChange}
-              />
-              <span>링크</span>
-            </CheckboxLabel>
-            <CheckboxLabel>
-              <TypeBox
-                type="checkbox"
-                name="IMAGE"
-                checked={dataType === 'IMAGE'}
-                onChange={handleCheckboxChange}
-              />
-              <span>이미지</span>
-            </CheckboxLabel>
-            <CheckboxLabel>
-              <TypeBox
-                type="checkbox"
-                name="PDF"
-                checked={dataType === 'PDF'}
-                onChange={handleCheckboxChange}
-              />
-              <span>PDF</span>
-            </CheckboxLabel>
-            {isModalVisible && (
-              <Backdrop onClick={() => setIsModalOpen(false)}>
-                <OptionDialog ref={ChangeRef}>
-                  <ChangeTitle>
-                    {pendingOption === 'LINK'
-                      ? '링크'
-                      : pendingOption === 'IMAGE'
-                        ? '이미지'
-                        : 'PDF'}{' '}
-                    모드로 변경하시겠습니까?
-                  </ChangeTitle>
-                  <ShortTitle>
-                    지금까지 설정한 모든 항목이 초기화됩니다.
-                  </ShortTitle>
-                  <ChangeButtons>
-                    <No onClick={closeChangeOption}>취소</No>
-                    <Yes onClick={handleConfirmChange}>확인</Yes>
-                  </ChangeButtons>
-                </OptionDialog>
-              </Backdrop>
-            )}
-          </Group>
         </LeftDiv>
         <RightDiv>
           <Button type="button" onClick={openModal}>
@@ -393,210 +315,220 @@ function AddContent({ onSetRepresentativeImage }) {
         )}
       </MainDiv>
 
-      {!isFirstSelection && (
-        <ContentPage>
-          <Contents>
+      <ContentPage>
+        <Contents>
+          <Inputs>
+            <Name>카테고리 지정*</Name>
             <Inputs>
-              <Name>카테고리 지정*</Name>
-              <Inputs>
-                <Controller
-                  name="boardCategory"
-                  control={control}
-                  defaultValue={[]}
-                  render={({ field, fieldState }) => (
-                    <>
-                      <AddCategory
-                        label="boardCategory"
-                        $error={fieldState.error ? true : undefined}
-                        $helperText={
-                          fieldState.error && fieldState.error.message
-                        }
-                        value={field.value || []}
-                        onChange={(newValue) => {
-                          if (newValue.length <= 5) {
-                            field.onChange(newValue);
-                            trigger('boardCategory');
-                          }
-                        }}
-                      />
-                      <InputButton
-                        type="button"
-                        onClick={() => showModal(field)}
-                      >
-                        + 카테고리 추가
-                      </InputButton>
-                      <NewAddCategoryModal
-                        ref={dialogRef}
-                        onConfirm={(newCategory) => {
-                          if (field.value.length < 5) {
-                            field.onChange([
-                              ...field.value,
-                              newCategory.trim(),
-                            ]);
-                          }
-                        }}
-                      />
-                    </>
-                  )}
-                />
-              </Inputs>
-            </Inputs>
-
-            {dataType === 'LINK' && (
               <Controller
-                name="contentLink"
+                name="boardCategory"
                 control={control}
+                defaultValue={[]}
                 render={({ field, fieldState }) => (
-                  <LinkUploader
-                    label="contentLink"
-                    $error={fieldState.error ? true : undefined}
-                    $helperText={fieldState.error && fieldState.error.message}
-                    value={field.value || []}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      trigger('contentLink');
-                    }}
-                  />
-                )}
-              />
-            )}
-            {dataType === 'IMAGE' && (
-              <ImageUploadComponent
-                onSetRepresentative={handleImage}
-                images={images}
-                setImages={setImages}
-              />
-            )}
-            {dataType === 'PDF' && (
-              <PdfUploadComponent
-                onSetRepresentative={handlePdf}
-                files={files}
-                setFiles={setFiles}
-              />
-            )}
-            <Tag>
-              <TagName>태그 (2개 이상)*</TagName>
-              <TagInputs>
-                <TagDiv>
-                  <TagContainer>
-                    <Controller
-                      name="tags"
-                      control={control}
-                      defaultValue={[]}
-                      render={({ field }) => (
-                        <>
-                          {tags.map((tag, idx) => (
-                            <Chip key={idx}>
-                              <TagP>{tag}</TagP>
-                              <Icon
-                                icon="ic:round-close"
-                                style={{
-                                  width: '24px',
-                                  height: '24px',
-                                  color: 'white',
-                                }}
-                                onClick={() => {
-                                  const updatedTags = tags.filter(
-                                    (item) => item !== tag,
-                                  );
-                                  setTags(updatedTags);
-                                  field.onChange(updatedTags);
-                                  if (TagRef.current) {
-                                    TagRef.current.removeTags(tag);
-                                  }
-                                }}
-                              />
-                            </Chip>
-                          ))}
-                          <TagInput
-                            onBlur={() => trigger('tags')}
-                            onCompositionStart={() => setIsComposing(true)}
-                            onCompositionEnd={() => setIsComposing(false)}
-                            onKeyDown={handleTagInput}
-                            placeholder={
-                              tags.length == 0
-                                ? '엔터를 입력하여 태그를 등록해주세요'
-                                : ''
-                            }
-                          />
-                          <AddTagModal
-                            ref={TagRef}
-                            originalTags={[]}
-                            title={'태그를 선택하세요.'}
-                            onConfirm={(newTags) => {
-                              setTags(newTags);
-                              setValue('tags', newTags);
-                            }}
-                          />
-                        </>
-                      )}
-                    />
-                  </TagContainer>
-                  <InputButton type="button" onClick={() => showTagModal()}>
-                    + 태그 선택
-                  </InputButton>
-                </TagDiv>
-                <Recommends>
-                  <Recommend>추천</Recommend>
-                  <RecommendBox>
-                    <Icon
-                      icon="ri:reset-left-line"
-                      style={{
-                        width: '15px',
-                        height: '15px',
-                        marginRight: '10px',
-                        color: '#4F4F4F',
+                  <>
+                    <AddCategory
+                      label="boardCategory"
+                      $error={fieldState.error ? true : undefined}
+                      $helperText={fieldState.error && fieldState.error.message}
+                      value={field.value || []}
+                      onChange={(newValue) => {
+                        if (newValue.length <= 5) {
+                          field.onChange(newValue);
+                          trigger('boardCategory');
+                        }
                       }}
                     />
-                    태크 추천받기
-                  </RecommendBox>
-                </Recommends>
-              </TagInputs>
-            </Tag>
-            <Dday>
-              <Long>
-                <Name>
-                  디데이
-                  <Short>
-                    디데이를 입력하면 해당 날짜에 알림을 받을 수 있습니다.
-                  </Short>
-                </Name>
-              </Long>
-              <Date type="date" {...register('dday')} defaultValue={null} />
-            </Dday>
-            <Memo>
-              <Name>메모 입력</Name>
-              <div>
-                <Text
-                  defaultValue={null}
-                  maxLength={1500}
-                  name="contentDetail"
-                  type="text"
-                  {...register('contentDetail')}
-                  placeholder="메모를 입력하세요."
+                    <InputButton type="button" onClick={() => showModal(field)}>
+                      + 카테고리 추가
+                    </InputButton>
+                    <NewAddCategoryModal
+                      ref={dialogRef}
+                      onConfirm={(newCategory) => {
+                        if (field.value.length < 5) {
+                          field.onChange([...field.value, newCategory.trim()]);
+                        }
+                      }}
+                    />
+                  </>
+                )}
+              />
+            </Inputs>
+          </Inputs>
+
+          {dataType === 'LINK' && (
+            <Controller
+              name="contentLink"
+              control={control}
+              render={({ field, fieldState }) => (
+                <LinkUploader
+                  label="contentLink"
+                  $error={fieldState.error ? true : undefined}
+                  $helperText={fieldState.error && fieldState.error.message}
+                  value={link || ''}
+                  onChange={(value) => {
+                    field.onChange(value);
+                    trigger('contentLink');
+                  }}
                 />
-                <Count>
-                  {contentDetail === null ? 0 : contentDetail.length}/1500
-                </Count>
-              </div>
-            </Memo>
-          </Contents>
-          <ButtonContainers>
-            <Buttons
-              disabled={!isValid}
-              type="button"
-              onClick={() => {
-                if (isValid) {
-                  showSaveModal();
-                }
-              }}
-            >
-              저장하기
-            </Buttons>
-          </ButtonContainers>
-          <ContentSaveModal ref={SaveRef} onConfirm={handleSubmit(onSubmit)} />
-        </ContentPage>
-      )}
+              )}
+            />
+          )}
+          {dataType === 'IMAGE' && (
+            <ImageUploadComponent
+              representativeIndex={representativeIndex}
+              images={images}
+            />
+          )}
+          {dataType === 'PDF' && (
+            <PdfUploadComponent
+              representativeIndex={representativeIndex}
+              files={files}
+            />
+          )}
+          <Tag>
+            <TagName>태그 (2개 이상)*</TagName>
+            <TagInputs>
+              <TagDiv>
+                <TagContainer>
+                  <Controller
+                    name="tags"
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field }) => (
+                      <>
+                        {tags.map((tag, idx) => (
+                          <Chip key={idx}>
+                            <TagP>{tag}</TagP>
+                            <Icon
+                              icon="ic:round-close"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                                color: 'white',
+                              }}
+                              onClick={() => {
+                                const updatedTags = tags.filter(
+                                  (item) => item !== tag,
+                                );
+                                setTags(updatedTags);
+                                field.onChange(updatedTags);
+                                if (TagRef.current) {
+                                  TagRef.current.removeTags(tag);
+                                }
+                              }}
+                            />
+                          </Chip>
+                        ))}
+                        <TagInput
+                          onBlur={() => trigger('tags')}
+                          onCompositionStart={() => setIsComposing(true)}
+                          onCompositionEnd={() => setIsComposing(false)}
+                          onKeyDown={handleTagInput}
+                          placeholder={
+                            tags.length == 0
+                              ? '엔터를 입력하여 태그를 등록해주세요'
+                              : ''
+                          }
+                        />
+                        <AddTagModal
+                          ref={TagRef}
+                          originalTags={[]}
+                          title={'태그를 선택하세요.'}
+                          onConfirm={handleAddTag}
+                        />
+                      </>
+                    )}
+                  />
+                </TagContainer>
+                <InputButton type="button" onClick={() => showTagModal()}>
+                  + 태그 선택
+                </InputButton>
+              </TagDiv>
+              <Recommends>
+                <Recommend>추천</Recommend>
+                <div>
+                  {recoTags.length === 0 ? (
+                    <div
+                      style={{
+                        padding: '5px 12px',
+                        backgroundColor: '#dcdada',
+                        color: '#ff0000',
+                        borderRadius: '5px',
+                        textAlign: 'center',
+                        fontSize: '16px',
+                      }}
+                    >
+                      태그 추천 불가
+                    </div>
+                  ) : (
+                    recoTags.map((tag, idx) => (
+                      <button
+                        key={idx}
+                        style={{
+                          display: 'inline-block',
+                          padding: '5px 12px',
+                          margin: '5px',
+                          backgroundColor: '#dcdada',
+                          borderRadius: '5px',
+                          cursor: 'pointer',
+                          color: '#4f4f4f',
+                          fontWeight: '600',
+                          fontSize: '16px',
+                          border: 'none',
+                        }}
+                        onClick={(event) => handleRecoTagClick(event, tag)}
+                      >
+                        {tag}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </Recommends>
+            </TagInputs>
+          </Tag>
+          <Dday>
+            <Long>
+              <Name>
+                디데이
+                <Short>
+                  디데이를 입력하면 해당 날짜에 알림을 받을 수 있습니다.
+                </Short>
+              </Name>
+            </Long>
+            <Date type="date" {...register('dday')} defaultValue={null} />
+          </Dday>
+          <Memo>
+            <Name>메모 입력</Name>
+            <div>
+              <Text
+                defaultValue={null}
+                maxLength={1500}
+                name="contentDetail"
+                type="text"
+                {...register('contentDetail')}
+                placeholder="메모를 입력하세요."
+              />
+              <Count>
+                {contentDetail === null ? 0 : contentDetail.length}/1500
+              </Count>
+            </div>
+          </Memo>
+        </Contents>
+        <ButtonContainers>
+          <Buttons
+            disabled={!isValid}
+            type="button"
+            onClick={() => {
+              if (isValid) {
+                showSaveModal();
+              }
+            }}
+          >
+            저장하기
+          </Buttons>
+        </ButtonContainers>
+        <ContentSaveModal ref={SaveRef} onConfirm={handleSubmit(onSubmit)} />
+      </ContentPage>
     </form>
   );
 }
@@ -628,100 +560,12 @@ const ButtonContainers = styled.div`
   align-items: center;
 `;
 
-const ShortTitle = styled.div`
-  font-weight: 400;
-  font-size: 26px;
-  color: #4f4f4f;
-  margin-bottom: 53px;
-`;
-const ChangeButtons = styled.div`
-  display: flex;
-  column-gap: 17px;
-`;
-
-const No = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 130px;
-  height: 54px;
-  background-color: #f2f2f2;
-  color: #4f4f4f;
-  font-size: 22px;
-  font-weight: 500;
-  border-radius: 10px;
-  border: 0;
-`;
-
-const Yes = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 130px;
-  height: 54px;
-  background-color: #41c3ab;
-  color: white;
-  font-size: 22px;
-  font-weight: 500;
-  border-radius: 10px;
-  border: 0;
-`;
-
-const ChangeTitle = styled.div`
-  font-weight: 600;
-  font-size: 40px;
-  margin-bottom: 16px;
-`;
-
-const OptionDialog = styled.dialog`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 74px 202px;
-  width: 650px;
-  height: 280px;
-  background-color: white;
-  border: 0;
-  border-radius: 50px;
-
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-`;
-
-const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-`;
-
 const Count = styled.div`
   width: fit-content;
   font-weight: 400;
   font-size: 20px;
   color: #9f9f9f;
   transform: translateX(1268px) translateY(-40px);
-`;
-
-const RecommendBox = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 393px;
-  height: 31px;
-  border-radius: 5px;
-  background-color: #eeeeee;
-  border: 0;
-  color: #4f4f4f;
-  font-weight: 400;
-  font-size: 15px;
 `;
 
 const Recommend = styled.div`
@@ -921,47 +765,6 @@ const TitleDiv = styled.input`
   &::placeholder {
     font-size: 40px;
     color: #9f9f9f;
-  }
-`;
-
-const Label = styled.label`
-  font-size: 24px;
-  color: #9f9f9f;
-  margin-bottom: 0.938rem;
-`;
-
-const Group = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-`;
-
-const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  span {
-    font-size: 24px;
-    color: #4f4f4f;
-  }
-`;
-
-const TypeBox = styled.input`
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  appearance: none;
-  border: 1px solid #9f9f9f;
-  border-radius: 5px;
-
-  &:checked {
-    background-color: #41c3ab;
-    border: none;
-    background-image: url(${checkIcon});
-    background-size: 60%;
-    background-position: center;
-    background-repeat: no-repeat;
   }
 `;
 

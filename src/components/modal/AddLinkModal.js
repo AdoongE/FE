@@ -1,208 +1,236 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import Alert from '@mui/material/Alert';
+import { axiosInstance } from '../api/axios-instance';
+import { useNavigate } from 'react-router-dom';
 
-const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
-  const closeModal = () => {
-    ref.current?.close();
-  };
-
-  const dialogRef = useRef(null);
-  const showLinkModal = () => {
-    dialogRef.current?.showModal();
-  };
-
+const AddLinkModal = ({ onClose }) => {
+  const navigate = useNavigate();
   const [contentLinks, setContentLinks] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const closeLinkModal = () => {
-    ref.current?.close();
-    setContentLinks('');
+  const closeModal = () => {
+    onClose(); // 부모 컴포넌트에서 전달된 onClose 호출
+    setContentLinks(''); // 상태 초기화
   };
 
-  const handleAddLink = () => {
+  const handleAddLink = async () => {
     if (contentLinks === '') {
-      setErrorMessage('URL을 입력해주세요.');
+      setErrorMessage('링크를 입력해주세요.');
       return;
     }
 
     const regex = /^(http|https):\/\/[^\s$.?#].[^\s]*$/i;
-    const isValid = regex.test(contentLinks);
+    const youtubeRegex = /^https:\/\/www\.youtube\.com\/watch\?v=[^&]+/;
+    const naverNewsRegex = /^https:\/\/n\.news\.naver\.com/;
 
-    if (!isValid) {
+    if (!regex.test(contentLinks)) {
       setErrorMessage('유효하지 않은 링크입니다.');
+      return;
     } else {
-      onConfirm(contentLinks);
+      if (youtubeRegex.test(contentLinks)) {
+        console.log('유튜브 링크:', contentLinks);
+        try {
+          const params = { youtubeUrl: contentLinks };
+          const response = await axiosInstance.post(
+            '/api/v1/simplification/youtube/v2',
+            null,
+            { params },
+          );
+          const simplificationInfo =
+            response.data?.results[0]?.simplificationInfo;
+          if (response.data.status?.code === 200) {
+            console.log('유튜브 링크 간략화 성공');
+            console.log('간략화 내용 : ', simplificationInfo);
+            console.log('간략화 link : ', contentLinks);
+            const tagsString = simplificationInfo.tags || '';
+            const tagsArray = tagsString.split(/,\s*/);
+            navigate('/content-add', {
+              state: {
+                status: 200,
+                title: simplificationInfo.title || '',
+                summary: simplificationInfo.summary || '',
+                tags: tagsArray || [],
+                link: contentLinks,
+              },
+            });
+          }
+        } catch (error) {
+          console.error('유튜브 링크 간략화 실패:', error);
+        }
+      } else if (naverNewsRegex.test(contentLinks)) {
+        console.log('네이버 뉴스 링크:', contentLinks);
+        try {
+          const params = { naverNewsUrl: contentLinks };
+          const response = await axiosInstance.post(
+            '/api/v1/simplification/naver-news/v2',
+            null,
+            { params },
+          );
+          const simplificationInfo =
+            response.data?.results[0]?.simplificationInfo;
+          if (response.data.status?.code === 200) {
+            console.log('네이버 뉴스 링크 간략화 성공');
+            console.log('간략화 내용 : ', simplificationInfo);
+            console.log('간략화 link : ', contentLinks);
+            const tagsString = simplificationInfo.tags || '';
+            const tagsArray = tagsString.split(/,\s*/);
+            navigate('/content-add', {
+              state: {
+                status: 200,
+                title: simplificationInfo.title || '',
+                summary: simplificationInfo.summary || '',
+                tags: tagsArray || [],
+                link: contentLinks,
+              },
+            });
+          }
+        } catch (error) {
+          console.error('네이버 뉴스 링크 간략화 실패:', error);
+        }
+      } else {
+        console.log('간략화 불가 링크 생성 성공');
+        navigate('/content-add', {
+          state: {
+            status: 400,
+            title: '',
+            summary: '',
+            tags: [],
+            link: contentLinks,
+          },
+        });
+      }
       setErrorMessage('');
       closeModal();
-      setContentLinks('');
     }
   };
 
-  useEffect(() => {
-    if (ref.current) {
-      const dialogElement = ref.current;
-      const handleClickOutside = (event) => {
-        const dialogArea = dialogElement.getBoundingClientRect();
-        if (
-          event.clientX < dialogArea.left ||
-          event.clientX > dialogArea.right ||
-          event.clientY < dialogArea.top ||
-          event.clientY > dialogArea.bottom
-        ) {
-          dialogElement.close();
-          setContentLinks('');
-        }
-      };
-      dialogElement.addEventListener('click', handleClickOutside);
-      return () => {
-        dialogElement.removeEventListener('click', handleClickOutside);
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    if (errorMessage) {
-      showLinkModal();
-      const timer = setTimeout(() => {
-        dialogRef.current?.close();
-        setErrorMessage('');
-      }, 1200);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [errorMessage, setErrorMessage]);
-
   return (
-    <Dialog ref={ref}>
-      <ModalDiv>
+    <ModalOverlay onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
         <TopDiv>
-          <ModalTitle>링크 업로드</ModalTitle>
+          <ModalTitle>씨드 추가</ModalTitle>
           <Icon
             icon="line-md:close"
             style={{ width: '36px', height: '36px', cursor: 'pointer' }}
-            onClick={closeLinkModal}
+            onClick={() => closeModal()}
           />
         </TopDiv>
+        <Title>링크를 입력하세요.</Title>
 
         <Input
           value={contentLinks}
           onChange={(event) => setContentLinks(event.target.value)}
-          placeholder="링크를 입력하세요."
+          placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
         />
-        <ButtonContainer>
-          <ModalButton type="button" className="no" onClick={closeLinkModal}>
-            취소
-          </ModalButton>
-          <ModalButton type="button" className="ok" onClick={handleAddLink}>
-            확인
-          </ModalButton>
-          {errorMessage && showLinkModal()}
-        </ButtonContainer>
-      </ModalDiv>
-      <ErrorDialog ref={dialogRef}>
-        <Alert
-          severity="info"
-          sx={{
-            bgcolor: '#F2F2F2',
-            mt: 2,
-            width: '300px',
-            display: 'flex',
-            fontSize: '15px',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {errorMessage}
-        </Alert>
-      </ErrorDialog>
-    </Dialog>
+        {errorMessage === '링크를 입력해주세요.' ? (
+          <Error>{errorMessage}</Error>
+        ) : errorMessage === '' ? (
+          <Error></Error>
+        ) : (
+          <Error>유효하지 않은 링크입니다.</Error>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button onClick={handleAddLink}>완료</Button>
+        </div>
+      </ModalContent>
+    </ModalOverlay>
   );
-});
+};
 
 AddLinkModal.displayName = 'AddLinkModal';
 
-const ErrorDialog = styled.dialog`
-  padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  width: 580px;
+  padding: 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Error = styled.div`
+  color: #f00;
+  font-family: 'Pretendard Variable';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  height: 14px;
+  margin-bottom: 2px;
+  margin-top: 7px;
 `;
 
 const Input = styled.input`
+  padding-left: 19px;
   background-color: #f6f6f6;
-  border: 0;
-  border-bottom: 1px solid #7f7f7f;
-  width: 814px;
-  height: 68px;
-  margin-top: 48px;
-  margin-bottom: 47px;
-  font-size: 30px;
-  padding-left: 20px;
+  // border: 0;
+  // border: $({({errorMessage})=>errorMessage ? '1px solid red' : 'none')};
+  margin-bottom: 7px;
+  width: 559px;
+  height: 51px;
+  font-size: 22px;
   display: flex;
   flex-wrap: wrap;
   overflow-x: auto;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  column-gap: 44px;
-`;
-
-const ModalButton = styled.button`
-  height: 54px;
-  width: 99px;
-  padding: 14px 30px;
-  font-size: 22px;
   border: none;
+  box-shadow: none;
+  &::placeholder {
+    font-size: 18px;
+    font-weight: 400;
+    transform: translateY(-2px);
+  }
+`;
+
+const Button = styled.button`
   border-radius: 50px;
-  cursor: pointer;
-  &.ok {
-    background-color: #41c3ab;
-    color: white;
-  }
-  &.no {
-    background-color: #dcdada;
-    color: black;
-  }
+  background: #41c3ab;
+  border: 0;
+  display: flex;
+  padding: 14px 30px;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-family: 'Pretendard Variable';
+  font-size: 22px;
+  font-weight: 500;
+  width: 99px;
+  height: 54px;
 `;
 
 const ModalTitle = styled.h2`
   font-size: 32px;
-  font-weight: 850;
+  font-weight: 700;
   font-family: 'Pretendard-Regular';
-  margin-bottom: 10px;
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 27px;
+  margin-bottom: 62px;
 `;
 
-const Dialog = styled.dialog`
-  position: relative;
-  width: 972px;
-  height: 365px;
-  border-radius: 50px;
-  background-color: white;
-  border: none;
-  ::backdrop {
-    background-color: rgba(0, 0, 0, 0.55);
-  }
-`;
-
-const ModalDiv = styled.div`
-  margin: 50px;
+const Title = styled.div`
+  color: #4f4f4f;
+  font-family: 'Pretendard Variable';
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 21px;
 `;
 
 export default AddLinkModal;

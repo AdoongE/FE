@@ -7,7 +7,7 @@ import { axiosInstance } from '../api/axios-instance';
 
 function PdfUploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
-  const [representativeIndex, setRepresentativeIndex] = useState(null);
+  const [representativeIndex, setRepresentativeIndex] = useState(0);
   const [error, setError] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();

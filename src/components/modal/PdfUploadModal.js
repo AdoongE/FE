@@ -65,16 +65,15 @@ function PdfUploadModal({ onClose }) {
       representativeIndex !== null ? representativeIndex : 0;
 
     const formData = new FormData();
-    for (const pdf of files) {
-      const blob = await fetch(pdf.preview).then((res) => res.blob());
-      const file = new File([blob], pdf.label, { type: blob.type });
-      formData.append('files', file);
-    }
-    formData.append('thumbnailIdx', finalRepresentativeIndex);
+    const pdf = files[finalRepresentativeIndex];
+    const blob = await fetch(pdf.preview).then((res) => res.blob());
+    const file = new File([blob], pdf.label, { type: blob.type });
+
+    formData.append('file', file);
 
     try {
       const response = await axiosInstance.post(
-        '/api/v1/simplification/pdf/v2',
+        '/api/v1/simplification/pdf',
         formData,
         {
           headers: {
@@ -84,7 +83,7 @@ function PdfUploadModal({ onClose }) {
       );
       console.log('Response:', response);
 
-      const simplificationInfo = response.data?.results[0].simplificationInfo;
+      const simplificationInfo = response.data?.results[0];
       const tagsString = simplificationInfo.tags || '';
       const tagsArray = tagsString.split(/,\s*/);
 

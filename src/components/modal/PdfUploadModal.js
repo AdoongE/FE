@@ -79,6 +79,7 @@ function PdfUploadModal({ onClose }) {
         },
       );
       console.log('Response:', response);
+
       const simplificationInfo = response.data?.results[0].simplificationInfo;
       const tagsString = simplificationInfo.tags || '';
       const tagsArray = tagsString.split(/,\s*/);

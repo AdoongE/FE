@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../api/axios-instance';
 
 function ImageUploadModal({ onClose }) {
   const [images, setImages] = useState([]);
@@ -11,13 +12,16 @@ function ImageUploadModal({ onClose }) {
   const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop: (acceptedFiles) => {
-      const newImages = acceptedFiles.map((file) => ({
-        id: file.name,
-        label: file.name,
-        preview: URL.createObjectURL(file),
-      }));
+      const newImages = acceptedFiles.map((file) => {
+        const preview = URL.createObjectURL(file);
+        return {
+          id: file.name,
+          label: file.name,
+          preview,
+        };
+      });
       setImages((prevImages) => {
         const updatedImages = [...prevImages, ...newImages];
         // 첫 이미지 업로드 시 대표 이미지 설정
@@ -30,6 +34,8 @@ function ImageUploadModal({ onClose }) {
     },
     accept: 'image/jpeg, image/png, image/svg+xml',
     maxSize: 10 * 1024 * 1024, // 10MB 제한
+    noClick: images.length > 0,
+    noKeyboard: true,
   });
 
   const handleDeleteImage = (id) => {
@@ -47,7 +53,7 @@ function ImageUploadModal({ onClose }) {
     setRepresentativeIndex(index);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (images.length === 0) {
       setError(true); // 이미지 업로드 에러 메시지 표시
       return;
@@ -56,26 +62,59 @@ function ImageUploadModal({ onClose }) {
     const finalRepresentativeIndex =
       representativeIndex !== null ? representativeIndex : 0;
 
-    navigate('/content-add', {
-      state: { images, representativeIndex: finalRepresentativeIndex },
-    });
-    onClose(); // 모달 닫기
+    const formData = new FormData();
+    for (const image of images) {
+      const blob = await fetch(image.preview).then((res) => res.blob());
+      const file = new File([blob], image.label, { type: blob.type });
+      formData.append('files', file);
+    }
+    formData.append('thumbnailIdx', finalRepresentativeIndex);
+
+    try {
+      const response = await axiosInstance.post(
+        '/api/v1/simplification/image/v2', // API URL은 동일
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      console.log('Response:', response);
+
+      // Simplification 정보와 태그 처리
+      const simplificationInfo = response.data?.results[0].simplificationInfo;
+      const tagsString = simplificationInfo.tags || '';
+      const tagsArray = tagsString.split(/,\s*/);
+
+      navigate('/content-add', {
+        state: {
+          files: response.data.results[0].files || [], // API 응답에서 `files` 가져오기
+          representativeIndex: finalRepresentativeIndex,
+          title: simplificationInfo.title || '',
+          summary: simplificationInfo.summary || '',
+          tags: tagsArray || [],
+        },
+      });
+      onClose();
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      setError(true);
+    }
   };
 
   const handleScrollLeft = () => {
-    if (scrollIndex > 0) {
-      setScrollIndex(scrollIndex - 1);
-    }
+    setScrollIndex((prevIndex) => Math.max(0, prevIndex - 1));
   };
 
   const handleScrollRight = () => {
-    if (scrollIndex < images.length - 1) {
-      setScrollIndex(scrollIndex + 1);
-    }
+    setScrollIndex((prevIndex) =>
+      Math.min(prevIndex + 1, Math.max(0, images.length - 4)),
+    );
   };
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <Header>
           <Title>씨드 추가</Title>
@@ -108,12 +147,12 @@ function ImageUploadModal({ onClose }) {
               </>
             ) : (
               <ImagesWrapper>
-                {images.length > 4 && (
-                  <ScrollButtonLeft
-                    onClick={handleScrollLeft}
-                    disabled={scrollIndex === 0}
-                  >
-                    {'<'}
+                {scrollIndex > 0 && (
+                  <ScrollButtonLeft onClick={handleScrollLeft}>
+                    <Icon
+                      icon="fa-solid:angle-left"
+                      style={{ fontSize: '20px', color: '#666' }}
+                    />
                   </ScrollButtonLeft>
                 )}
                 {images
@@ -121,35 +160,35 @@ function ImageUploadModal({ onClose }) {
                   .map((image, index) => (
                     <ImageBox
                       key={image.id}
-                      onClick={(event) =>
-                        handleSetRepresentative(scrollIndex + index, event)
+                      onClick={(e) =>
+                        handleSetRepresentative(scrollIndex + index, e)
                       }
                     >
-                      {representativeIndex === index && (
+                      {index + scrollIndex === representativeIndex && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
                       <ImagePreview src={image.preview} alt={image.label} />
                       <DeleteButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteImage(image.id);
-                        }}
+                        onClick={(e) => handleDeleteImage(images.id, e)}
                       >
                         ×
                       </DeleteButton>
                     </ImageBox>
                   ))}
-                {images.length > 4 && (
-                  <ScrollButtonRight
-                    onClick={handleScrollRight}
-                    disabled={scrollIndex + 4 >= images.length}
-                  >
-                    {'>'}
+                {scrollIndex + 4 < images.length && (
+                  <ScrollButtonRight onClick={handleScrollRight}>
+                    <Icon
+                      icon="fa-solid:angle-right"
+                      style={{ fontSize: '20px', color: '#666' }}
+                    />
                   </ScrollButtonRight>
                 )}
               </ImagesWrapper>
             )}
           </DropArea>
+          {images.length > 0 && (
+            <AddButton onClick={open}>+ 이미지 추가</AddButton>
+          )}
           <FileLimit>
             최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
           </FileLimit>
@@ -226,7 +265,6 @@ const DropArea = styled.div`
   background-color: #f6f6f6;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   cursor: pointer;
   overflow: hidden;
@@ -239,54 +277,43 @@ const DropText = styled.div`
   text-align: center;
 `;
 
-const FileLimit = styled.p`
-  font-size: 16px;
-  color: #9f9f9f;
-  margin-top: 20px;
-`;
-
-const ErrorMessage = styled.p`
-  font-size: 16px;
-  color: #ff6b6b;
-  margin-top: 8px;
-  margin-bottom: -30px;
-`;
-
 const ImagesWrapper = styled.div`
-  display: flex;
   position: relative;
+  display: flex;
   gap: 10px;
   padding: 10px 0;
+  overflow-x: hidden;
 `;
 
 const ScrollButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
   border: none;
-  font-size: 24px;
-  color: black;
   cursor: pointer;
-  display: flex;
-  margin-top: 40px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  z-index: 1;
+  font-size: 20px;
 `;
 
 const ScrollButtonLeft = styled(ScrollButton)`
-  left: -20px;
+  left: -40px;
 `;
 
 const ScrollButtonRight = styled(ScrollButton)`
-  right: -20px;
+  right: -40px;
 `;
 
 const ImageBox = styled.div`
   width: 130px;
   height: 130px;
+  margin-top: 20px;
   position: relative;
   background-color: #f0f0f0;
   border-radius: 5px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const RepresentativeLabel = styled.div`
@@ -317,6 +344,33 @@ const DeleteButton = styled.button`
   color: #666;
   cursor: pointer;
   font-size: 20px;
+`;
+
+const AddButton = styled.button`
+  margin: -40px auto;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: var(--Color-5, #9f9f9f);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  color: white;
+  border: none;
+`;
+
+const FileLimit = styled.p`
+  font-size: 16px;
+  color: #9f9f9f;
+  margin-top: 20px;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 16px;
+  color: #ff6b6b;
+  margin-top: 8px;
+  margin-bottom: -30px;
 `;
 
 const Footer = styled.div`

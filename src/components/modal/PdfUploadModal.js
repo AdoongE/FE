@@ -61,22 +61,12 @@ function PdfUploadModal({ onClose }) {
       representativeIndex !== null ? representativeIndex : 0;
 
     const formData = new FormData();
-
-    // FormData에 File 객체 추가
-    files.forEach(({ file }) => {
-      if (file instanceof File) {
-        formData.append('files', file);
-      } else {
-        console.warn('Invalid file object:', file);
-      }
-    });
-
-    formData.append('thumbnailIdx', finalRepresentativeIndex);
-
-    // FormData 디버깅 출력
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}:`, pair[1]);
+    for (const pdf of files) {
+      const blob = await fetch(pdf.preview).then((res) => res.blob());
+      const file = new File([blob], pdf.label, { type: blob.type });
+      formData.append('files', file);
     }
+    formData.append('thumbnailIdx', finalRepresentativeIndex);
 
     try {
       const response = await axiosInstance.post(
@@ -88,10 +78,19 @@ function PdfUploadModal({ onClose }) {
           },
         },
       );
-      console.log('Response:', response.data);
+      console.log('Response:', response);
+      const simplificationInfo = response.data?.results[0].simplificationInfo;
+      const tagsString = simplificationInfo.tags || '';
+      const tagsArray = tagsString.split(/,\s*/);
 
       navigate('/content-add', {
-        state: { files, representativeIndex: finalRepresentativeIndex },
+        state: {
+          files,
+          representativeIndex: finalRepresentativeIndex,
+          title: simplificationInfo.title || '',
+          summary: simplificationInfo.summary || '',
+          tags: tagsArray || [],
+        },
       });
       onClose();
     } catch (error) {

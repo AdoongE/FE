@@ -41,11 +41,8 @@ const AddLinkModal = ({ onClose }) => {
             response.data?.results[0]?.simplificationInfo;
           if (response.data.status?.code === 200) {
             console.log('유튜브 링크 간략화 성공');
-            console.log('status: ', response.data.status.code);
-            console.log('title: ', simplificationInfo.title || '');
-            console.log('summary: ', simplificationInfo.summary || '');
-            console.log('tags: ', simplificationInfo.tags || '');
-            console.log('link: ', contentLinks);
+            console.log('간략화 내용 : ', simplificationInfo);
+            console.log('간략화 link : ', contentLinks);
             const tagsString = simplificationInfo.tags || '';
             const tagsArray = tagsString.split(/,\s*/);
             navigate('/content-add', {
@@ -74,17 +71,16 @@ const AddLinkModal = ({ onClose }) => {
             response.data?.results[0]?.simplificationInfo;
           if (response.data.status?.code === 200) {
             console.log('네이버 뉴스 링크 간략화 성공');
-            console.log('status: ', response.data.status.code);
-            console.log('title: ', simplificationInfo.title || '');
-            console.log('summary: ', simplificationInfo.summary || '');
-            console.log('tags: ', simplificationInfo.tags || '');
-            console.log('link: ', contentLinks);
+            console.log('간략화 내용 : ', simplificationInfo);
+            console.log('간략화 link : ', contentLinks);
+            const tagsString = simplificationInfo.tags || '';
+            const tagsArray = tagsString.split(/,\s*/);
             navigate('/content-add', {
               state: {
                 status: 200,
                 title: simplificationInfo.title || '',
                 summary: simplificationInfo.summary || '',
-                tags: simplificationInfo.tags || '',
+                tags: tagsArray || [],
                 link: contentLinks,
               },
             });
@@ -99,7 +95,7 @@ const AddLinkModal = ({ onClose }) => {
             status: 400,
             title: '',
             summary: '',
-            tags: '',
+            tags: [],
             link: contentLinks,
           },
         });

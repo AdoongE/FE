@@ -353,7 +353,7 @@ const Sidebar = ({
     setFilterName(condition);
     setActiveTab('맞춤필터');
     setFilterId(filterId);
-    setMessage(`${condition}이(가) 적용되었습니다.`);
+    setMessage(`${condition}이 적용되었습니다.`);
     setTimeout(() => setMessage(''), 2000);
   };
 
@@ -834,17 +834,17 @@ const fadeInOut = keyframes`
 const MessageBox = styled.div`
   position: fixed;
   top: 12%;
-  left: 50%;
+  left: 45%;
   background-color: #f2f2f2;
   color: #333;
   font-size: 28px;
   border-radius: 12px;
   box-shadow: 0 0 5px #4f4f4f;
-  z-index: 9999;
-  width: 511px;
-  height: 99px;
+  z-index: 100000;
+  width: 435px;
+  height: 67px;
   gap: 20px;
-  padding: 8px 25px;
+  padding: 16px 50px;
   display: flex;
   align-items: center;
   justify-content: center;

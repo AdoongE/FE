@@ -37,18 +37,22 @@ function PdfUploadModal({ onClose }) {
     noKeyboard: true, // 키보드 동작 비활성화
   });
 
+  const handleSetRepresentative = (index, event) => {
+    event.stopPropagation();
+    setRepresentativeIndex(index);
+  };
+
+  // 삭제 시 대표 이미지 유지 로직 수정
   const handleDeleteFile = (id) => {
     const updatedFiles = files.filter((file) => file.id !== id);
     setFiles(updatedFiles);
 
+    // 현재 대표 이미지가 삭제된 경우, 첫 번째 이미지를 대표로 설정
     if (updatedFiles.length > 0 && id === files[representativeIndex]?.id) {
-      setRepresentativeIndex(0);
+      setRepresentativeIndex(0); // 첫 번째 이미지를 대표 이미지로 설정
+    } else if (updatedFiles.length === 0) {
+      setRepresentativeIndex(null); // 파일이 모두 삭제된 경우 대표 이미지 초기화
     }
-  };
-
-  const handleSetRepresentative = (index, event) => {
-    event.stopPropagation();
-    setRepresentativeIndex(index);
   };
 
   const handleConfirm = async () => {
@@ -131,7 +135,7 @@ function PdfUploadModal({ onClose }) {
           <DropArea {...getRootProps()} hasError={error}>
             <input {...getInputProps()} />
             {files.length === 0 ? (
-              <>
+              <EmptyState>
                 <Icon
                   icon="material-symbols:upload-rounded"
                   style={{ width: '59px', height: '59px', color: '#4F4F4F' }}
@@ -141,52 +145,64 @@ function PdfUploadModal({ onClose }) {
                   <br />
                   혹은 여기로 파일을 끌어오세요.
                 </DropText>
-              </>
+              </EmptyState>
             ) : (
-              <FilesWrapper>
-                {scrollIndex > 0 && (
-                  <ScrollButtonLeft onClick={handleScrollLeft}>
-                    <Icon
-                      icon="fa-solid:angle-left"
-                      style={{ fontSize: '20px', color: '#666' }}
-                    />
-                  </ScrollButtonLeft>
-                )}
-                {files
-                  .slice(scrollIndex, scrollIndex + 4)
-                  .map((file, index) => (
-                    <FileContainer
-                      key={file.id}
-                      onClick={(e) =>
-                        handleSetRepresentative(index + scrollIndex, e)
-                      }
+              <FilesState>
+                <FilesWrapper>
+                  {scrollIndex > 0 && (
+                    <ScrollButtonLeft
+                      onClick={(e) => {
+                        e.stopPropagation(); // 이벤트 전파 방지
+                        handleScrollLeft();
+                      }}
                     >
-                      {index + scrollIndex === representativeIndex && (
-                        <RepresentativeLabel>대표</RepresentativeLabel>
-                      )}
-                      <FileIcon>
-                        <Icon
-                          icon="mdi-light:file"
-                          style={{ fontSize: '50px', color: '#666' }}
-                        />
-                      </FileIcon>
-                      <FileName>{file.label}</FileName>
-                      <DeleteButton
-                        onClick={(e) => handleDeleteFile(file.id, e)}
+                      <Icon
+                        icon="fa-solid:angle-left"
+                        style={{ fontSize: '20px', color: '#666' }}
+                      />
+                    </ScrollButtonLeft>
+                  )}
+                  {files
+                    .slice(scrollIndex, scrollIndex + 4)
+                    .map((file, index) => (
+                      <FileContainer
+                        key={file.id}
+                        onClick={(e) =>
+                          handleSetRepresentative(index + scrollIndex, e)
+                        }
                       >
-                        ×
-                      </DeleteButton>
-                    </FileContainer>
-                  ))}
-                {scrollIndex + 4 < files.length && (
-                  <ScrollButtonRight onClick={handleScrollRight}>
-                    <Icon
-                      icon="fa-solid:angle-right"
-                      style={{ fontSize: '20px', color: '#666' }}
-                    />
-                  </ScrollButtonRight>
-                )}
-              </FilesWrapper>
+                        {index + scrollIndex === representativeIndex && (
+                          <RepresentativeLabel>대표</RepresentativeLabel>
+                        )}
+                        <FileIcon>
+                          <Icon
+                            icon="mdi-light:file"
+                            style={{ fontSize: '50px', color: '#666' }}
+                          />
+                        </FileIcon>
+                        <FileName>{file.label}</FileName>
+                        <DeleteButton
+                          onClick={(e) => handleDeleteFile(file.id, e)}
+                        >
+                          ×
+                        </DeleteButton>
+                      </FileContainer>
+                    ))}
+                  {scrollIndex + 4 < files.length && (
+                    <ScrollButtonRight
+                      onClick={(e) => {
+                        e.stopPropagation(); // 이벤트 전파 방지
+                        handleScrollRight();
+                      }}
+                    >
+                      <Icon
+                        icon="fa-solid:angle-right"
+                        style={{ fontSize: '20px', color: '#666' }}
+                      />
+                    </ScrollButtonRight>
+                  )}
+                </FilesWrapper>
+              </FilesState>
             )}
           </DropArea>
           {files.length > 0 && <AddButton onClick={open}>+ PDF 추가</AddButton>}
@@ -236,12 +252,15 @@ const Header = styled.div`
 const Title = styled.h2`
   font-size: 32px;
   font-weight: bold;
+  height: 100%;
 `;
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 60px;
+  justify-content: space-between;
+  height: 100%;
 `;
 
 const DescriptionText = styled.p`
@@ -259,6 +278,7 @@ const DescriptionNote = styled.small`
 `;
 
 const DropArea = styled.div`
+  position: relative;
   height: 240px;
   border-radius: 10px;
   background-color: #f6f6f6;
@@ -267,6 +287,18 @@ const DropArea = styled.div`
   align-items: center;
   cursor: pointer;
   overflow: hidden;
+`;
+
+const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* 부모 높이에 맞게 중앙 정렬 */
+`;
+
+const FilesState = styled.div`
+  display: flex;
 `;
 
 const DropText = styled.div`
@@ -281,7 +313,6 @@ const FilesWrapper = styled.div`
   display: flex;
   gap: 10px;
   padding: 10px 0;
-  overflow-x: hidden;
 `;
 
 const ScrollButton = styled.button`
@@ -357,7 +388,10 @@ const DeleteButton = styled.button`
 `;
 
 const AddButton = styled.button`
-  margin: -60px auto;
+  position: absolute;
+  bottom: 730px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 10px 20px;
   border-radius: 10px;
   background: var(--Color-5, #9f9f9f);
@@ -365,7 +399,6 @@ const AddButton = styled.button`
   border-radius: 10px;
   cursor: pointer;
   font-size: 16px;
-  display: block;
   color: white;
   border: none;
 `;
@@ -373,7 +406,6 @@ const AddButton = styled.button`
 const FileLimit = styled.p`
   font-size: 16px;
   color: #9f9f9f;
-  margin-top: 100px;
 `;
 
 const ErrorMessage = styled.p`

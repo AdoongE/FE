@@ -91,6 +91,7 @@ function ImageUploadModal({ onClose }) {
       // 결과 데이터를 상태로 전달
       navigate('/content-add', {
         state: {
+          images,
           representativeIndex: finalRepresentativeIndex,
           title: simplificationInfo.title || '',
           summary: simplificationInfo.summary || '',

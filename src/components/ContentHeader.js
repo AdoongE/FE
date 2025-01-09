@@ -478,7 +478,7 @@ const SearchContainer = styled.div`
   width: 493px;
   height: 50px;
   border-radius: 25px;
-  margin-right: 101px;
+  margin-right: 50px;
   border: 1px solid #9f9f9f;
   display: flex;
   justify-content: space-around;

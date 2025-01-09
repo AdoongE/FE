@@ -56,7 +56,7 @@ function ContentBox({
   const contentIcons = {
     LINK: 'ic:round-link',
     IMAGE: 'ri:image-line',
-    PDF: 'mdi-light:file',
+    PDF: 'codicon:file',
   };
 
   return (

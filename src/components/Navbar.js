@@ -237,7 +237,7 @@ const NewContentButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   padding: 10px;
-  gap: 8px;
+  gap: 3px;
 
   svg {
     margin-left: 10px;

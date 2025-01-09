@@ -316,6 +316,7 @@ const MainPage = () => {
                       contentDateType={data?.contentDateType || '타입 없음'}
                       thumbnailImage={data?.thumbnailImage || null}
                       updatedDt={data?.updatedDt || '업데이트 정보 없음'}
+                      message={data?.message || ''}
                       open={() => openModal(data)}
                       fetchData={fetchData}
                     />

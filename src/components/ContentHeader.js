@@ -144,6 +144,7 @@ function ContentHeader({
         contentDateType: item.contentDateType || '타입 없음',
         thumbnailImage: item.thumbnailImage || null,
         updatedDt: item.updatedDt || '업데이트 정보 없음',
+        message: item.contentDetail || '',
       }));
 
       if (results.length === 0) {

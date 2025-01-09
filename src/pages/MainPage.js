@@ -419,6 +419,7 @@ const NoSearchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 234px;
 `;
 
 const Pagination = styled.div`

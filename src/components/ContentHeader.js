@@ -450,7 +450,8 @@ const DropdownItem = styled.div`
   align-items: center;
 
   &:hover {
-    background-color: #f2f2f2;
+    color: #21a58c;
+    font-weight: 700;
   }
 `;
 

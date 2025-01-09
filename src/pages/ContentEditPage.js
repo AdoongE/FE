@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import NewAddCategoryModal from '../components/modal/NewAddCategoryModal';
 import AddTagModal from '../components/modal/AddTagModal';
-import LinkUploader from '../components/LinkUploader';
+import EditLinkUpload from '../components/EditLinkUpload';
 import EditImageUpload from '../components/EditImageUpload';
 import EditPdfUpload from '../components/EditPdfUpload';
 import { ContentEditHandler } from '../components/api/ContentEditApi';
@@ -361,7 +361,7 @@ function ContentEditPage() {
                 name="contentLink"
                 control={control}
                 render={({ field, fieldState }) => (
-                  <LinkUploader
+                  <EditLinkUpload
                     label="contentLink"
                     $error={fieldState.error ? true : undefined}
                     $helperText={fieldState.error && fieldState.error.message}

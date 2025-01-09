@@ -36,6 +36,12 @@ function ContentBox({
     setShowNewImage(!showNewImage);
   };
 
+  const contentIcons = {
+    LINK: 'ic:round-link',
+    IMAGE: 'ri:image-line',
+    PDF: 'mdi-light:file',
+  };
+
   return (
     <Box>
       <ImageBox onClick={open}>
@@ -69,7 +75,7 @@ function ContentBox({
       <ContentTitle>
         <IconBox>
           <Icon
-            icon="ic:round-link"
+            icon={contentIcons[contentDateType] || 'ic:round-link'} // 기본값은 링크
             style={{
               width: '20px',
               height: '20px',

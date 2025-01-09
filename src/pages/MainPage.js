@@ -403,7 +403,7 @@ const ContentArea = styled.div`
     !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
   grid-row-gap: 40px;
   box-sizing: border-box;
-  height: ${(props) => (props.$isBlank ? '100%' : 'auto')};
+  height: auto;
   padding: ${(props) =>
     props.$isBlank ? `${props.$gap || 300}px 0 0 0` : 'inherit'};
 `;
@@ -426,8 +426,8 @@ const Pagination = styled.div`
   align-items: center;
   gap: 8px;
   position: fixed;
-  bottom: 50px;
-  left: 58%;
+  margin-top: 10px;
+  padding-bottom: 50px;
 `;
 
 const PageArrow = styled.button`

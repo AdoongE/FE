@@ -22,7 +22,8 @@ function ContentHeader({
   setSearchState,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFormatState, setSelectedFormatState] = useState('저장형식'); // 저장형식 상태
+  const [selectedFilter, setSelectedFilter] = useState('정렬');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -172,18 +173,19 @@ function ContentHeader({
     dialogRef.current?.showModal();
   };
 
-  // 정렬 변경
-  const handleSortChange = (option) => {
-    setSelectedFilter(option);
-    setSortOrder(option);
-    setShowSortDropdown(false);
-  };
-
   // 저장 형식 변경
   const handleFormatChange = (option) => {
     setLocalSelectedFormat(option); // 내부 상태 업데이트
     setSelectedFormat(option); // 부모로 전달
+    setSelectedFormatState(option); // 선택된 저장 형식 상태 업데이트
     setShowFormatDropdown(false); // 드롭다운 닫기
+  };
+
+  // 정렬 변경
+  const handleSortChange = (option) => {
+    setSelectedFilter(option); // 선택된 필터 상태 업데이트
+    setSortOrder(option); // 기존 동작 유지
+    setShowSortDropdown(false); // 드롭다운 닫기
   };
 
   // 태그 제출 처리
@@ -223,17 +225,17 @@ function ContentHeader({
               <Dropdown>
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
-                  isDefault={
-                    !localSelectedFormat
-                  } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+                  isDefault={!localSelectedFormat}
                   width="137px"
                 >
-                  저장형식{' '}
+                  {selectedFormatState} {/* 선택된 저장형식 표시 */}
                   <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
-                    <DropdownItem onClick={() => handleFormatChange('')}>
+                    <DropdownItem
+                      onClick={() => handleFormatChange('전체보기')}
+                    >
                       전체보기
                     </DropdownItem>
                     <DropdownItem onClick={() => handleFormatChange('링크')}>
@@ -252,12 +254,10 @@ function ContentHeader({
               <Dropdown>
                 <DropdownButton
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
-                  isDefault={
-                    !selectedFilter
-                  } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+                  isDefault={!selectedFilter}
                   width="106px"
                 >
-                  정렬{' '}
+                  {selectedFilter} {/* 선택된 정렬 표시 */}
                   <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
                 </DropdownButton>
                 {showSortDropdown && (

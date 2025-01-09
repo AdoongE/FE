@@ -173,19 +173,12 @@ const MainPage = () => {
   useEffect(() => {
     let filteredData = [...originalData];
 
-    console.log('originalData:', originalData); // 원본 데이터 확인
-
     // 저장형식 필터링
-    if (localSelectedFormat) {
+    if (localSelectedFormat && localSelectedFormat !== '전체보기') {
       filteredData = filteredData.filter((item) => {
-        const koreanType = contentTypeMapping[item.contentDateType]; // 매핑된 한국어 값
-        console.log('item.contentDateType:', item.contentDateType); // 데이터 타입 확인
-        console.log('koreanType:', koreanType); // 매핑된 한국어 타입 확인
-        console.log('localSelectedFormat:', localSelectedFormat); // 선택된 필터 값
-        console.log('매칭 여부:', koreanType === localSelectedFormat); // 비교 결과
+        const koreanType = contentTypeMapping[item.contentDateType];
         return koreanType === localSelectedFormat;
       });
-      console.log('필터링 후 데이터:', filteredData); // 필터링 결과 확인
     }
 
     // 정렬

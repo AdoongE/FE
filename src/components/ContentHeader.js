@@ -36,6 +36,8 @@ function ContentHeader({
   const dialogRef = useRef(null);
   const visibleTags = isExpanded ? tags : tags.slice(0, 4);
 
+  const [filteredData, setFilteredDataState] = useState([]);
+
   // 날짜 포맷 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -125,6 +127,10 @@ function ContentHeader({
       setKeyword(searchQuery.trim()); // 부모(MainPage)의 keyword 업데이트
       saveSearchQuery(searchQuery.trim()); // 최근 검색어 저장
       await fetchSearchResults(searchQuery.trim()); // 공통 검색 함수 호출
+    } else if (!searchQuery.trim()) {
+      // 검색어가 없을 때 빈 콘텐츠 화면으로 설정
+      setSearchState(true);
+      setFilteredData([]); // 빈 결과 설정
     }
   };
 
@@ -134,6 +140,12 @@ function ContentHeader({
     setKeyword(query);
     saveSearchQuery(query); // 검색어 저장
     await fetchSearchResults(query); // 공통 검색 함수 호출
+
+    // 결과가 없으면 빈 콘텐츠 화면으로 설정
+    if (!filteredData || filteredData.length === 0) {
+      setSearchState(true); // 검색 결과 없음
+      setFilteredDataState([]); // 빈 결과 설정
+    }
   };
 
   // 태그 검색 모달 열기

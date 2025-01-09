@@ -404,8 +404,7 @@ const ContentArea = styled.div`
   grid-row-gap: 40px;
   box-sizing: border-box;
   height: auto;
-  padding: ${(props) =>
-    props.$isBlank ? `${props.$gap || 300}px 0 0 0` : 'inherit'};
+  padding: ${(props) => (props.$isBlank ? 'center' : 'inherit')};
   margin-bottom: 100px;
 `;
 
@@ -419,7 +418,7 @@ const NoSearchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 234px;
+  margin-top: 131px;
 `;
 
 const Pagination = styled.div`
@@ -429,8 +428,8 @@ const Pagination = styled.div`
   gap: 8px;
   position: absolute;
   bottom: 30px;
-  left: 57%;
   z-index: 1;
+  margin-left: calc(100vw * 0.3609);
 `;
 
 const PageArrow = styled.button`

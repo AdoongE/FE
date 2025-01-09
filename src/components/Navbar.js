@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import LogoImage from '../assets/icons/seedzip_logo.png';
 import Logo from '../assets/icons/seedzip.png';
+import ProfileImage from '../assets/icons/profile.png';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import CheckboxModal from './modal/CheckboxModal';
@@ -116,21 +117,18 @@ function Navbar() {
         <NewContentButton onClick={handleNewContentClick}>
           <Icon
             icon="iconoir:plus"
-            width="24"
-            height="24"
+            width="30"
+            height="30"
             style={{ color: '#00000' }}
           />
-          새 콘텐츠
+          새로운 씨드
         </NewContentButton>
-        <ProfileIcon>
-          <Icon
-            icon="ix:user-profile-filled"
-            width="40px"
-            height="40px"
-            style={{ color: '#9F9F9F' }}
-            onClick={() => navigate('/mypage')}
-          />
-        </ProfileIcon>
+        <Profile
+          src={ProfileImage}
+          alt="profile"
+          onClick={() => navigate('/mypage')}
+          style={{ cursor: 'pointer' }}
+        />
       </NavbarRight>
       <CheckboxModal ref={dialogRef} />
     </NavbarContainer>
@@ -227,24 +225,29 @@ const NewContentButton = styled.button`
   display: flex;
   align-items: center;
   background-color: #41c3ab;
-  font-size: 15px;
+  font-size: 17.742px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
   color: #fff;
   border: none;
-  width: 130px;
-  height: 40px;
-  border-radius: 40px;
-  padding: 13.6px;
+  width: 160.19px;
+  height: 48.19px;
+  border-radius: 40.323px;
   cursor: pointer;
-  margin-left: 16px;
+  margin-left: 10px;
+  padding: 10px;
+  gap: 8px;
 
   svg {
     margin-left: 10px;
   }
 `;
 
-const ProfileIcon = styled.div`
-  margin-left: 16px;
-  margin-right: 40px;
+const Profile = styled.img`
+  width: 48px;
+  height: 48px;
+  margin-left: 10px;
 `;
 
 export default Navbar;

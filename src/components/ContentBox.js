@@ -234,17 +234,20 @@ const Tag = styled.button`
 const ContentTitle = styled.div`
   margin-top: 10px;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 9px;
-  white-space: normal; /* 줄바꿈 허용 */
-  word-break: break-word; /* 긴 단어가 부모를 넘어가면 줄바꿈 */
+  white-space: normal;
+  width: 100%;
 `;
+
 const ContentName = styled.div`
   font-weight: 500;
   font-size: 22px;
   line-height: 26.25px;
   color: #000000;
+  margin-left: 7px;
+  white-space: normal;
+  word-break: break-word;
 `;
 
 const CategoryDisplay = styled.div`

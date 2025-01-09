@@ -28,8 +28,9 @@ function ContentBox({
     (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   // 카테고리 텍스트 생성
-  const displayCategory =
-    category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : ''); // 최대 5개 표시 후 "..." 추가
+  const displayCategory = Array.isArray(category)
+    ? category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : '') // 최대 5개 표시 후 "..." 추가
+    : ''; // 배열이 아닐 경우 빈 문자열 처리
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);

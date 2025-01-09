@@ -113,7 +113,7 @@ function ImageUploadModal({ onClose }) {
   };
 
   const handleScrollLeft = () => {
-    setScrollIndex((prevIndex) => Math.max(0, prevIndex - 1));
+    setScrollIndex((prevIndex) => Math.max(0, prevIndex - 4));
   };
 
   return (

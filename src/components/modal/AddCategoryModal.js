@@ -105,12 +105,12 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background-color: white;
   border-radius: 50px;
-  width: 46.625rem;
-  height: 21.875rem;
+  width: 746px;
+  height: 371px;
 `;
 
 const ModalDiv = styled.div`
-  margin: 3.125rem;
+  margin: 50px;
 `;
 
 const TopDiv = styled.div`
@@ -141,7 +141,7 @@ const Input = styled.input`
   border: none;
   border-bottom: 1px solid #7f7f7f;
   width: 100%;
-  height: 4.25rem;
+  height: 68px;
   margin-top: 26px;
   margin-bottom: 18px;
   font-size: 30px;
@@ -153,8 +153,8 @@ const ButtonContainer = styled.div`
 `;
 
 const ModalButton = styled.button`
-  height: 3.375rem;
-  width: 6.188rem;
+  height: 54px;
+  width: 99px;
   font-size: 22px;
   border: none;
   border-radius: 50px;

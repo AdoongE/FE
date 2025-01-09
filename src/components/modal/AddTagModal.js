@@ -325,6 +325,7 @@ const TagContainer = styled.div`
   column-gap: 11px;
   row-gap: 20px;
   overflow-y: auto;
+  align-content: flex-start;
 `;
 
 const Line = styled.div`

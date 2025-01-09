@@ -376,7 +376,7 @@ const MainPage = () => {
 const MainContainer = styled.div`
   display: flex;
   padding-left: 390px;
-  height: 100vh;
+  position: relative;
 `;
 
 const SidebarContainer = styled.div`
@@ -406,6 +406,7 @@ const ContentArea = styled.div`
   height: auto;
   padding: ${(props) =>
     props.$isBlank ? `${props.$gap || 300}px 0 0 0` : 'inherit'};
+  margin-bottom: 100px;
 `;
 
 const StyledContentBox = styled.div`
@@ -425,9 +426,11 @@ const Pagination = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  position: fixed;
-  margin-top: 10px;
-  padding-bottom: 50px;
+  position: absolute;
+  bottom: 30px; /* 화면 하단에서 20px 위로 띄움 */
+  left: 60%; /* 화면 가운데 정렬 */
+  transform: translateX(-50%); /* 가운데 정렬 보정 */
+  z-index: 10; /* 다른 요소보다 위로 표시되도록 */
 `;
 
 const PageArrow = styled.button`

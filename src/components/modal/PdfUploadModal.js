@@ -203,8 +203,10 @@ function PdfUploadModal({ onClose }) {
                 </FilesWrapper>
               </FilesState>
             )}
+            {files.length > 0 && (
+              <AddButton onClick={open}>+ PDF 추가</AddButton>
+            )}
           </DropArea>
-          {files.length > 0 && <AddButton onClick={open}>+ PDF 추가</AddButton>}
           <FileLimit>최대 1OMB 이하의 PDF 파일만 첨부할 수 있습니다.</FileLimit>
           {error && <ErrorMessage>PDF 파일을 업로드하세요</ErrorMessage>}
         </Body>
@@ -388,7 +390,7 @@ const DeleteButton = styled.button`
 
 const AddButton = styled.button`
   position: absolute;
-  bottom: 730px;
+  margin-top: 177px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;

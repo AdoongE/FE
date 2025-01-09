@@ -213,10 +213,10 @@ function ImageUploadModal({ onClose }) {
                 </ImagesWrapper>
               </FilesState>
             )}
+            {images.length > 0 && (
+              <AddButton onClick={open}>+ 이미지 추가</AddButton>
+            )}
           </DropArea>
-          {images.length > 0 && (
-            <AddButton onClick={open}>+ 이미지 추가</AddButton>
-          )}
           <FileLimit>
             최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
           </FileLimit>
@@ -391,7 +391,7 @@ const DeleteButton = styled.button`
 
 const AddButton = styled.button`
   position: absolute;
-  bottom: 730px;
+  margin-top: 177px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;

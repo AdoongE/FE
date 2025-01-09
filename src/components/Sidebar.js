@@ -437,6 +437,7 @@ const Sidebar = ({
                         isOpen={openBookmarkDropdowns[index]}
                         onClose={() => handleBookmarkCloseDropdown(index)}
                         categoryName={bookmark}
+                        categoryLength={bookmark.length}
                         isBookmarked={bookmarks.includes(bookmark)}
                         onBookmarkAdd={handleBookmarkAdd}
                         onBookmarkRemove={handleBookmarkRemove}
@@ -494,6 +495,7 @@ const Sidebar = ({
                           isOpen={openDropdown === index}
                           onClose={() => setOpenDropdown(null)}
                           categoryName={category}
+                          categoryLength={category.length}
                           onBookmarkAdd={handleBookmarkAdd}
                           onEditCategory={handleEditCategory}
                           onRemoveCategory={handleRemoveCategory}
@@ -550,9 +552,11 @@ const Sidebar = ({
         <CustomFilter>
           <CustomUp>
             <CategoryP>나의 맞춤 필터</CategoryP>
-            <AddButton className="filter" onClick={() => showModal()}>
-              <AddRoundedIcon />
-            </AddButton>
+            {customFilter.length < 5 && (
+              <AddButton className="filter" onClick={() => showModal()}>
+                <AddRoundedIcon />
+              </AddButton>
+            )}
           </CustomUp>
           <CustomDiv>
             {customFilter.length === 0 && (
@@ -578,8 +582,8 @@ const Sidebar = ({
                 onClick={() => CustomFilterClick(condition)}
               >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
-                {condition}
                 <Right>
+                  {condition}
                   {hoveredFilterIndex === index && (
                     <DotBox onClick={() => setOpenFilterDropdown(index)}>
                       <MoreVertIcon />
@@ -765,7 +769,8 @@ const DotBox = styled.div`
   height: 32px;
   background-color: #9f9f9f;
   border-radius: 7px;
-  margin-left: 8px;
+  /* margin-left: 8px; */
+  margin-right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -808,7 +813,7 @@ const Custom = styled.div`
   border: none;
   cursor: pointer;
   padding-left: 7px;
-  margin-right: 17px;
+  margin-right: 7px;
   height: 44px;
 
   &:hover {
@@ -821,7 +826,10 @@ const Custom = styled.div`
 `;
 
 const Right = styled.div`
-  margin-left: 105px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;
 
 const fadeInOut = keyframes`

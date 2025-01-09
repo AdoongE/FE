@@ -38,13 +38,17 @@ const MainPage = () => {
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [keyword, setKeyword] = useState(''); // 검색 키워드 상태 추가
   const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
 
-  console.log('activeTab : ', activeTab);
+  // keyword 상태 업데이트 로그 출력
+  useEffect(() => {
+    console.log('Updated Keyword:', keyword); // keyword 값 출력
+  }, [keyword]); // keyword가 업데이트 될 때마다 출력
 
   const fetchData = useCallback(async () => {
     try {
@@ -267,6 +271,7 @@ const MainPage = () => {
           categoryName={categoryName}
           filterId={filterId}
           filterName={filterName}
+          setKeyword={setKeyword}
           tags={tags}
           setTags={setTags}
         />
@@ -317,6 +322,7 @@ const MainPage = () => {
                       thumbnailImage={data?.thumbnailImage || null}
                       updatedDt={data?.updatedDt || '업데이트 정보 없음'}
                       message={data?.message || ''}
+                      keyword={keyword}
                       open={() => openModal(data)}
                       fetchData={fetchData}
                     />

@@ -18,9 +18,26 @@ function ContentBox({
   contentDateType,
   updatedDt,
   message,
+  keyword,
   fetchData,
 }) {
+  console.log('ContentBox Props - keyword:', keyword);
   const [showNewImage, setShowNewImage] = useState(false);
+
+  // 키워드 강조 함수
+  const highlightText = (message, keyword) => {
+    if (!keyword) return message;
+    const parts = message.split(new RegExp(`(${keyword})`, 'gi'));
+    return parts.map((part, index) =>
+      part.toLowerCase() === keyword.toLowerCase() ? (
+        <strong key={index} style={{ color: 'black' }}>
+          {part}
+        </strong>
+      ) : (
+        part
+      ),
+    );
+  };
 
   // 제목이 없을 경우 업데이트 날짜로 대체
   const displayTitle =
@@ -90,7 +107,7 @@ function ContentBox({
       <CategoryDisplay title={displayCategory}>
         {displayCategory}
       </CategoryDisplay>
-      {message && <MemoText>{message}</MemoText>}
+      {message && <MemoText>{highlightText(message, keyword)}</MemoText>}
     </Box>
   );
 }
@@ -234,7 +251,7 @@ const CategoryDisplay = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
-  color: #4f4f4f;
+  color: rgb(141, 141, 141);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

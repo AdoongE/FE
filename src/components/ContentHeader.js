@@ -20,6 +20,7 @@ function ContentHeader({
   setTags,
   setFilteredData,
   setSearchState,
+  setKeyword,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
   const [selectedFormatState, setSelectedFormatState] = useState('저장형식'); // 저장형식 상태
@@ -73,51 +74,8 @@ function ContentHeader({
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // 검색 실행 로직
-  const handleSearchKeyPress = async (e) => {
-    if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim());
-      try {
-        const requestData = {
-          keyword: searchQuery.trim(),
-          sortOrder: selectedFilter || undefined,
-          dataType: localSelectedFormat || undefined,
-          tags: tags.length > 0 ? tags : undefined,
-        };
-
-        const response = await axiosInstance.post(
-          '/api/v1/content/filtering',
-          requestData,
-        );
-
-        const results = response.data.results || [];
-
-        if (results.length === 0) {
-          setSearchState(true); // 검색 결과 없음 상태로 설정
-          setFilteredData([]); // filteredData 초기화
-        } else {
-          setSearchState(false); // 검색 결과 있음
-          setFilteredData(
-            results.map((item) => ({
-              id: item.contentId || 'ID 없음',
-              title: item.contentName || '제목 없음',
-              categoryName: item.categoryName || [],
-              tagName: item.tagName || [],
-              dDay: item.dday ?? null,
-              contentDateType: item.contentDateType || '타입 없음',
-              thumbnailImage: item.thumbnailImage || null,
-              updatedDt: item.updatedDt || '업데이트 정보 없음',
-            })),
-          );
-        }
-        setSearchQuery(''); // 입력 초기화
-      } catch (error) {
-        console.error('검색 실패:', error);
-      }
-    }
-  };
-
-  const fetchSearchResults = async (query = searchQuery) => {
+  // 공통 API 호출 함수
+  const fetchSearchResults = async (query) => {
     try {
       console.log('검색 요청 시작 - 키워드:', query); // 검색 키워드 확인
 
@@ -161,12 +119,21 @@ function ContentHeader({
     }
   };
 
-  // 최근 검색어 클릭 핸들러
+  // 엔터 키를 눌렀을 때 실행되는 함수
+  const handleSearchKeyPress = async (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      setKeyword(searchQuery.trim()); // 부모(MainPage)의 keyword 업데이트
+      saveSearchQuery(searchQuery.trim()); // 최근 검색어 저장
+      await fetchSearchResults(searchQuery.trim()); // 공통 검색 함수 호출
+    }
+  };
+
+  // 최근 검색어 클릭 시 실행되는 함수
   const handleRecentSearchClick = async (query) => {
     setSearchQuery(query); // 검색어 업데이트
+    setKeyword(query);
     saveSearchQuery(query); // 검색어 저장
-
-    await fetchSearchResults(query);
+    await fetchSearchResults(query); // 공통 검색 함수 호출
   };
 
   // 태그 검색 모달 열기
@@ -288,7 +255,7 @@ function ContentHeader({
                 placeholder="찾고 싶은 콘텐츠를 검색하세요."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleSearchKeyPress}
+                onKeyPress={handleSearchKeyPress} // 엔터 키 누를 때 실행
                 onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
                 onBlur={() =>
                   setTimeout(() => setShowRecentSearches(false), 200)

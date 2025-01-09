@@ -548,6 +548,7 @@ const Sidebar = ({
             onConfirm={handleConfirmRemove}
           />
         )}
+        {/* 맞춤 필터 */}
         <Line></Line>
         <CustomFilter>
           <CustomUp>
@@ -769,7 +770,6 @@ const DotBox = styled.div`
   height: 32px;
   background-color: #9f9f9f;
   border-radius: 7px;
-  /* margin-left: 8px; */
   margin-right: 8px;
   display: flex;
   align-items: center;

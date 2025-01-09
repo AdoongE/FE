@@ -35,8 +35,9 @@ export const EditCategoryModal = ({
     console.log('이름 편집 아이디', categoryId);
 
     try {
-      const response = await api.patch(`/api/v1/category/${categoryId}`, {
+      const response = await api.patch(`/api/v1/category`, {
         name: newCategoryName,
+        categoryId: categoryId,
       });
 
       if (response.status === 200) {

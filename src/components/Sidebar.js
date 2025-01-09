@@ -353,7 +353,7 @@ const Sidebar = ({
     setFilterName(condition);
     setActiveTab('맞춤필터');
     setFilterId(filterId);
-    setMessage(`${condition}이(가) 적용되었습니다.`);
+    setMessage(`${condition}이 적용되었습니다.`);
     setTimeout(() => setMessage(''), 2000);
   };
 
@@ -437,6 +437,7 @@ const Sidebar = ({
                         isOpen={openBookmarkDropdowns[index]}
                         onClose={() => handleBookmarkCloseDropdown(index)}
                         categoryName={bookmark}
+                        categoryLength={bookmark.length}
                         isBookmarked={bookmarks.includes(bookmark)}
                         onBookmarkAdd={handleBookmarkAdd}
                         onBookmarkRemove={handleBookmarkRemove}
@@ -494,6 +495,7 @@ const Sidebar = ({
                           isOpen={openDropdown === index}
                           onClose={() => setOpenDropdown(null)}
                           categoryName={category}
+                          categoryLength={category.length}
                           onBookmarkAdd={handleBookmarkAdd}
                           onEditCategory={handleEditCategory}
                           onRemoveCategory={handleRemoveCategory}
@@ -546,13 +548,16 @@ const Sidebar = ({
             onConfirm={handleConfirmRemove}
           />
         )}
+        {/* 맞춤 필터 */}
         <Line></Line>
         <CustomFilter>
           <CustomUp>
             <CategoryP>나의 맞춤 필터</CategoryP>
-            <AddButton className="filter" onClick={() => showModal()}>
-              <AddRoundedIcon />
-            </AddButton>
+            {customFilter.length < 5 && (
+              <AddButton className="filter" onClick={() => showModal()}>
+                <AddRoundedIcon />
+              </AddButton>
+            )}
           </CustomUp>
           <CustomDiv>
             {customFilter.length === 0 && (
@@ -578,8 +583,8 @@ const Sidebar = ({
                 onClick={() => CustomFilterClick(condition)}
               >
                 <Icon icon="ri:align-left" width="24px" height="24px" />
-                {condition}
                 <Right>
+                  {condition}
                   {hoveredFilterIndex === index && (
                     <DotBox onClick={() => setOpenFilterDropdown(index)}>
                       <MoreVertIcon />
@@ -765,7 +770,7 @@ const DotBox = styled.div`
   height: 32px;
   background-color: #9f9f9f;
   border-radius: 7px;
-  margin-left: 8px;
+  margin-right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -808,7 +813,7 @@ const Custom = styled.div`
   border: none;
   cursor: pointer;
   padding-left: 7px;
-  margin-right: 17px;
+  margin-right: 7px;
   height: 44px;
 
   &:hover {
@@ -821,7 +826,10 @@ const Custom = styled.div`
 `;
 
 const Right = styled.div`
-  margin-left: 105px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;
 
 const fadeInOut = keyframes`
@@ -834,17 +842,17 @@ const fadeInOut = keyframes`
 const MessageBox = styled.div`
   position: fixed;
   top: 12%;
-  left: 50%;
+  left: 45%;
   background-color: #f2f2f2;
   color: #333;
   font-size: 28px;
   border-radius: 12px;
   box-shadow: 0 0 5px #4f4f4f;
-  z-index: 9999;
-  width: 511px;
-  height: 99px;
+  z-index: 100000;
+  width: 435px;
+  height: 67px;
   gap: 20px;
-  padding: 8px 25px;
+  padding: 16px 50px;
   display: flex;
   align-items: center;
   justify-content: center;

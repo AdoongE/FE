@@ -428,6 +428,7 @@ const TagContainer = styled.div`
   border-radius: 20px;
   padding: 53px 47px;
   margin-bottom: 60px;
+  align-content: flex-start;
 `;
 
 const Notag = styled.div`

@@ -7,7 +7,7 @@ import { axiosInstance } from '../api/axios-instance';
 const DropdownMenu = styled.ul`
   position: absolute;
   left: 430px;
-  transform: translate(-50%, -65%);
+  transform: translate(-50%, -5%);
   background-color: white;
   border-radius: 10px;
   list-style: none;

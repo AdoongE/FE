@@ -49,7 +49,7 @@ function SignupPage() {
   const schema = yup.object().shape({
     nickname: yup
       .string()
-      .matches(/^[가-힣a-zA-Z0-9\s]{1,10}$/, '*공백포함 10자 이내')
+      .matches(/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]{1,10}$/, '*공백포함 10자 이내')
       .required('*필수 항목입니다.'),
     birthday: yup
       .string()
@@ -144,8 +144,10 @@ function SignupPage() {
                 placeholder="닉네임을 입력하세요."
                 onClick={handleClick}
               />
-              {errors.nickname && touchedFields.nickname && (
+              {errors.nickname && touchedFields.nickname ? (
                 <Error>{errors.nickname?.message}</Error>
+              ) : (
+                <Error></Error>
               )}
             </Option>
             <Option>
@@ -155,8 +157,10 @@ function SignupPage() {
                 type="date"
                 {...register('birthday')}
               />
-              {errors.birthday && touchedFields.birthday && (
+              {errors.birthday && touchedFields.birthday ? (
                 <Error>{errors.birthday?.message}</Error>
+              ) : (
+                <Error></Error>
               )}
             </Option>
             <Option>
@@ -378,7 +382,8 @@ function SignupPage() {
 const Error = styled.div`
   color: red;
   font-size: 18px;
-  transform: translateY(-7px);
+  margin-top: 12px;
+  height: 18px;
 `;
 
 const Date = styled.input`
@@ -486,12 +491,13 @@ const Inputs = styled.input`
   border-radius: 5px;
   border: 1px solid #9f9f9f;
   font-size: 25px;
+  padding-left: 32px;
 
   &::placeholder {
     font-weight: 400;
     font-size: 20px;
     color: #9f9f9f;
-    transform: translateX(32px);
+    // transform: translateX(12px);
   }
 `;
 

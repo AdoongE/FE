@@ -10,7 +10,8 @@ const DropdownMenu = styled.ul`
   border-radius: 10px;
   list-style: none;
   z-index: 1;
-  width: 14.875rem;
+  width: ${({ categoryLength }) =>
+    `calc(${Math.max(14.875, categoryLength * 1.3 + 5)}rem)`};
   box-shadow: 0 0 8px #dfdfdf;
 `;
 
@@ -39,6 +40,7 @@ const Dropdown = ({
   isOpen,
   onClose,
   categoryName,
+  categoryLength,
   isBookmarked,
   onBookmarkAdd,
   onBookmarkRemove,
@@ -85,7 +87,7 @@ const Dropdown = ({
   };
 
   return (
-    <DropdownMenu ref={dropdownRef}>
+    <DropdownMenu ref={dropdownRef} categoryLength={categoryLength}>
       <DropdownItem onClick={toggleBookmark}>
         <Icons
           icon={

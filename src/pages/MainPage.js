@@ -428,7 +428,7 @@ const Pagination = styled.div`
   gap: 8px;
   position: absolute;
   bottom: 30px; /* 화면 하단에서 20px 위로 띄움 */
-  left: 60%; /* 화면 가운데 정렬 */
+  left: 61%; /* 화면 가운데 정렬 */
   transform: translateX(-50%); /* 가운데 정렬 보정 */
   z-index: 10; /* 다른 요소보다 위로 표시되도록 */
 `;

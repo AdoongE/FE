@@ -538,9 +538,10 @@ const RecentSearchList = styled.div`
   border: 1px solid #dcdcdc;
   border-radius: 8px;
   width: 445px;
-  max-height: 315px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  max-height: none; /* max-height 제거 */
+  height: auto; /* 자동으로 높이를 설정하여 항목 수에 맞게 커지도록 설정 */
 `;
 
 const RecentSearchTitle = styled.div`

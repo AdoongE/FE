@@ -218,19 +218,14 @@ function ViewContent() {
           </ContentDiv>
           <Dday>
             <Long>
-              <Name className="dday">
-                디데이
-                <Short>
-                  디데이를 입력하면 해당 날짜에 알림을 받을 수 있습니다.
-                </Short>
-              </Name>
+              <Name className="dday">디데이</Name>
             </Long>
             <DdayDiv>
-              <RemainDay>
-                {remainingDays !== null
-                  ? `D${remainingDays >= 0 ? `-${remainingDays}` : `+${Math.abs(remainingDays)}`}`
-                  : '계산 중...'}
-              </RemainDay>
+              {remainingDays !== null ? (
+                <RemainDay>
+                  {`D${remainingDays >= 0 ? `-${remainingDays}` : `+${Math.abs(remainingDays)}`}`}
+                </RemainDay>
+              ) : null}
               <Calendar>
                 <Icon
                   icon="lucide:calendar"
@@ -242,7 +237,7 @@ function ViewContent() {
                     marginRight: '10px',
                   }}
                 />
-                <Date>{contentInfo.dday}</Date>
+                {remainingDays ? <Date>{contentInfo.dday}</Date> : `yyyy-mm-dd`}
               </Calendar>
             </DdayDiv>
           </Dday>
@@ -342,6 +337,10 @@ const Link = styled.div`
   cursor: pointer;
   display: inline-block;
   width: fit-content;
+  max-width: 800px;
+  white-space: nowrap; // 텍스트가 한 줄로 표시되도록 함
+  overflow: hidden; // 넘치는 텍스트를 숨김
+  text-overflow: ellipsis; // 넘치는 텍스트를 말줄임표(...)로 표시
   &:hover {
     color: #41c3ab;
   }
@@ -398,14 +397,6 @@ const Memo = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 16px;
-`;
-
-const Short = styled.span`
-  font-weight: 400;
-  font-size: 20px;
-  color: #8b8b8b;
-  margin-left: 10px;
-  width: 300px;
 `;
 
 const Long = styled.div`

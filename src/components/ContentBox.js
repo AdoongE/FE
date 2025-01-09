@@ -21,7 +21,6 @@ function ContentBox({
   keyword,
   fetchData,
 }) {
-  console.log('ContentBox Props - keyword:', keyword);
   const [showNewImage, setShowNewImage] = useState(false);
 
   // 키워드 강조 함수

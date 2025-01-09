@@ -398,7 +398,7 @@ const MainContent = styled.div`
 const ContentArea = styled.div`
   display: ${(props) => (props.$isBlank ? 'flex' : 'grid')};
   justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
-  align-items: ${(props) => (props.$isBlank ? 'flex-start' : 'stretch')};
+  align-items: ${(props) => (props.$isBlank ? 'center' : 'stretch')};
   grid-template-columns: ${(props) =>
     !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
   grid-row-gap: 40px;
@@ -427,10 +427,9 @@ const Pagination = styled.div`
   align-items: center;
   gap: 8px;
   position: absolute;
-  bottom: 30px; /* 화면 하단에서 20px 위로 띄움 */
-  left: 61%; /* 화면 가운데 정렬 */
-  transform: translateX(-50%); /* 가운데 정렬 보정 */
-  z-index: 1; /* 다른 요소보다 위로 표시되도록 */
+  bottom: 30px;
+  left: 57%;
+  z-index: 1;
 `;
 
 const PageArrow = styled.button`

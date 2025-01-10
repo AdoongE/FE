@@ -18,9 +18,25 @@ function ContentBox({
   contentDateType,
   updatedDt,
   message,
+  keyword,
   fetchData,
 }) {
   const [showNewImage, setShowNewImage] = useState(false);
+
+  // 키워드 강조 함수
+  const highlightText = (message, keyword) => {
+    if (!keyword) return message;
+    const parts = message.split(new RegExp(`(${keyword})`, 'gi'));
+    return parts.map((part, index) =>
+      part.toLowerCase() === keyword.toLowerCase() ? (
+        <strong key={index} style={{ color: 'black' }}>
+          {part}
+        </strong>
+      ) : (
+        part
+      ),
+    );
+  };
 
   // 제목이 없을 경우 업데이트 날짜로 대체
   const displayTitle =
@@ -28,11 +44,18 @@ function ContentBox({
     (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   // 카테고리 텍스트 생성
-  const displayCategory =
-    category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : ''); // 최대 5개 표시 후 "..." 추가
+  const displayCategory = Array.isArray(category)
+    ? category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : '') // 최대 5개 표시 후 "..." 추가
+    : ''; // 배열이 아닐 경우 빈 문자열 처리
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);
+  };
+
+  const contentIcons = {
+    LINK: 'ic:round-link',
+    IMAGE: 'ri:image-line',
+    PDF: 'codicon:file',
   };
 
   return (
@@ -68,7 +91,7 @@ function ContentBox({
       <ContentTitle>
         <IconBox>
           <Icon
-            icon="ic:round-link"
+            icon={contentIcons[contentDateType] || 'ic:round-link'} // 기본값은 링크
             style={{
               width: '20px',
               height: '20px',
@@ -83,7 +106,7 @@ function ContentBox({
       <CategoryDisplay title={displayCategory}>
         {displayCategory}
       </CategoryDisplay>
-      {message && <MemoText>{message}</MemoText>}
+      {message && <MemoText>{highlightText(message, keyword)}</MemoText>}
     </Box>
   );
 }
@@ -210,8 +233,10 @@ const Tag = styled.button`
 const ContentTitle = styled.div`
   margin-top: 10px;
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-start;
   margin-bottom: 9px;
+  white-space: normal;
+  width: 100%;
 `;
 
 const ContentName = styled.div`
@@ -219,13 +244,16 @@ const ContentName = styled.div`
   font-size: 22px;
   line-height: 26.25px;
   color: #000000;
+  margin-left: 7px;
+  white-space: normal;
+  word-break: break-word;
 `;
 
 const CategoryDisplay = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
-  color: #4f4f4f;
+  color: rgb(141, 141, 141);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

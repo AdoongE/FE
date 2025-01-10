@@ -20,9 +20,11 @@ function ContentHeader({
   setTags,
   setFilteredData,
   setSearchState,
+  setKeyword,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFormatState, setSelectedFormatState] = useState('저장형식'); // 저장형식 상태
+  const [selectedFilter, setSelectedFilter] = useState('정렬');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,6 +35,8 @@ function ContentHeader({
   const [showRecentSearches, setShowRecentSearches] = useState(false);
   const dialogRef = useRef(null);
   const visibleTags = isExpanded ? tags : tags.slice(0, 4);
+
+  const [filteredData, setFilteredDataState] = useState([]);
 
   // 날짜 포맷 함수
   const formatDate = (dateString) => {
@@ -72,51 +76,8 @@ function ContentHeader({
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // 검색 실행 로직
-  const handleSearchKeyPress = async (e) => {
-    if (e.key === 'Enter' && searchQuery.trim()) {
-      saveSearchQuery(searchQuery.trim());
-      try {
-        const requestData = {
-          keyword: searchQuery.trim(),
-          sortOrder: selectedFilter || undefined,
-          dataType: localSelectedFormat || undefined,
-          tags: tags.length > 0 ? tags : undefined,
-        };
-
-        const response = await axiosInstance.post(
-          '/api/v1/content/filtering',
-          requestData,
-        );
-
-        const results = response.data.results || [];
-
-        if (results.length === 0) {
-          setSearchState(true); // 검색 결과 없음 상태로 설정
-          setFilteredData([]); // filteredData 초기화
-        } else {
-          setSearchState(false); // 검색 결과 있음
-          setFilteredData(
-            results.map((item) => ({
-              id: item.contentId || 'ID 없음',
-              title: item.contentName || '제목 없음',
-              categoryName: item.categoryName || [],
-              tagName: item.tagName || [],
-              dDay: item.dday ?? null,
-              contentDateType: item.contentDateType || '타입 없음',
-              thumbnailImage: item.thumbnailImage || null,
-              updatedDt: item.updatedDt || '업데이트 정보 없음',
-            })),
-          );
-        }
-        setSearchQuery(''); // 입력 초기화
-      } catch (error) {
-        console.error('검색 실패:', error);
-      }
-    }
-  };
-
-  const fetchSearchResults = async (query = searchQuery) => {
+  // 공통 API 호출 함수
+  const fetchSearchResults = async (query) => {
     try {
       console.log('검색 요청 시작 - 키워드:', query); // 검색 키워드 확인
 
@@ -143,6 +104,7 @@ function ContentHeader({
         contentDateType: item.contentDateType || '타입 없음',
         thumbnailImage: item.thumbnailImage || null,
         updatedDt: item.updatedDt || '업데이트 정보 없음',
+        message: item.contentDetail || '',
       }));
 
       if (results.length === 0) {
@@ -159,12 +121,31 @@ function ContentHeader({
     }
   };
 
-  // 최근 검색어 클릭 핸들러
+  // 엔터 키를 눌렀을 때 실행되는 함수
+  const handleSearchKeyPress = async (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      setKeyword(searchQuery.trim()); // 부모(MainPage)의 keyword 업데이트
+      saveSearchQuery(searchQuery.trim()); // 최근 검색어 저장
+      await fetchSearchResults(searchQuery.trim()); // 공통 검색 함수 호출
+    } else if (!searchQuery.trim()) {
+      // 검색어가 없을 때 빈 콘텐츠 화면으로 설정
+      setSearchState(true);
+      setFilteredData([]); // 빈 결과 설정
+    }
+  };
+
+  // 최근 검색어 클릭 시 실행되는 함수
   const handleRecentSearchClick = async (query) => {
     setSearchQuery(query); // 검색어 업데이트
+    setKeyword(query);
     saveSearchQuery(query); // 검색어 저장
+    await fetchSearchResults(query); // 공통 검색 함수 호출
 
-    await fetchSearchResults(query);
+    // 결과가 없으면 빈 콘텐츠 화면으로 설정
+    if (!filteredData || filteredData.length === 0) {
+      setSearchState(true); // 검색 결과 없음
+      setFilteredDataState([]); // 빈 결과 설정
+    }
   };
 
   // 태그 검색 모달 열기
@@ -172,18 +153,19 @@ function ContentHeader({
     dialogRef.current?.showModal();
   };
 
-  // 정렬 변경
-  const handleSortChange = (option) => {
-    setSelectedFilter(option);
-    setSortOrder(option);
-    setShowSortDropdown(false);
-  };
-
   // 저장 형식 변경
   const handleFormatChange = (option) => {
     setLocalSelectedFormat(option); // 내부 상태 업데이트
     setSelectedFormat(option); // 부모로 전달
+    setSelectedFormatState(option); // 선택된 저장 형식 상태 업데이트
     setShowFormatDropdown(false); // 드롭다운 닫기
+  };
+
+  // 정렬 변경
+  const handleSortChange = (option) => {
+    setSelectedFilter(option); // 선택된 필터 상태 업데이트
+    setSortOrder(option); // 기존 동작 유지
+    setShowSortDropdown(false); // 드롭다운 닫기
   };
 
   // 태그 제출 처리
@@ -223,17 +205,17 @@ function ContentHeader({
               <Dropdown>
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
-                  isDefault={
-                    !localSelectedFormat
-                  } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+                  isDefault={!localSelectedFormat}
                   width="137px"
                 >
-                  저장형식{' '}
+                  {selectedFormatState} {/* 선택된 저장형식 표시 */}
                   <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
-                    <DropdownItem onClick={() => handleFormatChange('')}>
+                    <DropdownItem
+                      onClick={() => handleFormatChange('전체보기')}
+                    >
                       전체보기
                     </DropdownItem>
                     <DropdownItem onClick={() => handleFormatChange('링크')}>
@@ -252,12 +234,10 @@ function ContentHeader({
               <Dropdown>
                 <DropdownButton
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
-                  isDefault={
-                    !selectedFilter
-                  } /* 값이 선택되지 않았을 때 연한 색상 적용 */
+                  isDefault={!selectedFilter}
                   width="106px"
                 >
-                  정렬{' '}
+                  {selectedFilter} {/* 선택된 정렬 표시 */}
                   <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
                 </DropdownButton>
                 {showSortDropdown && (
@@ -287,7 +267,7 @@ function ContentHeader({
                 placeholder="찾고 싶은 콘텐츠를 검색하세요."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleSearchKeyPress}
+                onKeyPress={handleSearchKeyPress} // 엔터 키 누를 때 실행
                 onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
                 onBlur={() =>
                   setTimeout(() => setShowRecentSearches(false), 200)
@@ -470,7 +450,8 @@ const DropdownItem = styled.div`
   align-items: center;
 
   &:hover {
-    background-color: #f2f2f2;
+    color: #21a58c;
+    font-weight: 700;
   }
 `;
 
@@ -478,7 +459,7 @@ const SearchContainer = styled.div`
   width: 493px;
   height: 50px;
   border-radius: 25px;
-  margin-right: 101px;
+  margin-right: 50px;
   border: 1px solid #9f9f9f;
   display: flex;
   justify-content: space-around;
@@ -570,9 +551,10 @@ const RecentSearchList = styled.div`
   border: 1px solid #dcdcdc;
   border-radius: 8px;
   width: 445px;
-  max-height: 315px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  max-height: none; /* max-height 제거 */
+  height: auto; /* 자동으로 높이를 설정하여 항목 수에 맞게 커지도록 설정 */
 `;
 
 const RecentSearchTitle = styled.div`

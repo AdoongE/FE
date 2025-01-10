@@ -38,13 +38,17 @@ const MainPage = () => {
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [keyword, setKeyword] = useState(''); // 검색 키워드 상태 추가
   const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
 
-  console.log('activeTab : ', activeTab);
+  // keyword 상태 업데이트 로그 출력
+  useEffect(() => {
+    console.log('Updated Keyword:', keyword); // keyword 값 출력
+  }, [keyword]); // keyword가 업데이트 될 때마다 출력
 
   const fetchData = useCallback(async () => {
     try {
@@ -173,19 +177,12 @@ const MainPage = () => {
   useEffect(() => {
     let filteredData = [...originalData];
 
-    console.log('originalData:', originalData); // 원본 데이터 확인
-
     // 저장형식 필터링
-    if (localSelectedFormat) {
+    if (localSelectedFormat && localSelectedFormat !== '전체보기') {
       filteredData = filteredData.filter((item) => {
-        const koreanType = contentTypeMapping[item.contentDateType]; // 매핑된 한국어 값
-        console.log('item.contentDateType:', item.contentDateType); // 데이터 타입 확인
-        console.log('koreanType:', koreanType); // 매핑된 한국어 타입 확인
-        console.log('localSelectedFormat:', localSelectedFormat); // 선택된 필터 값
-        console.log('매칭 여부:', koreanType === localSelectedFormat); // 비교 결과
+        const koreanType = contentTypeMapping[item.contentDateType];
         return koreanType === localSelectedFormat;
       });
-      console.log('필터링 후 데이터:', filteredData); // 필터링 결과 확인
     }
 
     // 정렬
@@ -274,6 +271,7 @@ const MainPage = () => {
           categoryName={categoryName}
           filterId={filterId}
           filterName={filterName}
+          setKeyword={setKeyword}
           tags={tags}
           setTags={setTags}
         />
@@ -323,6 +321,8 @@ const MainPage = () => {
                       contentDateType={data?.contentDateType || '타입 없음'}
                       thumbnailImage={data?.thumbnailImage || null}
                       updatedDt={data?.updatedDt || '업데이트 정보 없음'}
+                      message={data?.message || ''}
+                      keyword={keyword}
                       open={() => openModal(data)}
                       fetchData={fetchData}
                     />
@@ -376,7 +376,7 @@ const MainPage = () => {
 const MainContainer = styled.div`
   display: flex;
   padding-left: 390px;
-  height: 100vh;
+  position: relative;
 `;
 
 const SidebarContainer = styled.div`
@@ -398,14 +398,14 @@ const MainContent = styled.div`
 const ContentArea = styled.div`
   display: ${(props) => (props.$isBlank ? 'flex' : 'grid')};
   justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
-  align-items: ${(props) => (props.$isBlank ? 'flex-start' : 'stretch')};
+  align-items: ${(props) => (props.$isBlank ? 'center' : 'stretch')};
   grid-template-columns: ${(props) =>
     !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
   grid-row-gap: 40px;
   box-sizing: border-box;
-  height: ${(props) => (props.$isBlank ? '100%' : 'auto')};
-  padding: ${(props) =>
-    props.$isBlank ? `${props.$gap || 300}px 0 0 0` : 'inherit'};
+  height: auto;
+  padding: ${(props) => (props.$isBlank ? 'center' : 'inherit')};
+  margin-bottom: 100px;
 `;
 
 const StyledContentBox = styled.div`
@@ -418,6 +418,7 @@ const NoSearchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 131px;
 `;
 
 const Pagination = styled.div`
@@ -425,9 +426,10 @@ const Pagination = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  position: fixed;
-  bottom: 50px;
-  left: 58%;
+  position: absolute;
+  bottom: 30px;
+  z-index: 1;
+  margin-left: calc(100vw * 0.3609);
 `;
 
 const PageArrow = styled.button`

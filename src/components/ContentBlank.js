@@ -54,7 +54,7 @@ const Blank = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  margin-top: 131px;
 `;
 
 const Sentence = styled.div`

@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import Logo from '../../assets/icons/logo.png';
 
 const LoginModal = forwardRef((props, ref) => {
-  const REST_API_KEY = 'c070041b0cad704dd796871d5f281434';
-  const REDIRECT_URI = 'http://localhost:3000/kakao/callback';
-  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {
     window.location.href = link;

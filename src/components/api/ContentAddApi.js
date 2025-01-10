@@ -3,14 +3,14 @@ import axios from 'axios';
 const token = localStorage.getItem('jwtToken');
 
 const api = axios.create({
-  baseURL: 'http://210.107.205.122:20011',
+  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
   headers: {
     Authorization: `${token}`,
     'Content-Type': 'application/json',
   },
 });
 const api_ = axios.create({
-  baseURL: 'http://210.107.205.122:20011',
+  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
   headers: {
     Authorization: `${token}`,
     'Content-Type': 'multipart/form-data',

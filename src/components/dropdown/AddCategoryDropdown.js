@@ -7,8 +7,7 @@ import Select from '@mui/material/Select';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
-
+import { axiosInstance } from '../api/axios-instance';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -40,15 +39,9 @@ export default function AddCategory({ value = [], onChange }) {
     onChange(value.filter((item) => item !== field));
   };
 
-  const token = localStorage.getItem('jwtToken');
-  const api = axios.create({
-    baseURL: 'http://210.107.205.122:20011',
-    headers: { Authorization: `${token}` },
-  });
-
   const handleViewCategory = async () => {
     try {
-      const response = await api.get('/api/v1/category');
+      const response = await axiosInstance.get('/api/v1/category');
       const results = response.data.results;
       console.log('카테고리 이름 좀 보자', results);
       const names = results.map((item) => item.name);

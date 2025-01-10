@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
+import { axiosInstance } from '../api/axios-instance';
 
 export const EditCategoryModal = ({
   isOpen,
@@ -21,21 +21,13 @@ export const EditCategoryModal = ({
 
   if (!isOpen) return null;
 
-  const token = localStorage.getItem('jwtToken');
-  const api = axios.create({
-    baseURL: 'http://210.107.205.122:20011',
-    headers: {
-      Authorization: `${token}`,
-      withCredentials: true,
-    },
-  });
   const handleConfirm = async () => {
     onConfirm(newCategoryName);
     setNewCategoryName('');
     console.log('이름 편집 아이디', categoryId);
 
     try {
-      const response = await api.patch(`/api/v1/category`, {
+      const response = await axiosInstance.patch(`/api/v1/category`, {
         name: newCategoryName,
         categoryId: categoryId,
       });

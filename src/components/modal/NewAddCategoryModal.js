@@ -2,7 +2,7 @@ import React, { forwardRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { IOSSwitch } from '../switch/PublicCategorySwitch';
-import axios from 'axios';
+import { axiosInstance } from '../api/axios-instance';
 
 const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
   const [isPublic, setIsPublic] = useState(true);
@@ -16,18 +16,12 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
     setIsPublic(!isPublic);
   };
 
-  const token = localStorage.getItem('jwtToken');
-  const api = axios.create({
-    baseURL: 'http://210.107.205.122:20011',
-    headers: { Authorization: `${token}` },
-  });
-
   const handleAddCategory = async () => {
     const newCategoryName = categoryName.trim() || '새로운 카테고리';
     onConfirm(newCategoryName);
     setCategoryName('');
     try {
-      const response = await api.post('/api/v1/category', {
+      const response = await axiosInstance.post('/api/v1/category', {
         name: newCategoryName,
         isPublic: isPublic ? true : false,
       });

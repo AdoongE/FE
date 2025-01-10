@@ -14,7 +14,6 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import TagFilterModal from '../components/modal/TagFilterModal';
 import { axiosInstance } from './api/axios-instance';
-import axios from 'axios';
 
 const Sidebar = ({
   setCategoryId,
@@ -51,12 +50,6 @@ const Sidebar = ({
   const [customFilterIds, setCustomFilterIds] = useState([]);
   const [message, setMessage] = useState('');
 
-  const token = localStorage.getItem('jwtToken');
-  const api = axios.create({
-    baseURL: 'http://210.107.205.122:20011',
-    headers: { Authorization: `${token}` },
-  });
-
   const handleViewCategory = async (source) => {
     if (source === 'click') {
       setIsCategoryOpen((prev) => {
@@ -68,7 +61,7 @@ const Sidebar = ({
     }
 
     try {
-      const response = await api.get('/api/v1/category');
+      const response = await axiosInstance.get('/api/v1/category');
       const results = response.data.results;
       const ids = results.map((item) => item.categoryId);
       setCategoryIds(ids);
@@ -88,7 +81,7 @@ const Sidebar = ({
     setIsBookmarkOpen(!isBookmarkOpen);
 
     try {
-      const response = await api.get('/api/v1/bookmark');
+      const response = await axiosInstance.get('/api/v1/bookmark');
       const results = response.data.results;
       const ids = results.map((item) => item.bookmarkId);
       setBookmarkIds(ids);
@@ -144,7 +137,7 @@ const Sidebar = ({
     console.log(`Bookmark added: Category ID = ${categoryId}`);
 
     try {
-      const response = await api.post(
+      const response = await axiosInstance.post(
         `/api/v1/category/${categoryId}/bookmark`,
       );
       if (response.status === 200) {
@@ -201,7 +194,9 @@ const Sidebar = ({
     console.log(`Bookmark remove: bookmark ID = ${bookmarkId}`);
 
     try {
-      const response = await api.delete(`/api/v1/bookmark/${bookmarkId}`);
+      const response = await axiosInstance.delete(
+        `/api/v1/bookmark/${bookmarkId}`,
+      );
       if (response.status === 200) {
         console.log('북마크 삭제 성공');
       } else {
@@ -234,7 +229,9 @@ const Sidebar = ({
     setDeleteModalOpen(false);
 
     try {
-      const response = await api.delete(`/api/v1/category/${categoryId}`);
+      const response = await axiosInstance.delete(
+        `/api/v1/category/${categoryId}`,
+      );
       if (response.status === 200) {
         console.log('카테고리 삭제 성공');
       } else {

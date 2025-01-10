@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
 import ViewImagePdfModal from './modal/ViewImagePDFModal';
+import { axiosInstance } from './api/axios-instance';
 
 function ViewContent() {
   const navigate = useNavigate();
@@ -44,13 +44,10 @@ function ViewContent() {
   console.log('썸네일 인덱스', contentInfo.thumbnailImage);
 
   const handleViewContent = async () => {
-    const token = localStorage.getItem('jwtToken');
-    const api = axios.create({
-      baseURL: 'http://210.107.205.122:20011',
-      headers: { Authorization: `${token}` },
-    });
     try {
-      const response = await api.get(`/api/v1/content/all/${state.contentId}`);
+      const response = await axiosInstance.get(
+        `/api/v1/content/all/${state.contentId}`,
+      );
       const results = response.data.results[0];
       console.log('결과', results);
       setContentInfo({

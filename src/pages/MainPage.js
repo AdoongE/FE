@@ -7,20 +7,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import noSearchContent from '../assets/icons/noSearchContent.png';
-import axios from 'axios';
 import { axiosInstance } from '../components/api/axios-instance';
-
-const api = axios.create({
-  baseURL: 'http://210.107.205.122:20011',
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwtToken');
-  if (token) {
-    config.headers.Authorization = token;
-  }
-  return config;
-});
 
 const MainPage = () => {
   const [collectData, setCollectData] = useState([]); // 모아보기 전체 콘텐츠 수
@@ -89,7 +76,7 @@ const MainPage = () => {
       } else {
         if (activeTab === '모아보기' || activeTab === '나의 씨드') {
           url = '/api/v1/content/';
-          const res = await api.get(url);
+          const res = await axiosInstance.get(url);
           const responseData = res.data.results?.[0]?.contentsInfoList || [];
           setCollectData(responseData); // null 방지
         } else if (activeTab === '카테고리') {
@@ -105,7 +92,7 @@ const MainPage = () => {
         }
 
         console.log('GET 요청할 URL:', url);
-        const response = await api.get(url);
+        const response = await axiosInstance.get(url);
         console.log('응답 데이터:', response.data.results);
 
         results =

@@ -12,7 +12,7 @@ import EditLinkUpload from '../components/EditLinkUpload';
 import EditImageUpload from '../components/EditImageUpload';
 import EditPdfUpload from '../components/EditPdfUpload';
 import { ContentEditHandler } from '../components/api/ContentEditApi';
-import axios from 'axios';
+import { axiosInstance } from '../components/api/axios-instance';
 import Alert from '@mui/material/Alert';
 import Navbar from '../components/Navbar';
 
@@ -106,15 +106,9 @@ function ContentEditPage() {
     }
   }, []);
 
-  const token = localStorage.getItem('jwtToken');
-  const api = axios.create({
-    baseURL: 'http://210.107.205.122:20011',
-    headers: { Authorization: `${token}` },
-  });
-
   const getDetail = async () => {
     try {
-      const response = await api.get(`/api/v1/content/all/${Id}`);
+      const response = await axiosInstance.get(`/api/v1/content/all/${Id}`);
       const results = response.data.results[0];
       console.log('수정 전 data: ', results);
       setOriginalContentDetail(results);

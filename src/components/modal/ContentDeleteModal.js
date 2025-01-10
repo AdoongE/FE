@@ -1,15 +1,6 @@
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-
-const token = localStorage.getItem('jwtToken');
-
-const api = axios.create({
-  baseURL: 'http://210.107.205.122:20011', // 백엔드 서버 주소로 설정
-  headers: {
-    Authorization: `${token}`, // 토큰을 템플릿 리터럴로 추가
-  },
-});
+import { axiosInstance } from '../api/axios-instance';
 
 const ContentDeleteModal = forwardRef(({ contentId, fetchData }, ref) => {
   const cloesModal = () => {
@@ -20,7 +11,9 @@ const ContentDeleteModal = forwardRef(({ contentId, fetchData }, ref) => {
     e.stopPropagation();
     console.log('콘텐츠 삭제 id: ', contentId);
     try {
-      const response = await api.delete(`/api/v1/content/${contentId}`);
+      const response = await axiosInstance.delete(
+        `/api/v1/content/${contentId}`,
+      );
 
       console.log('삭제 성공: ', response?.data.results);
       cloesModal();

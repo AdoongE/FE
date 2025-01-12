@@ -137,7 +137,11 @@ function PdfUploadModal({ onClose }) {
               <EmptyState>
                 <Icon
                   icon="material-symbols:upload-rounded"
-                  style={{ width: '59px', height: '59px', color: '#4F4F4F' }}
+                  style={{
+                    width: '3.07vw',
+                    height: '3.07vw',
+                    color: '#4F4F4F',
+                  }}
                 />
                 <DropText>
                   PDF 파일 선택
@@ -157,7 +161,7 @@ function PdfUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -176,7 +180,7 @@ function PdfUploadModal({ onClose }) {
                         <FileIcon>
                           <Icon
                             icon="mdi-light:file"
-                            style={{ fontSize: '50px', color: '#666' }}
+                            style={{ fontSize: '2.604vw', color: '#666' }}
                           />
                         </FileIcon>
                         <FileName>{file.label}</FileName>
@@ -196,7 +200,7 @@ function PdfUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-right"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonRight>
                   )}

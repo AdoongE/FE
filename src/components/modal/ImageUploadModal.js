@@ -123,7 +123,7 @@ function ImageUploadModal({ onClose }) {
           <Title>씨드 추가</Title>
           <Icon
             icon="line-md:close"
-            style={{ width: '24px', height: '24px', cursor: 'pointer' }}
+            style={{ width: '1.25vw', height: '1.25vw', cursor: 'pointer' }}
             onClick={onClose}
           />
         </Header>
@@ -140,7 +140,11 @@ function ImageUploadModal({ onClose }) {
               <EmptyState>
                 <Icon
                   icon="material-symbols:upload-rounded"
-                  style={{ width: '59px', height: '59px', color: '#4F4F4F' }}
+                  style={{
+                    width: '3.07vw',
+                    height: '3.07vw',
+                    color: '#4F4F4F',
+                  }}
                 />
                 <DropText>
                   이미지 선택
@@ -160,7 +164,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -193,7 +197,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -206,7 +210,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-right"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonRight>
                   )}

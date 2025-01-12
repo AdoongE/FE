@@ -206,10 +206,13 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
                   isDefault={!localSelectedFormat}
-                  width="137px"
+                  width="7.135vw"
                 >
                   {selectedFormatState} {/* 선택된 저장형식 표시 */}
-                  <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
+                  <Icon
+                    icon="uil:angle-down"
+                    style={{ marginLeft: ' 0.417vw' }}
+                  />
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
@@ -235,10 +238,13 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
                   isDefault={!selectedFilter}
-                  width="106px"
+                  width="5.521vw"
                 >
                   {selectedFilter} {/* 선택된 정렬 표시 */}
-                  <Icon icon="uil:angle-down" style={{ marginLeft: '8px' }} />
+                  <Icon
+                    icon="uil:angle-down"
+                    style={{ marginLeft: ' 0.417vw' }}
+                  />
                 </DropdownButton>
                 {showSortDropdown && (
                   <DropdownMenu>
@@ -257,9 +263,9 @@ function ContentHeader({
               <Icon
                 icon="stash:search-solid"
                 style={{
-                  width: '24px',
-                  height: '24px',
-                  marginLeft: '15px',
+                  width: '1.25vw',
+                  height: '1.25vw',
+                  marginLeft: '0.781vw',
                   color: 'black',
                 }}
               />
@@ -286,7 +292,7 @@ function ContentHeader({
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '8px',
+                          gap: '0.417vw',
                           background: 'none',
                           border: 'none',
                           padding: '0',
@@ -297,7 +303,7 @@ function ContentHeader({
                       >
                         <Icon
                           icon="ion:search-outline"
-                          style={{ fontSize: '20px' }}
+                          style={{ fontSize: '1.042vw' }}
                         />
                         {search.query}
                       </button>
@@ -329,7 +335,7 @@ function ContentHeader({
                 <SearchTitle>
                   <img
                     src={filterIcon}
-                    style={{ width: '1.25rem', marginRight: '0.5rem' }}
+                    style={{ width: '1.042vw', marginRight: '0.417vw' }}
                     alt="circle check icon"
                   />
                   검색 필터
@@ -341,8 +347,8 @@ function ContentHeader({
                       <Icon
                         icon="ic:round-close"
                         style={{
-                          width: '1.25rem',
-                          marginLeft: '0.25rem',
+                          width: '1.042vw',
+                          marginLeft: '0.208vw',
                           border: 'none',
                           backgroundColor: 'transparent',
                           color: '#9f9f9f',
@@ -378,13 +384,13 @@ function ContentHeader({
 
 const Main = styled.div`
   position: relative;
-  padding-top: 83px;
-  padding-bottom: 70px;
+  padding-top: 4.323vw; /* 83px */
+  padding-bottom: 3.646vw; /* 70px */
 `;
 
 const Title = styled.div`
   font-weight: 700;
-  font-size: 44px;
+  font-size: 2.292vw; /* 44px */
   position: absolute;
   left: 0;
   display: flex;
@@ -394,13 +400,13 @@ const Title = styled.div`
 
 const CategoryName = styled.span`
   font-weight: 400;
-  font-size: 30px;
-  margin-left: 11px;
+  font-size: 1.563vw; /* 30px */
+  margin-left: 0.573vw; /* 11px */
 `;
 
 const DropdownContainer = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 1.042vw; /* 20px */
 `;
 
 const Dropdown = styled.div`
@@ -409,18 +415,18 @@ const Dropdown = styled.div`
 
 const DropdownButton = styled.button`
   background: white;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  font-size: 22px;
+  border: 0.052vw solid #dcdcdc; /* 1px */
+  border-radius: 0.417vw; /*  0.417vw */
+  font-size: 1.146vw; /* 22px */
   color: ${(props) => (props.isDefault ? '#9f9f9f' : '#333')};
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 48px;
-  width: ${(props) => props.width || '200px'};
+  height: 2.5vw; /* 4 0.417vw */
+  width: ${(props) => props.width || '10.417vw'}; /* 200px */
   position: relative;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.052vw 0.104vw rgba(0, 0, 0, 0.1); /* 0 1px 2px */
   &:hover {
     background-color: #f9f9f9;
   }
@@ -428,24 +434,24 @@ const DropdownButton = styled.button`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 0.208vw); /* 4px */
   left: 0;
   background: white;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 0.052vw solid #dcdcdc; /* 1px */
+  border-radius: 0.417vw; /*  0.417vw */
+  box-shadow: 0 0.208vw 0.313vw rgba(0, 0, 0, 0.1); /* 0 4px 6px */
   z-index: 10;
-  width: 200px;
+  width: 10.417vw; /* 200px */
 `;
 
 const DropdownItem = styled.div`
-  padding: 10px 12px;
-  font-size: 22px;
+  padding: 0.521vw 0.625vw; /* 10px 12px */
+  font-size: 1.146vw; /* 22px */
   color: ${(props) => (props.isSelected ? '#333' : '#666')};
   font-weight: ${(props) => (props.isSelected ? '700' : '400')};
   cursor: pointer;
   text-align: left;
-  height: 48px;
+  height: 2.5vw; /* 4 0.417vw */
   display: flex;
   align-items: center;
 
@@ -456,24 +462,24 @@ const DropdownItem = styled.div`
 `;
 
 const SearchContainer = styled.div`
-  width: 493px;
-  height: 50px;
-  border-radius: 25px;
-  margin-right: 50px;
-  border: 1px solid #9f9f9f;
+  width: 25.677vw; /* 493px */
+  height: 2.604vw; /* 50px */
+  border-radius: 1.302vw; /* 25px */
+  margin-right: 2.604vw; /* 50px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
   display: flex;
   justify-content: space-around;
   align-items: center;
-  position: relative; /* 부모 요소 기준 위치 설정 */
+  position: relative;
 `;
 
 const Search = styled.input`
-  width: 300px;
+  width: 15.625vw; /* 300px */
   border: none;
   text-align: start;
-  font-size: 25px;
+  font-size: 1.302vw; /* 25px */
   &::placeholder {
-    font-size: 18px;
+    font-size: 0.938vw; /* 1 0.417vw */
     color: #9f9f9f;
   }
   &:focus {
@@ -482,12 +488,12 @@ const Search = styled.input`
 `;
 
 const SearchButton = styled.button`
-  width: 110px;
-  height: 40px;
+  width: 5.729vw; /* 110px */
+  height: 2.083vw; /* 40px */
   border: 0;
-  border-radius: 40.32px;
+  border-radius: 2.101vw; /* 40.32px */
   background-color: #f2f2f2;
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -498,7 +504,7 @@ const Bar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 80px;
+  margin-top: 4.167vw; /* 80px */
 `;
 
 const FilterDiv = styled.div`
@@ -507,16 +513,16 @@ const FilterDiv = styled.div`
 
 const FilterTitle = styled.div`
   font-weight: 700;
-  font-size: 44px;
+  font-size: 2.292vw; /* 44px */
 `;
 
 const FilterBtn = styled.button`
-  margin-top: 50px;
-  width: 165px;
-  height: 44px;
-  font-size: 20px;
+  margin-top: 2.604vw; /* 50px */
+  width: 8.594vw; /* 165px */
+  height: 2.292vw; /* 44px */
+  font-size: 1.042vw; /* 20px */
   border: none;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   background-color: #def3f1;
   display: flex;
   justify-content: center;
@@ -530,9 +536,9 @@ const FilterBtn = styled.button`
 `;
 
 const FilterEditIcon = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-left: 13px;
+  width: 1.25vw; /* 1.25vw */
+  height: 1.25vw; /* 1.25vw */
+  margin-left: 0.677vw; /* 13px */
   filter: invert(48%) sepia(59%) saturate(518%) hue-rotate(119deg)
     brightness(98%) contrast(89%);
 
@@ -544,24 +550,23 @@ const FilterEditIcon = styled.img`
 
 const RecentSearchList = styled.div`
   position: absolute;
-  top: calc(100% + 5px);
-  left: 50%; /* 가운데 정렬 */
+  top: calc(100% + 0.26vw); /* 5px */
+  left: 50%;
   transform: translateX(-50%);
   background: white;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  width: 445px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: 0.052vw solid #dcdcdc; /* 1px */
+  border-radius: 0.417vw; /*  0.417vw */
+  width: 23.177vw; /* 445px */
+  box-shadow: 0 0.208vw 0.313vw rgba(0, 0, 0, 0.1); /* 0 4px 6px */
   z-index: 10;
-  max-height: none; /* max-height 제거 */
-  height: auto; /* 자동으로 높이를 설정하여 항목 수에 맞게 커지도록 설정 */
+  height: auto;
 `;
 
 const RecentSearchTitle = styled.div`
   font-weight: bold;
-  font-size: 20px;
-  padding: 19px;
-  position: relative; /* border 조정을 위해 relative 추가 */
+  font-size: 1.042vw; /* 20px */
+  padding: 0.99vw; /* 19px */
+  position: relative;
 
   &:after {
     content: '';
@@ -569,56 +574,53 @@ const RecentSearchTitle = styled.div`
     bottom: 0;
     left: 5%;
     right: 5%;
-    height: 1px;
-    background-color: #eaeaea; /* 구분선 색상 */
+    height: 0.052vw; /* 1px */
+    background-color: #eaeaea;
   }
 `;
 
 const RecentSearchItem = styled.div`
   display: flex;
-  justify-content: space-between; /* 검색어와 오른쪽 요소를 양쪽 정렬 */
+  justify-content: space-between;
   align-items: center;
-  padding: 15px 19px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  font-size: 18px;
+  padding: 0.781vw 0.99vw; /* 15px 19px */
+  margin-top: 0.781vw; /* 15px */
+  margin-bottom: 0.781vw; /* 15px */
+  font-size: 0.938vw; /* 1 0.417vw */
   color: #666;
 
   & > span {
     display: flex;
     align-items: center;
-    gap: 16px; /* 아이콘과 텍스트 간격 */
+    gap: 0.833vw; /* 16px */
   }
 
-  /* 오른쪽 영역 (날짜와 삭제 버튼) */
   & > div {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* 오른쪽 정렬 */
-    gap: 6px; /* 날짜와 삭제 버튼 간 간격 */
+    justify-content: flex-end;
+    gap: 0.313vw; /* 6px */
   }
 `;
 
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
   cursor: pointer;
 `;
 
 // 검색 필터 스타일
 const FilterContainer = styled.div`
   background-color: #f2f2f2;
-  border-radius: 10px;
-  width: 632px;
-  min-height: 50px;
+  border-radius: 0.521vw; /* 10px */
+  width: 32.917vw; /* 632px */
+  min-height: 2.604vw; /* 50px */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* align-items: center; */
-  /* align-items: flex-start; */
-  margin-top: 24px;
-  padding: 4px 16px;
+  margin-top: 1.25vw; /* 1.25vw */
+  padding: 0.208vw 0.833vw; /* 4px 16px */
   transition: height 0.3s ease;
   overflow: hidden;
 `;
@@ -626,16 +628,15 @@ const FilterContainer = styled.div`
 const ParentContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 1.458vw; /* 2 0.417vw */
 `;
 
 const SearchTitle = styled.span`
   font-weight: bold;
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
   color: #9f9f9f;
   display: flex;
   align-items: center;
-  /* flex-shrink: 0; */
 `;
 
 const ToggleButton = styled.button`
@@ -644,36 +645,35 @@ const ToggleButton = styled.button`
   color: #9f9f9f;
   cursor: pointer;
   position: relative;
-  font-size: 16px;
-  /* flex-shrink: 0; */
+  font-size: 0.833vw; /* 16px */
 
   &:after {
     content: '';
     display: block;
-    width: calc(100% - 10px);
-    height: 1px;
+    width: calc(100% - 0.521vw); /* 10px */
+    height: 0.052vw; /* 1px */
     background-color: #9f9f9f;
     position: absolute;
-    left: 5px;
+    left: 0.26vw; /* 5px */
   }
 `;
 
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.521vw; /* 10px */
   overflow: hidden;
-  width: 428px;
+  width: 22.292vw; /* 42 0.417vw */
 `;
 
 const Tag = styled.div`
-  padding: 3px 12px;
+  padding: 0.156vw 0.625vw; /* 3px 12px */
   background-color: #ffffff;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 0.521vw; /* 10px */
+  font-size: 0.833vw; /* 16px */
   color: #4f4f4f;
   display: inline-flex;
-  height: 34.33px;
+  height: 1.788vw; /* 34.33px */
   justify-content: center;
   align-items: center;
 `;

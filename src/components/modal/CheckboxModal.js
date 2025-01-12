@@ -75,7 +75,7 @@ const CheckboxModal = forwardRef((_, ref) => {
           <ModalTitle>씨드 추가</ModalTitle>
           <Icon
             icon="line-md:close"
-            style={{ width: '36px', height: '36px', cursor: 'pointer' }}
+            style={{ width: '1.875vw', height: '1.875vw', cursor: 'pointer' }}
             onClick={() => closeModal()}
           />
         </TopDiv>
@@ -129,12 +129,12 @@ const CheckboxModal = forwardRef((_, ref) => {
 CheckboxModal.displayName = 'CheckboxModal';
 
 const Dialog = styled.dialog`
-  width: 580px;
-  height: 280px;
-  border-radius: 50px;
+  width: 30.208vw; /* 580px */
+  height: 14.583vw; /* 280px */
+  border-radius: 2.604vw; /* 50px */
   background: #fff;
   border: 0;
-  padding: 40px 50px;
+  padding: 2.083vw 2.604vw; /* 40px 50px */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -144,23 +144,23 @@ const Dialog = styled.dialog`
 `;
 
 const Button = styled.button`
-  border-radius: 50px;
+  border-radius: 2.604vw; /* 50px */
   background: #41c3ab;
   border: 0;
   display: flex;
-  padding: 14px 30px;
+  padding: 0.729vw 1.563vw; /* 14px 30px */
   justify-content: center;
   align-items: center;
   color: #fff;
   font-family: 'Pretendard Variable';
-  font-size: 22px;
+  font-size: 1.146vw; /* 22px */
   font-weight: 500;
-  width: 99px;
-  height: 54px;
+  width: 5.156vw; /* 99px */
+  height: 2.813vw; /* 54px */
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 32px;
+  font-size: 1.667vw; /* 32px */
   font-weight: 700;
   font-family: 'Pretendard-Regular';
 `;
@@ -168,44 +168,44 @@ const ModalTitle = styled.h2`
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 62px;
+  margin-bottom: 3.229vw; /* 62px */
 `;
 
 const Title = styled.div`
   color: #4f4f4f;
   font-family: 'Pretendard Variable';
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-bottom: 21px;
+  margin-bottom: 1.094vw; /* 21px */
 `;
 
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 40px;
-  margin-bottom: 44px;
+  column-gap: 2.083vw; /* 40px */
+  margin-bottom: 2.292vw; /* 44px */
 `;
 
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.625vw; /* 12px */
 
   span {
-    font-size: 24px;
+    font-size: 1.25vw; /* 24px */
     color: #4f4f4f;
   }
 `;
 
 const TypeBox = styled.input`
-  width: 28px;
-  height: 28px;
+  width: 1.458vw; /* 28px */
+  height: 1.458vw; /* 28px */
   cursor: pointer;
   appearance: none;
-  border: 1px solid #9f9f9f;
-  border-radius: 5px;
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  border-radius: 0.26vw; /* 5px */
 
   &:checked {
     background-color: #41c3ab;

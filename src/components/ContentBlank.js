@@ -54,27 +54,27 @@ const Blank = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 131px;
+  margin-top: 6.823vw; /* 131px */
 `;
 
 const Sentence = styled.div`
   font-weight: 500;
-  font-size: 32px;
+  font-size: 1.667vw; /* 32px */
   text-align: center;
   color: #4f4f4f;
-  line-height: 46px;
+  line-height: 2.396vw; /* 46px */
 `;
 
 const NewContentButton = styled.button`
-  width: 404px;
-  height: 76px;
-  margin-top: 44px;
+  width: 21.042vw; /* 404px */
+  height: 3.958vw; /* 76px */
+  margin-top: 2.292vw; /* 44px */
   color: white;
   background-color: #41c3ab;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 1.042vw; /* 20px */
   font-weight: 600;
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
   border: 0;
 `;
 

@@ -402,8 +402,8 @@ function AddContent() {
                             <Icon
                               icon="ic:round-close"
                               style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '1.25vw;',
+                                height: '1.25vw;',
                                 color: 'white',
                               }}
                               onClick={() => {
@@ -450,12 +450,12 @@ function AddContent() {
                   {recoTags.length === 0 ? (
                     <div
                       style={{
-                        padding: '5px 12px',
+                        padding: '0.26vw 0.625vw', // 5px 12px
                         backgroundColor: '#dcdada',
                         color: '#ff0000',
-                        borderRadius: '5px',
+                        borderRadius: '0.26vw', // 5px
                         textAlign: 'center',
-                        fontSize: '16px',
+                        fontSize: '0.833vw', // 16px
                       }}
                     >
                       태그 추천 불가
@@ -466,14 +466,14 @@ function AddContent() {
                         key={idx}
                         style={{
                           display: 'inline-block',
-                          padding: '5px 12px',
-                          margin: '5px',
+                          padding: '0.26vw .625vw',
+                          margin: '0.26vw',
                           backgroundColor: '#dcdada',
-                          borderRadius: '5px',
+                          borderRadius: '0.26vw',
                           cursor: 'pointer',
                           color: '#4f4f4f',
                           fontWeight: '600',
-                          fontSize: '16px',
+                          fontSize: '0.833vw',
                           border: 'none',
                         }}
                         onClick={(event) => handleRecoTagClick(event, tag)}
@@ -535,23 +535,22 @@ function AddContent() {
 
 const Chip = styled.div`
   width: fit-content;
-  height: 44px;
+  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 5px;
-  column-gap: 15px;
+  border-radius: 0.26vw; /* 5px */
+  column-gap: 0.781vw; /* 15px */
   background-color: #41c3ab;
-  padding-left: 16px;
-  padding-right: 16px;
-  /* margin-right: 10px; */
-  margin: 4px 4px;
+  padding-left: 0.833vw; /* 16px */
+  padding-right: 0.833vw; /* 16px */
+  margin: 0.208vw; /* 4px */
 `;
 
 const TagP = styled.p`
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
 `;
 
 const ButtonContainers = styled.div`
@@ -779,7 +778,7 @@ const Button = styled.button`
   width: 152px;
   height: 57px;
   color: #4f4f4f;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 500;
   background-color: #dcdada;
   border: none;
@@ -791,7 +790,7 @@ const Button = styled.button`
 `;
 
 const ArrowIcon = styled(FaArrowRight)`
-  font-size: 24px;
+  font-size: 1.25vw;
   color: #4f4f4f;
   transform: scale(0.7);
 `;

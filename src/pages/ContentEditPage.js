@@ -401,8 +401,8 @@ function ContentEditPage() {
                                 <Icon
                                   icon="ic:round-close"
                                   style={{
-                                    width: '24px',
-                                    height: '24px',
+                                    width: '1.25vw',
+                                    height: '1.25vw',
                                     color: 'white',
                                   }}
                                   onClick={() => {
@@ -451,9 +451,9 @@ function ContentEditPage() {
                       <Icon
                         icon="ri:reset-left-line"
                         style={{
-                          width: '15px',
-                          height: '15px',
-                          marginRight: '10px',
+                          width: '0.781vw',
+                          height: '0.781vw',
+                          marginRight: '0.521vw',
                           color: '#4F4F4F',
                         }}
                       />
@@ -520,14 +520,14 @@ function ContentEditPage() {
               sx={{
                 bgcolor: '#F2F2F2',
                 mt: 2,
-                width: '507.73px',
-                height: '99.73px',
+                width: '26.467vw' /* 507.73px */,
+                height: '5.194vw' /* 99.73px */,
                 display: 'flex',
-                fontSize: '28px',
-                size: '28px',
+                fontSize: '1.458vw' /* 28px */,
+                size: '1.458vw' /* 28px */,
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: '8px',
+                borderRadius: '0.417vw' /* 8px */,
                 border: '0',
               }}
             >
@@ -546,7 +546,7 @@ const ErrorDialog = styled.dialog`
   background: transparent;
   box-shadow: none;
   position: absolute;
-  top: -14px;
+  top: -0.729vw; /* -14px */
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
@@ -556,69 +556,69 @@ const NoButtons = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 289px;
-  height: 76px;
-  border-radius: 10px;
+  width: 15.052vw; /* 289px */
+  height: 3.958vw; /* 76px */
+  border-radius: 0.521vw; /* 10px */
   border: 0;
   background-color: #dcdada;
   color: #9f9f9f;
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
   font-weight: 600;
-  margin-bottom: 80px;
+  margin-bottom: 4.167vw; /* 80px */
 `;
 
 const Chip = styled.div`
   width: fit-content;
-  height: 44px;
+  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 5px;
-  column-gap: 15px;
+  border-radius: 0.26vw; /* 5px */
+  column-gap: 0.781vw; /* 0.781vw */
   background-color: #41c3ab;
-  padding-left: 16px;
-  padding-right: 16px;
-  margin: 4px 4px;
+  padding-left: 0.833vw; /* 16px */
+  padding-right: 0.833vw; /* 16px */
+  margin: 0.208vw 0.208vw; /* 4px */
 `;
 
 const TagP = styled.p`
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
 `;
 
 const ButtonContainers = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: 40px;
+  column-gap: 2.083vw; /* 40px */
 `;
 
 const Count = styled.div`
   width: fit-content;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   color: #9f9f9f;
-  transform: translateX(1268px) translateY(-40px);
+  transform: translateX(66.042vw) translateY(-2.083vw); /* 1268px, -40px */
 `;
 
 const RecommendBox = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 393px;
-  height: 31px;
-  border-radius: 5px;
+  width: 20.469vw; /* 393px */
+  height: 1.615vw; /* 31px */
+  border-radius: 0.26vw; /* 5px */
   background-color: #eeeeee;
   border: 0;
   color: #4f4f4f;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 0.781vw; /* 0.781vw */
 `;
 
 const Recommend = styled.div`
   font-weight: 400;
-  font-size: 18px;
+  font-size: 0.938vw; /* 18px */
   color: #4f4f4f;
   display: flex;
   justify-content: center;
@@ -627,71 +627,71 @@ const Recommend = styled.div`
 
 const Recommends = styled.div`
   display: flex;
-  column-gap: 17px;
+  column-gap: 0.885vw; /* 17px */
 `;
 
 const InputButton = styled.button`
   width: fit-content;
-  height: 44.19px;
-  border-radius: 10px;
+  height: 2.292vw; /* 44.19px */
+  border-radius: 0.521vw; /* 10px */
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #9f9f9f;
+  border: 0.052vw solid #9f9f9f; /* 1px */
   color: white;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   background-color: #9f9f9f;
-  padding: 10px 18px;
+  padding: 0.521vw 0.938vw; /* 10px 18px */
 `;
 
 const TagContainer = styled.div`
-  width: 709px;
-  min-height: 60px;
-  border: 1px solid #9f9f9f;
-  border-radius: 10px;
+  width: 36.927vw; /* 709px */
+  min-height: 3.125vw; /* 60px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  border-radius: 0.521vw; /* 10px */
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 0px 6px;
+  padding: 0 0.313vw; /* 6px */
 `;
 
 const TagInputs = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 15px;
+  row-gap: 0.781vw; /* 0.781vw */
 `;
 
 const TagInput = styled.input`
   flex-grow: 1;
-  padding: 0.5em 0;
+  padding: 0.26em 0;
   border: none;
   outline: none;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   background-color: transparent;
 `;
 
 const TagDiv = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 1.042vw; /* 20px */
   align-items: center;
 `;
 
 const Text = styled.textarea`
-  width: 1334px;
-  height: 238px;
-  border-radius: 10px;
-  border: 1px solid #9f9f9f;
-  font-size: 20px;
-  padding-left: 27px;
-  padding-top: 26px;
-  padding-right: 27px;
+  width: 69.479vw; /* 1334px */
+  height: 12.396vw; /* 238px */
+  border-radius: 0.521vw; /* 10px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.042vw; /* 20px */
+  padding-left: 1.406vw; /* 27px */
+  padding-top: 1.354vw; /* 26px */
+  padding-right: 1.406vw; /* 27px */
 
   &::placeholder {
     color: #4f4f4f;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 1.042vw; /* 20px */
   }
 `;
 
@@ -699,36 +699,36 @@ const Dday = styled.div``;
 
 const Tag = styled.div`
   display: flex;
-  column-gap: 41px;
+  column-gap: 2.135vw; /* 41px */
 `;
 
 const Memo = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 0.833vw; /* 16px */
 `;
 
 const Date = styled.input`
-  width: 238px;
-  height: 50px;
-  border-radius: 5px;
-  border: 1px solid #9f9f9f;
-  font-size: 20px;
+  width: 12.396vw; /* 238px */
+  height: 2.604vw; /* 50px */
+  border-radius: 0.26vw; /* 5px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.042vw; /* 20px */
   font-weight: 400;
   color: #4f4f4f;
 `;
 
 const Short = styled.span`
   font-weight: 400;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   color: #8b8b8b;
-  margin-left: 10px;
+  margin-left: 0.521vw; /* 10px */
 `;
 
 const Long = styled.div`
   display: flex;
-  column-gap: 10px;
-  margin-bottom: 22px;
+  column-gap: 0.521vw; /* 10px */
+  margin-bottom: 1.146vw; /* 22px */
 `;
 
 const Inputs = styled.div`
@@ -738,43 +738,43 @@ const Inputs = styled.div`
 
 const Name = styled.div`
   font-weight: 400;
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
 `;
 
 const TagName = styled.div`
   font-weight: 400;
-  font-size: 30px;
-  margin-top: 12px;
+  font-size: 1.563vw; /* 30px */
+  margin-top: 0.625vw; /* 12px */
 `;
 
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 80px;
-  margin-top: 57px;
-  margin-bottom: 80px;
+  row-gap: 4.167vw; /* 80px */
+  margin-top: 2.969vw; /* 57px */
+  margin-bottom: 4.167vw; /* 80px */
 `;
 
 const Buttons = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 289px;
-  height: 76px;
-  border-radius: 10px;
+  width: 15.052vw; /* 289px */
+  height: 3.958vw; /* 76px */
+  border-radius: 0.521vw; /* 10px */
   border: 0;
   background-color: #41c3ab;
   color: white;
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
   font-weight: 600;
-  margin-bottom: 80px;
+  margin-bottom: 4.167vw; /* 80px */
 `;
 
 const ContentPage = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 1334px;
+  width: 69.479vw; /* 1334px */
 `;
 
 const MainDiv = styled.div`
@@ -787,19 +787,19 @@ const LeftDiv = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 1334px;
+  width: 69.479vw; /* 1334px */
 `;
 
 const TitleDiv = styled.input`
-  font-size: 40px;
+  font-size: 2.083vw; /* 40px */
   color: #9f9f9f;
   border: none;
-  border-bottom: 2px solid #9f9f9f;
-  margin-bottom: 80px;
-  padding-bottom: 10px;
+  border-bottom: 0.104vw solid #9f9f9f; /* 2px */
+  margin-bottom: 4.167vw; /* 80px */
+  padding-bottom: 0.521vw; /* 10px */
 
   &::placeholder {
-    font-size: 40px;
+    font-size: 2.083vw; /* 40px */
     color: #9f9f9f;
   }
 `;

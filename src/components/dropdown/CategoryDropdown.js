@@ -5,35 +5,35 @@ import { Icon } from '@iconify/react';
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  left: 330px;
+  left: 17.188vw; /* 330px */
   background-color: white;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   list-style: none;
   z-index: 1;
   width: ${({ categoryLength }) =>
     `calc(${Math.max(14.875, categoryLength * 1.3 + 5)}rem)`};
-  box-shadow: 0 0 8px #dfdfdf;
+  box-shadow: 0 0 0.417vw #dfdfdf; /* 8px */
 `;
 
 const DropdownItem = styled.li`
-  padding-left: 15px;
-  margin: 9px 7px;
-  border-radius: 10px;
+  padding-left: 0.781vw; /* 15px */
+  margin: 0.469vw 0.365vw; /* 9px 7px */
+  border-radius: 0.521vw; /* 10px */
   cursor: pointer;
-  height: 44px;
+  height: 2.292vw; /* 44px */
   display: flex;
   flex-direction: row;
   align-items: center;
   &:hover {
     background-color: rgba(188, 188, 188, 0.5);
   }
-  font-size: 18px;
+  font-size: 0.938vw; /* 18px */
 `;
 
 const Icons = styled(Icon)`
-  width: 24px;
-  height: 24px;
-  margin-right: 17px;
+  width: 1.25vw; /* 24px */
+  height: 1.25vw; /* 24px */
+  margin-right: 0.885vw; /* 17px */
 `;
 
 const Dropdown = ({

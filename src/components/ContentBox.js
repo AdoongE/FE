@@ -93,8 +93,8 @@ function ContentBox({
           <Icon
             icon={contentIcons[contentDateType] || 'ic:round-link'} // 기본값은 링크
             style={{
-              width: '20px',
-              height: '20px',
+              width: '1.042vw',
+              height: '1.042vw',
               color: 'white',
               zIndex: '2',
             }}
@@ -113,42 +113,42 @@ function ContentBox({
 
 const Dropdown = styled.div`
   position: absolute;
-  top: 10px;
-  left: 400px;
+  top: 0.521vw; /* 10px */
+  left: 20.833vw; /* 400px */
 `;
 
 const Box = styled.div`
-  width: 440px;
-  min-height: 387px;
+  width: 22.917vw; /* 440px */
+  min-height: 20.156vw; /* 387px */
   z-index: 0;
 `;
 
 const ImageBox = styled.div`
-  width: 440px;
-  height: 284px;
+  width: 22.917vw; /* 440px */
+  height: 14.792vw; /* 284px */
   background-color: #f2f2f2;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   position: relative;
-  margin-bottom: 11px;
+  margin-bottom: 0.573vw; /* 11px */
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 4px #9a9a9a;
+  box-shadow: 0 0 0.208vw #9a9a9a; /* 4px */
 `;
 
 const ContentImage = styled.img`
   ${({ isDefaultImage }) =>
     isDefaultImage
       ? `
-    width: 129px;
-    height: 129px;
+    width: 6.719vw; /* 129px */
+    height: 6.719vw; /* 129px */
     filter: invert(100%) sepia(4%) saturate(0%) hue-rotate(125deg) brightness(91%) contrast(90%);
   `
       : `
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 0.521vw; /* 10px */
   `}
 `;
 
@@ -158,72 +158,70 @@ const PDFThumbnail = styled.div`
   overflow: hidden;
 
   canvas {
-    width: 440px !important;
-    height: 284px !important;
+    width: 22.917vw !important; /* 440px */
+    height: 14.792vw !important; /* 284px */
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 0.521vw; /* 10px */
   }
 `;
 
 const IconBox = styled.div`
-  width: 30px;
-  height: 30px;
-  border-radius: 100px;
+  width: 1.563vw; /* 30px */
+  height: 1.563vw; /* 30px */
+  border-radius: 50%;
   background-color: #4f4f4f;
   z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 7px;
+  margin-right: 0.365vw; /* 7px */
 `;
 
 const Dday = styled.div`
   position: absolute;
   width: fit-content;
-
-  height: 17px;
-  top: 10px;
-  left: 10px;
-  border-radius: 50px;
-  padding: 5px 15px;
+  height: 0.885vw; /* 17px */
+  top: 0.521vw; /* 10px */
+  left: 0.521vw; /* 10px */
+  border-radius: 2.604vw; /* 50px */
+  padding: 0.26vw 0.781vw; /* 5px 15px */
   opacity: 80%;
-
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  font-size: 14px;
-  line-height: 16.71px;
+  font-size: 0.729vw; /* 14px */
+  line-height: 0.87vw; /* 16.71px */
   text-align: center;
   color: black;
 
   background-color: ${({ dDay }) =>
     dDay === 0
-      ? '#9AE4D6' // D-DAY 색상
+      ? '#9AE4D6'
       : dDay === -1 || dDay === -2 || dDay === -3
-        ? '#DCDADA' // D-1, D-2, D-3 색상
+        ? '#DCDADA'
         : dDay <= -4
-          ? '#FFFFFF' // D-4 이하 색상
+          ? '#FFFFFF'
           : 'transparent'};
 `;
 
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0.417vw; /* 8px */
 `;
 
 const Tag = styled.button`
   width: fit-content;
   height: fit-content;
   border: 0;
-  border-radius: 50px;
+  border-radius: 2.604vw; /* 50px */
   opacity: 80%;
   background-color: white;
-  border: 0.5px solid #9f9f9f;
-  padding: 5px 10px;
+  border: 0.026vw solid #9f9f9f; /* 0.5px */
+  padding: 0.26vw 0.521vw; /* 5px 10px */
   font-weight: 400;
-  font-size: 12px;
+  font-size: 0.625vw; /* 12px */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,28 +229,28 @@ const Tag = styled.button`
 `;
 
 const ContentTitle = styled.div`
-  margin-top: 10px;
+  margin-top: 0.521vw; /* 10px */
   display: flex;
   align-items: flex-start;
-  margin-bottom: 9px;
+  margin-bottom: 0.469vw; /* 9px */
   white-space: normal;
   width: 100%;
 `;
 
 const ContentName = styled.div`
   font-weight: 500;
-  font-size: 22px;
-  line-height: 26.25px;
+  font-size: 1.146vw; /* 22px */
+  line-height: 1.367vw; /* 26.25px */
   color: #000000;
-  margin-left: 7px;
+  margin-left: 0.365vw; /* 7px */
   white-space: normal;
   word-break: break-word;
 `;
 
 const CategoryDisplay = styled.div`
   font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 0.833vw; /* 16px */
+  line-height: 0.99vw; /* 19px */
   color: rgb(141, 141, 141);
   white-space: nowrap;
   overflow: hidden;
@@ -260,8 +258,8 @@ const CategoryDisplay = styled.div`
 `;
 
 const MemoText = styled.div`
-  margin-top: 8px;
-  font-size: 14px;
+  margin-top: 0.417vw; /* 8px */
+  font-size: 0.729vw; /* 14px */
   color: #555;
 `;
 

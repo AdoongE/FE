@@ -273,15 +273,15 @@ const MainPage = () => {
                 src={noSearchContent}
                 alt="noSearch"
                 style={{
-                  width: '268px',
-                  height: '190px',
-                  marginBottom: '22.24px',
+                  width: '13.958vw',
+                  height: '9.896vw',
+                  marginBottom: '1.158vw',
                 }}
               />
-              <div style={{ fontSize: '30px', marginBottom: '4px' }}>
+              <div style={{ fontSize: '1.563vw', marginBottom: '0.208vw' }}>
                 해당 조건에 맞는 콘텐츠가 없어요
               </div>
-              <div style={{ fontSize: '20px', color: '#9f9f9f' }}>
+              <div style={{ fontSize: '1.042vw', color: '#9f9f9f' }}>
                 다른 키워드로 검색해보세요
               </div>
             </NoSearchContent>
@@ -362,14 +362,14 @@ const MainPage = () => {
 // 스타일 컴포넌트
 const MainContainer = styled.div`
   display: flex;
-  padding-left: 390px;
+  padding-left: 20.313vw; /* 390px */
   position: relative;
 `;
 
 const SidebarContainer = styled.div`
   position: fixed;
   left: 0;
-  width: 345px;
+  width: 17.969vw; /* 345px */
   height: 100vh;
   z-index: 1;
 `;
@@ -378,8 +378,8 @@ const MainContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 45px;
-  margin-top: 118px;
+  margin-left: 2.344vw; /* 45px */
+  margin-top: 6.146vw; /* 118px */
 `;
 
 const ContentArea = styled.div`
@@ -387,17 +387,19 @@ const ContentArea = styled.div`
   justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
   align-items: ${(props) => (props.$isBlank ? 'center' : 'stretch')};
   grid-template-columns: ${(props) =>
-    !props.$isBlank ? 'repeat(auto-fill, minmax(440px, 1fr))' : 'none'};
-  grid-row-gap: 40px;
+    !props.$isBlank
+      ? 'repeat(auto-fill, minmax(22.917vw, 1fr))'
+      : 'none'}; /* 440px */
+  grid-row-gap: 2.083vw; /* 40px */
   box-sizing: border-box;
   height: auto;
   padding: ${(props) => (props.$isBlank ? 'center' : 'inherit')};
-  margin-bottom: 100px;
+  margin-bottom: 5.208vw; /* 100px */
 `;
 
 const StyledContentBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(22.917vw, 1fr)); /* 440px */
 `;
 
 const NoSearchContent = styled.div`
@@ -405,16 +407,16 @@ const NoSearchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 131px;
+  margin-top: 6.823vw; /* 131px */
 `;
 
 const Pagination = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 0.417vw; /* 8px */
   position: absolute;
-  bottom: 30px;
+  bottom: 1.563vw; /* 30px */
   z-index: 1;
   margin-left: calc(100vw * 0.3609);
 `;
@@ -422,7 +424,7 @@ const Pagination = styled.div`
 const PageArrow = styled.button`
   background: transparent;
   border: none;
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
   color: ${(props) => (props.disabled ? '#ccc' : '#000')};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   &:hover {
@@ -433,7 +435,7 @@ const PageArrow = styled.button`
 const PageNumber = styled.button`
   background: transparent;
   border: none;
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
   font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
   color: ${({ $active }) => ($active ? '#000' : '#999')};
   cursor: pointer;

@@ -149,8 +149,8 @@ const AddTagModal = forwardRef(
             <Icon
               icon="ri:reset-left-line"
               style={{
-                width: '32px',
-                height: '32px',
+                width: '1.667vw',
+                height: '1.667vw;',
                 color: 'black',
               }}
               onClick={handleReset}
@@ -158,8 +158,8 @@ const AddTagModal = forwardRef(
             <Icon
               icon="ic:round-close"
               style={{
-                width: '36px',
-                height: '36px',
+                width: '1.875vw',
+                height: '1.875vw',
                 color: 'black',
               }}
               onClick={handleClose}
@@ -186,8 +186,8 @@ const AddTagModal = forwardRef(
             <Icon
               icon="prime:check-square"
               style={{
-                width: '24px',
-                height: '24px',
+                width: '1.25vw',
+                height: '1.25vw',
                 color: '#4F4F4F',
               }}
             />
@@ -245,33 +245,33 @@ const AddTagModal = forwardRef(
 AddTagModal.displayName = 'AddTagModal';
 
 const TagImage = styled.img`
-  width: 132px;
-  height: 132px;
+  width: 6.875vw; /* 132px */
+  height: 6.875vw; /* 132px */
 `;
 
 const Notag = styled.div`
-  margin-left: 59px;
-  width: 640px;
-  height: 400px;
+  margin-left: 3.073vw; /* 59px */
+  width: 33.333vw; /* 640px */
+  height: 20.833vw; /* 400px */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  row-gap: 10px;
+  row-gap: 0.521vw; /* 10px */
   font-weight: 500;
-  font-size: 32px;
+  font-size: 1.667vw; /* 32px */
 `;
 
 const OptionContainer = styled.div`
-  margin-left: 58px;
-  margin-bottom: 36px;
+  margin-left: 3.021vw; /* 58px */
+  margin-bottom: 1.875vw; /* 36px */
 `;
 
 const Short = styled.div`
   display: flex;
-  column-gap: 10px;
+  column-gap: 0.521vw; /* 10px */
   color: #4f4f4f;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   font-weight: 400;
 `;
 
@@ -282,87 +282,87 @@ const Option = styled.div`
 
 const Options = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.833vw; /* 16px */
   text-align: center;
-  font-size: 22px;
+  font-size: 1.146vw; /* 22px */
   color: #9f9f9f;
-  margin-bottom: 12px;
+  margin-bottom: 0.625vw; /* 12px */
 `;
 
 const TagItem = styled.button`
-  height: 54px;
+  height: 2.813vw; /* 54px */
   width: fit-content;
-  border-radius: 50px;
-  font-size: 22px;
+  border-radius: 2.604vw; /* 50px */
+  font-size: 1.146vw; /* 22px */
   font-weight: 500;
-  padding: 14px 30px;
+  padding: 0.729vw 1.563vw; /* 14px 30px */
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
-  border: ${(props) => (props.$isSelected ? 0 : '1px solid #9F9F9F')};
+  border: ${(props) => (props.$isSelected ? 0 : '0.052vw solid #9F9F9F')};
 `;
 
 const Button = styled.button`
-  width: 222px;
-  height: 58px;
+  width: 11.563vw; /* 222px */
+  height: 3.021vw; /* 58px */
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   border: 0;
   background-color: #41c3ab;
   font-weight: 600;
-  font-size: 22px;
-  margin-left: 262px;
+  font-size: 1.146vw; /* 22px */
+  margin-left: 13.646vw; /* 262px */
 `;
 
 const TagContainer = styled.div`
-  margin-left: 59px;
-  width: 640px;
-  height: 400px;
+  margin-left: 3.073vw; /* 59px */
+  width: 33.333vw; /* 640px */
+  height: 20.833vw; /* 400px */
   display: flex;
   flex-wrap: wrap;
-  column-gap: 11px;
-  row-gap: 20px;
+  column-gap: 0.573vw; /* 11px */
+  row-gap: 1.042vw; /* 20px */
   overflow-y: auto;
   align-content: flex-start;
 `;
 
 const Line = styled.div`
-  width: 699px;
-  height: 0px;
-  border: 1px solid #9f9f9f;
-  margin-top: 48px;
-  margin-bottom: 38px;
-  margin-left: 23px;
+  width: 36.406vw; /* 699px */
+  height: 0;
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  margin-top: 2.5vw; /* 48px */
+  margin-bottom: 1.979vw; /* 38px */
+  margin-left: 1.198vw; /* 23px */
 `;
 
 const Head = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-left: 58px;
-  margin-right: 49px;
-  margin-bottom: 20px;
+  margin-left: 3.021vw; /* 58px */
+  margin-right: 2.552vw; /* 49px */
+  margin-bottom: 1.042vw; /* 20px */
 `;
 
 const Icons = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.833vw; /* 16px */
 `;
 
 const Title = styled.div`
-  font-size: 32px;
+  font-size: 1.667vw; /* 32px */
   font-weight: 600;
 `;
 
 const Dialog = styled.dialog`
   overflow-y: hidden;
-  padding-top: 55px;
-  padding-bottom: 40px;
+  padding-top: 2.865vw; /* 55px */
+  padding-bottom: 2.083vw; /* 40px */
   position: relative;
-  width: 746px;
-  height: 691px;
-  border-radius: 50px;
+  width: 38.854vw; /* 746px */
+  height: 35.99vw; /* 691px */
+  border-radius: 2.604vw; /* 50px */
   background-color: white;
   border: 0;
   ::backdrop {

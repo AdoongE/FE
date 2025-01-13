@@ -109,7 +109,7 @@ const ModalContent = styled.div`
 `;
 
 const ModalDiv = styled.div`
-  margin: 1.627vw; /* 3.125rem */
+  margin: 2.604vw; /* 3.125rem */
 `;
 
 const TopDiv = styled.div`
@@ -120,7 +120,7 @@ const TopDiv = styled.div`
 
 const ModalTitle = styled.h2`
   font-size: 1.667vw; /* 32px */
-  font-weight: 850;
+  font-weight: 700;
   margin-bottom: 0.521vw; /* 10px */
 `;
 
@@ -147,7 +147,7 @@ const ModalButton = styled.button`
   border: none;
   border-radius: 2.604vw; /* 50px */
   cursor: pointer;
-  margin-right: 0.521vw; /* 10px */
+  margin-right: 1.042vw; /* 10px */
   &.ok {
     background-color: #41c3ab;
     color: white;

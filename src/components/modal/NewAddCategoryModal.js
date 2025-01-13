@@ -118,7 +118,7 @@ const TopDiv = styled.div`
 
 const ModalTitle = styled.h2`
   font-size: 1.667vw; /* 32px */
-  font-weight: 850;
+  font-weight: 700;
   font-family: 'Pretendard-Regular';
   margin-bottom: 0.521vw; /* 10px */
 `;
@@ -147,7 +147,7 @@ const Input = styled.input`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 0.521vw; /* 10px */
+  gap: 1.042vw; /* 10px */
 `;
 
 const ModalButton = styled.button`

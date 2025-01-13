@@ -72,15 +72,15 @@ const ModalContent = styled.div`
 
 const ModalTitle = styled.h2`
   font-size: 1.667vw; /* 32px */
-  font-weight: 850;
+  font-weight: 800;
   font-family: 'Pretendard-Regular';
-  margin-bottom: 2.083vw; /* 40px */
+  margin-bottom: 1.354vw; /* 40px */
 `;
 
 const ModalText = styled.h2`
   font-size: 1.146vw; /* 22px */
   font-family: 'Pretendard-Regular';
-  margin-bottom: 3.385vw; /* 65px */
+  margin-bottom: 2.708vw; /* 65px */
   text-align: center;
 `;
 

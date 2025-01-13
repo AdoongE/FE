@@ -19,8 +19,8 @@ const PdfUploadComponent = ({ representativeIndex, files = [] }) => {
               <FileIcon>
                 <Icon
                   icon="mdi-light:file"
-                  width="2.604vw;"
-                  height="2.604vw;"
+                  width="2.604vw"
+                  height="2.604vw"
                   style={{ color: '#9F9F9F' }}
                 />
               </FileIcon>

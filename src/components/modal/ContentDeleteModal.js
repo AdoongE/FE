@@ -106,8 +106,8 @@ const Alert = styled.div`
 
 const Dialog = styled.dialog`
   position: relative;
-  width: 33.177vw; /* 637px */
-  height: 18.229vw; /* 350px */
+  width: 30vw;
+  height: 15vw; /* 350px */
   border-radius: 2.604vw; /* 50px */
   background-color: white;
   border: 0;

@@ -56,9 +56,8 @@ ContentSaveModal.displayName = 'ContentSaveModal';
 const Buttons = styled.div`
   display: flex;
   column-gap: 1.042vw; /* 20px */
-  position: absolute;
-  top: 12.083vw; /* 232px */
-  left: 9.323vw; /* 179px */
+  margin-top: 3vw;
+  justify-content: center;
 `;
 
 const No = styled.button`
@@ -90,18 +89,16 @@ const Yes = styled.button`
 `;
 
 const Alert = styled.div`
-  position: absolute;
   font-weight: 600;
   font-size: 1.875vw; /* 36px */
   text-align: center;
-  top: 6.354vw; /* 122px */
-  left: 9.635vw; /* 185px */
+  margin-top: 5vw;
 `;
 
 const Dialog = styled.dialog`
   position: relative;
-  width: 33.177vw; /* 637px */
-  height: 18.229vw; /* 350px */
+  width: 30vw;
+  height: 15vw; /* 350px */
   border-radius: 2.604vw; /* 50px */
   background-color: white;
   border: 0;

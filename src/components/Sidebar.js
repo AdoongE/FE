@@ -389,8 +389,8 @@ const Sidebar = ({
             <ImgIcon
               src={seedIcon}
               alt="seed icon"
-              width="1.25vw;"
-              height="1.25vw;"
+              width="1.25vw"
+              height="1.25vw"
             />
             나의 씨드
           </CollectBtn>
@@ -401,8 +401,8 @@ const Sidebar = ({
             <ImgIcon
               src={reminderIcon}
               alt="reminder icon"
-              width="1.25vw;"
-              height="1.25vw;"
+              width="1.25vw"
+              height="1.25vw"
             />
             리마인더
           </ManageBtn>
@@ -411,11 +411,7 @@ const Sidebar = ({
           <CategoryP>모든 카테고리 ({categoryIds.length})</CategoryP>
           <Accordion>
             <AccordionTitle onClick={handleViewBookmark}>
-              <Icons
-                icon="material-symbols:bookmark-outline"
-                width="1.25vw;"
-                height="1.25vw;"
-              />
+              <Icons icon="meteor-icons:bookmark" />
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
             </AccordionTitle>
@@ -467,7 +463,7 @@ const Sidebar = ({
               onMouseEnter={() => setHoveredCategory(true)}
               onMouseLeave={() => setHoveredCategory(false)}
             >
-              <Icons icon="ion:grid-outline" width="1.25vw;" height="1.25vw;" />
+              <Icons icon="ion:grid-outline" />
               {`내 카테고리`}
               <RightArrowIcon open={isCategoryOpen} />
               {hoveredCategory && (
@@ -593,7 +589,7 @@ const Sidebar = ({
                 onMouseLeave={() => setHoveredFilterIndex(null)}
                 onClick={() => CustomFilterClick(condition)}
               >
-                <Icon icon="ri:align-left" width="1.25vw;" height="1.25vw;" />
+                <Icon icon="ri:align-left" width="1.25vw" height="1.25vw" />
                 <Right>
                   {condition}
                   {hoveredFilterIndex === index && (
@@ -696,7 +692,7 @@ const Accordion = styled.div`
 const AccordionTitle = styled.div`
   margin: 0.521vw 1.094vw; /* 10px 21px */
   font-size: 1.042vw; /* 20px */
-  font-weight: 580;
+  font-weight: 600;
   padding: 0.521vw 0; /* 10px 0 */
   padding-left: 1.042vw; /* 20px */
   cursor: pointer;
@@ -849,8 +845,8 @@ const fadeInOut = keyframes`
 
 const MessageBox = styled.div`
   position: fixed;
-  top: 6.25%; /* 12% */
-  left: 23.438vw; /* 45% */
+  top: 13%; /* 12% */
+  left: 45%; /* 45% */
   background-color: #f2f2f2;
   color: #333;
   font-size: 1.458vw; /* 28px */

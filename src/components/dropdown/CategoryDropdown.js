@@ -11,7 +11,7 @@ const DropdownMenu = styled.ul`
   list-style: none;
   z-index: 1;
   width: ${({ categoryLength }) =>
-    `calc(${Math.max(14.875, categoryLength * 1.3 + 5)}rem)`};
+    `calc(${Math.max(12.396, categoryLength * 1.083 + 4.167)}vw)`};
   box-shadow: 0 0 0.417vw #dfdfdf; /* 8px */
 `;
 

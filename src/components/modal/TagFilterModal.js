@@ -366,7 +366,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         />
       </Date>
       <NewWord>디데이 기간</NewWord>
-      <Short style={{ marginBottom: '20px' }}>
+      <Short style={{ marginBottom: '1.024vw' }}>
         <Icon
           icon="prime:check-square"
           style={{
@@ -610,7 +610,7 @@ const Title = styled.div`
 `;
 
 const Dialog = styled.dialog`
-  height: 43.7vw; // 839px
+  height: 44.375vw;
   width: 57.24vw; // 1099px
   border: 0;
   border-radius: 2.6vw; // 50px

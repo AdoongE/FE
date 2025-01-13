@@ -14,8 +14,8 @@ function TagHeader() {
           <Icon
             icon="ri:reset-left-line"
             style={{
-              width: '32px',
-              height: '32px',
+              width: '1.667vw',
+              height: '1.667vw',
               color: 'black',
             }}
             onClick={handleReset}
@@ -23,8 +23,8 @@ function TagHeader() {
           <Icon
             icon="ic:round-close"
             style={{
-              width: '36px',
-              height: '36px',
+              width: '1.88vw' /* 36px */,
+              height: '1.88vw' /* 36px */,
               color: 'black',
             }}
             onClick={handleClose}
@@ -51,8 +51,8 @@ function TagHeader() {
         <Icon
           icon="prime:check-square"
           style={{
-            width: '18px',
-            height: '18px',
+            width: '0.94vw' /* 18px */,
+            height: '0.94vw' /* 18px */,
             color: '#4F4F4F',
           }}
         />
@@ -64,9 +64,9 @@ function TagHeader() {
 
 const Short = styled.div`
   display: flex;
-  column-gap: 10px;
+  column-gap: 0.52vw; /* 10px */
   color: #4f4f4f;
-  font-size: 20px;
+  font-size: 1.04vw; /* 20px */
   font-weight: 400;
 `;
 
@@ -77,33 +77,33 @@ const Option = styled.div`
 
 const Options = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.83vw; /* 16px */
   text-align: center;
-  font-size: 22px;
+  font-size: 1.15vw; /* 22px */
   color: #9f9f9f;
-  margin-bottom: 12px;
+  margin-bottom: 0.63vw; /* 12px */
 `;
 
 const Word = styled.div`
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 1.04vw; /* 20px */
 `;
 
 const Icons = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.83vw; /* 16px */
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   position: fixed;
-  margin-bottom: 65px;
+  margin-bottom: 3.39vw; /* 65px */
 `;
 
 const Title = styled.div`
-  font-size: 32px;
+  font-size: 1.67vw; /* 32px */
   font-weight: 600;
 `;
 

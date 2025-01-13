@@ -137,9 +137,8 @@ const ModalHeader = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 10.37vh; /* 112px */
-  gap: 0.52vw; /* 10px */
-  margin-bottom: 2.45vw;
+  height: 7.031vw;
+  gap: 0.52vw;
 `;
 
 const SaveButton = styled.button`

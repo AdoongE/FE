@@ -825,14 +825,14 @@ const ModalContent = styled.div`
 const ModalTitle = styled.h2`
   font-size: 2.08vw; /* 40px */
   font-weight: 850;
-  margin-bottom: 0.032vw; /* 0.625rem (10px) */
+  margin-bottom: 0.5vw;
 `;
 
 const ModalText = styled.h2`
   font-size: 1.35vw; /* 26px */
   color: #4f4f4f;
-  margin-bottom: 0.098vw; /* 1.875rem (30px) */
   text-align: center;
+  margin-bottom: 1.5625vw;
 `;
 
 const ButtonContainer = styled.div`

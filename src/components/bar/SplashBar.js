@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LoginModal from '../modal/LoginModal';
 import LogoImage from '../../assets/icons/seedzip_logo.png';
@@ -6,6 +7,7 @@ import Logo from '../../assets/icons/seedzip.png';
 
 function SplashBar() {
   const dialogRef = useRef(null);
+  const navigate = useNavigate();
 
   const showModal = () => {
     dialogRef.current?.showModal();
@@ -14,8 +16,16 @@ function SplashBar() {
     <div>
       <Bar>
         <LogoContainer>
-          <StyledLogoImage src={LogoImage} alt="seedzip_logo" />
-          <StyledLogo src={Logo} alt="seedzip" />
+          <StyledLogoImage
+            src={LogoImage}
+            alt="seedzip_logo"
+            onClick={() => navigate('/main')}
+          />
+          <StyledLogo
+            src={Logo}
+            alt="seedzip"
+            onClick={() => navigate('/main')}
+          />
         </LogoContainer>
         <LoginButton onClick={showModal}>로그인</LoginButton>
       </Bar>

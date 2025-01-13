@@ -417,7 +417,7 @@ const Pagination = styled.div`
   gap: 0.417vw; /* 8px */
   position: absolute;
   bottom: 1.563vw; /* 30px */
-  z-index: 1;
+  z-index: -1;
   margin-left: calc(100vw * 0.3609);
 `;
 

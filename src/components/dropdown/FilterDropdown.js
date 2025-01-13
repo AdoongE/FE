@@ -133,8 +133,8 @@ const ButtonDelContainer = styled.div`
 `;
 
 const ModalDelButton = styled.button`
-  height: 1.757vw; /* 3.375rem → 65px */
-  width: 4.219vw; /* 8.125rem → 155px */
+  width: 6.771vw; /* 130px */
+  height: 2.813vw;
   font-size: 1.146vw; /* 22px */
   border: none;
   border-radius: 0.521vw; /* 10px */

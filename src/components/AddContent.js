@@ -814,8 +814,8 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background-color: white;
   border-radius: 2.6vw; /* 50px */
-  width: 56.25rem; /* 유지 (고정값) */
-  height: 32.438rem; /* 유지 (고정값) */
+  width: 46.875vw;
+  height: 27.031vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -825,14 +825,12 @@ const ModalContent = styled.div`
 const ModalTitle = styled.h2`
   font-size: 2.08vw; /* 40px */
   font-weight: 850;
-  font-family: 'Pretendard-Regular';
   margin-bottom: 0.032vw; /* 0.625rem (10px) */
 `;
 
 const ModalText = styled.h2`
   font-size: 1.35vw; /* 26px */
   color: #4f4f4f;
-  font-family: 'Pretendard-Regular';
   margin-bottom: 0.098vw; /* 1.875rem (30px) */
   text-align: center;
 `;
@@ -844,9 +842,9 @@ const ButtonContainer = styled.div`
 `;
 
 const ModalButton = styled.button`
-  height: 1.95vw; /* 3.75rem (60px) */
-  width: 4.75vw; /* 9.125rem (146px) */
-  font-size: 1.15vw; /* 22px */
+  width: 6.771vw; /* 130px */
+  height: 2.813vw;
+  font-size: 1.146vw; /* 22px */
   border: none;
   border-radius: 0.52vw; /* 10px */
   cursor: pointer;

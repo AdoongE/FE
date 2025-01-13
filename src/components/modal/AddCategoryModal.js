@@ -46,8 +46,8 @@ export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
             <Icon
               icon="line-md:close"
               style={{
-                width: '36px',
-                height: '36px',
+                width: '1.875vw',
+                height: '1.875vw',
                 cursor: 'pointer',
               }}
               onClick={onClose}

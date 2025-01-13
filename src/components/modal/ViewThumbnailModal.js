@@ -26,14 +26,14 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
         content: {
           position: 'relative',
           inset: 'auto',
-          width: '1047px',
-          height: '758px',
+          width: '54.53vw',
+          height: '39.48vw',
           maxWidth: '80%',
           maxHeight: '80%',
           margin: 'auto',
-          padding: '20px',
+          padding: '1.04vw',
           background: '#fff',
-          borderRadius: '20px',
+          borderRadius: '1.04vw',
           overflow: 'hidden',
         },
       }}
@@ -63,6 +63,7 @@ const DocumentWrapper = styled.div`
   height: 100%;
 
   canvas {
+    margin: auto;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -77,10 +78,11 @@ const ImageWrapper = styled.div`
   height: 100%;
 
   img {
+    margin: auto;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    width: 593px;
-    height: 645px;
+    width: 60%;
+    height: 60%;
   }
 `;

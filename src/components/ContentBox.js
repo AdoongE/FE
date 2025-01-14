@@ -245,6 +245,7 @@ const ContentName = styled.div`
   margin-left: 0.365vw; /* 7px */
   white-space: normal;
   word-break: break-word;
+  flex-shrink: 0;
 `;
 
 const CategoryDisplay = styled.div`

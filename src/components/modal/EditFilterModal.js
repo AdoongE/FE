@@ -18,21 +18,21 @@ import { format, parseISO } from 'date-fns';
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
     style={{
-      width: '238px',
-      height: '50px',
+      width: '12.396vw' /* 238px */,
+      height: '2.604vw' /* 50px */,
       fontWeight: '400',
-      fontSize: '20px',
+      fontSize: '1.042vw' /* 20px */,
       color: '#4f4f4f',
-      border: '1px solid #9f9f9f',
-      borderRadius: '10px',
+      border: '0.052vw solid #9f9f9f' /* 1px */,
+      borderRadius: '0.521vw' /* 10px */,
       display: 'flex',
       alignItems: 'center',
-      paddingLeft: '15px',
+      paddingLeft: '0.781vw' /* 15px */,
     }}
   >
     <Icon
       icon="uit:calender"
-      style={{ width: '24px', height: '24px', marginRight: '10px' }}
+      style={{ width: '1.25vw', height: '1.25vw', marginRight: '.521vw' }}
       onClick={onClick}
     />
     <InputDate
@@ -262,8 +262,8 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           <Icon
             icon="ri:reset-left-line"
             style={{
-              width: '32px',
-              height: '32px',
+              width: '1.667vw',
+              height: '1.667vw',
               color: 'black',
             }}
             onClick={handleReset}
@@ -271,8 +271,8 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           <Icon
             icon="ic:round-close"
             style={{
-              width: '36px',
-              height: '36px',
+              width: '1.875vw',
+              height: '1.875vw',
               color: 'black',
             }}
             onClick={handleClose}
@@ -300,8 +300,8 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           <Icon
             icon="prime:check-square"
             style={{
-              width: '24px',
-              height: '24px',
+              width: '1.25vw',
+              height: '1.25vw',
               color: '#4F4F4F',
             }}
           />
@@ -401,8 +401,8 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
         <Icon
           icon="prime:check-square"
           style={{
-            width: '24px',
-            height: '24px',
+            width: '1.25vw',
+            height: '1.25vw',
             color: '#4F4F4F',
           }}
         />
@@ -444,25 +444,25 @@ EditFilterModal.displayName = 'EditFilterModal';
 CustomInput.displayName = 'CustomInput';
 
 const Button = styled.button`
-  width: 222px;
-  height: 58px;
+  width: 11.563vw; /* 222px */
+  height: 3.021vw; /* 58px */
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   border: 0;
   color: white;
   background-color: #41c3ab;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 1.146vw; /* 22px */
 `;
 
 const DdayInput = styled.input`
-  width: 131px;
-  height: 50px;
-  border-radius: 10px;
-  border: 1px solid #9f9f9f;
-  font-size: 20px;
+  width: 6.823vw; /* 131px */
+  height: 2.604vw; /* 50px */
+  border-radius: 0.521vw; /* 10px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.042vw; /* 20px */
   font-weight: 400;
   text-align: center;
   ::placeholder {
@@ -472,23 +472,23 @@ const DdayInput = styled.input`
 
 const Dday = styled.div`
   display: flex;
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-weight: 500;
   color: #4f4f4f;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 0.521vw; /* 10px */
 `;
 
 const NewWord = styled.div`
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-weight: 600;
-  margin-bottom: 9px;
+  margin-bottom: 0.469vw; /* 9px */
 `;
 
 const InputDate = styled.input`
   border: none;
   padding: 0;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   font-weight: 400;
   color: #4f4f4f;
   &:focus {
@@ -500,10 +500,10 @@ const InputDate = styled.input`
 
 const Date = styled.div`
   display: flex;
-  column-gap: 16px;
-  font-size: 40px;
+  column-gap: 0.833vw; /* 16px */
+  font-size: 2.083vw; /* 40px */
   font-weight: 600;
-  margin-bottom: 60px;
+  margin-bottom: 3.125vw; /* 60px */
   z-index: 1000 !important;
   position: relative !important;
 `;
@@ -511,21 +511,21 @@ const Date = styled.div`
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.625vw; /* 12px */
 
   span {
-    font-size: 24px;
+    font-size: 1.25vw; /* 24px */
     color: #4f4f4f;
   }
 `;
 
 const TypeBox = styled.input`
-  width: 28px;
-  height: 28px;
+  width: 1.458vw; /* 28px */
+  height: 1.458vw; /* 28px */
   cursor: pointer;
   appearance: none;
-  border: 1px solid #9f9f9f;
-  border-radius: 5px;
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  border-radius: 0.26vw; /* 5px */
 
   &:checked {
     background-color: #41c3ab;
@@ -540,45 +540,46 @@ const TypeBox = styled.input`
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  margin-bottom: 60px;
+  gap: 1.042vw; /* 20px */
+  margin-bottom: 3.125vw; /* 60px */
 `;
 
 const OptionContainer = styled.div`
-  margin-bottom: 36px;
+  margin-bottom: 1.875vw; /* 36px */
 `;
 
 const Word = styled.div`
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 1.042vw; /* 20px */
 `;
 
 const TagItem = styled.button`
-  height: 54px;
+  height: 2.813vw; /* 54px */
   width: fit-content;
-  border-radius: 50px;
-  font-size: 22px;
+  border-radius: 2.604vw; /* 50px */
+  font-size: 1.146vw; /* 22px */
   font-weight: 500;
-  padding: 14px 30px;
+  padding: 0.729vw 1.563vw; /* 14px 30px */
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
-  border: ${(props) => (props.$isSelected ? 0 : '1px solid #9F9F9F')};
+  border: ${(props) =>
+    props.$isSelected ? 0 : '0.052vw solid #9F9F9F'}; /* 1px */
 `;
 
 const TagContainer = styled.div`
-  width: 979px;
-  height: 498px;
+  width: 50.99vw; /* 979px */
+  height: 25.938vw; /* 498px */
   display: flex;
   flex-wrap: wrap;
-  column-gap: 8px;
-  row-gap: 16px;
+  column-gap: 0.417vw; /* 8px */
+  row-gap: 0.833vw; /* 16px */
   overflow-y: auto;
   background-color: #fafafa;
   border: 0;
-  border-radius: 20px;
-  padding: 53px 47px;
-  margin-bottom: 60px;
+  border-radius: 1.042vw; /* 20px */
+  padding: 2.76vw 2.448vw; /* 53px 47px */
+  margin-bottom: 3.125vw; /* 60px */
 `;
 
 const Option = styled.div`
@@ -588,44 +589,43 @@ const Option = styled.div`
 
 const Options = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.833vw; /* 16px */
   text-align: center;
-  font-size: 22px;
+  font-size: 1.146vw; /* 22px */
   color: #9f9f9f;
-  margin-bottom: 12px;
+  margin-bottom: 0.625vw; /* 12px */
 `;
 
 const Short = styled.div`
   display: flex;
-  column-gap: 10px;
+  column-gap: 0.521vw; /* 10px */
   color: #4f4f4f;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   font-weight: 400;
 `;
 
 const Icons = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.833vw; /* 16px */
 `;
 
 const Head = styled.div`
   display: flex;
-  /* position: fixed; */
   justify-content: space-between;
-  margin-bottom: 65px;
+  margin-bottom: 3.385vw; /* 65px */
 `;
 
 const Title = styled.div`
-  font-size: 32px;
+  font-size: 1.667vw; /* 32px */
   font-weight: 600;
 `;
 
 const Dialog = styled.dialog`
-  height: 839px;
-  width: 1099px;
+  height: 43.698vw; /* 839px */
+  width: 57.24vw; /* 1099px */
   border: 0;
-  border-radius: 50px;
-  padding: 60px;
+  border-radius: 2.604vw; /* 50px */
+  padding: 3.125vw; /* 60px */
   overflow-y: visible;
   z-index: 1000 !important;
   position: absolute !important;

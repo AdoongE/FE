@@ -9,7 +9,7 @@ import { axiosInstance } from '../components/api/axios-instance';
 import FieldSelectPlaceholder from '../components/dropdown/FieldDropdown';
 import SingleSelectPlaceholder from '../components/dropdown/JobDropdown';
 import { Icon } from '@iconify/react';
-import Navbar from '../components/Navbar';
+import SplashBar from '../components/bar/SplashBar';
 
 function MyPage() {
   const [isOtherSelected, setIsOtherSelected] = useState(false);
@@ -150,7 +150,7 @@ function MyPage() {
     <div>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <Navbar />
+          <SplashBar />
           <Page>
             <Header>
               <Titles>마이페이지</Titles>
@@ -311,7 +311,7 @@ function MyPage() {
                   <NewContent>
                     <Checkbox
                       sx={{
-                        '& .MuiSvgIcon-root': { fontSize: 30 },
+                        '& .MuiSvgIcon-root': { fontSize: '1.563vw' },
                         '&.Mui-checked': {
                           color: '#41C3AB',
                         },
@@ -339,9 +339,9 @@ function MyPage() {
           <Dialog onClick={(e) => e.stopPropagation()}>
             <Icon
               icon="ph:warning-circle-thin"
-              width="148"
-              height="148"
-              style={{ color: '#41c3ab', marginBottom: 34 }}
+              width="7.708vw"
+              height="7.708vw"
+              style={{ color: '#41c3ab', marginBottom: '1.771vw' }}
             />
             <ModalTitle>정말 탈퇴하시겠습니까?</ModalTitle>
             <ModalContent>
@@ -360,13 +360,13 @@ function MyPage() {
 
 const ModalButton1 = styled.button`
   font-weight: 500;
-  font-size: 22px;
-  width: 146px;
-  height: 60px;
+  font-size: 1.146vw; /* 22px */
+  width: 7.604vw; /* 146px */
+  height: 3.125vw; /* 60px */
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   border: 0;
   color: #4f4f4f;
   background-color: #f2f2f2;
@@ -374,13 +374,13 @@ const ModalButton1 = styled.button`
 
 const ModalButton2 = styled.button`
   font-weight: 500;
-  font-size: 22px;
-  width: 146px;
-  height: 60px;
+  font-size: 1.146vw; /* 22px */
+  width: 7.604vw; /* 146px */
+  height: 3.125vw; /* 60px */
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   border: 0;
   color: white;
   background-color: #41c3ab;
@@ -388,20 +388,20 @@ const ModalButton2 = styled.button`
 
 const Buttons = styled.div`
   display: flex;
-  column-gap: 20px;
+  column-gap: 1.042vw; /* 20px */
 `;
 
 const ModalContent = styled.div`
   font-weight: 400;
-  font-size: 26px;
+  font-size: 1.354vw; /* 26px */
   color: #4f4f4f;
-  margin-bottom: 30px;
+  margin-bottom: 1.563vw; /* 30px */
 `;
 
 const ModalTitle = styled.div`
   font-weight: 600;
-  font-size: 40px;
-  margin-bottom: 10px;
+  font-size: 2.083vw; /* 40px */
+  margin-bottom: 0.521vw; /* 10px */
 `;
 
 const Backdrop = styled.div`
@@ -419,9 +419,9 @@ const Backdrop = styled.div`
 
 const Dialog = styled.div`
   position: relative;
-  width: 900px;
-  height: 519px;
-  border-radius: 50px;
+  width: 46.875vw; /* 900px */
+  height: 27.031vw; /* 519px */
+  border-radius: 2.604vw; /* 50px */
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -434,49 +434,49 @@ const Out = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 103px;
+  margin-bottom: 5.365vw; /* 103px */
   font-weight: 500;
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   text-decoration: underline;
 `;
 
 const Lines = styled.div`
-  width: 1094px;
+  width: 56.979vw; /* 1094px */
   height: 0px;
-  border: 1px solid #9f9f9f;
-  margin-top: 4px;
-  margin-bottom: 24px;
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  margin-top: 0.208vw; /* 4px */
+  margin-bottom: 1.25vw; /* 24px */
 `;
 
 const Error = styled.div`
   color: red;
-  font-size: 18px;
-  margin-top: 12px;
-  height: 18px;
+  font-size: 0.938vw; /* 18px */
+  margin-top: 0.625vw; /* 12px */
+  height: 0.938vw; /* 18px */
 `;
 
 const Date = styled.input`
-  font-size: 18px;
-  width: 238px;
-  height: 50px;
-  border-radius: 5px;
-  border: 1px solid #9f9f9f;
+  font-size: 0.938vw; /* 18px */
+  width: 12.396vw; /* 238px */
+  height: 2.604vw; /* 50px */
+  border-radius: 0.26vw; /* 5px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
 `;
 
 const Button = styled.button`
-  width: 704px;
-  height: 76px;
+  width: 36.667vw; /* 704px */
+  height: 3.958vw; /* 76px */
   font-weight: 600;
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 160px;
+  margin-top: 8.333vw; /* 160px */
   background-color: #41c3ab;
   border: 0;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 1.042vw; /* 20px */
 
   &:disabled {
     background-color: #dcdada;
@@ -486,44 +486,44 @@ const Button = styled.button`
 
 const NewContent = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.833vw; /* 16px */
   align-items: center;
 `;
 
 const Content = styled.div`
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   font-weight: 400;
 `;
 
 const Input = styled.input`
-  width: 224px;
-  height: 65px;
-  border-radius: 5px;
-  border: 1px solid #9f9f9f;
-  font-size: 25px;
+  width: 11.667vw; /* 224px */
+  height: 3.385vw; /* 65px */
+  border-radius: 0.26vw; /* 5px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.302vw; /* 25px */
 
   &::placeholder {
     font-weight: 400;
-    font-size: 20px;
-    line-height: 23.87px;
+    font-size: 1.042vw; /* 20px */
+    line-height: 1.243vw; /* 23.87px */
     color: #9f9f9f;
-    transform: translateX(34px);
+    transform: translateX(1.771vw); /* 34px */
   }
 `;
 
 const Choice = styled.div`
   display: flex;
-  column-gap: 37px;
+  column-gap: 1.927vw; /* 37px */
 `;
 
 const GenderChoice = styled.div`
-  width: 179px;
-  height: 58px;
+  width: 9.323vw; /* 179px */
+  height: 3.021vw; /* 58px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  border-radius: 5px;
+  border-radius: 0.26vw; /* 5px */
   border: 0;
 
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : '#DCDADA')};
@@ -531,29 +531,28 @@ const GenderChoice = styled.div`
 
 const Gender = styled.div`
   display: flex;
-  column-gap: 20px;
+  column-gap: 1.042vw; /* 20px */
 `;
 
 const Inputs = styled.input`
-  width: 1094px;
-  height: 65px;
-  border-radius: 5px;
-  border: 1px solid #9f9f9f;
-  font-size: 25px;
-  padding-left: 32px;
+  width: 56.979vw; /* 1094px */
+  height: 3.385vw; /* 65px */
+  border-radius: 0.26vw; /* 5px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.302vw; /* 25px */
+  padding-left: 1.667vw; /* 32px */
 
   &::placeholder {
     font-weight: 400;
-    font-size: 20px;
+    font-size: 1.042vw; /* 20px */
     color: #9f9f9f;
-    // transform: translateX(12px);
   }
 `;
 
 const Name = styled.div`
   font-weight: 500;
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 1.25vw; /* 24px */
+  margin-bottom: 1.042vw; /* 20px */
 `;
 
 const Option = styled.div`
@@ -571,23 +570,23 @@ const Page = styled.div`
 const Signup = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 80px;
-  margin-top: 60px;
+  row-gap: 4.167vw; /* 80px */
+  margin-top: 3.125vw; /* 60px */
 `;
 
 const Line = styled.div`
-  width: 441px;
+  width: 22.969vw; /* 441px */
   height: 0px;
-  border: 1px solid #9f9f9f;
+  border: 0.052vw solid #9f9f9f; /* 1px */
 `;
 
 const Short = styled.div`
   font-weight: 400;
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   text-align: center;
   color: #9f9f9f;
-  margin-top: 26px;
-  margin-bottom: 20px;
+  margin-top: 1.354vw; /* 26px */
+  margin-bottom: 1.042vw; /* 20px */
 `;
 
 const Header = styled.div`
@@ -595,11 +594,12 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 86px;
+  margin-top: 4.479vw; /* 86px */
 `;
+
 const Titles = styled.div`
   font-weight: 600;
-  font-size: 50px;
+  font-size: 2.604vw; /* 50px */
   text-align: center;
 `;
 

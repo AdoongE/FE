@@ -292,9 +292,12 @@ function AddContent() {
             <ModalContent>
               <Icon
                 icon="ph:warning-circle-thin"
-                width="148"
-                height="148"
-                style={{ color: '#41c3ab', marginBottom: 34 }}
+                width="7.71vw" /* 148px */
+                height="7.71vw" /* 148px */
+                style={{
+                  color: '#41c3ab',
+                  marginBottom: '1.77vw' /* 34px */,
+                }}
               />
               <ModalTitle>지금 나가시겠습니까?</ModalTitle>
               <ModalText>지금까지 설정한 모든 항목이 초기화됩니다.</ModalText>
@@ -402,8 +405,8 @@ function AddContent() {
                             <Icon
                               icon="ic:round-close"
                               style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '1.25vw',
+                                height: '1.25vw',
                                 color: 'white',
                               }}
                               onClick={() => {
@@ -450,12 +453,12 @@ function AddContent() {
                   {recoTags.length === 0 ? (
                     <div
                       style={{
-                        padding: '5px 12px',
+                        padding: '0.26vw 0.625vw', // 5px 12px
                         backgroundColor: '#dcdada',
                         color: '#ff0000',
-                        borderRadius: '5px',
+                        borderRadius: '0.26vw', // 5px
                         textAlign: 'center',
-                        fontSize: '16px',
+                        fontSize: '0.833vw', // 16px
                       }}
                     >
                       태그 추천 불가
@@ -466,14 +469,14 @@ function AddContent() {
                         key={idx}
                         style={{
                           display: 'inline-block',
-                          padding: '5px 12px',
-                          margin: '5px',
+                          padding: '0.26vw .625vw',
+                          margin: '0.26vw',
                           backgroundColor: '#dcdada',
-                          borderRadius: '5px',
+                          borderRadius: '0.26vw',
                           cursor: 'pointer',
                           color: '#4f4f4f',
                           fontWeight: '600',
-                          fontSize: '16px',
+                          fontSize: '0.833vw',
                           border: 'none',
                         }}
                         onClick={(event) => handleRecoTagClick(event, tag)}
@@ -535,23 +538,22 @@ function AddContent() {
 
 const Chip = styled.div`
   width: fit-content;
-  height: 44px;
+  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 5px;
-  column-gap: 15px;
+  border-radius: 0.26vw; /* 5px */
+  column-gap: 0.781vw; /* 15px */
   background-color: #41c3ab;
-  padding-left: 16px;
-  padding-right: 16px;
-  /* margin-right: 10px; */
-  margin: 4px 4px;
+  padding-left: 0.833vw; /* 16px */
+  padding-right: 0.833vw; /* 16px */
+  margin: 0.208vw; /* 4px */
 `;
 
 const TagP = styled.p`
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
 `;
 
 const ButtonContainers = styled.div`
@@ -563,14 +565,14 @@ const ButtonContainers = styled.div`
 const Count = styled.div`
   width: fit-content;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 1.04vw; /* 20px */
   color: #9f9f9f;
-  transform: translateX(1268px) translateY(-40px);
+  transform: translateX(66.04vw) translateY(-2.08vw); /* 1268px, -40px */
 `;
 
 const Recommend = styled.div`
   font-weight: 400;
-  font-size: 18px;
+  font-size: 0.94vw; /* 18px */
   color: #4f4f4f;
   display: flex;
   justify-content: center;
@@ -579,74 +581,73 @@ const Recommend = styled.div`
 
 const Recommends = styled.div`
   display: flex;
-  column-gap: 17px;
+  column-gap: 0.89vw; /* 17px */
 `;
 
 const InputButton = styled.button`
   width: fit-content;
-  height: 44.19px;
-  border-radius: 10px;
+  height: 2.3vw; /* 44.19px */
+  border-radius: 0.52vw; /* 10px */
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #9f9f9f;
+  border: 0.05vw solid #9f9f9f; /* 1px */
   color: white;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.04vw; /* 20px */
   background-color: #9f9f9f;
-  padding: 10px 18px;
+  padding: 0.52vw 0.94vw; /* 10px, 18px */
 `;
 
 const TagContainer = styled.div`
-  width: 709px;
-  min-height: 60px;
-  border: 1px solid #9f9f9f;
-  border-radius: 10px;
+  width: 36.93vw; /* 709px */
+  min-height: 3.13vw; /* 60px */
+  border: 0.05vw solid #9f9f9f; /* 1px */
+  border-radius: 0.52vw; /* 10px */
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 0px 6px;
+  padding: 0 0.31vw; /* 0px, 6px */
 `;
 
 const TagInputs = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 15px;
+  row-gap: 0.78vw; /* 15px */
 `;
 
 const TagInput = styled.input`
   flex-grow: 1;
-  padding: 0.5em 0;
+  padding: 0.42vw 0;
   border: none;
   outline: none;
-  font-size: 20px;
+  font-size: 1.04vw;
   background-color: transparent;
 `;
 
 const TagDiv = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 1.04vw; /* 20px */
   align-items: center;
 `;
 
 const Text = styled.textarea`
-  width: 1334px;
-  height: 238px;
-  border-radius: 10px;
-  border: 1px solid #9f9f9f;
-  font-size: 20px;
-  padding-left: 27px;
-  padding-top: 26px;
-  padding-right: 27px;
+  width: 69.48vw; /* 1334px */
+  height: 12.4vw; /* 238px */
+  border-radius: 0.52vw; /* 10px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.04vw; /* 20px */
+  padding-left: 1.41vw; /* 27px */
+  padding-top: 1.35vw; /* 26px */
+  padding-right: 1.41vw; /* 27px */
   &:focus {
     outline: none;
   }
-
   &::placeholder {
     color: #4f4f4f;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 1.04vw; /* 20px */
   }
 `;
 
@@ -654,36 +655,36 @@ const Dday = styled.div``;
 
 const Tag = styled.div`
   display: flex;
-  column-gap: 41px;
+  column-gap: 2.14vw; /* 41px */
 `;
 
 const Memo = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 0.83vw; /* 16px */
 `;
 
 const Date = styled.input`
-  width: 238px;
-  height: 50px;
-  border-radius: 5px;
-  border: 1px solid #9f9f9f;
-  font-size: 20px;
+  width: 12.4vw; /* 238px */
+  height: 2.6vw; /* 50px */
+  border-radius: 0.26vw; /* 5px */
+  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 1.04vw; /* 20px */
   font-weight: 400;
   color: #4f4f4f;
 `;
 
 const Short = styled.span`
   font-weight: 400;
-  font-size: 20px;
+  font-size: 1.04vw; /* 20px */
   color: #8b8b8b;
-  margin-left: 10px;
+  margin-left: 0.52vw; /* 10px */
 `;
 
 const Long = styled.div`
   display: flex;
-  column-gap: 10px;
-  margin-bottom: 22px;
+  column-gap: 0.52vw; /* 10px */
+  margin-bottom: 1.15vw; /* 22px */
 `;
 
 const Inputs = styled.div`
@@ -693,36 +694,36 @@ const Inputs = styled.div`
 
 const Name = styled.div`
   font-weight: 400;
-  font-size: 30px;
+  font-size: 1.56vw; /* 30px */
 `;
 
 const TagName = styled.div`
   font-weight: 400;
-  font-size: 30px;
-  margin-top: 12px;
+  font-size: 1.56vw; /* 30px */
+  margin-top: 0.62vw; /* 12px */
 `;
 
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 80px;
-  margin-top: 57px;
-  margin-bottom: 80px;
+  row-gap: 4.17vw; /* 80px */
+  margin-top: 2.97vw; /* 57px */
+  margin-bottom: 4.17vw; /* 80px */
 `;
 
 const Buttons = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 404px;
-  height: 76px;
-  border-radius: 10px;
+  width: 21.04vw; /* 404px */
+  height: 3.96vw; /* 76px */
+  border-radius: 0.52vw; /* 10px */
   border: 0;
   background-color: #41c3ab;
   color: white;
-  font-size: 30px;
+  font-size: 1.56vw; /* 30px */
   font-weight: 600;
-  margin-bottom: 80px;
+  margin-bottom: 4.17vw; /* 80px */
 
   &:disabled {
     background-color: #dcdada;
@@ -734,7 +735,7 @@ const ContentPage = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 1334px;
+  width: 69.48vw; /* 1334px */
 `;
 
 const MainDiv = styled.div`
@@ -747,23 +748,23 @@ const LeftDiv = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 1334px;
+  width: 69.48vw; /* 1334px */
 `;
 
 const TitleDiv = styled.input`
-  font-size: 40px;
+  font-size: 2.08vw; /* 40px */
   color: #9f9f9f;
   border: none;
-  border-bottom: 2px solid #9f9f9f;
-  margin-bottom: 1.813rem;
-  padding-bottom: 10px;
+  border-bottom: 0.1vw solid #9f9f9f; /* 2px */
+  margin-bottom: 1.88vw; /* 36px */
+  padding-bottom: 0.52vw; /* 10px */
 
   &:focus {
     outline: none;
   }
 
   &::placeholder {
-    font-size: 40px;
+    font-size: 2.08vw; /* 40px */
     color: #9f9f9f;
   }
 `;
@@ -772,26 +773,26 @@ const RightDiv = styled.div`
   position: absolute;
   right: 0;
   top: 16vh;
-  padding-right: 64px;
+  padding-right: 3.33vw; /* 64px */
 `;
 
 const Button = styled.button`
-  width: 152px;
-  height: 57px;
+  width: 7.92vw; /* 152px */
+  height: 2.97vw; /* 57px */
   color: #4f4f4f;
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-weight: 500;
   background-color: #dcdada;
   border: none;
-  border-radius: 10px;
+  border-radius: 0.52vw; /* 10px */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 0.31vw; /* 6px */
 `;
 
 const ArrowIcon = styled(FaArrowRight)`
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   color: #4f4f4f;
   transform: scale(0.7);
 `;
@@ -812,9 +813,9 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background-color: white;
-  border-radius: 50px;
-  width: 56.25rem;
-  height: 32.438rem;
+  border-radius: 2.6vw; /* 50px */
+  width: 46.875vw;
+  height: 27.031vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -822,32 +823,30 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 40px;
+  font-size: 2.08vw; /* 40px */
   font-weight: 850;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 0.625rem;
+  margin-bottom: 0.5vw;
 `;
 
 const ModalText = styled.h2`
-  font-size: 26px;
+  font-size: 1.35vw; /* 26px */
   color: #4f4f4f;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 1.875rem;
   text-align: center;
+  margin-bottom: 1.5625vw;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 1.04vw; /* 20px */
 `;
 
 const ModalButton = styled.button`
-  height: 3.75rem;
-  width: 9.125rem;
-  font-size: 22px;
+  width: 6.771vw; /* 130px */
+  height: 2.813vw;
+  font-size: 1.146vw; /* 22px */
   border: none;
-  border-radius: 10px;
+  border-radius: 0.52vw; /* 10px */
   cursor: pointer;
   &.ok {
     background-color: #41c3ab;

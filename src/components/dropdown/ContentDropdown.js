@@ -44,8 +44,8 @@ function ContentDropdown({ contentId, fetchData }) {
         <Icon
           icon="pepicons-pencil:dots-y"
           style={{
-            width: '24px',
-            height: '24px',
+            width: '1.25vw',
+            height: '1.25vw',
           }}
         />
       </Button>
@@ -55,8 +55,8 @@ function ContentDropdown({ contentId, fetchData }) {
             <Icon
               icon="tabler:dots"
               style={{
-                width: '20px',
-                height: '20px',
+                width: '1.042vw',
+                height: '1.042vw',
                 color: '#4F4F4F',
               }}
             />
@@ -74,8 +74,8 @@ function ContentDropdown({ contentId, fetchData }) {
               <Icon
                 icon="mage:trash"
                 style={{
-                  width: '20px',
-                  height: '20px',
+                  width: '1.042vw',
+                  height: '1.042vw',
                   color: '#4F4F4F',
                 }}
               />
@@ -94,41 +94,41 @@ function ContentDropdown({ contentId, fetchData }) {
 }
 
 const Text = styled.div`
-  margin-left: 13.18px;
+  margin-left: 0.686vw; /* 13.18px */
   font-weight: 400;
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
 `;
 
 const Options = styled.button`
-  width: 150px;
-  border: 0px;
-  height: 35px;
+  width: 7.813vw; /* 150px */
+  border: 0;
+  height: 1.823vw; /* 35px */
   background-color: white;
-  margin-left: 8px;
+  margin-left: 0.417vw; /* 8px */
   display: flex;
   flex-direction: row;
 `;
 
 const Button = styled.button`
   color: black;
-  border: 0px;
+  border: 0;
   position: relative;
   background-color: transparent;
 `;
 
 const Open = styled.div`
   position: absolute;
-  right: 21px;
+  right: 1.094vw; /* 21px */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 179px;
-  height: 80px;
-  border-radius: 10.03px;
+  width: 9.323vw; /* 179px */
+  height: 4.167vw; /* 80px */
+  border-radius: 0.522vw; /* 10.03px */
   background-color: white;
   color: #4f4f4f;
-  padding-top: 14px;
+  padding-top: 0.729vw; /* 14px */
 `;
 
 export default ContentDropdown;

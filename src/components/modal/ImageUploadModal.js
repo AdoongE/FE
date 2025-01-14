@@ -123,7 +123,7 @@ function ImageUploadModal({ onClose }) {
           <Title>씨드 추가</Title>
           <Icon
             icon="line-md:close"
-            style={{ width: '24px', height: '24px', cursor: 'pointer' }}
+            style={{ width: '1.25vw', height: '1.25vw', cursor: 'pointer' }}
             onClick={onClose}
           />
         </Header>
@@ -140,7 +140,11 @@ function ImageUploadModal({ onClose }) {
               <EmptyState>
                 <Icon
                   icon="material-symbols:upload-rounded"
-                  style={{ width: '59px', height: '59px', color: '#4F4F4F' }}
+                  style={{
+                    width: '3.07vw',
+                    height: '3.07vw',
+                    color: '#4F4F4F',
+                  }}
                 />
                 <DropText>
                   이미지 선택
@@ -160,7 +164,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -193,7 +197,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -206,7 +210,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-right"
-                        style={{ fontSize: '20px', color: '#666' }}
+                        style={{ fontSize: '1.042vw', color: '#666' }}
                       />
                     </ScrollButtonRight>
                   )}
@@ -248,10 +252,10 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  width: 680px;
-  height: 620px;
-  padding: 50px;
-  border-radius: 20px;
+  width: 35.42vw; /* 680px */
+  height: 32.29vw; /* 620px */
+  padding: 2.6vw; /* 50px */
+  border-radius: 1.04vw; /* 20px */
   display: flex;
   flex-direction: column;
 `;
@@ -263,7 +267,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 32px;
+  font-size: 1.67vw; /* 32px */
   font-weight: bold;
   height: 100%;
 `;
@@ -271,29 +275,29 @@ const Title = styled.h2`
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 60px;
+  margin-top: 3.13vw; /* 60px */
   justify-content: space-between;
   height: 100%;
 `;
 
 const DescriptionText = styled.p`
   color: var(--Color-4, #4f4f4f);
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-style: normal;
-  margin-bottom: 8px;
+  margin-bottom: 0.42vw; /* 8px */
 `;
 
 const DescriptionNote = styled.small`
   color: var(--Color-5, #9f9f9f);
-  font-size: 16px;
+  font-size: 0.83vw; /* 16px */
   font-style: normal;
-  margin-bottom: 20px;
+  margin-bottom: 1.04vw; /* 20px */
 `;
 
 const DropArea = styled.div`
   position: relative;
-  height: 240px;
-  border-radius: 10px;
+  height: 12.5vw; /* 240px */
+  border-radius: 0.52vw; /* 10px */
   background-color: #f6f6f6;
   display: flex;
   flex-direction: column;
@@ -316,16 +320,16 @@ const FilesState = styled.div`
 
 const DropText = styled.div`
   color: #aaa;
-  margin-top: 12px;
-  font-size: 16px;
+  margin-top: 0.63vw; /* 12px */
+  font-size: 0.83vw; /* 16px */
   text-align: center;
 `;
 
 const ImagesWrapper = styled.div`
   position: relative;
   display: flex;
-  gap: 10px;
-  padding: 10px 0;
+  gap: 0.52vw; /* 10px */
+  padding: 0.52vw 0; /* 10px */
 `;
 
 const ScrollButton = styled.button`
@@ -335,23 +339,23 @@ const ScrollButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1.04vw; /* 20px */
 `;
 
 const ScrollButtonLeft = styled(ScrollButton)`
-  left: -40px;
+  left: -2.08vw; /* -40px */
 `;
 
 const ScrollButtonRight = styled(ScrollButton)`
-  right: -40px;
+  right: -2.08vw; /* -40px */
 `;
 
 const ImageBox = styled.div`
-  width: 130px;
-  height: 130px;
-  margin-top: 20px;
+  width: 6.77vw; /* 130px */
+  height: 6.77vw; /* 130px */
+  margin-top: 1.04vw; /* 20px */
   background-color: #f0f0f0;
-  border-radius: 5px;
+  border-radius: 0.26vw; /* 5px */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -361,60 +365,58 @@ const ImageBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 0.26vw; /* 5px */
+  left: 0.26vw; /* 5px */
   background-color: #47c28b;
   color: white;
-  padding: 2px 6px;
-  font-size: 12px;
-  border-radius: 12px;
+  padding: 0.1vw 0.31vw; /* 2px 6px */
+  font-size: 0.63vw; /* 12px */
+  border-radius: 0.63vw; /* 12px */
   font-weight: bold;
 `;
 
 const ImagePreview = styled.img`
-  width: 130px;
-  height: 130px;
-  border-radius: 5px;
+  width: 6.77vw; /* 130px */
+  height: 6.77vw; /* 130px */
+  border-radius: 0.26vw; /* 5px */
   object-fit: cover;
 `;
 
 const DeleteButton = styled.button`
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 0.26vw; /* 5px */
+  right: 0.26vw; /* 5px */
   background-color: transparent;
   border: none;
   color: #666;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1.04vw; /* 20px */
 `;
 
 const AddButton = styled.button`
   position: absolute;
-  margin-top: 177px;
+  margin-top: 9.22vw; /* 177px */
   left: 50%;
   transform: translateX(-50%);
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 0.52vw 1.04vw; /* 10px 20px */
+  border-radius: 0.52vw; /* 10px */
   background: var(--Color-5, #9f9f9f);
   color: white;
-  border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
-  color: white;
+  font-size: 0.83vw; /* 16px */
   border: none;
 `;
 
 const FileLimit = styled.p`
-  font-size: 16px;
+  font-size: 0.83vw; /* 16px */
   color: #9f9f9f;
 `;
 
 const ErrorMessage = styled.p`
-  font-size: 16px;
+  font-size: 0.83vw; /* 16px */
   color: #ff6b6b;
-  margin-top: 8px;
-  margin-bottom: -30px;
+  margin-top: 0.42vw; /* 8px */
+  margin-bottom: -1.56vw; /* -30px */
 `;
 
 const Footer = styled.div`
@@ -423,13 +425,13 @@ const Footer = styled.div`
 `;
 
 const Button = styled.button`
-  margin-top: 120px;
+  margin-top: 6.25vw; /* 120px */
   background-color: #41c3ab;
-  width: 99px;
-  height: 54px;
+  width: 5.16vw; /* 99px */
+  height: 2.81vw; /* 54px */
   color: white;
   border: none;
-  border-radius: 50px;
-  font-size: 22px;
+  border-radius: 2.6vw; /* 50px */
+  font-size: 1.15vw; /* 22px */
   cursor: pointer;
 `;

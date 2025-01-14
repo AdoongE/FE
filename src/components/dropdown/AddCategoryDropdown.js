@@ -18,7 +18,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: '13.021vw',
     },
   },
 };
@@ -77,7 +77,7 @@ export default function AddCategory({ value = [], onChange }) {
                 sx={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  gap: 0.5,
+                  gap: '0.026vw',
                 }}
               >
                 {value.map((val) => (
@@ -86,8 +86,8 @@ export default function AddCategory({ value = [], onChange }) {
                     <Icon
                       icon="ic:round-close"
                       style={{
-                        width: '24px',
-                        height: '24px',
+                        width: '1.25vw',
+                        height: '1.25vw',
                         color: 'white',
                       }}
                       onMouseDown={(e) => {
@@ -143,45 +143,46 @@ export default function AddCategory({ value = [], onChange }) {
 
 const Chip = styled.div`
   width: fit-content;
-  height: 44px;
+  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 5px;
-  column-gap: 5px;
+  border-radius: 0.26vw; /* 5px */
+  column-gap: 0.26vw; /* 5px */
   background-color: #41c3ab;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 0.833vw; /* 16px */
+  padding-right: 0.833vw; /* 16px */
 `;
 
 const Title = styled.div`
   font-weight: 500;
-  font-size: 20px;
-  margin: 24px 20px;
+  font-size: 1.042vw; /* 20px */
+  margin: 1.25vw 1.042vw; /* 1.25vw 20px */
 `;
+
 const StyledFormControl = styled(FormControl)`
   && {
     margin: 0;
-    width: 709px;
+    width: 36.927vw; /* 709px */
     height: fit-content;
     margin-top: 0;
-    border-radius: 10px;
-    border: 1px solid #9f9f9f;
-    margin-left: 60px;
-    margin-right: 20px;
-    padding-top: -10px;
-    padding-bottom: -10px;
+    border-radius: 0.521vw; /* 10px */
+    border: 0.052vw solid #9f9f9f; /* 1px */
+    margin-left: 3.125vw; /* 60px */
+    margin-right: 1.042vw; /* 20px */
+    padding-top: -0.521vw; /* -10px */
+    padding-bottom: -0.521vw; /* -10px */
   }
 `;
 
 const StyledSelect = styled(Select)`
   && {
-    height: 60px;
+    height: 3.125vw; /* 60px */
     display: flex;
     align-items: center;
-    font-size: 20px;
+    font-size: 1.042vw; /* 20px */
     color: #9f9f9f;
   }
 `;

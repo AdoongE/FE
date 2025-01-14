@@ -61,9 +61,9 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background-color: white;
-  border-radius: 50px;
-  width: 46.625rem;
-  height: 21.875rem;
+  border-radius: 2.604vw; /* 50px */
+  width: 38.854vw; /* 746px */
+  height: 18.229vw; /* 350px */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,31 +71,31 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 32px;
-  font-weight: 850;
+  font-size: 1.667vw; /* 32px */
+  font-weight: 800;
   font-family: 'Pretendard-Regular';
-  margin-bottom: 1.625rem;
+  margin-bottom: 1.354vw; /* 40px */
 `;
 
 const ModalText = styled.h2`
-  font-size: 22px;
+  font-size: 1.146vw; /* 22px */
   font-family: 'Pretendard-Regular';
-  margin-bottom: 3.25rem;
+  margin-bottom: 2.708vw; /* 65px */
   text-align: center;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 17px;
+  gap: 0.885vw; /* 17px */
 `;
 
 const ModalButton = styled.button`
-  height: 3.375rem;
-  width: 8.125rem;
-  font-size: 22px;
+  width: 6.771vw; /* 130px */
+  height: 2.813vw;
+  font-size: 1.146vw; /* 22px */
   border: none;
-  border-radius: 10px;
+  border-radius: 0.521vw; /* 10px */
   cursor: pointer;
   &.ok {
     background-color: #41c3ab;

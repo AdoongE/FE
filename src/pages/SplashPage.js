@@ -33,54 +33,54 @@ function SplashPage() {
   );
 }
 
-const SplashImg = styled.img`
-  margin-top: 75px;
-  width: 774px;
-  height: 774px;
-`;
-
 const Page = styled.div`
   background-color: #f9fffe;
-  height: calc(100vh - 118px);
+  height: 50.1vw;
   width: 100%;
   display: flex;
 `;
 
 const Words = styled.div`
-  margin-left: 100px;
+  margin-left: 5.208vw; /* 100px */
   display: flex;
   flex-direction: column;
-  margin-top: 255px;
-  margin-right: 250px;
+  margin-top: 13.281vw;
+  margin-right: 13.021vw;
+`;
+
+const SplashImg = styled.img`
+  margin-top: 3.906vw; /* 75px */
+  width: 40.313vw; /* 774px */
+  height: 40.313vw; /* 774px */
 `;
 
 const StartButton = styled.button`
-  width: 341px;
-  height: 68px;
-  border-radius: 10px;
+  width: 17.76vw; /* 341px */
+  height: 3.542vw; /* 68px */
+  border-radius: 0.521vw; /* 10px */
   border: 0;
-  padding: 16px 60px;
+  padding: 0.833vw 3.125vw; /* 16px 60px */
   background-color: #41c3ab;
   color: white;
-  font-weight: 600px;
-  font-size: 30px;
+  font-weight: 600; /* px 제거 */
+  font-size: 1.563vw; /* 30px */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 48px;
+  margin-top: 2.5vw; /* 48px */
 `;
 
 const Short = styled.div`
   font-weight: 500;
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
   color: #4f4f4f;
-  margin-bottom: 25px;
+  margin-bottom: 1.302vw; /* 25px */
 `;
 
 const Long = styled.div`
   font-weight: 600;
-  font-size: 54px;
-  line-height: 75.6px;
+  font-size: 2.813vw; /* 54px */
+  line-height: 3.938vw; /* 75.6px */
 `;
 
 export default SplashPage;

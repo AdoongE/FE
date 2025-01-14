@@ -19,21 +19,21 @@ import tagImage from '../../assets/icons/tag.png';
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
     style={{
-      width: '238px',
-      height: '50px',
+      width: '12.4vw', // 238px
+      height: '2.6vw', // 50px
       fontWeight: '400',
-      fontSize: '20px',
+      fontSize: '1.04vw', // 20px
       color: '#4f4f4f',
-      border: '1px solid #9f9f9f',
-      borderRadius: '10px',
+      border: '0.05vw solid #9f9f9f', // 1px
+      borderRadius: '0.52vw', // 10px
       display: 'flex',
       alignItems: 'center',
-      paddingLeft: '15px',
+      paddingLeft: '0.78vw', // 15px
     }}
   >
     <Icon
       icon="uit:calender"
-      style={{ width: '24px', height: '24px', marginRight: '10px' }}
+      style={{ width: '1.25vw', height: '1.25vw', marginRight: '0.521vw' }}
       onClick={onClick}
     />
     <InputDate
@@ -222,8 +222,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
           <Icon
             icon="ri:reset-left-line"
             style={{
-              width: '32px',
-              height: '32px',
+              width: '1.667vw',
+              height: '1.667vw',
               color: 'black',
             }}
             onClick={handleReset}
@@ -231,8 +231,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
           <Icon
             icon="ic:round-close"
             style={{
-              width: '36px',
-              height: '36px',
+              width: '1.875vw',
+              height: '1.875vw',
               color: 'black',
             }}
             onClick={handleClose}
@@ -260,8 +260,8 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
           <Icon
             icon="prime:check-square"
             style={{
-              width: '24px',
-              height: '24px',
+              width: '1.25vw',
+              height: '1.25vw',
               color: '#4F4F4F',
             }}
           />
@@ -366,12 +366,12 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         />
       </Date>
       <NewWord>디데이 기간</NewWord>
-      <Short style={{ marginBottom: '20px' }}>
+      <Short style={{ marginBottom: '1.024vw' }}>
         <Icon
           icon="prime:check-square"
           style={{
-            width: '24px',
-            height: '24px',
+            width: '1.25vw',
+            height: '1.25vw',
             color: '#4F4F4F',
           }}
         />
@@ -411,64 +411,64 @@ TagFilterModal.displayName = 'TagFilterModal';
 CustomInput.displayName = 'CustomInput';
 
 const TagImage = styled.img`
-  width: 132px;
-  height: 132px;
+  width: 6.88vw; // 132px
+  height: 6.88vw; // 132px
 `;
 
 const TagContainer = styled.div`
-  width: 979px;
-  height: 498px;
+  width: 51vw; // 979px
+  height: 25.94vw; // 498px
   display: flex;
   flex-wrap: wrap;
-  column-gap: 8px;
-  row-gap: 16px;
+  column-gap: 0.42vw; // 8px
+  row-gap: 0.83vw; // 16px
   overflow-y: auto;
   background-color: #fafafa;
   border: 0;
-  border-radius: 20px;
-  padding: 53px 47px;
-  margin-bottom: 60px;
+  border-radius: 1.04vw; // 20px
+  padding: 2.76vw 2.45vw; // 53px 47px
+  margin-bottom: 3.13vw; // 60px
   align-content: flex-start;
 `;
 
 const Notag = styled.div`
-  width: 979px;
-  height: 498px;
+  width: 51vw; // 979px
+  height: 25.94vw; // 498px
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  row-gap: 10px;
+  row-gap: 0.52vw; // 10px
   font-weight: 500;
-  font-size: 32px;
+  font-size: 1.67vw; // 32px
   overflow-y: auto;
   background-color: #fafafa;
-  margin-bottom: 60px;
+  margin-bottom: 3.13vw; // 60px
   border: 0;
-  border-radius: 20px;
-  padding: 53px 47px;
+  border-radius: 1.04vw; // 20px
+  padding: 2.76vw 2.45vw; // 53px 47px
 `;
 
 const Button = styled.button`
-  width: 222px;
-  height: 58px;
+  width: 11.56vw; // 222px
+  height: 3.02vw; // 58px
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0.52vw; // 10px
   border: 0;
   color: white;
   background-color: #41c3ab;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 1.15vw; // 22px
 `;
 
 const DdayInput = styled.input`
-  width: 131px;
-  height: 50px;
-  border-radius: 10px;
-  border: 1px solid #9f9f9f;
-  font-size: 20px;
+  width: 6.82vw; // 131px
+  height: 2.6vw; // 50px
+  border-radius: 0.52vw; // 10px
+  border: 0.05vw solid #9f9f9f; // 1px
+  font-size: 1.04vw; // 20px
   font-weight: 400;
   text-align: center;
   ::placeholder {
@@ -478,38 +478,37 @@ const DdayInput = styled.input`
 
 const Dday = styled.div`
   display: flex;
-  font-size: 24px;
+  font-size: 1.25vw; // 그대로 유지
   font-weight: 500;
   color: #4f4f4f;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 0.52vw; // 10px
 `;
 
 const NewWord = styled.div`
-  font-size: 24px;
+  font-size: 1.25vw; // 그대로 유지
   font-weight: 600;
-  margin-bottom: 9px;
+  margin-bottom: 0.47vw; // 9px
 `;
 
 const InputDate = styled.input`
   border: none;
   padding: 0;
-  font-size: 20px;
+  font-size: 1.04vw; // 20px
   font-weight: 400;
   color: #4f4f4f;
   &:focus {
     outline: none;
   }
-
   width: 80%;
 `;
 
 const Date = styled.div`
   display: flex;
-  column-gap: 16px;
-  font-size: 40px;
+  column-gap: 0.83vw; // 16px
+  font-size: 2.08vw; // 40px
   font-weight: 600;
-  margin-bottom: 60px;
+  margin-bottom: 3.13vw; // 60px
   z-index: 1000 !important;
   position: relative !important;
 `;
@@ -517,21 +516,21 @@ const Date = styled.div`
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.63vw; // 12px
 
   span {
-    font-size: 24px;
+    font-size: 1.25vw; // 그대로 유지
     color: #4f4f4f;
   }
 `;
 
 const TypeBox = styled.input`
-  width: 28px;
-  height: 28px;
+  width: 1.46vw; // 28px
+  height: 1.46vw; // 28px
   cursor: pointer;
   appearance: none;
-  border: 1px solid #9f9f9f;
-  border-radius: 5px;
+  border: 0.05vw solid #9f9f9f; // 1px
+  border-radius: 0.26vw; // 5px
 
   &:checked {
     background-color: #41c3ab;
@@ -546,30 +545,30 @@ const TypeBox = styled.input`
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  margin-bottom: 60px;
+  gap: 1.04vw; // 20px
+  margin-bottom: 3.13vw; // 60px
 `;
 
 const OptionContainer = styled.div`
-  margin-bottom: 36px;
+  margin-bottom: 1.88vw; // 36px
 `;
 
 const Word = styled.div`
-  font-size: 24px;
+  font-size: 1.25vw; // 그대로 유지
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 1.04vw; // 20px
 `;
 
 const TagItem = styled.button`
-  height: 54px;
+  height: 2.81vw; // 54px
   width: fit-content;
-  border-radius: 50px;
-  font-size: 22px;
+  border-radius: 2.6vw; // 50px
+  font-size: 1.15vw; // 22px
   font-weight: 500;
-  padding: 14px 30px;
+  padding: 0.73vw 1.56vw; // 14px 30px
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
-  border: ${(props) => (props.$isSelected ? 0 : '1px solid #9F9F9F')};
+  border: ${(props) => (props.$isSelected ? 0 : '0.05vw solid #9F9F9F')}; // 1px
 `;
 
 const Option = styled.div`
@@ -579,44 +578,43 @@ const Option = styled.div`
 
 const Options = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.83vw; // 16px
   text-align: center;
-  font-size: 22px;
+  font-size: 1.15vw; // 22px
   color: #9f9f9f;
-  margin-bottom: 12px;
+  margin-bottom: 0.63vw; // 12px
 `;
 
 const Short = styled.div`
   display: flex;
-  column-gap: 10px;
+  column-gap: 0.52vw; // 10px
   color: #4f4f4f;
-  font-size: 20px;
+  font-size: 1.04vw; // 20px
   font-weight: 400;
 `;
 
 const Icons = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 0.83vw; // 16px
 `;
 
 const Head = styled.div`
   display: flex;
-  /* position: fixed; */
   justify-content: space-between;
-  margin-bottom: 65px;
+  margin-bottom: 3.39vw; // 65px
 `;
 
 const Title = styled.div`
-  font-size: 32px;
+  font-size: 1.67vw; // 32px
   font-weight: 600;
 `;
 
 const Dialog = styled.dialog`
-  height: 839px;
-  width: 1099px;
+  height: 44.375vw;
+  width: 57.24vw; // 1099px
   border: 0;
-  border-radius: 50px;
-  padding: 60px;
+  border-radius: 2.6vw; // 50px
+  padding: 3.13vw; // 60px
   overflow-y: visible;
   z-index: 1000 !important;
   position: absolute !important;

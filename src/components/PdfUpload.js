@@ -19,8 +19,8 @@ const PdfUploadComponent = ({ representativeIndex, files = [] }) => {
               <FileIcon>
                 <Icon
                   icon="mdi-light:file"
-                  width="50"
-                  height="50"
+                  width="2.604vw"
+                  height="2.604vw"
                   style={{ color: '#9F9F9F' }}
                 />
               </FileIcon>
@@ -41,12 +41,12 @@ const Wrapper = styled.div`
 `;
 
 const Instructions = styled.p`
-  font-size: 30px;
+  font-size: 1.563vw; /* 30px */
   font-weight: 400;
-  margin-bottom: 16px;
+  margin-bottom: 0.833vw; /* 16px */
 
   span {
-    font-size: 18px;
+    font-size: 0.938vw; /* 18px */
     color: #999;
     font-weight: normal;
   }
@@ -54,14 +54,14 @@ const Instructions = styled.p`
 
 const FilesWrapper = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 1.563vw; /* 30px */
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 0.781vw; /* 15px */
+  border: 0.052vw solid #ddd; /* 1px */
+  border-radius: 0.417vw; /* 8px */
   width: 100%;
-  max-width: 1100px;
+  max-width: 57.292vw; /* 1100px */
 `;
 
 const FileContainer = styled.div`
@@ -71,11 +71,11 @@ const FileContainer = styled.div`
 `;
 
 const FileBox = styled.div`
-  width: 159px;
-  height: 177px;
+  width: 8.281vw; /* 159px */
+  height: 9.219vw; /* 177px */
   position: relative;
   background-color: #eaf4f4;
-  border-radius: 4px;
+  border-radius: 0.208vw; /* 4px */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,30 +85,30 @@ const FileBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 0.26vw; /* 5px */
+  left: 0.26vw; /* 5px */
   background-color: #47c28b;
   color: white;
-  padding: 2px 6px;
-  font-size: 12px;
-  border-radius: 12px;
+  padding: 0.104vw 0.313vw; /* 2px 6px */
+  font-size: 0.625vw; /* 12px */
+  border-radius: 0.625vw; /* 12px */
 `;
 
 const FileIcon = styled.div`
   color: #4caf50;
-  font-size: 50px; /* 아이콘 크기 조절 */
+  font-size: 2.604vw; /* 50px */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 0.417vw; /* 8px */
 `;
 
 const FileName = styled.div`
-  margin-top: 8px;
-  font-size: 14px;
+  margin-top: 0.417vw; /* 8px */
+  font-size: 0.729vw; /* 14px */
   color: #666;
   text-align: center;
-  width: 140px;
+  width: 7.292vw; /* 140px */
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

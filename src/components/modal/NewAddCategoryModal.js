@@ -65,7 +65,7 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
           <ModalTitle>카테고리 추가</ModalTitle>
           <Icon
             icon="line-md:close"
-            style={{ width: '36px', height: '36px', cursor: 'pointer' }}
+            style={{ width: '1.875vw', height: '1.875vw', cursor: 'pointer' }}
             onClick={closeModal}
           />
         </TopDiv>
@@ -96,9 +96,9 @@ NewAddCategoryModal.displayName = 'NewAddCategoryModal';
 export default NewAddCategoryModal;
 const Dialog = styled.dialog`
   position: relative;
-  width: 746px;
-  height: 370px;
-  border-radius: 50px;
+  width: 38.854vw; /* 746px */
+  height: 19.271vw; /* 370px */
+  border-radius: 2.604vw; /* 50px */
   background-color: white;
   border: none;
   ::backdrop {
@@ -107,55 +107,55 @@ const Dialog = styled.dialog`
 `;
 
 const ModalDiv = styled.div`
-  margin: 50px;
+  margin: 2.604vw; /* 50px */
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 27px;
+  margin-bottom: 1.406vw; /* 27px */
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 32px;
-  font-weight: 850;
+  font-size: 1.667vw; /* 32px */
+  font-weight: 700;
   font-family: 'Pretendard-Regular';
-  margin-bottom: 10px;
+  margin-bottom: 0.521vw; /* 10px */
 `;
 
 const Label = styled.label`
-  font-size: 22px;
+  font-size: 1.146vw; /* 22px */
   font-family: 'Pretendard-Regular';
   color: #4f4f4f;
   display: flex;
   justify-content: end;
   align-items: center;
-  gap: 11px;
+  gap: 0.573vw; /* 11px */
 `;
 
 const Input = styled.input`
   background-color: #f6f6f6;
   border: none;
-  border-bottom: 1px solid #7f7f7f;
+  border-bottom: 0.052vw solid #7f7f7f; /* 1px */
   width: 100%;
-  height: 68px;
-  margin-top: 26px;
-  margin-bottom: 18px;
-  font-size: 30px;
+  height: 3.542vw; /* 68px */
+  margin-top: 1.354vw; /* 26px */
+  margin-bottom: 0.938vw; /* 18px */
+  font-size: 1.563vw; /* 30px */
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 1.042vw; /* 10px */
 `;
 
 const ModalButton = styled.button`
-  height: 54px;
-  width: 99px;
-  font-size: 22px;
+  height: 2.813vw; /* 54px */
+  width: 5.156vw; /* 99px */
+  font-size: 1.146vw; /* 22px */
   border: none;
-  border-radius: 50px;
+  border-radius: 2.604vw; /* 50px */
   cursor: pointer;
   &.ok {
     background-color: #41c3ab;

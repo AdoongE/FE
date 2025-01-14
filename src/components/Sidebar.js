@@ -386,14 +386,24 @@ const Sidebar = ({
             active={activeTab === '나의 씨드'}
             onClick={() => handleTabClick('나의 씨드')}
           >
-            <ImgIcon src={seedIcon} alt="seed icon" />
+            <ImgIcon
+              src={seedIcon}
+              alt="seed icon"
+              width="1.25vw"
+              height="1.25vw"
+            />
             나의 씨드
           </CollectBtn>
           <ManageBtn
             active={activeTab === '리마인더'}
             onClick={() => handleTabClick('리마인더')}
           >
-            <ImgIcon src={reminderIcon} alt="reminder icon" />
+            <ImgIcon
+              src={reminderIcon}
+              alt="reminder icon"
+              width="1.25vw"
+              height="1.25vw"
+            />
             리마인더
           </ManageBtn>
         </BtnDiv>
@@ -401,7 +411,7 @@ const Sidebar = ({
           <CategoryP>모든 카테고리 ({categoryIds.length})</CategoryP>
           <Accordion>
             <AccordionTitle onClick={handleViewBookmark}>
-              <Icons icon="material-symbols:bookmark-outline" />
+              <Icons icon="meteor-icons:bookmark" />
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
             </AccordionTitle>
@@ -552,7 +562,7 @@ const Sidebar = ({
             <CategoryP>나의 맞춤 필터</CategoryP>
             {customFilter.length < 5 && (
               <AddButton className="filter" onClick={() => showModal()}>
-                <AddRoundedIcon />
+                <AddRoundedIcon fontSize="1.042vw;" />
               </AddButton>
             )}
           </CustomUp>
@@ -566,7 +576,7 @@ const Sidebar = ({
               <MessageBox>
                 <img
                   src={circleCheckIcon}
-                  style={{ width: '4.188rem' }}
+                  style={{ width: '3.49vw' }}
                   alt="circle check icon"
                 />
                 {message}
@@ -579,7 +589,7 @@ const Sidebar = ({
                 onMouseLeave={() => setHoveredFilterIndex(null)}
                 onClick={() => CustomFilterClick(condition)}
               >
-                <Icon icon="ri:align-left" width="24px" height="24px" />
+                <Icon icon="ri:align-left" width="1.25vw" height="1.25vw" />
                 <Right>
                   {condition}
                   {hoveredFilterIndex === index && (
@@ -622,7 +632,7 @@ const StMainPage = styled.div`
 
 const SideDiv = styled.div`
   height: 100vh;
-  width: 21.563rem;
+  width: 18.28125vw;
   background-color: #f8fbfb;
   display: inline-block;
   position: relative;
@@ -632,61 +642,59 @@ const BtnDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 12.5rem;
-  border-bottom: 1px solid #dcdada;
-  margin-left: 20px;
-  margin-right: 20px;
-  padding-bottom: 9px;
+  border-bottom: 0.052vw solid #dcdada; /* 1px */
+  margin-top: 10.4167vw;
+  margin-left: 1.042vw; /* 20px */
+  margin-right: 1.042vw; /* 20px */
+  padding-bottom: 0.469vw; /* 9px */
 `;
 
 const Button = styled.button`
-  height: 3.5rem;
-  width: 18.938rem;
-  border-radius: 10px;
+  width: 15.781vw; /* 303px */
+  height: 2.917vw; /* 56px */
+  border-radius: 0.521vw; /* 10px */
   border: none;
   background-color: ${({ active }) => (active ? '#def3f1' : 'transparent')};
   display: inline-flex;
   align-items: center;
-  font-size: 20px;
+  font-size: 1.042vw; /* 20px */
   font-weight: 500;
   position: relative;
-  padding-left: 19px;
-  margin-bottom: 4px;
+  padding-left: 0.99vw; /* 19px */
+  margin-bottom: 0.208vw; /* 4px */
 `;
 
 const CollectBtn = styled(Button)``;
 const ManageBtn = styled(Button)``;
 
 const ImgIcon = styled.img`
-  width: 1.875rem;
-  height: 1.875rem;
-  margin-right: 10px;
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-right: 0.521vw; /* 10px */
   position: relative;
   left: 0;
 `;
 
 const CategoryDiv = styled.div`
-  margin-top: 28px;
+  margin-top: 1.458vw; /* 28px */
 `;
 
 const CategoryP = styled.p`
-  font-size: 24px;
+  font-size: 1.25vw; /* 24px */
   font-weight: 600;
-  margin-left: 2.125rem;
-  font-family: 'Pretendard-Regular';
+  margin-left: 1.106vw; /* 2.125rem */
 `;
 
 const Accordion = styled.div`
-  margin-top: 32px;
+  margin-top: 1.667vw; /* 32px */
 `;
 
 const AccordionTitle = styled.div`
-  margin: 10px 21px;
-  font-size: 20px;
-  font-family: 'Pretendard-Regular';
-  font-weight: 580;
-  padding: 10px 0;
-  padding-left: 20px;
+  margin: 0.521vw 1.094vw; /* 10px 21px */
+  font-size: 1.042vw; /* 20px */
+  font-weight: 600;
+  padding: 0.521vw 0; /* 10px 0 */
+  padding-left: 1.042vw; /* 20px */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -695,91 +703,91 @@ const AccordionTitle = styled.div`
 
   &.category:hover {
     background-color: #dcdada;
-    border-radius: 10px;
+    border-radius: 0.521vw; /* 10px */
   }
 `;
 
 const Icons = styled(Icon)`
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-right: 13px;
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-right: 0.677vw; /* 13px */
 `;
 
 const RightArrowIcon = styled(KeyboardArrowRightIcon)`
   transition: transform 0.3s;
   transform: rotate(${({ open }) => (open ? '90deg' : '0deg')});
-  size: 24px;
-  margin-left: 13px;
+  width: 1.25vw; /* 24px */
+  height: 1.25vw; /* 24px */
+  margin-left: 0.677vw; /* 13px */
 `;
 
 const AddButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 8px;
+  right: 0.417vw; /* 8px */
 
   &.category {
-    width: 32px;
-    height: 32px;
+    width: 1.667vw; /* 32px */
+    height: 1.667vw; /* 32px */
     background-color: #9f9f9f;
-    border-radius: 7px;
+    border-radius: 0.365vw; /* 7px */
     position: absolute;
   }
   &.filter {
     position: absolute;
-    padding-right: 15px;
+    padding-right: 0.781vw; /* 15px */
   }
 `;
 
 const AccordionContent = styled.div`
-  padding-bottom: 35px;
-  font-size: 16px;
-  font-family: 'Pretendard-Regular';
+  padding-bottom: 1.823vw; /* 35px */
+  font-size: 0.833vw; /* 16px */
   color: #9f9f9f;
-  margin-left: 78px;
+  margin-left: 4.063vw; /* 78px */
 `;
 
 const CategoryItem = styled.button`
-  margin-bottom: 18px;
+  margin-bottom: 0.938vw; /* 18px */
   margin: auto;
-  font-size: 20px;
-  font-family: 'Pretendard-Regular';
+  font-size: 1.042vw; /* 20px */
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 56px;
-  width: 303px;
-  height: 44px;
+  padding-left: 2.917vw; /* 56px */
+  width: 15.781vw; /* 303px */
+  height: 2.292vw; /* 44px */
   &:hover {
     background-color: ${({ active }) => {
       return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
     }};
-
-    border-radius: 10px;
+    border-radius: 0.521vw; /* 10px */
   }
 `;
 
 const DotBox = styled.div`
-  width: 32px;
-  height: 32px;
+  width: 1.667vw; /* 32px */
+  height: 1.667vw; /* 32px */
   background-color: #9f9f9f;
-  border-radius: 7px;
-  margin-right: 8px;
+  border-radius: 0.365vw; /* 7px */
+  margin-right: 0.417vw; /* 8px */
   display: flex;
   align-items: center;
   justify-content: center;
 `;
+
 const Line = styled.div`
-  margin-top: 30px;
-  border-top: 1px solid #dcdada;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-top: 1.563vw; /* 30px */
+  border-top: 0.052vw solid #dcdada; /* 1px */
+  margin-left: 1.042vw; /* 20px */
+  margin-right: 1.042vw; /* 20px */
 `;
+
 const CustomFilter = styled.div`
-  margin-top: 30px;
+  margin-top: 1.563vw; /* 30px */
 `;
 
 const CustomUp = styled.div`
@@ -788,37 +796,36 @@ const CustomUp = styled.div`
 `;
 
 const CustomDiv = styled.div`
-  margin-top: 20px;
+  margin-top: 1.042vw; /* 20px */
 `;
 
 const FilterContent = styled.div`
-  font-size: 16px;
+  font-size: 0.833vw; /* 16px */
   font-family: 'Pretendard-Regular';
   color: #9f9f9f;
-  margin-left: 31px;
+  margin-left: 1.615vw; /* 31px */
 `;
 
 const Custom = styled.div`
-  margin-left: 31px;
-  font-size: 20px;
+  margin-left: 1.615vw; /* 31px */
+  font-size: 1.042vw; /* 20px */
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 0.677vw; /* 13px */
   font-family: 'Pretendard-Regular';
   background: transparent;
   border: none;
   cursor: pointer;
-  padding-left: 7px;
-  margin-right: 7px;
-  height: 44px;
+  padding-left: 0.365vw; /* 7px */
+  margin-right: 0.365vw; /* 7px */
+  height: 2.292vw; /* 44px */
 
   &:hover {
     background-color: ${({ active }) => {
       return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
     }};
-
-    border-radius: 10px;
+    border-radius: 0.521vw; /* 10px */
   }
 `;
 
@@ -838,18 +845,18 @@ const fadeInOut = keyframes`
 
 const MessageBox = styled.div`
   position: fixed;
-  top: 12%;
-  left: 45%;
+  top: 13%; /* 12% */
+  left: 45%; /* 45% */
   background-color: #f2f2f2;
   color: #333;
-  font-size: 28px;
-  border-radius: 12px;
-  box-shadow: 0 0 5px #4f4f4f;
+  font-size: 1.458vw; /* 28px */
+  border-radius: 0.625vw; /* 12px */
+  box-shadow: 0 0 0.26vw #4f4f4f; /* 0 0 5px */
   z-index: 100000;
-  width: 435px;
-  height: 67px;
-  gap: 20px;
-  padding: 16px 50px;
+  width: 22.656vw; /* 435px */
+  height: 3.49vw; /* 67px */
+  gap: 1.042vw; /* 20px */
+  padding: 0.833vw 2.604vw; /* 16px 50px */
   display: flex;
   align-items: center;
   justify-content: center;

@@ -14,6 +14,11 @@ const GlobalStyle = createGlobalStyle`
   * {
     font-family: 'Pretendard-Regular', sans-serif;
   }
+
+  /* 모든 요소에 대해 px를 vw로 변환하는 함수 적용 */
+  * {
+    transition: all 0.3s ease;
+  }
 `;
 
 export default GlobalStyle;

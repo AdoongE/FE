@@ -55,18 +55,17 @@ ContentSaveModal.displayName = 'ContentSaveModal';
 
 const Buttons = styled.div`
   display: flex;
-  column-gap: 20px;
-  position: absolute;
-  top: 232px;
-  left: 179px;
+  column-gap: 1.042vw; /* 20px */
+  margin-top: 3vw;
+  justify-content: center;
 `;
 
 const No = styled.button`
-  width: 130px;
-  height: 54px;
+  width: 6.771vw; /* 130px */
+  height: 2.813vw; /* 54px */
   background-color: #f2f2f2;
-  border-radius: 10px;
-  font-size: 22px;
+  border-radius: 0.521vw; /* 10px */
+  font-size: 1.146vw; /* 22px */
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -77,11 +76,11 @@ const No = styled.button`
 
 const Yes = styled.button`
   color: white;
-  width: 130px;
-  height: 54px;
+  width: 6.771vw; /* 130px */
+  height: 2.813vw; /* 54px */
   background-color: #41c3ab;
-  border-radius: 10px;
-  font-size: 22px;
+  border-radius: 0.521vw; /* 10px */
+  font-size: 1.146vw; /* 22px */
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -90,23 +89,24 @@ const Yes = styled.button`
 `;
 
 const Alert = styled.div`
-  position: absolute;
   font-weight: 600;
-  font-size: 36px;
+  font-size: 1.875vw; /* 36px */
   text-align: center;
-  top: 122px;
-  left: 185px;
+  margin-top: 5vw;
 `;
 
 const Dialog = styled.dialog`
-  position: relative;
-  width: 637px;
-  height: 350px;
-  border-radius: 50px;
+  position: fixed; /* 화면 전체에서 고정 위치 */
+  top: 50%; /* 화면 세로 중앙 */
+  left: 37%;
+  transform: translate(-50%, -50%); /* 정확한 중앙 배치 */
+  width: 30vw;
+  height: 15vw; /* 350px */
+  border-radius: 2.604vw; /* 50px */
   background-color: white;
   border: 0;
   ::backdrop {
-    background-color: #0000008c;
+    background-color: #0000008c; /* 반투명 배경 */
   }
 `;
 

@@ -51,8 +51,8 @@ export const EditCategoryModal = ({
             <Icon
               icon="line-md:close"
               style={{
-                width: '36px',
-                height: '36px',
+                width: '1.875vw',
+                height: '1.875vw',
                 cursor: 'pointer',
               }}
               onClick={onClose}
@@ -103,37 +103,36 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background-color: white;
-  border-radius: 50px;
-  width: 46.625rem;
-  height: 21.875rem;
+  border-radius: 2.604vw; /* 50px */
+  width: 38.854vw; /* 746px */
+  height: 18.229vw; /* 350px */
 `;
 
 const ModalDiv = styled.div`
-  margin: 3.125rem;
+  margin: 2.604vw; /* 3.125rem */
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 27px;
+  margin-bottom: 1.406vw; /* 27px */
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 32px;
-  font-weight: 850;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 10px;
+  font-size: 1.667vw; /* 32px */
+  font-weight: 700;
+  margin-bottom: 0.521vw; /* 10px */
 `;
 
 const Input = styled.input`
   background-color: #f6f6f6;
   border: none;
-  border-bottom: 1px solid #7f7f7f;
+  border-bottom: 0.052vw solid #7f7f7f; /* 1px */
   width: 100%;
-  height: 4.25rem;
-  margin-top: 26px;
-  margin-bottom: 18px;
-  font-size: 30px;
+  height: 3.542vw; /* 68px */
+  margin-top: 1.354vw; /* 26px */
+  margin-bottom: 0.938vw; /* 18px */
+  font-size: 1.563vw; /* 30px */
 `;
 
 const ButtonContainer = styled.div`
@@ -142,13 +141,13 @@ const ButtonContainer = styled.div`
 `;
 
 const ModalButton = styled.button`
-  height: 3.375rem;
-  width: 6.188rem;
-  font-size: 22px;
+  height: 2.813vw; /* 54px */
+  width: 5.156vw; /* 99px */
+  font-size: 1.146vw; /* 22px */
   border: none;
-  border-radius: 50px;
+  border-radius: 2.604vw; /* 50px */
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 1.042vw; /* 10px */
   &.ok {
     background-color: #41c3ab;
     color: white;

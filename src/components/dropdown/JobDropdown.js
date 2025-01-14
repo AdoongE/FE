@@ -12,7 +12,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: '13.021vw',
     },
   },
 };
@@ -69,17 +69,17 @@ export default function SingleSelectPlaceholder({ value, onChange }) {
 const StyledFormControl = styled(FormControl)`
   && {
     margin: 0;
-    width: 445px;
-    height: 65px;
+    width: 23.177vw; /* 445px */
+    height: 3.385vw; /* 65px */
     margin-top: 0;
-    border-radius: 5px;
-    border: 1px solid #9f9f9f;
+    border-radius: 0.26vw; /* 5px */
+    border: 0.052vw solid #9f9f9f; /* 1px */
   }
 `;
 
 const StyledSelect = styled(Select)`
   && {
-    height: 65px;
+    height: 3.385vw; /* 65px */
     display: flex;
     align-items: center;
   }

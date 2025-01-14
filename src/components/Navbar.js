@@ -9,19 +9,54 @@ import CheckboxModal from './modal/CheckboxModal';
 
 function Navbar() {
   const [activeTab, setActiveTab] = useState('모아보기'); // 상단바 내부 전용 상태
-  const [activeBarWidth, setActiveBarWidth] = useState(0);
-  const [activeBarLeft, setActiveBarLeft] = useState(0);
-  const navbarMenuRef = useRef(null);
+  const [activeBarWidth, setActiveBarWidth] = useState(0); // ActiveBar 너비
+  const [activeBarLeft, setActiveBarLeft] = useState(0); // ActiveBar 위치
+  const navbarMenuRef = useRef(null); // Navbar 메뉴 참조
   const navigate = useNavigate();
   const dialogRef = useRef();
 
+  // 탭 클릭 시 ActiveBar의 위치와 너비 업데이트
   const handleTabClick = (tabName, event) => {
     setActiveTab(tabName);
     const button = event.currentTarget;
     const { offsetWidth, offsetLeft } = button;
-    setActiveBarWidth(offsetWidth);
-    setActiveBarLeft(offsetLeft);
+
+    setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
+    setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
   };
+
+  // 초기 ActiveBar 설정
+  useEffect(() => {
+    const activeButton = navbarMenuRef.current?.querySelector(
+      `[data-tab="${activeTab}"]`,
+    );
+    if (activeButton) {
+      const { offsetWidth, offsetLeft } = activeButton;
+
+      setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
+      setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
+    }
+  }, [activeTab]);
+
+  // 화면 크기 변경 시 ActiveBar 재계산
+  useEffect(() => {
+    const handleResize = () => {
+      const activeButton = navbarMenuRef.current?.querySelector(
+        `[data-tab="${activeTab}"]`,
+      );
+      if (activeButton) {
+        const { offsetWidth, offsetLeft } = activeButton;
+
+        setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
+        setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [activeTab]);
 
   const handleNewContentClick = () => {
     if (dialogRef.current) {
@@ -29,17 +64,6 @@ function Navbar() {
       console.log('모달 열기');
     }
   };
-
-  useEffect(() => {
-    const activeButton = navbarMenuRef.current.querySelector(
-      `[data-tab="${activeTab}"]`,
-    );
-    if (activeButton) {
-      const { offsetWidth, offsetLeft } = activeButton;
-      setActiveBarWidth(offsetWidth);
-      setActiveBarLeft(offsetLeft);
-    }
-  }, [activeTab]);
 
   useEffect(() => {
     if (dialogRef.current) {
@@ -110,15 +134,15 @@ function Navbar() {
       <NavbarRight>
         <Icon
           icon="iconoir:bell"
-          width="30"
-          height="30"
+          width="1.5625vw"
+          height="1.5625vw"
           style={{ color: 'black' }}
         />
         <NewContentButton onClick={handleNewContentClick}>
           <Icon
             icon="iconoir:plus"
-            width="30"
-            height="30"
+            width="1.5625vw"
+            height="1.5625vw"
             style={{ color: '#00000' }}
           />
           새로운 씨드
@@ -139,9 +163,9 @@ const NavbarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 118px;
-  border-bottom: 1px solid #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 6.146vw; /* 118px */
+  border-bottom: 0.052vw solid #ffffff; /* 1px */
+  box-shadow: 0 0.104vw 0.26vw rgba(0, 0, 0, 0.1); /* 0 2px 5px */
   position: fixed;
   top: 0;
   left: 0;
@@ -156,67 +180,65 @@ const LogoContainer = styled.div`
 `;
 
 const StyledLogoImage = styled.img`
-  width: 36px;
-  height: 36px;
-  margin-left: 40px;
+  width: 1.875vw; /* 36px */
+  height: 1.875vw; /* 36px */
+  margin-left: 2.083vw; /* 40px */
 `;
 
 const StyledLogo = styled.img`
-  width: 148px;
-  height: 40px;
-  margin-left: 16px;
-  margin-top: 12px;
+  width: 7.708vw; /* 148px */
+  height: 2.083vw; /* 40px */
+  margin-left: 0.833vw; /* 16px */
+  margin-top: 0.625vw; /* 12px */
 `;
 
 const NavbarMenu = styled.div`
   display: flex;
-  gap: 64px;
+  gap: 3.333vw; /* 64px */
   position: fixed;
-  left: 398px;
+  left: 20.729vw; /* 398px */
 `;
 
 const MenuButton = styled.button`
   display: flex;
   align-items: center;
   color: #666;
-  padding: 13.6px;
-  font-size: 26px;
-  margin-left: 53px;
+  padding: 0.708vw; /* 13.6px */
+  font-size: 1.354vw; /* 26px */
+  margin-left: 2.76vw; /* 53px */
   background: transparent;
   border: none;
   cursor: pointer;
   font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
   color: ${(props) => (props.active ? '#000' : '#666')};
 
-  /*텍스트 겹치는 문제 해결*/
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   svg {
-    margin-right: 10px; // 아이콘과 텍스트 간격
+    margin-right: 0.521vw; /* 10px */
   }
 `;
 
 const ActiveBar = styled.div`
-  width: ${(props) => props.width}px;
-  height: 7px;
-  background-color: #41c3ab;
   position: absolute;
-  top: 84px;
-  left: ${(props) => props.left}px;
+  width: ${({ width }) => width}vw;
+  height: 0.365vw;
+  background-color: #41c3ab;
+  bottom: -1.8vw;
+  left: ${({ left }) => left}vw;
   transition:
     width 0.3s ease,
     left 0.3s ease;
-  z-index: 3;
 `;
 
 const NavbarRight = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0.833vw; /* 16px */
   position: absolute;
-  right: 40px;
+  right: 2.083vw; /* 40px */
   top: 50%;
   transform: translateY(-50%);
 `;
@@ -225,29 +247,29 @@ const NewContentButton = styled.button`
   display: flex;
   align-items: center;
   background-color: #41c3ab;
-  font-size: 17.742px;
+  font-size: 0.924vw; /* 17.742px */
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   color: #fff;
   border: none;
-  width: 160.19px;
-  height: 48.19px;
-  border-radius: 40.323px;
+  width: 8.342vw; /* 160.19px */
+  height: 2.51vw; /* 48.19px */
+  border-radius: 2.101vw; /* 40.323px */
   cursor: pointer;
-  margin-left: 10px;
-  padding: 10px;
-  gap: 3px;
+  margin-left: 0.521vw; /* 10px */
+  padding: 0.521vw; /* 10px */
+  gap: 0.156vw; /* 3px */
 
   svg {
-    margin-left: 10px;
+    margin-left: 0.521vw; /* 10px */
   }
 `;
 
 const Profile = styled.img`
-  width: 48px;
-  height: 48px;
-  margin-left: 10px;
+  width: 2.5vw; /* 48px */
+  height: 2.5vw; /* 48px */
+  margin-left: 0.521vw; /* 10px */
 `;
 
 export default Navbar;

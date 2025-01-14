@@ -65,14 +65,14 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
         content: {
           position: 'relative',
           inset: 'auto',
-          width: '1047px',
-          height: '758px',
+          width: '54.53vw',
+          height: '39.48vw',
           maxWidth: '80%',
           maxHeight: '80%',
           margin: 'auto',
-          padding: '20px',
+          padding: '1.04vw',
           background: '#fff',
-          borderRadius: '20px',
+          borderRadius: '1.04vw',
           overflow: 'hidden',
         },
       }}
@@ -86,7 +86,7 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
           이 파일만 저장
         </SaveButton>
         <SaveButton
-          top="50px"
+          top="2.604vw"
           className="all"
           onClick={() => handleDownloadAll(files)}
         >
@@ -124,9 +124,9 @@ const CustomArrow = ({ contentDataType, direction, onClick }) => {
       onClick={onClick}
     >
       {direction === 'left' ? (
-        <FaChevronLeft size={40} />
+        <FaChevronLeft size={'2.083vw'} />
       ) : (
-        <FaChevronRight size={40} />
+        <FaChevronRight size={'2.083vw'} />
       )}
     </ArrowButton>
   );
@@ -137,21 +137,21 @@ const ModalHeader = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 112px;
-  gap: 10px;
-  margin-bottom: 47px;
+  height: 7.031vw;
+  gap: 0.52vw;
 `;
 
 const SaveButton = styled.button`
   position: absolute;
-  top: ${({ top }) => top || '10px'};
-  right: 0px;
+  top: ${({ top }) => top || '0.93vh'}; /* 10px */
+  right: 0;
   border: none;
-  width: 170.92px;
-  height: 39px;
-  border-radius: 10px;
-  font-size: 16px;
+  width: 8.9vw; /* 170.92px */
+  height: 2.03vw;
+  border-radius: 0.52vw; /* 10px */
+  font-size: 0.83vw; /* 16px */
   cursor: pointer;
+
   &.only {
     color: #9f9f9f;
     background-color: #dcdada;
@@ -193,6 +193,7 @@ const ImageWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+
   img {
     margin: auto;
     max-width: 100%;
@@ -209,5 +210,6 @@ const ArrowButton = styled.div`
   z-index: 1000;
   cursor: pointer;
   color: #9f9f9f;
-  ${({ direction }) => (direction === 'left' ? `left: 10px;` : `right: 10px;`)}
+  ${({ direction }) =>
+    direction === 'left' ? `left: 0.52vw;` : `right: 0.52vw;`}/* 10px */
 `;

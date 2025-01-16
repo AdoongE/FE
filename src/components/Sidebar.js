@@ -278,7 +278,14 @@ const Sidebar = ({
   };
 
   const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
+    if (tabName === '리마인더') {
+      // "리마인더" 클릭 시 activeTab을 "리마인더"로 변경
+      setActiveTab('리마인더');
+    } else if (tabName === '나의 씨드') {
+      // "나의 씨드" 클릭 시 페이지 새로고침
+      setActiveTab('나의 씨드');
+      window.location.reload(); // 페이지 새로고침
+    }
   };
 
   const handleCategoryClick = (categoryName, listType) => {

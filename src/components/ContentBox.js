@@ -60,15 +60,23 @@ function ContentBox({
 
   return (
     <Box>
-      <ImageBox onClick={open}>
+      <ImageBox>
         {contentDateType === 'PDF' ? (
-          <PDFThumbnail>
+          <PDFThumbnail onClick={open}>
             <Document file={thumbnailImage} loading={<div>Loading PDF...</div>}>
               <Page pageNumber={1} width={200} />
             </Document>
           </PDFThumbnail>
+        ) : contentDateType === 'LINK' ? (
+          <ContentImage
+            src={defaultImage}
+            alt="content thumbnail"
+            onClick={() => window.open(thumbnailImage, '_blank')}
+            isDefaultImage={true}
+          />
         ) : (
           <ContentImage
+            onClick={open}
             src={thumbnailImage || defaultImage}
             alt="content thumbnail"
             isDefaultImage={!thumbnailImage}

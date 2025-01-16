@@ -243,6 +243,7 @@ const ContentTitle = styled.div`
   margin-bottom: 0.469vw; /* 9px */
   white-space: normal;
   width: 100%;
+  position: relative;  /* relative로 위치 설정 */
 `;
 
 const ContentName = styled.div`
@@ -253,7 +254,10 @@ const ContentName = styled.div`
   margin-left: 0.365vw; /* 7px */
   white-space: normal;
   word-break: break-word;
-  flex-shrink: 0;
+  overflow: hidden;  /* 넘치는 텍스트는 숨기기 */
+  text-overflow: ellipsis; /* 텍스트가 넘칠 경우 ... 표시 */
+  width: calc(100% - 35px); /* 아이콘과 여백을 고려한 타이틀의 너비 */
+  display: inline-block;
 `;
 
 const CategoryDisplay = styled.div`

@@ -157,7 +157,7 @@ const ModalContent = styled.div`
   background: white;
   width: 30.208vw; /* 580px */
   padding: 2.083vw; /* 40px */
-  border-radius: 1.042vw; /* 20px */
+  border-radius: 2.604vw; /* 20px */
   display: flex;
   flex-direction: column;
 `;

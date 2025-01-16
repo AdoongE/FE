@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -9,6 +9,14 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/l
 
 const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
   console.log('ViewThumbnailModal file:', contentDataType);
+
+  const fileObject = useMemo(
+    () => ({
+      url: file,
+      withCredentials: true,
+    }),
+    [file],
+  );
 
   return (
     <Modal
@@ -40,7 +48,15 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
     >
       {contentDataType === 'PDF' ? (
         <DocumentWrapper>
-          <Document file={file}>
+          <Document
+            file={fileObject}
+            options={{
+              cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
+              cMapPacked: true,
+            }}
+            onLoadError={(error) => console.error('PDF Load Error:', error)}
+            onSourceError={(error) => console.error('PDF Source Error:', error)}
+          >
             <Page pageNumber={1} />
           </Document>
         </DocumentWrapper>

@@ -390,7 +390,7 @@ const Main = styled.div`
 
 const Title = styled.div`
   font-weight: 700;
-  font-size: 2.292vw; /* 44px */
+  font-size: 2.083vw; /* 44px */
   position: absolute;
   left: 0;
   display: flex;
@@ -513,7 +513,7 @@ const FilterDiv = styled.div`
 
 const FilterTitle = styled.div`
   font-weight: 700;
-  font-size: 2.292vw; /* 44px */
+  font-size: 2.083vw; /* 44px */
 `;
 
 const FilterBtn = styled.button`

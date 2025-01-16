@@ -38,7 +38,7 @@ function ViewContent() {
     const currentDate = new globalThis.Date();
     const ddayDate = new globalThis.Date(contentInfo.dday);
     const timeDiff = ddayDate - currentDate;
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * '1.25vw'));
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     setRemainingDays(dayDiff);
   };
   console.log('썸네일 인덱스', contentInfo.thumbnailImage);

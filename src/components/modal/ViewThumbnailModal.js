@@ -1,24 +1,26 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 // const pdfVersion = '2.6.347';
 // pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+// import * as pdfjsLib from 'pdfjs-dist';
+// import pdfjsWorker from './pdf.worker.mjs';
+// pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
   console.log('ViewThumbnailModal file:', contentDataType);
-
-  const fileObject = useMemo(
-    () => ({
-      url: file,
-      withCredentials: true,
-    }),
-    [file],
-  );
-
+  // const fileObject = useMemo(
+  //   () => ({
+  //     url: file,
+  //     withCredentials: true,
+  //   }),
+  //   [file],
+  // );
   return (
     <Modal
       ariaHideApp={false}
@@ -50,11 +52,11 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
       {contentDataType === 'PDF' ? (
         <DocumentWrapper>
           <Document
-            file={fileObject}
-            options={{
-              cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
-              cMapPacked: true,
-            }}
+            file={file}
+            // options={{
+            //   cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
+            //   cMapPacked: true,
+            // }}
             onLoadError={(error) => console.error('PDF Load Error:', error)}
             onSourceError={(error) => console.error('PDF Source Error:', error)}
           >

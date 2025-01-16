@@ -454,7 +454,6 @@ const Notag = styled.div`
   margin-bottom: 3.13vw; // 60px
   border: 0;
   border-radius: 1.04vw; // 20px
-  padding: 2.76vw 2.45vw; // 53px 47px
 `;
 
 const Button = styled.button`

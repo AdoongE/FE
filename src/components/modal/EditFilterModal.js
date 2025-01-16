@@ -256,47 +256,153 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
 
   return (
     <Dialog ref={dialogRef}>
-      <Head>
-        <Title>맞춤 필터 조건 설정</Title>
-        <Icons>
-          <Icon
-            icon="ri:reset-left-line"
-            style={{
-              width: '1.667vw',
-              height: '1.667vw',
-              color: 'black',
-            }}
-            onClick={handleReset}
+      <PaddingDiv>
+        <Head>
+          <Title>맞춤 필터 조건 설정</Title>
+          <Icons>
+            <Icon
+              icon="ri:reset-left-line"
+              style={{
+                width: '1.667vw',
+                height: '1.667vw',
+                color: 'black',
+              }}
+              onClick={handleReset}
+            />
+            <Icon
+              icon="ic:round-close"
+              style={{
+                width: '1.875vw',
+                height: '1.875vw',
+                color: 'black',
+              }}
+              onClick={handleClose}
+            />
+          </Icons>
+        </Head>
+        <Word>태그 선택</Word>
+        <OptionContainer>
+          <Options>
+            <Option
+              $isSelected={selectedFilter === '기본 태그'}
+              onClick={() => handleFilterClick('기본 태그')}
+            >
+              기본 태그
+            </Option>
+            <div>|</div>
+            <Option
+              $isSelected={selectedFilter === '나의 태그'}
+              onClick={() => handleFilterClick('나의 태그')}
+            >
+              나의 태그
+            </Option>
+          </Options>
+          <Short>
+            <Icon
+              icon="prime:check-square"
+              style={{
+                width: '1.25vw',
+                height: '1.25vw',
+                color: '#4F4F4F',
+              }}
+            />
+            <div>적절한 태그를 선택해보세요!</div>
+          </Short>
+        </OptionContainer>
+
+        {selectedFilter === '기본 태그' ? (
+          <TagContainer>
+            <TagPadding>
+              {Array.isArray(usedTags) &&
+                usedTags.map((usedTag) => (
+                  <TagItem
+                    type="button"
+                    key={usedTag.id}
+                    onClick={() => handleSelectTag(usedTag.name)}
+                    $isSelected={selectedTags.includes(usedTag.name)}
+                  >
+                    {usedTag.name}
+                  </TagItem>
+                ))}
+            </TagPadding>
+          </TagContainer>
+        ) : (
+          <TagContainer>
+            <TagPadding>
+              {Array.isArray(tags) &&
+                tags.map((tag) => (
+                  <TagItem
+                    type="button"
+                    key={tag.id}
+                    onClick={() => handleSelectTag(tag.name)}
+                    $isSelected={selectedTags.includes(tag.name)}
+                  >
+                    {tag.name}
+                  </TagItem>
+                ))}
+            </TagPadding>
+          </TagContainer>
+        )}
+        <Word>저장 형식</Word>
+        <Group>
+          <CheckboxLabel>
+            <TypeBox
+              type="checkbox"
+              name="LINK"
+              checked={dataType.includes('LINK')}
+              onChange={handleCheckboxChange}
+            />
+            <span>링크</span>
+          </CheckboxLabel>
+          <CheckboxLabel>
+            <TypeBox
+              type="checkbox"
+              name="IMAGE"
+              checked={dataType.includes('IMAGE')}
+              onChange={handleCheckboxChange}
+            />
+            <span>이미지</span>
+          </CheckboxLabel>
+          <CheckboxLabel>
+            <TypeBox
+              type="checkbox"
+              name="PDF"
+              checked={dataType.includes('PDF')}
+              onChange={handleCheckboxChange}
+            />
+            <span>PDF</span>
+          </CheckboxLabel>
+        </Group>
+        <Word>저장 날짜</Word>
+        <Date>
+          <DatePicker
+            locale={ko}
+            selected={startDate}
+            onChange={(date) => setStartDate(date || null)}
+            placeholderText="시작일"
+            dateFormat="yyyy/MM/dd"
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            className="custom-date-picker"
+            customInput={<CustomInput />}
           />
-          <Icon
-            icon="ic:round-close"
-            style={{
-              width: '1.875vw',
-              height: '1.875vw',
-              color: 'black',
-            }}
-            onClick={handleClose}
+          <span>~</span>
+          <DatePicker
+            locale={ko}
+            selected={endDate}
+            onChange={(date) => setEndDate(date || null)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            placeholderText="종료일"
+            dateFormat="yyyy/MM/dd"
+            customInput={<CustomInput />}
           />
-        </Icons>
-      </Head>
-      <Word>태그 선택</Word>
-      <OptionContainer>
-        <Options>
-          <Option
-            $isSelected={selectedFilter === '기본 태그'}
-            onClick={() => handleFilterClick('기본 태그')}
-          >
-            기본 태그
-          </Option>
-          <div>|</div>
-          <Option
-            $isSelected={selectedFilter === '나의 태그'}
-            onClick={() => handleFilterClick('나의 태그')}
-          >
-            나의 태그
-          </Option>
-        </Options>
-        <Short>
+        </Date>
+        <NewWord>디데이 기간</NewWord>
+        <Short style={{ marginBottom: '20px' }}>
           <Icon
             icon="prime:check-square"
             style={{
@@ -305,137 +411,37 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
               color: '#4F4F4F',
             }}
           />
-          <div>적절한 태그를 선택해보세요!</div>
+          <div>D-day는 D-0입니다</div>
         </Short>
-      </OptionContainer>
-
-      {selectedFilter === '기본 태그' ? (
-        <TagContainer>
-          {Array.isArray(usedTags) &&
-            usedTags.map((usedTag) => (
-              <TagItem
-                type="button"
-                key={usedTag.id}
-                onClick={() => handleSelectTag(usedTag.name)}
-                $isSelected={selectedTags.includes(usedTag.name)}
-              >
-                {usedTag.name}
-              </TagItem>
-            ))}
-        </TagContainer>
-      ) : (
-        <TagContainer>
-          {Array.isArray(tags) &&
-            tags.map((tag) => (
-              <TagItem
-                type="button"
-                key={tag.id}
-                onClick={() => handleSelectTag(tag.name)}
-                $isSelected={selectedTags.includes(tag.name)}
-              >
-                {tag.name}
-              </TagItem>
-            ))}
-        </TagContainer>
-      )}
-      <Word>저장 형식</Word>
-      <Group>
-        <CheckboxLabel>
-          <TypeBox
-            type="checkbox"
-            name="LINK"
-            checked={dataType.includes('LINK')}
-            onChange={handleCheckboxChange}
-          />
-          <span>링크</span>
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <TypeBox
-            type="checkbox"
-            name="IMAGE"
-            checked={dataType.includes('IMAGE')}
-            onChange={handleCheckboxChange}
-          />
-          <span>이미지</span>
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <TypeBox
-            type="checkbox"
-            name="PDF"
-            checked={dataType.includes('PDF')}
-            onChange={handleCheckboxChange}
-          />
-          <span>PDF</span>
-        </CheckboxLabel>
-      </Group>
-      <Word>저장 날짜</Word>
-      <Date>
-        <DatePicker
-          locale={ko}
-          selected={startDate}
-          onChange={(date) => setStartDate(date || null)}
-          placeholderText="시작일"
-          dateFormat="yyyy/MM/dd"
-          selectsStart
-          startDate={startDate}
-          endDate={endDate}
-          className="custom-date-picker"
-          customInput={<CustomInput />}
-        />
-        <span>~</span>
-        <DatePicker
-          locale={ko}
-          selected={endDate}
-          onChange={(date) => setEndDate(date || null)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-          placeholderText="종료일"
-          dateFormat="yyyy/MM/dd"
-          customInput={<CustomInput />}
-        />
-      </Date>
-      <NewWord>디데이 기간</NewWord>
-      <Short style={{ marginBottom: '20px' }}>
-        <Icon
-          icon="prime:check-square"
-          style={{
-            width: '1.25vw',
-            height: '1.25vw',
-            color: '#4F4F4F',
-          }}
-        />
-        <div>D-day는 D-0입니다</div>
-      </Short>
-      <Date>
-        <Dday>
-          <span>D-</span>
-          <DdayInput
-            placeholder="직접입력"
-            value={startDday}
-            type="number"
-            min={0}
-            onChange={handleChangeStartDay}
-          />
-        </Dday>
-        <span>~</span>
-        <Dday>
-          <span>D-</span>
-          <DdayInput
-            value={endDday}
-            placeholder="직접입력"
-            type="number"
-            min={0}
-            onChange={handleChangeEndDay}
-          />
-        </Dday>
-      </Date>
-      <div style={{ display: 'flex', justifyContent: ' center' }}>
-        <Button disabled={!isValid} onClick={handleSave}>
-          저장하기
-        </Button>
-      </div>
+        <Date>
+          <Dday>
+            <span>D-</span>
+            <DdayInput
+              placeholder="직접입력"
+              value={startDday}
+              type="number"
+              min={0}
+              onChange={handleChangeStartDay}
+            />
+          </Dday>
+          <span>~</span>
+          <Dday>
+            <span>D-</span>
+            <DdayInput
+              value={endDday}
+              placeholder="직접입력"
+              type="number"
+              min={0}
+              onChange={handleChangeEndDay}
+            />
+          </Dday>
+        </Date>
+        <div style={{ display: 'flex', justifyContent: ' center' }}>
+          <Button disabled={!isValid} onClick={handleSave}>
+            저장하기
+          </Button>
+        </div>
+      </PaddingDiv>
     </Dialog>
   );
 });
@@ -570,16 +576,20 @@ const TagItem = styled.button`
 const TagContainer = styled.div`
   width: 50.99vw; /* 979px */
   height: 25.938vw; /* 498px */
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 0.417vw; /* 8px */
-  row-gap: 0.833vw; /* 16px */
   overflow-y: auto;
   background-color: #fafafa;
   border: 0;
   border-radius: 1.042vw; /* 20px */
-  padding: 2.76vw 2.448vw; /* 53px 47px */
   margin-bottom: 3.125vw; /* 60px */
+`;
+
+const TagPadding = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.42vw; // 8px
+  row-gap: 0.83vw; // 16px
+  padding: 2.76vw 2.45vw; // 53px 47px
+  align-content: flex-start;
 `;
 
 const Option = styled.div`
@@ -625,10 +635,13 @@ const Dialog = styled.dialog`
   width: 57.24vw; /* 1099px */
   border: 0;
   border-radius: 2.604vw; /* 50px */
-  padding: 3.125vw; /* 60px */
+  /* padding: 3.125vw; // 60px */
   overflow-y: visible;
   z-index: 1000 !important;
   position: absolute !important;
+`;
+const PaddingDiv = styled.div`
+  padding: 3.13vw; // 60px
 `;
 
 export default EditFilterModal;

@@ -134,7 +134,7 @@ const Box = styled.div`
 const ImageBox = styled.div`
   width: 22.917vw; /* 440px */
   height: 14.792vw; /* 284px */
-  background-color: #f2f2f2;
+  background-color: #dcdada;
   border-radius: 0.521vw; /* 10px */
   position: relative;
   margin-bottom: 0.573vw; /* 11px */
@@ -150,7 +150,7 @@ const ContentImage = styled.img`
       ? `
     width: 6.719vw; /* 129px */
     height: 6.719vw; /* 129px */
-    filter: invert(100%) sepia(4%) saturate(0%) hue-rotate(125deg) brightness(91%) contrast(90%);
+    filter: invert(10%) sepia(54%) saturate(0%) hue-rotate(125deg) brightness(91%) contrast(90%);
   `
       : `
     width: 100%;

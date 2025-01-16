@@ -96,10 +96,7 @@ const Alert = styled.div`
 `;
 
 const Dialog = styled.dialog`
-  position: fixed; /* 화면 전체에서 고정 위치 */
-  top: 50%; /* 화면 세로 중앙 */
-  left: 37%;
-  transform: translate(-50%, -50%); /* 정확한 중앙 배치 */
+  position: fixed;
   width: 30vw;
   height: 15vw; /* 350px */
   border-radius: 2.604vw; /* 50px */

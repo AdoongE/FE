@@ -207,9 +207,9 @@ const Dday = styled.div`
     dDay === 0
       ? '#9AE4D6'
       : dDay === -1 || dDay === -2 || dDay === -3
-        ? '#DCDADA'
+        ? '#FFFFFF'
         : dDay <= -4
-          ? '#FFFFFF'
+          ? '#9F9F9F'
           : 'transparent'};
 `;
 
@@ -243,7 +243,7 @@ const ContentTitle = styled.div`
   margin-bottom: 0.469vw; /* 9px */
   white-space: normal;
   width: 100%;
-  position: relative;  /* relative로 위치 설정 */
+  position: relative; /* relative로 위치 설정 */
 `;
 
 const ContentName = styled.div`
@@ -254,7 +254,7 @@ const ContentName = styled.div`
   margin-left: 0.365vw; /* 7px */
   white-space: normal;
   word-break: break-word;
-  overflow: hidden;  /* 넘치는 텍스트는 숨기기 */
+  overflow: hidden; /* 넘치는 텍스트는 숨기기 */
   text-overflow: ellipsis; /* 텍스트가 넘칠 경우 ... 표시 */
   width: calc(100% - 35px); /* 아이콘과 여백을 고려한 타이틀의 너비 */
   display: inline-block;

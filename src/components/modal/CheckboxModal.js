@@ -130,7 +130,7 @@ CheckboxModal.displayName = 'CheckboxModal';
 
 const Dialog = styled.dialog`
   width: 30.208vw; /* 580px */
-  height: 14.583vw; /* 280px */
+  height: 14.99vw; /* 280px */
   border-radius: 2.604vw; /* 50px */
   background: #fff;
   border: 0;

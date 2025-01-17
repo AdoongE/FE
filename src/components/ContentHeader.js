@@ -187,6 +187,12 @@ function ContentHeader({
 
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
 
+  useEffect(() => {
+    if (visibleTags.length === 0) {
+      setActiveTab('나의 씨드');
+    }
+  }, [visibleTags]);
+
   return (
     <Main>
       {filterId === null ? (

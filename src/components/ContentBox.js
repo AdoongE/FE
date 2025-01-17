@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 import defaultImage from '../assets/icons/seed_contentbox.png';
-import { Document, Page } from 'react-pdf';
+// import { Document, Page } from 'react-pdf';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
@@ -62,11 +62,17 @@ function ContentBox({
     <Box>
       <ImageBox>
         {contentDateType === 'PDF' ? (
-          <PDFThumbnail onClick={open}>
-            <Document file={thumbnailImage} loading={<div>Loading PDF...</div>}>
-              <Page pageNumber={1} width={200} />
-            </Document>
-          </PDFThumbnail>
+          // <PDFThumbnail onClick={open}>
+          //   <Document file={thumbnailImage} loading={<div>Loading PDF...</div>}>
+          //     <Page pageNumber={1} width={200} />
+          //   </Document>
+          // </PDFThumbnail>
+          <ContentImage
+            onClick={open}
+            src={defaultImage}
+            alt="content thumbnail"
+            isDefaultImage={true}
+          />
         ) : contentDateType === 'LINK' ? (
           <ContentImage
             src={defaultImage}
@@ -160,18 +166,18 @@ const ContentImage = styled.img`
   `}
 `;
 
-const PDFThumbnail = styled.div`
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+// const PDFThumbnail = styled.div`
+//   justify-content: center;
+//   align-items: center;
+//   overflow: hidden;
 
-  canvas {
-    width: 22.917vw !important; /* 440px */
-    height: 14.792vw !important; /* 284px */
-    object-fit: cover;
-    border-radius: 0.521vw; /* 10px */
-  }
-`;
+//   canvas {
+//     width: 22.917vw !important; /* 440px */
+//     height: 14.792vw !important; /* 284px */
+//     object-fit: cover;
+//     border-radius: 0.521vw; /* 10px */
+//   }
+// `;
 
 const IconBox = styled.div`
   width: 1.563vw; /* 30px */

@@ -57,6 +57,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
   const [startDday, setStartDday] = useState(null);
   const [endDday, setEndDday] = useState(null);
   const [isValid, setIsValid] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
     if (startDday <= -1 || endDday <= -1 || endDday < startDday) {
@@ -212,6 +213,13 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     onSave(modalData);
     console.log(modalData);
     dialogRef.current?.close();
+    setResetKey((prevKey) => prevKey + 1);
+    setDataType([]);
+    setSelectedTags([]);
+    setStartDate(null);
+    setEndDate(null);
+    setStartDday('');
+    setEndDday('');
   };
 
   return (
@@ -344,6 +352,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         <Word>저장 날짜</Word>
         <Date>
           <DatePicker
+            key={`start-${resetKey}`}
             locale={ko}
             selected={startDate || null}
             onChange={(date) => setStartDate(date || null)}
@@ -357,6 +366,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
           />
           <span>~</span>
           <DatePicker
+            key={`end-${resetKey}`}
             locale={ko}
             selected={endDate || null}
             onChange={(date) => setEndDate(date || null)}
@@ -518,6 +528,7 @@ const Date = styled.div`
   margin-bottom: 3.13vw; // 60px
   z-index: 1000 !important;
   position: relative !important;
+  overflow: visible !important;
 `;
 
 const CheckboxLabel = styled.label`

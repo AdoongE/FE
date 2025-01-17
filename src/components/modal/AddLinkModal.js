@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { axiosInstance } from '../api/axios-instance';
 import { useNavigate } from 'react-router-dom';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const AddLinkModal = ({ onClose }) => {
   const navigate = useNavigate();
   const [contentLinks, setContentLinks] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeModal = () => {
     onClose(); // 부모 컴포넌트에서 전달된 onClose 호출
@@ -28,6 +30,8 @@ const AddLinkModal = ({ onClose }) => {
       setErrorMessage('유효하지 않은 링크입니다.');
       return;
     } else {
+      setIsLoading(true);
+
       if (youtubeRegex.test(contentLinks)) {
         console.log('유튜브 링크:', contentLinks);
         try {
@@ -57,6 +61,8 @@ const AddLinkModal = ({ onClose }) => {
           }
         } catch (error) {
           console.error('유튜브 링크 간략화 실패:', error);
+        } finally {
+          setIsLoading(false);
         }
       } else if (naverNewsRegex.test(contentLinks)) {
         console.log('네이버 뉴스 링크:', contentLinks);
@@ -87,6 +93,8 @@ const AddLinkModal = ({ onClose }) => {
           }
         } catch (error) {
           console.error('네이버 뉴스 링크 간략화 실패:', error);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         console.log('간략화 불가 링크 생성 성공');
@@ -131,7 +139,13 @@ const AddLinkModal = ({ onClose }) => {
           <Error>유효하지 않은 링크입니다.</Error>
         )}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button onClick={handleAddLink}>완료</Button>
+          <Button onClick={handleAddLink}>
+            {isLoading ? (
+              <BeatLoader color="rgba(255, 255, 255, 1)" margin={0} size={5} />
+            ) : (
+              <div>완료</div>
+            )}
+          </Button>
         </div>
       </ModalContent>
     </ModalOverlay>

@@ -57,6 +57,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
   const [startDday, setStartDday] = useState(null);
   const [endDday, setEndDday] = useState(null);
   const [isValid, setIsValid] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
   //   const [originalFilterDetail, setOriginalFilterDetail] = useState({});
 
   const getFilterData = async () => {
@@ -71,7 +72,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
       setSelectedTags(results.tags || []);
       setStartDate(results.startDate ? parseISO(results.startDate) : null);
       setEndDate(results.endDate ? parseISO(results.endDate) : null);
-      setStartDday(results.fromDDay || null);
+      setStartDday(results.fromDDay);
       setEndDday(results.toDDay || null);
 
       if (response.status === 200) {
@@ -252,6 +253,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
     } catch (error) {
       console.error('에러 발생:', error);
     }
+    setResetKey((prevKey) => prevKey + 1);
   };
 
   return (
@@ -376,6 +378,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
         <Word>저장 날짜</Word>
         <Date>
           <DatePicker
+            key={`start-${resetKey}`}
             locale={ko}
             selected={startDate}
             onChange={(date) => setStartDate(date || null)}
@@ -389,6 +392,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           />
           <span>~</span>
           <DatePicker
+            key={`end-${resetKey}`}
             locale={ko}
             selected={endDate}
             onChange={(date) => setEndDate(date || null)}

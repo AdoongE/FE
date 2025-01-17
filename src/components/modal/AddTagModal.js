@@ -348,6 +348,7 @@ const Head = styled.div`
 const Icons = styled.div`
   display: flex;
   column-gap: 0.833vw; /* 16px */
+  align-items: center;
 `;
 
 const Title = styled.div`

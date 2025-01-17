@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axios-instance';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 function PdfUploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
@@ -11,6 +12,7 @@ function PdfUploadModal({ onClose }) {
   const [error, setError] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -70,6 +72,7 @@ function PdfUploadModal({ onClose }) {
     const file = new File([blob], pdf.label, { type: blob.type });
 
     formData.append('file', file);
+    setIsLoading(true);
 
     try {
       const response = await axiosInstance.post(
@@ -100,6 +103,8 @@ function PdfUploadModal({ onClose }) {
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
       setError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -215,7 +220,13 @@ function PdfUploadModal({ onClose }) {
           {error && <ErrorMessage>PDF 파일을 업로드하세요</ErrorMessage>}
         </Body>
         <Footer>
-          <Button onClick={handleConfirm}>완료</Button>
+          <Button onClick={handleConfirm}>
+            {isLoading ? (
+              <BeatLoader color="rgba(255, 255, 255, 1)" margin={0} size={5} />
+            ) : (
+              <div>완료</div>
+            )}
+          </Button>
         </Footer>
       </ModalContent>
     </ModalOverlay>
@@ -433,4 +444,8 @@ const Button = styled.button`
   border-radius: 2.6vw; /* 50px */
   font-size: 1.15vw; /* 22px */
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.729vw 1.563vw;
 `;

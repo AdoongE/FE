@@ -9,7 +9,7 @@ import { axiosInstance } from '../components/api/axios-instance';
 import FieldSelectPlaceholder from '../components/dropdown/FieldDropdown';
 import SingleSelectPlaceholder from '../components/dropdown/JobDropdown';
 import { Icon } from '@iconify/react';
-import SplashBar from '../components/bar/SplashBar';
+import Navbar from '../components/Navbar';
 
 function MyPage() {
   const [isOtherSelected, setIsOtherSelected] = useState(false);
@@ -148,9 +148,9 @@ function MyPage() {
 
   return (
     <div>
+      <Navbar style={{ position: 'relative' }} />
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <SplashBar />
           <Page>
             <Header>
               <Titles>마이페이지</Titles>
@@ -565,6 +565,9 @@ const Page = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 10%;
+  left: 25%;
 `;
 
 const Signup = styled.div`

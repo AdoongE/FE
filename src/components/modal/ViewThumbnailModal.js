@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
+import { Icon } from '@iconify/react';
 import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -50,19 +51,25 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
       }}
     >
       {contentDataType === 'PDF' ? (
-        <DocumentWrapper>
-          <Document
-            file={file}
-            // options={{
-            //   cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
-            //   cMapPacked: true,
-            // }}
-            onLoadError={(error) => console.error('PDF Load Error:', error)}
-            onSourceError={(error) => console.error('PDF Source Error:', error)}
-          >
-            <Page pageNumber={1} />
-          </Document>
-        </DocumentWrapper>
+        // <DocumentWrapper>
+        //   <Document
+        //     file={file}
+        //     // options={{
+        //     //   cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
+        //     //   cMapPacked: true,
+        //     // }}
+        //     onLoadError={(error) => console.error('PDF Load Error:', error)}
+        //     onSourceError={(error) => console.error('PDF Source Error:', error)}
+        //   >
+        //     <Page pageNumber={1} />
+        //   </Document>
+        // </DocumentWrapper>
+        <Icon
+          icon="iconamoon:file-thin"
+          width="24vw"
+          height="24vw"
+          color="#aaa"
+        />
       ) : (
         <ImageWrapper>
           <img src={file} alt="Preview" />

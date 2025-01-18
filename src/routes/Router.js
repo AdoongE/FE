@@ -9,6 +9,9 @@ import AddContent from '../components/AddContent';
 import ContentViewPage from '../pages/ContentViewPage';
 import ContentEditPage from '../pages/ContentEditPage';
 import MyPage from '../pages/MyPage';
+import ServiceConsent from '../pages/consents/ServiceConsent';
+import PersonalConsent from '../pages/consents/PersonalConsent';
+import MarketingConsent from '../pages/consents/MarketingConsent';
 
 const Router = () => {
   return (
@@ -24,6 +27,9 @@ const Router = () => {
         <Route path="/content-add" element={<ContentAddPage />} />
         <Route path="/content-view" element={<ContentViewPage />} />
         <Route path="/content-edit/:Id" element={<ContentEditPage />} />
+        <Route path="/service-consent" element={<ServiceConsent />} />
+        <Route path="/personal-consent" element={<PersonalConsent />} />
+        <Route path="/marketing-consent" element={<MarketingConsent />} />
       </Routes>
     </BrowserRouter>
   );

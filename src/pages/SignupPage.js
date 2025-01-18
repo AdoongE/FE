@@ -301,10 +301,11 @@ function SignupPage() {
                 <Lines />
                 <ContentCheck>
                   <NewContent>
-                    <Content>
+                    <Content onClick={() => navigate('/service-consent')}>
                       {/* accordion mui 라이브러리 이용 */}
                       <span style={{ color: 'red' }}>(필수)</span> 서비스
-                      이용약관 {'>'}
+                      이용약관
+                      <div style={{ fontWeight: '700' }}>{'>'}</div>
                     </Content>
 
                     <FormControlLabel
@@ -324,10 +325,10 @@ function SignupPage() {
                     />
                   </NewContent>
                   <NewContent>
-                    <Content>
+                    <Content onClick={() => navigate('/personal-consent')}>
                       {/* accordion mui 라이브러리 이용 */}
                       <span style={{ color: 'red' }}>(필수)</span> 개인정보 수집
-                      및 이용동의 {'>'}
+                      및 이용동의 <div style={{ fontWeight: '700' }}>{'>'}</div>
                     </Content>
                     <FormControlLabel
                       control={
@@ -346,9 +347,10 @@ function SignupPage() {
                     />
                   </NewContent>
                   <NewContent>
-                    <Content>
+                    <Content onClick={() => navigate('/marketing-consent')}>
                       {/* accordion mui 라이브러리 이용 */}
-                      (선택) 마케팅 활용 및 광고성 정보 수신 동의 {'>'}
+                      (선택) 마케팅 활용 및 광고성 정보 수신 동의{' '}
+                      <div style={{ fontWeight: '700' }}>{'>'}</div>
                     </Content>
                     <FormControlLabel
                       control={
@@ -431,6 +433,10 @@ const ContentCheck = styled.div`
 const Content = styled.div`
   font-size: 1.042vw; /* 20px */
   font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.78125vw;
+  cursor: pointer;
 `;
 
 const Lines = styled.div`

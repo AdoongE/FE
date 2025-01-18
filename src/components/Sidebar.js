@@ -382,6 +382,7 @@ const Sidebar = ({
 
   useEffect(() => {
     handleViewCategory();
+    handleViewBookmark();
     CustomFilterView();
   }, []);
 

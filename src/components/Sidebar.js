@@ -24,7 +24,7 @@ const Sidebar = ({
   activeTab,
   setActiveTab,
 }) => {
-  const [isBookmarkOpen, setIsBookmarkOpen] = useState(true);
+  const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);

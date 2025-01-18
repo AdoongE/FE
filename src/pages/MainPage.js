@@ -75,11 +75,14 @@ const MainPage = () => {
         }
       } else {
         if (activeTab === '모아보기' || activeTab === '나의 씨드') {
+          setFilterId(null);
+          setCategoryId(null);
           url = '/api/v1/content/';
           const res = await axiosInstance.get(url);
           const responseData = res.data.results?.[0]?.contentsInfoList || [];
           setCollectData(responseData); // null 방지
         } else if (activeTab === '카테고리') {
+          setFilterId(null);
           url = `/api/v1/content/${categoryId}`;
         } else if (activeTab === '맞춤필터') {
           console.log('필터 ID :', filterId);

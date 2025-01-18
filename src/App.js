@@ -1,14 +1,14 @@
 import { StyledEngineProvider } from '@mui/styled-engine';
 import Router from './routes/Router';
 import GlobalStyle from './styles/GlobalStyle';
-import { pdfjs } from 'react-pdf';
+// import { pdfjs } from 'react-pdf';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 // import { pdfjs } from 'pdfjs-dist';
-if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-  const WORKER_URL = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-  pdfjs.GlobalWorkerOptions.workerSrc = WORKER_URL;
-}
+// if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+//   const WORKER_URL = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+//   pdfjs.GlobalWorkerOptions.workerSrc = WORKER_URL;
+// }
 function App() {
   return (
     <StyledEngineProvider injectFirst>

@@ -128,9 +128,10 @@ function ContentHeader({
       saveSearchQuery(searchQuery.trim()); // 최근 검색어 저장
       await fetchSearchResults(searchQuery.trim()); // 공통 검색 함수 호출
     } else if (!searchQuery.trim()) {
-      // 검색어가 없을 때 빈 콘텐츠 화면으로 설정
-      setSearchState(true);
-      setFilteredData([]); // 빈 결과 설정
+      // 검색어가 없을 때, 전체 콘텐츠 불러오기
+      setSearchState(false); // 검색 결과 있음
+      setFilteredDataState([]); // 빈 결과를 설정하지 않고 전체 씨드를 불러옴
+      await fetchSearchResults(''); // 전체 씨드를 불러오기 위한 빈 문자열 검색
     }
   };
 
@@ -185,6 +186,12 @@ function ContentHeader({
   };
 
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
+
+  // useEffect(() => {
+  //   if (visibleTags.length === 0) {
+  //     setActiveTab('나의 씨드');
+  //   }
+  // }, [visibleTags]);
 
   return (
     <Main>

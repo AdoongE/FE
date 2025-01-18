@@ -17,12 +17,21 @@ function Navbar() {
 
   // 탭 클릭 시 ActiveBar의 위치와 너비 업데이트
   const handleTabClick = (tabName, event) => {
-    setActiveTab(tabName);
+    setActiveTab(tabName); // 탭 클릭 시 활성화된 탭 설정
     const button = event.currentTarget;
     const { offsetWidth, offsetLeft } = button;
 
     setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
     setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
+
+    if (tabName === '모아보기') {
+      window.location.reload(); // 페이지 새로 고침
+    }
+  };
+
+  const handleLogoClick = () => {
+    navigate('/main'); // 로고 클릭 시 '/main'으로 이동
+    window.location.reload(); // 페이지 새로 고침
   };
 
   // 초기 ActiveBar 설정
@@ -101,13 +110,13 @@ function Navbar() {
         <StyledLogoImage
           src={LogoImage}
           alt="seedzip_logo"
-          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+          onClick={handleLogoClick}
           style={{ cursor: 'pointer' }} // 클릭 가능 표시
         />
         <StyledLogo
           src={Logo}
           alt="seedzip"
-          onClick={() => navigate('/main')} // 로고 클릭 시 메인 페이지 이동
+          onClick={handleLogoClick}
           style={{ cursor: 'pointer' }} // 클릭 가능 표시
         />
       </LogoContainer>

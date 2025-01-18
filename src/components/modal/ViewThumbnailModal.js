@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import { Document, Page } from 'react-pdf';
+// import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 // const pdfVersion = '2.6.347';
@@ -81,20 +81,20 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
 
 export default ViewThumbnailModal;
 
-const DocumentWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+// const DocumentWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 100%;
+//   height: 100%;
 
-  canvas {
-    margin: auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-`;
+//   canvas {
+//     margin: auto;
+//     max-width: 100%;
+//     max-height: 100%;
+//     object-fit: contain;
+//   }
+// `;
 
 const ImageWrapper = styled.div`
   display: flex;

@@ -148,11 +148,9 @@ const AddTagModal = forwardRef(
           <Icons>
             <Icon
               icon="ri:reset-left-line"
-              style={{
-                width: '1.667vw',
-                height: '1.667vw;',
-                color: 'black',
-              }}
+              width="1.667vw"
+              height="1.667vw"
+              color="black"
               onClick={handleReset}
             />
             <Icon

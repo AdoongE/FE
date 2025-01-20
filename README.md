@@ -42,25 +42,9 @@ Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에
 
 ---
 
-## 개발 환경
-
-| **필수 라이브러리 및 패키지** | **버전**  | **설명**                        |
-|------------------------------|-----------|----------------------------------|
-| React                       |  18.3.1 | UI 구현을 위한 프론트엔드 라이브러리 |
-| Axios                       | .. | API 연동을 위한 HTTP 클라이언트 |
-| Styled-Components           | .. | CSS-in-JS 스타일링 도구          |
-
----
-
 ## 시스템 아키텍처
 <img width="2000" alt="image" src="https://github.com/user-attachments/assets/16619ccf-f1c5-4b6e-bce7-41af13225cb4" />
 
----
-
-### 앱 서비스
-
-1. React Native 프로젝트 구성
-2. Expo를 통해 모바일 환경에서 실행
 
 ---
 ### Contributors

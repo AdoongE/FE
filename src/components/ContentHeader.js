@@ -183,15 +183,12 @@ function ContentHeader({
 
   const removeTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
+    if (tags.length === 1) {
+      setActiveTab('나의 씨드'); // 검색 필터링 태그 모두 삭제하면, 회색 박스 없애기
+    }
   };
 
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
-
-  // useEffect(() => {
-  //   if (visibleTags.length === 0) {
-  //     setActiveTab('나의 씨드');
-  //   }
-  // }, [visibleTags]);
 
   return (
     <Main>

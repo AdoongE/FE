@@ -53,6 +53,7 @@ Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에
 ---
 
 ## 시스템 아키텍처
+<img width="2000" alt="image" src="https://github.com/user-attachments/assets/16619ccf-f1c5-4b6e-bce7-41af13225cb4" />
 
 ---
 

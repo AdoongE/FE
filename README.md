@@ -2,7 +2,7 @@
 <div align="center">
     <img src="https://capsule-render.vercel.app/api?type=rect&color=0:A7F0E7,300:EBF8F5&height=180&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
 </div>
-
+----
 ### 서비스 개요
 
 Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에 모아 관리하고, **필요할 때 활용**할 수 있는 서비스를 제공합니다.

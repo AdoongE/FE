@@ -1,12 +1,3 @@
-# AdoongE FE🌱
-
-| **개발환경** | **버전** |
-| ------------ | -------- |
-| React        | 18.3.1   |
-| Redux        | 5.0.1    |
-| React-redux  | 9.1.2    |
-
-
 -------
 # Seedzip
 
@@ -86,11 +77,9 @@ Seedzip은 인사이트와 영감의 **씨앗(seed)**이 될 콘텐츠를 한 �
 
 | **필수 라이브러리 및 패키지** | **버전**  | **설명**                        |
 |------------------------------|-----------|----------------------------------|
-| React                       | 최신 버전 | UI 구현을 위한 프론트엔드 라이브러리 |
+| React                       |  18.3.1 | UI 구현을 위한 프론트엔드 라이브러리 |
 | Axios                       | 최신 버전 | API 연동을 위한 HTTP 클라이언트 |
 | Styled-Components           | 최신 버전 | CSS-in-JS 스타일링 도구          |
-| Python                      | 3.x       | AI 추천 모델 개발을 위한 언어     |
-| TensorFlow/PyTorch          | 최신 버전 | 딥러닝 모델 구현 라이브러리       |
 
 ---
 
@@ -141,8 +130,8 @@ Seedzip은 **AI 추천 시스템**과 **검색/필터링 엔진**을 기반으�
 
 ## 팀 소개
 
-|<img src="https://avatars.githubusercontent.com/u/165630285?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/144865717?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165617182?v=4" width="150" height="150"/>|
+|<img src="https://avatars.githubusercontent.com/u/29745391?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165630285?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/118765475?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|
-|남궁희<br/>)|김예린<br/>|선영주<br/>[@dudwntjs](https://github.com/dudwntjs)|
+|남궁희<br/>[@HeeNamgoong](https://github.com/HeeNamgoong)|선영주<br/>[@dudwntjs](https://github.com/dudwntjs)|김예린<br/>[@yelynnn](https://github.com/yelynnn)|
 
----
+

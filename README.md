@@ -3,10 +3,7 @@
     <img src="https://capsule-render.vercel.app/api?type=rect&color=0:A7F0E7,300:EBF8F5&height=180&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
 </div>
 
-유용한 디지털 정보를 한 곳에 모으고, 필요할 때 찾아볼 수 있는 서비스, **Seedzip**
 ---
-
-<img width="1000" alt="First Screen" src="https://raw.githubusercontent.com/AdoongE/FE/develop/src/assets/%E1%84%8E%E1%85%A5%E1%86%BA%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB.png" />
 
 ### 서비스 개요
 
@@ -18,6 +15,8 @@ Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에
 
   
 ### 주요 기능
+
+<img width="1000" alt="First Screen" src="https://raw.githubusercontent.com/AdoongE/FE/develop/src/assets/%E1%84%8E%E1%85%A5%E1%86%BA%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB.png" />
 
 1. **카테고리 및 북마크**
     - 카테고리 추가/수정/삭제 가능

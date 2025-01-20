@@ -2,7 +2,7 @@
 # Seedzip
 
 <div align="center">
-    <img src="https://capsule-render.vercel.app/api?type=shark&color=0:f0d1d1,300:d6edff&height=250&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
+    <img src="https://capsule-render.vercel.app/api?type=shark&color=0:82E9D6,300:D6EDFF&height=250&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
 </div>
 
 ---

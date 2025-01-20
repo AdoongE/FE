@@ -2,14 +2,12 @@
 # Seedzip
 
 <div align="center">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:82E9D6,300:D6EDFF&height=180&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
+    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:A7F0E7,300:EBF8F5&height=180&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
 </div>
 
 ---
 
-## 개요 및 개발 필요성
-
-안녕하세요. 유용한 디지털 정보를 한 곳에 모으고, 필요할 때 찾아볼 수 있는 서비스, **Seedzip**입니다.
+유용한 디지털 정보를 한 곳에 모으고, 필요할 때 찾아볼 수 있는 서비스, **Seedzip**
 
 ### 리서치 배경
 
@@ -130,7 +128,7 @@ Seedzip은 **AI 추천 시스템**과 **검색/필터링 엔진**을 기반으�
 
 ## 팀 소개
 
-|<img src="https://avatars.githubusercontent.com/u/29745391?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165630285?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/118765475?v=4" width="150" height="150"/>|
+|<img src="https://avatars.githubusercontent.com/u/29745391?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165630285?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/62613023?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|
 |남궁희<br/>[@HeeNamgoong](https://github.com/HeeNamgoong)|선영주<br/>[@dudwntjs](https://github.com/dudwntjs)|김예린<br/>[@yelynnn](https://github.com/yelynnn)|
 

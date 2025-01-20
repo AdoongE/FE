@@ -122,16 +122,6 @@ Seedzip은 **AI 추천 시스템**과 **검색/필터링 엔진**을 기반으�
 2. Expo를 통해 모바일 환경에서 실행.
 
 ---
-
-## 팀 소개
-
-# Seedzip
-
-<div align="center">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:A7F0E7,300:EBF8F5&height=180&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
-</div>
-
----
 ### Contributors
 
 |<img src="https://avatars.githubusercontent.com/u/104904309?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165630285?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/149746062?v=4" width="150" height="150"/>|

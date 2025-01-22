@@ -861,7 +861,7 @@ const MessageBox = styled.div`
   border-radius: 0.625vw; /* 12px */
   box-shadow: 0 0 0.26vw #4f4f4f; /* 0 0 5px */
   z-index: 100000;
-  width: 22.656vw; /* 435px */
+  width: auto; /* 435px */
   height: 3.49vw; /* 67px */
   gap: 1.042vw; /* 20px */
   padding: 0.833vw 2.604vw; /* 16px 50px */

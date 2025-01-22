@@ -183,15 +183,12 @@ function ContentHeader({
 
   const removeTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
+    if (tags.length === 1) {
+      setActiveTab('나의 씨드'); // 검색 필터링 태그 모두 삭제하면, 회색 박스 없애기
+    }
   };
 
   useEffect(() => console.log('선택한 태그: ', tags), [tags]);
-
-  // useEffect(() => {
-  //   if (visibleTags.length === 0) {
-  //     setActiveTab('나의 씨드');
-  //   }
-  // }, [visibleTags]);
 
   return (
     <Main>
@@ -376,7 +373,7 @@ function ContentHeader({
         <FilterDiv>
           <FilterTitle>나의 씨드</FilterTitle>
           <FilterBtn onClick={() => showModal()}>
-            {filterName}
+            <FilterName>{filterName}</FilterName>
             <FilterEditIcon
               src={filterEditIcon}
               alt="filter edit icon"
@@ -535,6 +532,8 @@ const FilterBtn = styled.button`
   justify-content: center;
   align-items: center;
   color: black;
+  padding: 0.26vw 0.938vw;
+  gap: 0.677vw;
 
   &:hover {
     background-color: #21a58c;
@@ -542,10 +541,16 @@ const FilterBtn = styled.button`
   }
 `;
 
+const FilterName = styled.div`
+  width: 5.5vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const FilterEditIcon = styled.img`
   width: 1.25vw; /* 1.25vw */
   height: 1.25vw; /* 1.25vw */
-  margin-left: 0.677vw; /* 13px */
   filter: invert(48%) sepia(59%) saturate(518%) hue-rotate(119deg)
     brightness(98%) contrast(89%);
 

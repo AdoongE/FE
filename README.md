@@ -6,6 +6,7 @@
 ----
 
 ### 서비스 개요
+![KakaoTalk_Photo_2025-03-09-00-24-34](https://github.com/user-attachments/assets/8093e1fc-8031-4fb8-ad17-79d3f285604f)
 
 Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에 모아 관리하고, **필요할 때 활용**할 수 있는 서비스를 제공합니다.
 
@@ -42,6 +43,7 @@ Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에
 ---
 
 ## System Architecture
+![Uploading KakaoTalk_Photo_2025-03-09-00-24-23.png…]()
 
 ---
 ### Contributors

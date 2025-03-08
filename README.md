@@ -43,7 +43,8 @@ Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에
 ---
 
 ## System Architecture
-![Uploading KakaoTalk_Photo_2025-03-09-00-24-23.png…]()
+![KakaoTalk_Photo_2025-03-09-00-24-23](https://github.com/user-attachments/assets/2c055f01-c3ff-453a-aa19-c238e2e0db6e)
+
 
 ---
 ### Contributors

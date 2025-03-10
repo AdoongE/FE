@@ -1,12 +1,8 @@
-import { StyledEngineProvider } from '@mui/styled-engine';
+import './styles/global.css';
 import Router from './routes/Router';
 
 function App() {
-  return (
-    <StyledEngineProvider injectFirst>
-      <Router />
-    </StyledEngineProvider>
-  );
+  return <Router />;
 }
 
 export default App;

@@ -1,5 +1,5 @@
-const defaultColor = require('./src/styles/default-color');
-const defaultFontSize = require('./src/styles/default-font-size');
+const defaultColor = require('./src/styles/defaultColor');
+const defaultFont = require('./src/styles/defaultFont');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
         sans: ['Pretendard-Regular', 'sans-serif'],
       },
       colors: defaultColor,
-      fontSize: defaultFontSize,
+      fontSize: defaultFont,
     },
   },
   corePlugins: {

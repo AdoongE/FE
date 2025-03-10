@@ -1,4 +1,4 @@
-const defaultFontSize = {
+const defaultFont = {
   //Title 스타일
   title0: ['28px', { fontWeignt: '600' }],
   title1: ['20px', { fontWeignt: '600' }],
@@ -12,4 +12,4 @@ const defaultFontSize = {
   body3: ['8px', { fontWeignt: '400' }],
 };
 
-module.exports = defaultFontSize;
+module.exports = defaultFont;

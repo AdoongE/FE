@@ -167,8 +167,8 @@ const Category = ({
             {categories.length === 0 && (
               <AccordionContent>카테고리를 생성하세요.</AccordionContent>
             )}
-            {['카테고리'] &&
-              ['카테고리'].map((category, index) => (
+            {categories &&
+              categories.map((category, index) => (
                 <CategoryItem
                   onClick={() => handleCategoryClick(category, 'category')}
                   key={category}

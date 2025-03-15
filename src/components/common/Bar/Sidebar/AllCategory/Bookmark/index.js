@@ -9,7 +9,7 @@ const Bookmark = ({
   setActiveTab,
   setCategoryId,
   setCateName,
-  categoryCounts,
+  // categoryCounts,
   setOpenBookmarkDropdowns,
 }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
@@ -151,7 +151,7 @@ const Bookmark = ({
                   onMouseLeave={() => setHoveredBookmarkIndex(null)}
                 >
                   {bookmark}
-                  {` (${categoryCounts[bookmark] || 0})`}
+                  {/* {` (${categoryCounts[bookmark] || 0})`} */}
                   {hoveredBookdmarkIndex === index && (
                     <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
                       <MoreVertIcon />

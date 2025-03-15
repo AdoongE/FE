@@ -16,41 +16,34 @@ const Sidebar = () => {
   }, [setActiveTab]);
 
   return (
-    <StMainPage>
-      <SideDiv>
-        <TabButton activeTab={activeTab} setActiveTab={setActiveTab} />
-        <Line />
-        <CategoriesProvider>
-          <AllCategory setActiveTab={setActiveTab} />
-        </CategoriesProvider>
-        <Line />
-        <CustomFilter
-          setActiveTab={setActiveTab}
-          setFilterId={setFilterId}
-          setFilterName={setFilterName}
-        />
-      </SideDiv>
-    </StMainPage>
+    <SideDiv>
+      <TabButton activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Line />
+      <CategoriesProvider>
+        <AllCategory setActiveTab={setActiveTab} />
+      </CategoriesProvider>
+      <Line />
+      <CustomFilter
+        setActiveTab={setActiveTab}
+        setFilterId={setFilterId}
+        setFilterName={setFilterName}
+      />
+    </SideDiv>
   );
 };
 
-const StMainPage = styled.div`
-  background-color: white;
-`;
-
 const SideDiv = styled.div`
   height: 100vh;
-  width: 18.28125vw;
-  background-color: #f8fbfb;
+  width: 262px;
+  padding: 0 16px;
+  background-color: var(--sidebar);
   display: inline-block;
   position: relative;
 `;
 
 const Line = styled.div`
-  margin-top: 1.563vw; /* 30px */
-  border-top: 0.052vw solid #dcdada; /* 1px */
-  margin-left: 1.042vw; /* 20px */
-  margin-right: 1.042vw; /* 20px */
+  margin-top: 13px;
+  border-top: 1px solid var(--gray3);
 `;
 
 export default Sidebar;

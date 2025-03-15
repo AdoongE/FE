@@ -15,7 +15,6 @@ const AllCategory = ({ setActiveTab }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState('');
-  // const [categories, setCategories] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState('');
@@ -27,6 +26,8 @@ const AllCategory = ({ setActiveTab }) => {
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
   // const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [, setIsAddingBookmark] = useState(false);
+  const [, setCategoryId] = useState(null);
+  const [, setCateName] = useState('');
 
   // useEffect(() => {
   //   if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -37,8 +38,7 @@ const AllCategory = ({ setActiveTab }) => {
 
   useEffect(() => {
     setActiveTab('나의 씨드');
-    console.log('윤미래', categories);
-  }, [setActiveTab, categories]);
+  }, [setActiveTab]);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -49,7 +49,6 @@ const AllCategory = ({ setActiveTab }) => {
     if (!newCategoryName) return;
     setCategories([...categories, newCategoryName]);
     closeModal();
-    console.log('윤미래', categories);
   };
 
   const handleBookmarkAdd = async (categoryName) => {
@@ -171,10 +170,11 @@ const AllCategory = ({ setActiveTab }) => {
         />
         <Category
           setActiveTab={setActiveTab}
+          setCategoryId={setCategoryId}
+          setCateName={setCateName}
+          // categoryCounts={categoryCounts}
           setIsModalOpen={setIsModalOpen}
           setOpenDropdown={setOpenDropdown}
-          // categories={categories}
-          // setCategories={setCategories}
         />
       </CategoryDiv>
       {/* 카데고리 추가 모달 창 */}

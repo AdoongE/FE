@@ -11,29 +11,25 @@ const Category = ({
   setActiveTab,
   setCategoryId,
   setCateName,
-  categoryCounts,
+  // categoryCounts, // 이후에 메인페이지에서 가져옴
   setIsModalOpen,
   setOpenDropdown,
-  // categories,
-  // setCategories,
 }) => {
   const { categories, setCategories } = useCategories();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
   const [hoveredCategory, setHoveredCategory] = useState(false);
-  const [hoveredCategoryIndex] = useState(null);
-  // const [categories, setCategories] = useState([]);
+  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [bookmarks] = useState([]);
-  // const [draggingIndex, setDraggingIndex] = useState(null);
+  const [draggingIndex, setDraggingIndex] = useState(null);
   const [categoryIds, setCategoryIds] = useState([]);
   const [bookcateIds] = useState([]);
 
   const handleViewCategory = async (source) => {
-    console.log('당근당근', categories);
     if (source === 'click') {
       setIsCategoryOpen((prev) => {
         if (!prev) {
-          console.log('카테고리를 처음 열었따!'); // 삭제삭제
+          console.log('카테고리를 처음 열었따!');
         }
         return !prev;
       });
@@ -41,14 +37,11 @@ const Category = ({
 
     try {
       const response = await axiosInstance.get('/api/v1/category');
-      console.log('getgetget', response);
       const results = response.data.results;
       const ids = results.map((item) => item.categoryId);
       setCategoryIds(ids);
-      console.log('여기는????', categories);
       const names = results.map((item) => item.name);
       setCategories(names); // 카테고리 조회 연동
-      console.log('특강', categories);
 
       if (response.status === 200) {
         console.log('카테고리 조회 성공');
@@ -59,11 +52,6 @@ const Category = ({
       console.error('에러 발생:', error);
     }
   };
-
-  useEffect(() => {
-    handleViewCategory();
-    console.log('환경:', categories);
-  }, [categories]);
 
   // useEffect(() => {
   //   if (isAddingBookmark || isEditModalOpen || isDeleteModalOpen) {
@@ -82,39 +70,40 @@ const Category = ({
   };
 
   // 드래그 앤 드롭
-  // const onDragStart = (e, id, listType) => {
-  //   e.dataTransfer.effectAllowed = 'move';
-  //   e.dataTransfer.setData('index', String(id));
-  //   e.dataTransfer.setData('listType', listType);
-  //   setDraggingIndex(id);
-  // };
+  const onDragStart = (e, id, listType) => {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('index', String(id));
+    e.dataTransfer.setData('listType', listType);
+    setDraggingIndex(id);
+  };
 
-  // const onDragDrop = (e, dropIndex, listType) => {
-  //   e.preventDefault();
+  const onDragDrop = (e, dropIndex, listType) => {
+    e.preventDefault();
 
-  //   const sourceIndex = Number(e.dataTransfer.getData('index'));
-  //   const sourceListType = e.dataTransfer.getData('listType');
+    const sourceIndex = Number(e.dataTransfer.getData('index'));
+    const sourceListType = e.dataTransfer.getData('listType');
 
-  //   if (sourceIndex === dropIndex && sourceListType === listType) return;
+    if (sourceIndex === dropIndex && sourceListType === listType) return;
 
-  //   if (listType === 'categories') {
-  //     const updatedCategories = [...categories];
-  //     const [movedItem] = updatedCategories.splice(sourceIndex, 1);
-  //     updatedCategories.splice(dropIndex, 0, movedItem);
-  //     setCategories(updatedCategories);
-  //   } else if (listType === 'bookmarks') {
-  //     const updatedBookmarks = [...bookmarks];
-  //     const [movedItem] = updatedBookmarks.splice(sourceIndex, 1);
-  //     updatedBookmarks.splice(dropIndex, 0, movedItem);
-  //     setBookmarks(updatedBookmarks);
-  //   }
+    if (listType === 'categories') {
+      const updatedCategories = [...categories];
+      const [movedItem] = updatedCategories.splice(sourceIndex, 1);
+      updatedCategories.splice(dropIndex, 0, movedItem);
+      setCategories(updatedCategories);
+    }
+    // else if (listType === 'bookmarks') {
+    //   const updatedBookmarks = [...bookmarks];
+    //   const [movedItem] = updatedBookmarks.splice(sourceIndex, 1);
+    //   updatedBookmarks.splice(dropIndex, 0, movedItem);
+    //   setBookmarks(updatedBookmarks);
+    // }
 
-  //   setDraggingIndex(null);
-  // };
+    setDraggingIndex(null);
+  };
 
-  // const onDragOver = (e) => {
-  //   e.preventDefault();
-  // };
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
 
   const handleCategoryClick = (categoryName, listType) => {
     let categoryIndex, categoryId;
@@ -140,8 +129,7 @@ const Category = ({
   };
 
   useEffect(() => {
-    // handleViewCategory();
-    console.log('응????', categories);
+    handleViewCategory();
   }, []);
 
   return (
@@ -171,10 +159,17 @@ const Category = ({
               categories.map((category, index) => (
                 <CategoryItem
                   onClick={() => handleCategoryClick(category, 'category')}
-                  key={category}
+                  draggable
+                  onDragStart={(e) => onDragStart(e, index, 'categories')}
+                  onDragOver={onDragOver}
+                  onDrop={(e) => onDragDrop(e, index, 'categories')}
+                  active={draggingIndex === index}
+                  key={index}
+                  onMouseEnter={() => setHoveredCategoryIndex(index)}
+                  onMouseLeave={() => setHoveredCategoryIndex(null)}
                 >
                   {category}
-                  {` (${categoryCounts[category] || 0})`}
+                  {/* {` (${categoryCounts[category] || 0})`} */}
                   {hoveredCategoryIndex === index && (
                     <DotBox onClick={() => setOpenDropdown(index)}>
                       <MoreVertIcon />

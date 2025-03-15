@@ -42,7 +42,8 @@ const SideDiv = styled.div`
 `;
 
 const Line = styled.div`
-  margin-top: 13px;
+  margin-top: 10px;
+  margin-bottom: 24px;
   border-top: 1px solid var(--gray3);
 `;
 

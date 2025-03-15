@@ -9,6 +9,7 @@ import Dropdown from '../Dropdown/CategoryDropdown';
 import Bookmark from './Bookmark/index';
 import Category from './Category/index';
 import { useCategories } from '../CategoryContext';
+import { font } from 'styles/font';
 
 const AllCategory = ({ setActiveTab }) => {
   const { categories, setCategories } = useCategories();
@@ -26,7 +27,7 @@ const AllCategory = ({ setActiveTab }) => {
   const [openBookmarkDropdowns, setOpenBookmarkDropdowns] = useState({});
   // const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [, setIsAddingBookmark] = useState(false);
-  const [, setCategoryId] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
   const [, setCateName] = useState('');
 
   // useEffect(() => {
@@ -52,8 +53,8 @@ const AllCategory = ({ setActiveTab }) => {
   };
 
   const handleBookmarkAdd = async (categoryName) => {
-    const categoryIndex = categories.indexOf(categoryName);
-    const categoryId = categoryIds[categoryIndex];
+    // const categoryIndex = categories.indexOf(categoryName);
+    // const categoryId = categoryIds[categoryIndex];
 
     if (!bookmarks.includes(categoryName)) {
       setBookmarks([...bookmarks, categoryName]);
@@ -257,12 +258,9 @@ const AllCategory = ({ setActiveTab }) => {
 
 export default AllCategory;
 
-const CategoryDiv = styled.div`
-  margin-top: 1.458vw; /* 28px */
-`;
+const CategoryDiv = styled.div``;
 
 const CategoryP = styled.p`
-  font-size: 1.25vw; /* 24px */
-  font-weight: 600;
-  margin-left: 1.106vw; /* 2.125rem */
+  ${font.title2}
+  padding: 0 14px;
 `;

@@ -1,9 +1,16 @@
-import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Icon } from '@iconify/react';
 import { axiosInstance } from 'apis/axiosInstance';
+import {
+  Accordion,
+  AccordionTitle,
+  Icons,
+  RightArrowIcon,
+  CategoryList,
+  AccordionContent,
+  CategoryItem,
+  DotBox,
+} from '../style.ts';
 
 const Bookmark = ({
   setActiveTab,
@@ -125,125 +132,42 @@ const Bookmark = ({
   }, []);
 
   return (
-    <>
-      <CategoryDiv>
-        <Accordion>
-          <AccordionTitle onClick={handleViewBookmark}>
-            <Icons icon="meteor-icons:bookmark" />
-            북마크
-            <RightArrowIcon open={isBookmarkOpen} />
-          </AccordionTitle>
-          {isBookmarkOpen && (
-            <>
-              {bookmarks.length === 0 && (
-                <AccordionContent>북마크를 추가하세요.</AccordionContent>
-              )}
-              {bookmarks.map((bookmark, index) => (
-                <CategoryItem
-                  onClick={() => handleCategoryClick(bookmark, 'bookmark')}
-                  draggable
-                  onDragStart={(e) => onDragStart(e, index, 'bookmarks')}
-                  onDragOver={onDragOver}
-                  onDrop={(e) => onDragDrop(e, index, 'bookmarks')}
-                  active={draggingIndex === index}
-                  key={index}
-                  onMouseEnter={() => setHoveredBookmarkIndex(index)}
-                  onMouseLeave={() => setHoveredBookmarkIndex(null)}
-                >
-                  {bookmark}
-                  {/* {` (${categoryCounts[bookmark] || 0})`} */}
-                  {hoveredBookdmarkIndex === index && (
-                    <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
-                      <MoreVertIcon />
-                    </DotBox>
-                  )}
-                </CategoryItem>
-              ))}
-            </>
+    <Accordion>
+      <AccordionTitle onClick={handleViewBookmark}>
+        <Icons icon="meteor-icons:bookmark" />
+        북마크
+        <RightArrowIcon open={isBookmarkOpen} />
+      </AccordionTitle>
+      {isBookmarkOpen && (
+        <CategoryList>
+          {bookmarks.length === 0 && (
+            <AccordionContent>북마크를 추가하세요.</AccordionContent>
           )}
-        </Accordion>
-      </CategoryDiv>
-    </>
+          {bookmarks.map((bookmark, index) => (
+            <CategoryItem
+              onClick={() => handleCategoryClick(bookmark, 'bookmark')}
+              draggable
+              onDragStart={(e) => onDragStart(e, index, 'bookmarks')}
+              onDragOver={onDragOver}
+              onDrop={(e) => onDragDrop(e, index, 'bookmarks')}
+              active={draggingIndex === index}
+              key={index}
+              onMouseEnter={() => setHoveredBookmarkIndex(index)}
+              onMouseLeave={() => setHoveredBookmarkIndex(null)}
+            >
+              {bookmark}
+              {/* {` (${categoryCounts[bookmark] || 0})`} */}
+              {hoveredBookdmarkIndex === index && (
+                <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
+                  <MoreVertIcon />
+                </DotBox>
+              )}
+            </CategoryItem>
+          ))}
+        </CategoryList>
+      )}
+    </Accordion>
   );
 };
 
 export default Bookmark;
-
-const CategoryDiv = styled.div`
-  margin-top: 1.458vw; /* 28px */
-`;
-
-const Accordion = styled.div`
-  margin-top: 1.667vw; /* 32px */
-`;
-
-const AccordionTitle = styled.div`
-  margin: 0.521vw 1.094vw; /* 10px 21px */
-  font-size: 1.042vw; /* 20px */
-  font-weight: 600;
-  padding: 0.521vw 0; /* 10px 0 */
-  padding-left: 1.042vw; /* 20px */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  position: relative;
-  background-color: transparent;
-
-  &.category:hover {
-    background-color: #dcdada;
-    border-radius: 0.521vw; /* 10px */
-  }
-`;
-
-const Icons = styled(Icon)`
-  width: 1.25vw;
-  height: 1.25vw;
-  margin-right: 0.677vw; /* 13px */
-`;
-
-const RightArrowIcon = styled(KeyboardArrowRightIcon)`
-  transition: transform 0.3s;
-  transform: rotate(${({ open }) => (open ? '90deg' : '0deg')});
-  width: 1.25vw; /* 24px */
-  height: 1.25vw; /* 24px */
-  margin-left: 0.677vw; /* 13px */
-`;
-
-const AccordionContent = styled.div`
-  padding-bottom: 1.823vw; /* 35px */
-  font-size: 0.833vw; /* 16px */
-  color: #9f9f9f;
-  margin-left: 4.063vw; /* 78px */
-`;
-
-const CategoryItem = styled.button`
-  margin-bottom: 0.938vw; /* 18px */
-  margin: auto;
-  font-size: 1.042vw; /* 20px */
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: 2.917vw; /* 56px */
-  width: 15.781vw; /* 303px */
-  height: 2.292vw; /* 44px */
-  &:hover {
-    background-color: ${({ active }) => {
-      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
-    }};
-    border-radius: 0.521vw; /* 10px */
-  }
-`;
-
-const DotBox = styled.div`
-  width: 1.667vw; /* 32px */
-  height: 1.667vw; /* 32px */
-  background-color: #9f9f9f;
-  border-radius: 0.365vw; /* 7px */
-  margin-right: 0.417vw; /* 8px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;

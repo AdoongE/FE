@@ -68,7 +68,7 @@ export const AccordionContent = styled.div`
   ${font.body2}
   color: var(--gray2);
   margin-top: 5px;
-  margin-left: 26px;
+  margin-left: 40px;
 `;
 
 export const CategoryItem = styled.button`

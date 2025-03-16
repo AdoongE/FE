@@ -16,8 +16,9 @@ const Bookmark = ({
   setActiveTab,
   setCategoryId,
   setCateName,
-  // categoryCounts,
+  // categoryCounts, // 메인페이지에서 이후에
   setOpenBookmarkDropdowns,
+  setBookmarkIds,
 }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [hoveredBookdmarkIndex, setHoveredBookmarkIndex] = useState(null);
@@ -25,7 +26,7 @@ const Bookmark = ({
   const [bookmarks, setBookmarks] = useState([]);
   const [draggingIndex, setDraggingIndex] = useState(null);
   const [categoryIds] = useState([]);
-  const [, setBookmarkIds] = useState([]);
+  // const [, setBookmarkIds] = useState([]);
   const [bookcateIds, setBookcateIds] = useState([]);
 
   const handleViewBookmark = async () => {

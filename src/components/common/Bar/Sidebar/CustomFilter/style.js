@@ -22,6 +22,7 @@ export const CustomDiv = styled.div`
 export const FilterContent = styled.div`
   ${font.body2}
   color: var(--gray2);
+  padding: 0 10px;
 `;
 
 export const CustomList = styled.div`

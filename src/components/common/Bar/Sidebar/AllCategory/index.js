@@ -20,7 +20,7 @@ const AllCategory = ({ setActiveTab }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [categoryIds] = useState([]);
+  // const [categoryIds] = useState([]);
   const [bookmarkIds, setBookmarkIds] = useState([]);
   const [editIds, setEditIds] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -28,6 +28,7 @@ const AllCategory = ({ setActiveTab }) => {
   // const [isAddingBookmark, setIsAddingBookmark] = useState(false);
   const [, setIsAddingBookmark] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
+  const [categoryIds, setCategoryIds] = useState([]);
   const [, setCateName] = useState('');
 
   // useEffect(() => {
@@ -168,47 +169,34 @@ const AllCategory = ({ setActiveTab }) => {
           setActiveTab={setActiveTab}
           setIsModalOpen={setIsModalOpen}
           setOpenBookmarkDropdowns={setOpenBookmarkDropdowns}
+          setBookmarkIds={setBookmarkIds}
         />
         <Category
           setActiveTab={setActiveTab}
           setCategoryId={setCategoryId}
+          categoryIds={categoryIds}
+          setCategoryIds={setCategoryIds}
           setCateName={setCateName}
-          // categoryCounts={categoryCounts}
+          // categoryCounts={categoryCounts} // 이후 메인페이지
           setIsModalOpen={setIsModalOpen}
           setOpenDropdown={setOpenDropdown}
         />
       </CategoryDiv>
-      {/* 카데고리 추가 모달 창 */}
       {isModalOpen && (
         <AddCategoryModal
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleConfirm}
-          // categories={categories}
         />
       )}
-      {/* 편집 모달 창 */}
-      {categories.map((category) => (
-        <Dropdown
-          key={category}
-          categoryName={category}
-          onEditCategory={handleEditCategory}
+      {isEditModalOpen && (
+        <EditCategoryModal
+          isOpen={isEditModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          initialCategoryName={editCategoryName}
+          onConfirm={handleConfirmEdit}
+          categoryId={editIds}
         />
-      ))}
-      <EditCategoryModal
-        isOpen={isEditModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        initialCategoryName={editCategoryName}
-        onConfirm={handleConfirmEdit}
-        categoryId={editIds}
-      />
-      {/* 삭제 모달 창 */}
-      {categories.map((category) => (
-        <Dropdown
-          key={category}
-          categoryName={category}
-          onRemoveCategory={handleRemoveCategory}
-        />
-      ))}
+      )}
       {isDeleteModalOpen && (
         <RemoveCategoryModal
           isOpen={isDeleteModalOpen}
@@ -235,7 +223,7 @@ const AllCategory = ({ setActiveTab }) => {
         </>
       ))}
 
-      {bookmarks.map((bookmark, index) => (
+      {bookmarks?.map((bookmark, index) => (
         <>
           {openBookmarkDropdowns[index] && (
             <Dropdown

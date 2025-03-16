@@ -22,6 +22,8 @@ const Category = ({
   // categoryCounts, // 이후에 메인페이지에서 가져옴
   setIsModalOpen,
   setOpenDropdown,
+  categoryIds,
+  setCategoryIds,
 }) => {
   const { categories, setCategories } = useCategories();
 
@@ -30,7 +32,7 @@ const Category = ({
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [bookmarks] = useState([]);
   const [draggingIndex, setDraggingIndex] = useState(null);
-  const [categoryIds, setCategoryIds] = useState([]);
+  // const [categoryIds, setCategoryIds] = useState([]);
   const [bookcateIds] = useState([]);
 
   const handleViewCategory = async (source) => {

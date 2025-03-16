@@ -1,13 +1,24 @@
-import styled, { keyframes } from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import { axiosInstance } from 'apis/axiosInstance';
 import circleCheckIcon from 'assets/icons/circleCheck.png';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Icon } from '@iconify/react';
 import FilterDropdown from '../Dropdown/FilterDropdown';
 import TagFilterModal from '../Modal/TagFilterModal';
 // import { useCategories } from '../CategoryContext';
+import { AddButton, DotBox, Icons } from '../AllCategory/style';
+import {
+  CustomFilterContainer,
+  CustomUp,
+  CategoryP,
+  CustomDiv,
+  FilterContent,
+  CustomList,
+  CustomItem,
+  Right,
+  MessageBox,
+  CheckIcon,
+} from './style';
 
 const CustomFilter = ({ setActiveTab, setFilterId, setFilterName }) => {
   const [hoveredFilterIndex, setHoveredFilterIndex] = useState(null);
@@ -95,7 +106,7 @@ const CustomFilter = ({ setActiveTab, setFilterId, setFilterName }) => {
         <CategoryP>나의 맞춤 필터</CategoryP>
         {customFilter.length < 5 && (
           <AddButton className="filter" onClick={() => showModal()}>
-            <AddRoundedIcon fontSize="1.042vw;" />
+            <AddRoundedIcon />
           </AddButton>
         )}
       </CustomUp>
@@ -107,43 +118,41 @@ const CustomFilter = ({ setActiveTab, setFilterId, setFilterName }) => {
         )}
         {message && (
           <MessageBox>
-            <img
-              src={circleCheckIcon}
-              style={{ width: '3.49vw' }}
-              alt="circle check icon"
-            />
+            <CheckIcon src={circleCheckIcon} alt="circle check icon" />
             {message}
           </MessageBox>
         )}
-        {customFilter.map((condition, index) => (
-          <Custom
-            key={index}
-            onMouseEnter={() => setHoveredFilterIndex(index)}
-            onMouseLeave={() => setHoveredFilterIndex(null)}
-            onClick={() => CustomFilterClick(condition)}
-          >
-            <Icon icon="ri:align-left" width="1.25vw" height="1.25vw" />
-            <Right>
-              {condition}
-              {hoveredFilterIndex === index && (
-                <DotBox onClick={() => setOpenFilterDropdown(index)}>
-                  <MoreVertIcon />
-                </DotBox>
-              )}
-              {openFilterDropdown === index && (
-                <FilterDropdown
-                  isOpen={openFilterDropdown === index}
-                  onClose={() => setOpenFilterDropdown(null)}
-                  initialFilterName={condition}
-                  onEditFilter={(newName) => handleEditFilter(index, newName)}
-                  onRemoveFilter={() => handleRemoveFilter(index)}
-                  customFilter={customFilter}
-                  filterIds={customFilterIds}
-                />
-              )}
-            </Right>
-          </Custom>
-        ))}
+        <CustomList>
+          {customFilter.map((condition, index) => (
+            <CustomItem
+              key={index}
+              onMouseEnter={() => setHoveredFilterIndex(index)}
+              onMouseLeave={() => setHoveredFilterIndex(null)}
+              onClick={() => CustomFilterClick(condition)}
+            >
+              <Icons icon="ri:align-left" />
+              <Right>
+                {condition}
+                {hoveredFilterIndex === index && (
+                  <DotBox onClick={() => setOpenFilterDropdown(index)}>
+                    <MoreVertIcon />
+                  </DotBox>
+                )}
+                {openFilterDropdown === index && (
+                  <FilterDropdown
+                    isOpen={openFilterDropdown === index}
+                    onClose={() => setOpenFilterDropdown(null)}
+                    initialFilterName={condition}
+                    onEditFilter={(newName) => handleEditFilter(index, newName)}
+                    onRemoveFilter={() => handleRemoveFilter(index)}
+                    customFilter={customFilter}
+                    filterIds={customFilterIds}
+                  />
+                )}
+              </Right>
+            </CustomItem>
+          ))}
+        </CustomList>
       </CustomDiv>
       <TagFilterModal
         ref={dialogRef}
@@ -156,116 +165,3 @@ const CustomFilter = ({ setActiveTab, setFilterId, setFilterName }) => {
 };
 
 export default CustomFilter;
-
-const CustomFilterContainer = styled.div`
-  margin-top: 1.563vw; /* 30px */
-`;
-
-const CategoryP = styled.p`
-  font-size: 1.25vw; /* 24px */
-  font-weight: 600;
-  margin-left: 1.106vw; /* 2.125rem */
-`;
-
-const AddButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  right: 0.417vw; /* 8px */
-
-  &.category {
-    width: 1.667vw; /* 32px */
-    height: 1.667vw; /* 32px */
-    background-color: #9f9f9f;
-    border-radius: 0.365vw; /* 7px */
-    position: absolute;
-  }
-  &.filter {
-    position: absolute;
-    padding-right: 0.781vw; /* 15px */
-  }
-`;
-
-const DotBox = styled.div`
-  width: 1.667vw; /* 32px */
-  height: 1.667vw; /* 32px */
-  background-color: #9f9f9f;
-  border-radius: 0.365vw; /* 7px */
-  margin-right: 0.417vw; /* 8px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const CustomUp = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const CustomDiv = styled.div`
-  margin-top: 1.042vw; /* 20px */
-`;
-
-const FilterContent = styled.div`
-  font-size: 0.833vw; /* 16px */
-  font-family: 'Pretendard-Regular';
-  color: #9f9f9f;
-  margin-left: 1.615vw; /* 31px */
-`;
-
-const Custom = styled.div`
-  margin-left: 1.615vw; /* 31px */
-  font-size: 1.042vw; /* 20px */
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.677vw; /* 13px */
-  font-family: 'Pretendard-Regular';
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding-left: 0.365vw; /* 7px */
-  margin-right: 0.365vw; /* 7px */
-  height: 2.292vw; /* 44px */
-
-  &:hover {
-    background-color: ${({ active }) => {
-      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
-    }};
-    border-radius: 0.521vw; /* 10px */
-  }
-`;
-
-const Right = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-const fadeInOut = keyframes`
-  0% { opacity: 0; transform: translateY(-10px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-10px); }
-`;
-
-const MessageBox = styled.div`
-  position: fixed;
-  top: 13%; /* 12% */
-  left: 45%; /* 45% */
-  background-color: #f2f2f2;
-  color: #333;
-  font-size: 1.458vw; /* 28px */
-  border-radius: 0.625vw; /* 12px */
-  box-shadow: 0 0 0.26vw #4f4f4f; /* 0 0 5px */
-  z-index: 100000;
-  width: auto; /* 435px */
-  height: 3.49vw; /* 67px */
-  gap: 1.042vw; /* 20px */
-  padding: 0.833vw 2.604vw; /* 16px 50px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: ${fadeInOut} 2s forwards;
-`;

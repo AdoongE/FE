@@ -10,7 +10,7 @@ import {
   AccordionContent,
   CategoryItem,
   DotBox,
-} from '../style.ts';
+} from '../style';
 
 const Bookmark = ({
   setActiveTab,

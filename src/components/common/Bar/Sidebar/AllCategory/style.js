@@ -3,6 +3,11 @@ import { font } from 'styles/font';
 import { Icon } from '@iconify/react';
 import ArrowRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 
+export const CategoryP = styled.p`
+  ${font.title2}
+  padding: 0 14px;
+`;
+
 export const Accordion = styled.div``;
 
 export const AccordionTitle = styled.div`
@@ -28,7 +33,7 @@ export const Icons = styled(Icon)`
   height: 18px;
 `;
 
-export const RightArrowIcon = styled(ArrowRoundedIcon)<{ open: boolean }>`
+export const RightArrowIcon = styled(ArrowRoundedIcon)`
   transition: transform 0.3s;
   transform: rotate(${({ open }) => (open ? '270deg' : '180deg')});
   width: 14px;
@@ -39,16 +44,16 @@ export const AddButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 6px;
 
   &.category {
     background-color: #c5c5c5;
     border-radius: 4px;
     position: absolute;
+    right: 6px;
   }
   &.filter {
     position: absolute;
-    padding-right: 0.781vw;
+    right: 25px;
   }
 `;
 
@@ -62,7 +67,7 @@ export const CategoryList = styled.div`
 export const AccordionContent = styled.div`
   ${font.body2}
   color: var(--gray2);
-  margin-top: 12px;
+  margin-top: 5px;
   margin-left: 26px;
 `;
 
@@ -77,7 +82,7 @@ export const CategoryItem = styled.button`
   justify-content: space-between;
   width: 100%;
   padding: 6px;
-  padding-left: 34px;
+  padding-left: 40px;
   &:hover {
     background-color: ${({ active }) =>
       active ? 'rgba(188, 188, 188, 0.2)' : '#eaebeb'};
@@ -87,7 +92,7 @@ export const CategoryItem = styled.button`
 
 export const DotBox = styled.div`
   background-color: #c5c5c5;
-  border-radius: 0.365vw;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;

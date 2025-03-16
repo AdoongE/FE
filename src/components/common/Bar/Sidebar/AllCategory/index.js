@@ -9,7 +9,7 @@ import Dropdown from '../Dropdown/CategoryDropdown';
 import Bookmark from './Bookmark/index';
 import Category from './Category/index';
 import { useCategories } from '../CategoryContext';
-import { font } from 'styles/font';
+import { CategoryP } from './style';
 
 const AllCategory = ({ setActiveTab }) => {
   const { categories, setCategories } = useCategories();
@@ -259,8 +259,3 @@ const AllCategory = ({ setActiveTab }) => {
 export default AllCategory;
 
 const CategoryDiv = styled.div``;
-
-const CategoryP = styled.p`
-  ${font.title2}
-  padding: 0 14px;
-`;

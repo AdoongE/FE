@@ -11,6 +11,7 @@ export const GlobalStyle = createGlobalStyle`
     --gray2: #9F9F9F;
     --gray3: #DCDADA;
     --gray4: #F2F2F2;
+    --gray6: #F6F6F6;
     --sidebar: #F8FBFB;
   }
   html, body, #root {

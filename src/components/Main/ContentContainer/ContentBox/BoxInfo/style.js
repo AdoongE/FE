@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { font } from 'styles/font';
+import { Icon } from '@iconify/react';
 
 export const IconBox = styled.div`
   width: 20px;
@@ -56,7 +57,17 @@ export const CategoryDisplay = styled.div`
 `;
 
 export const MemoText = styled.div`
-  margin-top: 0.417vw; /* 8px */
-  font-size: 0.729vw; /* 14px */
-  color: #555;
+  margin-top: 4px;
+  ${font.body2}
+  color: var(--gray2);
+`;
+
+export const StyledIcon = styled(Icon).attrs((props) => ({
+  icon: props.icon || 'ic:round-link',
+}))`
+  width: 12px;
+  height: 12px;
+  color: white;
+  z-index: 2;
+  cursor: pointer;
 `;

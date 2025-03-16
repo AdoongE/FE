@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Icon } from '@iconify/react';
 import {
   CategoryDisplay,
   ContentName,
   ContentTitle,
   IconBox,
   MemoText,
+  StyledIcon,
   Tag,
   TagContainer,
 } from './style';
@@ -65,14 +65,8 @@ function BoxInfo({
       </TagContainer>
       <ContentTitle>
         <IconBox>
-          <Icon
-            icon={contentIcons[contentDateType] || 'ic:round-link'}
-            style={{
-              width: '12px',
-              height: '12px',
-              color: 'white',
-              zIndex: '2',
-            }}
+          <StyledIcon
+            icon={contentIcons[contentDateType]}
             onClick={handleIconClick}
           />
         </IconBox>

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Icon } from '@iconify/react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Open, Options, Text } from './style';
+import { Button, DotIcon, DropDownIcon, Open, Options, Text } from './style';
 import ContentDeleteModal from '../ContentDeleteModal';
 
 function ContentDropdown({ contentId, fetchData }) {
@@ -36,25 +35,12 @@ function ContentDropdown({ contentId, fetchData }) {
   return (
     <div>
       <Button onClick={handleKebabToggle} onBlur={handleKebabClose}>
-        <Icon
-          icon="pepicons-pencil:dots-y"
-          style={{
-            width: '18px',
-            height: '18px',
-          }}
-        />
+        <DotIcon icon="pepicons-pencil:dots-y" />
       </Button>
       {isKebabOpen && (
         <Open ref={optionsRef}>
           <Options onClick={handleDetail}>
-            <Icon
-              icon="tabler:dots"
-              style={{
-                width: '12px',
-                height: '12px',
-                color: '#4F4F4F',
-              }}
-            />
+            <DropDownIcon icon="tabler:dots" />
             <Text>세부 정보 보기</Text>
           </Options>
           <div>
@@ -65,14 +51,7 @@ function ContentDropdown({ contentId, fetchData }) {
                 showModal();
               }}
             >
-              <Icon
-                icon="mage:trash"
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  color: '#4F4F4F',
-                }}
-              />
+              <DropDownIcon icon="mage:trash" />
               <Text>삭제하기</Text>
             </Options>
           </div>

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { font } from 'styles/font';
+import { Icon } from '@iconify/react';
 
 export const Text = styled.div`
   margin-left: 11px;
@@ -36,4 +37,15 @@ export const Open = styled.div`
   background-color: white;
   color: #4f4f4f;
   padding: 6px 0px;
+`;
+
+export const DropDownIcon = styled(Icon)`
+  width: 12px;
+  height: 12px;
+  color: #4f4f4f;
+`;
+
+export const DotIcon = styled(Icon)`
+  width: '18px';
+  height: 18px;
 `;

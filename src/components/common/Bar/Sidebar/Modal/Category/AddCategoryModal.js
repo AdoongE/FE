@@ -15,7 +15,7 @@ import {
   Input,
   ButtonContainer,
   ModalButton,
-} from './style';
+} from '../style';
 
 export const AddCategoryModal = ({ onClose, onConfirm }) => {
   const { categories } = useCategories();

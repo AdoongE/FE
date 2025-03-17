@@ -11,7 +11,7 @@ import {
   Input,
   ButtonContainer,
   ModalButton,
-} from './style';
+} from '../style';
 
 export const EditCategoryModal = ({
   isOpen,

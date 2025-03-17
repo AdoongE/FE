@@ -8,7 +8,7 @@ import {
   ModalText,
   ButtonContainer,
   ModalButton,
-} from './style';
+} from '../style';
 
 export const RemoveCategoryModal = ({
   isOpen,

@@ -115,3 +115,12 @@ export const ModalText = styled.h2`
   margin-bottom: 37px;
   text-align: center;
 `;
+
+export const ModalDelTitle = styled.h2`
+  ${font.title0}
+  padding-top: 42px;
+  margin-top: 0px;
+  margin-bottom: 62px;
+  display: flex;
+  justify-content: center;
+`;

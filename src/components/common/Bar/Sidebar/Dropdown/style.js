@@ -12,6 +12,11 @@ export const DropdownMenu = styled.ul`
     `calc(${Math.max(12.396, categoryLength * 1.083 + 4.167)}vw)`};
   box-shadow: 0 0 9px #dfdfdf;
   padding: 4px;
+  &.filter {
+    left: 365px;
+    transform: translate(-50%, -5%);
+    width: 148px;
+  }
 `;
 
 export const DropdownItem = styled.li`

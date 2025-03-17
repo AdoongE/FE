@@ -2,39 +2,38 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { axiosInstance } from '../../../../../apis/axiosInstance';
+import { font } from 'styles/font';
+import { axiosInstance } from 'apis/axiosInstance';
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  left: 22.396vw; /* 430px */
+  left: 365px;
   transform: translate(-50%, -5%);
   background-color: white;
-  border-radius: 0.521vw; /* 10px */
-  list-style: none;
+  border-radius: 8px;
   z-index: 1;
-  width: 10.417vw; /* 200px */
-  box-shadow: 0 0 0.417vw #dfdfdf; /* 8px */
+  width: 148px;
+  box-shadow: 0 0 9px #dfdfdf;
+  padding: 4px;
 `;
 
 const DropdownItem = styled.li`
-  padding-left: 0.781vw; /* 15px */
-  margin: 0.469vw 0.365vw; /* 9px 7px */
-  border-radius: 0.521vw; /* 10px */
+  ${font.body2}
+  padding: 9px 6px;
+  border-radius: 4px;
   cursor: pointer;
-  height: 1.823vw; /* 35px */
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 12px;
   &:hover {
-    background-color: rgba(188, 188, 188, 0.5);
+    background-color: #ededed;
   }
-  font-size: 0.938vw; /* 18px */
 `;
 
 const Icons = styled(Icon)`
-  width: 1.25vw; /* 24px */
-  height: 1.25vw; /* 24px */
-  margin-right: 0.885vw; /* 17px */
+  width: 16px;
+  height: 16px;
 `;
 
 const ModalOverlay = styled.div`

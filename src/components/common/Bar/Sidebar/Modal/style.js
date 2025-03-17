@@ -19,7 +19,6 @@ export const ModalContent = styled.div`
   background-color: white;
   border-radius: 36px;
   width: 542px;
-  /* height: 19.323vw; */
 `;
 
 export const ModalDiv = styled.div`
@@ -41,6 +40,11 @@ export const ModalTitle = styled.h2`
   font-size: 24px;
   font-weight: 600;
   margin: 0;
+  &.remove {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const Icons = styled(Icon)`
@@ -91,4 +95,23 @@ export const ModalButton = styled.button`
     background-color: var(--gray4);
     color: black;
   }
+  &.remove-ok {
+    background-color: var(--green2);
+    color: white;
+    border-radius: 8px;
+    padding: 10.5px 32px;
+  }
+  &.remove-no {
+    background-color: var(--gray4);
+    color: black;
+    border-radius: 8px;
+    padding: 10.5px 32px;
+  }
+`;
+
+export const ModalText = styled.h2`
+  ${font.title3}
+  color: var(--gray1);
+  margin-bottom: 37px;
+  text-align: center;
 `;

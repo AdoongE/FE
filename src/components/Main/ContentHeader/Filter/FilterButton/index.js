@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button } from './stlye';
-import filterIcon from '../../../../../assets/icons/filter.png';
+import { Button } from './style';
+import { Icon } from '@iconify/react';
 
 function FilterButton({ onClick }) {
   return (
     <Button onClick={onClick}>
-      <img src={filterIcon} alt="Filter" />
+      <Icon icon="mdi:filter-variant" className="filter-icon" />
       검색 필터
     </Button>
   );

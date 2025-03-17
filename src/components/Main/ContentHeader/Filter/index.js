@@ -1,13 +1,22 @@
 import React from 'react';
 import { FilterContainer } from './style';
 import FilterButton from './FilterButton';
-import FilterTags from './FilterTags';
+import Tags from './Tags';
+import useFilterStore from '../../../../store/useFilterStore';
 
-function Filter({ tags, setTags, onFilterClick }) {
+function Filter() {
+  const { tags, setTags, isFilterVisible, toggleFilterVisibility } =
+    useFilterStore();
+
   return (
     <FilterContainer>
-      <FilterButton onClick={onFilterClick} />
-      <FilterTags tags={tags} setTags={setTags} />
+      <FilterButton onClick={toggleFilterVisibility} />
+      {isFilterVisible && (
+        <Tags
+          tags={tags}
+          onRemoveTag={(tag) => setTags(tags.filter((t) => t !== tag))}
+        />
+      )}
     </FilterContainer>
   );
 }

@@ -6,32 +6,34 @@ import {
   DropdownItem,
 } from '../style';
 import { Icon } from '@iconify/react';
+import useDropdownStore from '../../../../../store/useDropdownStore';
 
-function SortDropdown({ setSortOrder }) {
+function SortDropdown() {
+  const { sortOrder, setSortOrder } = useDropdownStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('정렬');
-
-  const handleSelect = (option) => {
-    setSelectedOption(option);
-    setSortOrder(option);
-    setIsOpen(false);
-  };
 
   return (
-    <DropdownContainer>
-      <DropdownButton onClick={() => setIsOpen(!isOpen)}>
-        {selectedOption}
-        <Icon
-          icon="uil:angle-down"
-          style={{ fontSize: '18px', color: 'var(--gray2)' }}
-        />
+    <DropdownContainer onClick={(e) => e.stopPropagation()}>
+      <DropdownButton onClick={() => setIsOpen(!isOpen)} width="106px">
+        {sortOrder}
+        <Icon icon="uil:angle-down" className="dropdown-icon" />
       </DropdownButton>
       {isOpen && (
         <DropdownMenu>
-          <DropdownItem onClick={() => handleSelect('최신순')}>
+          <DropdownItem
+            onClick={() => {
+              setSortOrder('최신순');
+              setIsOpen(false);
+            }}
+          >
             최신순
           </DropdownItem>
-          <DropdownItem onClick={() => handleSelect('이름순')}>
+          <DropdownItem
+            onClick={() => {
+              setSortOrder('이름순');
+              setIsOpen(false);
+            }}
+          >
             이름순
           </DropdownItem>
         </DropdownMenu>

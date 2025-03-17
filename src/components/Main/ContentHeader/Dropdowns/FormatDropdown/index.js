@@ -6,36 +6,52 @@ import {
   DropdownItem,
 } from '../style';
 import { Icon } from '@iconify/react';
+import useDropdownStore from '../../../../../store/useDropdownStore';
 
-function FormatDropdown({ setSelectedFormat }) {
+function FormatDropdown() {
+  const { selectedFormat, setSelectedFormat } = useDropdownStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('저장형식');
-
-  const handleSelect = (option) => {
-    setSelectedOption(option);
-    setSelectedFormat(option);
-    setIsOpen(false);
-  };
 
   return (
-    <DropdownContainer>
-      <DropdownButton onClick={() => setIsOpen(!isOpen)}>
-        {selectedOption}
-        <Icon
-          icon="uil:angle-down"
-          style={{ fontSize: '18px', color: 'var(--gray2)' }}
-        />
+    <DropdownContainer onClick={(e) => e.stopPropagation()}>
+      <DropdownButton onClick={() => setIsOpen(!isOpen)} width="137px">
+        {selectedFormat}
+        <Icon icon="uil:angle-down" className="dropdown-icon" />
       </DropdownButton>
       {isOpen && (
         <DropdownMenu>
-          <DropdownItem onClick={() => handleSelect('전체보기')}>
+          <DropdownItem
+            onClick={() => {
+              setSelectedFormat('전체보기');
+              setIsOpen(false);
+            }}
+          >
             전체보기
           </DropdownItem>
-          <DropdownItem onClick={() => handleSelect('링크')}>링크</DropdownItem>
-          <DropdownItem onClick={() => handleSelect('이미지')}>
+          <DropdownItem
+            onClick={() => {
+              setSelectedFormat('링크');
+              setIsOpen(false);
+            }}
+          >
+            링크
+          </DropdownItem>
+          <DropdownItem
+            onClick={() => {
+              setSelectedFormat('이미지');
+              setIsOpen(false);
+            }}
+          >
             이미지
           </DropdownItem>
-          <DropdownItem onClick={() => handleSelect('PDF')}>PDF</DropdownItem>
+          <DropdownItem
+            onClick={() => {
+              setSelectedFormat('PDF');
+              setIsOpen(false);
+            }}
+          >
+            PDF
+          </DropdownItem>
         </DropdownMenu>
       )}
     </DropdownContainer>

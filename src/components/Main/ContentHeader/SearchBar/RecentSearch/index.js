@@ -22,7 +22,7 @@ function RecentSearch({ setKeyword, fetchSearchResults }) {
       {recentSearches.map((search, index) => (
         <RecentSearchItem key={index}>
           <button onClick={() => handleRecentSearchClick(search.query)}>
-            <Icon icon="ion:search-outline" className="search-icon" />
+            <Icon icon="iconamoon:search" className="search-icon" />
             {search.query}
           </button>
           <div>

@@ -5,7 +5,6 @@ export const SearchButtonContainer = styled.button`
   height: 36px;
   border: 0;
   border-radius: 18.75px;
-  border: 0.75px solid var --grey;
   background-color: #f2f2f2;
   font-size: 0.833vw;
   font-weight: 500;

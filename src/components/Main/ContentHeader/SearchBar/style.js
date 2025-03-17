@@ -1,33 +1,40 @@
 import styled from 'styled-components';
 
 export const SearchContainer = styled.div`
-  width: 25.677vw;
-  height: 2.604vw;
-  border-radius: 1.302vw;
-  margin-right: 2.604vw;
-  border: 0.052vw solid #9f9f9f;
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  width: 400px;
+  height: 42.5px;
+  border-radius: 25px;
+  right: 20px;
+  background: rgba(242, 242, 242, 0.3);
+  border: 1px solid var(--gray4);
   position: relative;
 
   .search-icon {
-    width: 1.25vw;
-    height: 1.25vw;
-    margin-left: 0.781vw;
+    width: 24px;
+    height: 24px;
     color: black;
   }
 `;
 
+export const SearchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  padding: 15px;
+`;
+
 export const Search = styled.input`
-  width: 15.625vw;
   border: none;
-  text-align: start;
-  font-size: 1.302vw;
+  background: transparent;
+  font-size: 14px;
+  width: 100%;
+  padding-left: 13px;
 
   &::placeholder {
-    font-size: 0.938vw;
-    color: #9f9f9f;
+    font-size: 14px;
+    color: var(--gray2);
   }
 
   &:focus {
@@ -36,15 +43,18 @@ export const Search = styled.input`
 `;
 
 export const SearchButton = styled.button`
-  width: 5.729vw;
-  height: 2.083vw;
-  border: 0;
-  border-radius: 2.101vw;
-  background-color: #f2f2f2;
-  font-size: 0.833vw;
+  width: 90px;
+  height: 34px;
+  border: none;
+  border-radius: 17px;
+  background: var(--gray4);
+  font-size: 14px;
   font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  color: var(--gray2);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  margin-right: 5px;
 `;

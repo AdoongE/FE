@@ -6,17 +6,17 @@ export const RecentSearchList = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: white;
-  border: 1px solid #dcdcdc;
-  border-radius: 5px;
-  width: 250px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 8px;
+  width: 350px;
   z-index: 10;
   height: auto;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
 
   .title {
-    font-weight: bold;
-    font-size: 11px;
-    padding: 11px;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 15px;
     position: relative;
 
     &:after {
@@ -35,21 +35,36 @@ export const RecentSearchItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 11px;
+  padding: 10px 13px;
   font-size: 10px;
-  color: #666;
+  color: var(--gray2);
+  border: none;
+
+  .search-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--gray2);
+  }
+
+  & > button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    cursor: pointer;
+  }
 
   & > div {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 3px;
+    gap: 7px;
   }
 `;
 
 export const DeleteButton = styled.button`
-  background: none;
-  border: none;
+  all: unset;
   font-size: 9px;
   cursor: pointer;
 `;

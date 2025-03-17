@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
-import { SearchContainer, Search, SearchButton } from './style';
+import { SearchContainer, SearchWrapper, Search, SearchButton } from './style';
 import RecentSearch from './RecentSearch';
 
 function SearchBar({ setKeyword, fetchSearchResults }) {
@@ -17,15 +17,17 @@ function SearchBar({ setKeyword, fetchSearchResults }) {
 
   return (
     <SearchContainer>
-      <Icon icon="stash:search-solid" className="search-icon" />
-      <Search
-        placeholder="찾고 싶은 콘텐츠를 검색하세요."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onKeyPress={handleSearchKeyPress}
-        onFocus={() => setShowRecentSearches(true)}
-        onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)}
-      />
+      <SearchWrapper>
+        <Icon icon="iconamoon:search" className="search-icon" />
+        <Search
+          placeholder="찾고 싶은 콘텐츠를 검색하세요."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyPress={handleSearchKeyPress}
+          onFocus={() => setShowRecentSearches(true)}
+          onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)}
+        />
+      </SearchWrapper>
       <SearchButton
         type="button"
         onClick={() => dialogRef.current?.showModal()}

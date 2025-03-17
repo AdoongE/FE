@@ -4,7 +4,7 @@ export const NavbarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 84px;
+  height: 118px;
   box-shadow: 0px 0px 7.5px 1.5px rgba(0, 0, 0, 0.07);
   position: fixed;
   width: 100%;
@@ -37,7 +37,7 @@ export const NavbarMenu = styled.div`
 `;
 
 export const MenuButton = styled.button`
-  font-size: 20px;
+  font-size: 26px;
   margin-right: 80px;
   background: transparent;
   border: none;
@@ -48,10 +48,10 @@ export const MenuButton = styled.button`
 
 export const ActiveBar = styled.div`
   position: absolute;
-  width: 78px;
+  width: 100px;
   height: 8px;
   background-color: #41c3ab;
-  top: 50px;
+  top: 70px;
   left: ${({ left }) => left}vw;
   transition:
     width 0.3s ease,

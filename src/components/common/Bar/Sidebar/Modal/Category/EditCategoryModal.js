@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { axiosInstance } from '../../../../../apis/axiosInstance';
+import { axiosInstance } from 'apis/axiosInstance';
 import {
   ModalOverlay,
   ModalContent,

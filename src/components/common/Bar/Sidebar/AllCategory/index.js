@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { axiosInstance } from 'apis/axiosInstance';
-import AddCategoryModal from '../Modal/AddCategoryModal';
-import EditCategoryModal from '../Modal/EditCategoryModal';
-import RemoveCategoryModal from '../Modal/RemoveCategoryModal';
+import AddCategoryModal from '../Modal/Category/AddCategoryModal';
+import EditCategoryModal from '../Modal/Category/EditCategoryModal';
+import RemoveCategoryModal from '../Modal/Category/RemoveCategoryModal';
 import Dropdown from '../Dropdown/CategoryDropdown';
 
 import Bookmark from './Bookmark/index';

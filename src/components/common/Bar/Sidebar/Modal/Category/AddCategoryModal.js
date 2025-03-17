@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { PublicToggle } from '../Toggle/PublicCategoryToggle';
+import { PublicToggle } from '../../Toggle/PublicCategoryToggle';
 import { axiosInstance } from 'apis/axiosInstance';
 // import { useCategories } from 'Bar/Sidebar/CategoryContext';
-import { useCategories } from '../CategoryContext';
+import { useCategories } from '../../CategoryContext';
 import {
   ModalOverlay,
   ModalContent,

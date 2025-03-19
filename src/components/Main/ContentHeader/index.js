@@ -3,7 +3,7 @@ import { HeaderContainer, Title, DropdownAndSearch } from './style';
 import SearchBar from './SearchBar';
 import Dropdowns from './Dropdowns';
 import Filter from './Filter';
-import Tags from './Tags';
+import Tags from './Filter/Tags';
 
 import useSearchStore from '../../../store/useSearchStore';
 import useDropdownStore from '../../../store/useDropdownStore';

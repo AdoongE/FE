@@ -22,10 +22,10 @@ export const DropdownButton = styled.button`
   background: white;
   border: 1px solid var(--gray3);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--gray2);
   cursor: pointer;
-  padding: 12px 16px;
+  padding: 8px 16px;
 
   width: ${(props) => (props.$isSort ? '106px' : '137px')}
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);

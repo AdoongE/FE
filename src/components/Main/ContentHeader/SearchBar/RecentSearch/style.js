@@ -15,7 +15,7 @@ export const RecentSearchList = styled.div`
 
   .title {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 16px;
     padding: 15px;
     position: relative;
 
@@ -36,7 +36,7 @@ export const RecentSearchItem = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 13px;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--gray2);
   border: none;
 
@@ -65,6 +65,6 @@ export const RecentSearchItem = styled.div`
 
 export const DeleteButton = styled.button`
   all: unset;
-  font-size: 9px;
+  font-size: 12px;
   cursor: pointer;
 `;

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
   position: fixed;
-  top: 118px;
+  top: 84px;
   left: 320px;
   right: 0;
   width: auto;
@@ -11,7 +11,7 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 44px;
+  font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
 

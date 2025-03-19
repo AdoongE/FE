@@ -3,8 +3,8 @@ import styled from 'styled-components';
 export const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 400px;
-  height: 42.5px;
+  width: 370px;
+  height: 36px;
   border-radius: 25px;
   right: 20px;
   background: rgba(242, 242, 242, 0.3);
@@ -28,12 +28,12 @@ export const SearchWrapper = styled.div`
 export const Search = styled.input`
   border: none;
   background: transparent;
-  font-size: 14px;
+  font-size: 12px;
   width: 100%;
   padding-left: 13px;
 
   &::placeholder {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--gray2);
   }
 
@@ -43,12 +43,12 @@ export const Search = styled.input`
 `;
 
 export const SearchButton = styled.button`
-  width: 90px;
-  height: 34px;
+  width: 78px;
+  height: 28px;
   border: none;
   border-radius: 17px;
   background: var(--gray4);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--gray2);
   cursor: pointer;

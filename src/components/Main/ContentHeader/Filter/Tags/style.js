@@ -5,7 +5,6 @@ export const TagsContainer = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   padding: 8px;
-  background: var(--gray4);
   border-radius: 8px;
 `;
 

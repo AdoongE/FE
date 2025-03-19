@@ -93,9 +93,6 @@ function Navbar() {
           onClick={() => navigate('/mypage')}
         />
       </NavbarRight>
-
-      {/* 모달 컴포넌트 임시 주석 처리 */}
-      {/* <CheckboxModal ref={dialogRef} /> */}
     </NavbarContainer>
   );
 }

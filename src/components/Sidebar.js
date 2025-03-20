@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import seedIcon from '../assets/icons/seed_sidebar.png';
 import reminderIcon from '../assets/icons/reminder_sidebar.png';
 import circleCheckIcon from '../assets/icons/circleCheck.png';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import ArrowRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Dropdown from '../components/dropdown/CategoryDropdown';
@@ -14,6 +14,7 @@ import EditCategoryModal from '../components/modal/EditCategoryModal';
 import RemoveCategoryModal from '../components/modal/RemoveCategoryModal';
 import TagFilterModal from '../components/modal/TagFilterModal';
 import { axiosInstance } from './api/axios-instance';
+import { font } from '../styles/font';
 
 const Sidebar = ({
   setCategoryId,
@@ -394,27 +395,18 @@ const Sidebar = ({
             active={activeTab === '나의 씨드'}
             onClick={() => handleTabClick('나의 씨드')}
           >
-            <ImgIcon
-              src={seedIcon}
-              alt="seed icon"
-              width="1.25vw"
-              height="1.25vw"
-            />
+            <ImgIcon src={seedIcon} alt="seed icon" />
             나의 씨드
           </CollectBtn>
           <ManageBtn
             active={activeTab === '리마인더'}
             onClick={() => handleTabClick('리마인더')}
           >
-            <ImgIcon
-              src={reminderIcon}
-              alt="reminder icon"
-              width="1.25vw"
-              height="1.25vw"
-            />
+            <ImgIcon src={reminderIcon} alt="reminder icon" />
             리마인더
           </ManageBtn>
         </BtnDiv>
+        <Line />
         <CategoryDiv>
           <CategoryP>모든 카테고리 ({categoryIds.length})</CategoryP>
           <Accordion>
@@ -424,7 +416,7 @@ const Sidebar = ({
               <RightArrowIcon open={isBookmarkOpen} />
             </AccordionTitle>
             {isBookmarkOpen && (
-              <>
+              <CategoryList>
                 {bookmarks.length === 0 && (
                   <AccordionContent>북마크를 추가하세요.</AccordionContent>
                 )}
@@ -462,7 +454,7 @@ const Sidebar = ({
                     )}
                   </CategoryItem>
                 ))}
-              </>
+              </CategoryList>
             )}
 
             <AccordionTitle
@@ -485,7 +477,7 @@ const Sidebar = ({
                 {categories.length === 0 && (
                   <AccordionContent>카테고리를 생성하세요.</AccordionContent>
                 )}
-                <>
+                <CategoryList>
                   {categories.map((category, index) => (
                     <CategoryItem
                       onClick={() => handleCategoryClick(category, 'category')}
@@ -518,7 +510,7 @@ const Sidebar = ({
                       )}
                     </CategoryItem>
                   ))}
-                </>
+                </CategoryList>
               </>
             )}
           </Accordion>
@@ -564,13 +556,13 @@ const Sidebar = ({
           />
         )}
         {/* 맞춤 필터 */}
-        <Line></Line>
+        <Line />
         <CustomFilter>
           <CustomUp>
             <CategoryP>나의 맞춤 필터</CategoryP>
             {customFilter.length < 5 && (
               <AddButton className="filter" onClick={() => showModal()}>
-                <AddRoundedIcon fontSize="1.042vw;" />
+                <AddRoundedIcon />
               </AddButton>
             )}
           </CustomUp>
@@ -582,45 +574,43 @@ const Sidebar = ({
             )}
             {message && (
               <MessageBox>
-                <img
-                  src={circleCheckIcon}
-                  style={{ width: '3.49vw' }}
-                  alt="circle check icon"
-                />
+                <CheckIcon src={circleCheckIcon} alt="circle check icon" />
                 {message}
               </MessageBox>
             )}
-            {customFilter.map((condition, index) => (
-              <Custom
-                key={index}
-                onMouseEnter={() => setHoveredFilterIndex(index)}
-                onMouseLeave={() => setHoveredFilterIndex(null)}
-                onClick={() => CustomFilterClick(condition)}
-              >
-                <Icon icon="ri:align-left" width="1.25vw" height="1.25vw" />
-                <Right>
-                  {condition}
-                  {hoveredFilterIndex === index && (
-                    <DotBox onClick={() => setOpenFilterDropdown(index)}>
-                      <MoreVertIcon />
-                    </DotBox>
-                  )}
-                  {openFilterDropdown === index && (
-                    <FilterDropdown
-                      isOpen={openFilterDropdown === index}
-                      onClose={() => setOpenFilterDropdown(null)}
-                      initialFilterName={condition}
-                      onEditFilter={(newName) =>
-                        handleEditFilter(index, newName)
-                      }
-                      onRemoveFilter={() => handleRemoveFilter(index)}
-                      customFilter={customFilter}
-                      filterIds={customFilterIds}
-                    />
-                  )}
-                </Right>
-              </Custom>
-            ))}
+            <CustomList>
+              {customFilter.map((condition, index) => (
+                <CustomItem
+                  key={index}
+                  onMouseEnter={() => setHoveredFilterIndex(index)}
+                  onMouseLeave={() => setHoveredFilterIndex(null)}
+                  onClick={() => CustomFilterClick(condition)}
+                >
+                  <Icon icon="ri:align-left" width="1.25vw" height="1.25vw" />
+                  <Right>
+                    {condition}
+                    {hoveredFilterIndex === index && (
+                      <DotBox onClick={() => setOpenFilterDropdown(index)}>
+                        <MoreVertIcon />
+                      </DotBox>
+                    )}
+                    {openFilterDropdown === index && (
+                      <FilterDropdown
+                        isOpen={openFilterDropdown === index}
+                        onClose={() => setOpenFilterDropdown(null)}
+                        initialFilterName={condition}
+                        onEditFilter={(newName) =>
+                          handleEditFilter(index, newName)
+                        }
+                        onRemoveFilter={() => handleRemoveFilter(index)}
+                        customFilter={customFilter}
+                        filterIds={customFilterIds}
+                      />
+                    )}
+                  </Right>
+                </CustomItem>
+              ))}
+            </CustomList>
           </CustomDiv>
         </CustomFilter>
         <TagFilterModal
@@ -640,8 +630,9 @@ const StMainPage = styled.div`
 
 const SideDiv = styled.div`
   height: 100vh;
-  width: 18.28125vw;
-  background-color: #f8fbfb;
+  width: 262px;
+  padding: 0 16px;
+  background-color: var(--sidebar);
   display: inline-block;
   position: relative;
 `;
@@ -650,153 +641,137 @@ const BtnDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-bottom: 0.052vw solid #dcdada; /* 1px */
-  margin-top: 10.4167vw;
-  margin-left: 1.042vw; /* 20px */
-  margin-right: 1.042vw; /* 20px */
-  padding-bottom: 0.469vw; /* 9px */
+  margin-top: 143px;
+  gap: 7px;
 `;
 
 const Button = styled.button`
-  width: 15.781vw; /* 303px */
-  height: 2.917vw; /* 56px */
-  border-radius: 0.521vw; /* 10px */
+  width: 100%;
+  padding: 14px 12px;
+  gap: 12px;
+  border-radius: 8px;
   border: none;
   background-color: ${({ active }) => (active ? '#def3f1' : 'transparent')};
+  ${({ active }) => (active ? font.title2 : font.title3)}
   display: inline-flex;
   align-items: center;
-  font-size: 1.042vw; /* 20px */
-  font-weight: 500;
   position: relative;
-  padding-left: 0.99vw; /* 19px */
-  margin-bottom: 0.208vw; /* 4px */
 `;
 
 const CollectBtn = styled(Button)``;
 const ManageBtn = styled(Button)``;
 
 const ImgIcon = styled.img`
-  width: 1.25vw;
-  height: 1.25vw;
-  margin-right: 0.521vw; /* 10px */
+  width: 18px;
+  height: 18px;
   position: relative;
   left: 0;
 `;
 
-const CategoryDiv = styled.div`
-  margin-top: 1.458vw; /* 28px */
-`;
+const CategoryDiv = styled.div``;
 
 const CategoryP = styled.p`
-  font-size: 1.25vw; /* 24px */
-  font-weight: 600;
-  margin-left: 1.106vw; /* 2.125rem */
+  ${font.title2}
+  padding: 0 14px;
 `;
 
-const Accordion = styled.div`
-  margin-top: 1.667vw; /* 32px */
-`;
+const Accordion = styled.div``;
 
 const AccordionTitle = styled.div`
-  margin: 0.521vw 1.094vw; /* 10px 21px */
-  font-size: 1.042vw; /* 20px */
-  font-weight: 600;
-  padding: 0.521vw 0; /* 10px 0 */
-  padding-left: 1.042vw; /* 20px */
+  ${font.title3}
   cursor: pointer;
   display: flex;
   align-items: center;
   position: relative;
   background-color: transparent;
+  gap: 8px;
+  padding: 9px;
+  padding-left: 14px;
+  padding-right: 6px;
 
   &.category:hover {
-    background-color: #dcdada;
-    border-radius: 0.521vw; /* 10px */
+    background-color: #eaebeb;
+    border-radius: 8px;
   }
 `;
 
 const Icons = styled(Icon)`
-  width: 1.25vw;
-  height: 1.25vw;
-  margin-right: 0.677vw; /* 13px */
+  width: 18px;
+  height: 18px;
 `;
 
-const RightArrowIcon = styled(KeyboardArrowRightIcon)`
+const RightArrowIcon = styled(ArrowRoundedIcon)`
   transition: transform 0.3s;
-  transform: rotate(${({ open }) => (open ? '90deg' : '0deg')});
-  width: 1.25vw; /* 24px */
-  height: 1.25vw; /* 24px */
-  margin-left: 0.677vw; /* 13px */
+  transform: rotate(${({ open }) => (open ? '270deg' : '180deg')});
+  width: 14px;
+  height: 14px;
 `;
 
 const AddButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 0.417vw; /* 8px */
 
   &.category {
-    width: 1.667vw; /* 32px */
-    height: 1.667vw; /* 32px */
-    background-color: #9f9f9f;
-    border-radius: 0.365vw; /* 7px */
+    background-color: #c5c5c5;
+    border-radius: 4px;
     position: absolute;
+    right: 6px;
   }
   &.filter {
     position: absolute;
-    padding-right: 0.781vw; /* 15px */
+    right: 25px;
   }
 `;
 
+const CategoryList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 14px;
+`;
+
 const AccordionContent = styled.div`
-  padding-bottom: 1.823vw; /* 35px */
-  font-size: 0.833vw; /* 16px */
-  color: #9f9f9f;
-  margin-left: 4.063vw; /* 78px */
+  ${font.body2}
+  color: var(--gray2);
+  margin-top: 5px;
+  margin-left: 40px;
 `;
 
 const CategoryItem = styled.button`
-  margin-bottom: 0.938vw; /* 18px */
+  ${font.title4}
   margin: auto;
-  font-size: 1.042vw; /* 20px */
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 2.917vw; /* 56px */
-  width: 15.781vw; /* 303px */
-  height: 2.292vw; /* 44px */
+  width: 100%;
+  padding: 6px;
+  padding-left: 40px;
   &:hover {
-    background-color: ${({ active }) => {
-      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
-    }};
-    border-radius: 0.521vw; /* 10px */
+    background-color: ${({ active }) =>
+      active ? 'rgba(188, 188, 188, 0.2)' : '#eaebeb'};
+    border-radius: 8px;
   }
 `;
 
 const DotBox = styled.div`
-  width: 1.667vw; /* 32px */
-  height: 1.667vw; /* 32px */
-  background-color: #9f9f9f;
-  border-radius: 0.365vw; /* 7px */
-  margin-right: 0.417vw; /* 8px */
+  background-color: #c5c5c5;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const Line = styled.div`
-  margin-top: 1.563vw; /* 30px */
-  border-top: 0.052vw solid #dcdada; /* 1px */
-  margin-left: 1.042vw; /* 20px */
-  margin-right: 1.042vw; /* 20px */
+  margin-top: 10px;
+  margin-bottom: 24px;
+  border-top: 1px solid var(--gray3);
 `;
 
-const CustomFilter = styled.div`
-  margin-top: 1.563vw; /* 30px */
-`;
+const CustomFilter = styled.div``;
 
 const CustomUp = styled.div`
   display: flex;
@@ -804,36 +779,35 @@ const CustomUp = styled.div`
 `;
 
 const CustomDiv = styled.div`
-  margin-top: 1.042vw; /* 20px */
+  margin-top: 24px;
+  padding: 0 4px;
 `;
 
 const FilterContent = styled.div`
-  font-size: 0.833vw; /* 16px */
-  font-family: 'Pretendard-Regular';
-  color: #9f9f9f;
-  margin-left: 1.615vw; /* 31px */
+  ${font.body2}
+  color: var(--gray2);
+  padding: 0 10px;
 `;
 
-const Custom = styled.div`
-  margin-left: 1.615vw; /* 31px */
-  font-size: 1.042vw; /* 20px */
-  font-weight: 500;
+const CustomList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-right: 10px;
+`;
+
+const CustomItem = styled.div`
+  ${font.title3}
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.677vw; /* 13px */
-  font-family: 'Pretendard-Regular';
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding-left: 0.365vw; /* 7px */
-  margin-right: 0.365vw; /* 7px */
-  height: 2.292vw; /* 44px */
-
+  width: 100%;
+  padding: 6px;
+  gap: 13px;
   &:hover {
-    background-color: ${({ active }) => {
-      return active ? 'rgba(188, 188, 188, 0.2)' : '#dcdada';
-    }};
-    border-radius: 0.521vw; /* 10px */
+    background-color: ${({ active }) =>
+      active ? 'rgba(188, 188, 188, 0.2)' : '#eaebeb'};
+    border-radius: 8px;
   }
 `;
 
@@ -853,22 +827,24 @@ const fadeInOut = keyframes`
 
 const MessageBox = styled.div`
   position: fixed;
-  top: 13%; /* 12% */
-  left: 45%; /* 45% */
+  top: 13%;
+  left: 45%;
   background-color: #f2f2f2;
-  color: #333;
-  font-size: 1.458vw; /* 28px */
-  border-radius: 0.625vw; /* 12px */
-  box-shadow: 0 0 0.26vw #4f4f4f; /* 0 0 5px */
+  font-size: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5.075px 0px rgba(0, 0, 0, 0.4);
   z-index: 100000;
-  width: auto; /* 435px */
-  height: 3.49vw; /* 67px */
-  gap: 1.042vw; /* 20px */
-  padding: 0.833vw 2.604vw; /* 16px 50px */
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: ${fadeInOut} 2s forwards;
+`;
+
+const CheckIcon = styled.img`
+  width: 44px;
 `;
 
 export default Sidebar;

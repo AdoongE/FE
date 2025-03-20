@@ -1,7 +1,7 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import { IOSSwitch } from '../switch/PublicCategorySwitch';
+import { PublicToggle } from '../Toggle/PublicCategoryToggle';
 import { axiosInstance } from '../api/axios-instance';
 
 const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
@@ -71,7 +71,7 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
         </TopDiv>
         <Label>
           공개 카테고리
-          <IOSSwitch checked={isPublic} onChange={handleToggle} />
+          <PublicToggle checked={isPublic} onChange={handleToggle} />
         </Label>
         <Input
           value={categoryName}

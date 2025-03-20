@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { PublicToggle } from '../Toggle/PublicCategoryToggle';
 import { axiosInstance } from '../api/axios-instance';
@@ -67,11 +66,6 @@ export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
       </ModalContent>
     </ModalOverlay>
   );
-};
-
-AddCategoryModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
 };
 
 export default AddCategoryModal;

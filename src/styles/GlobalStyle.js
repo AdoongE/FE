@@ -17,6 +17,10 @@ export const GlobalStyle = createGlobalStyle`
   html, body, #root {
     font-family: "Pretendard";
   }
+  * {
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 export default GlobalStyle;

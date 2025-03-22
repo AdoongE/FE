@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { Icon } from '@iconify/react';
+// import { Icon } from '@iconify/react';
 // import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -23,7 +23,7 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
   //   [file],
   // );
   return (
-    <Modal
+    <ModalDiv
       ariaHideApp={false}
       isOpen={!!file}
       onRequestClose={onClose}
@@ -34,19 +34,6 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
           alignItems: 'center',
           backgroundColor: 'rgba(0, 0, 0, 0.6)',
           zIndex: 1000,
-        },
-        content: {
-          position: 'relative',
-          inset: 'auto',
-          width: '54.53vw',
-          height: '39.48vw',
-          maxWidth: '80%',
-          maxHeight: '80%',
-          margin: 'auto',
-          padding: '1.04vw',
-          background: '#fff',
-          borderRadius: '1.04vw',
-          overflow: 'hidden',
         },
       }}
     >
@@ -64,22 +51,37 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
         //     <Page pageNumber={1} />
         //   </Document>
         // </DocumentWrapper>
-        <Icon
-          icon="iconamoon:file-thin"
-          width="24vw"
-          height="24vw"
-          color="#aaa"
-        />
+        // <Icon
+        //   icon="iconamoon:file-thin"
+        //   width="24vw"
+        //   height="24vw"
+        //   color="#aaa"
+        // />
+        <></>
       ) : (
         <ImageWrapper>
           <img src={file} alt="Preview" />
         </ImageWrapper>
       )}
-    </Modal>
+    </ModalDiv>
   );
 };
 
 export default ViewThumbnailModal;
+
+const ModalDiv = styled(Modal)`
+  background-color: #fff;
+  position: relative;
+  inset: auto;
+  margin: auto;
+  width: 55%;
+  height: 56%;
+  padding: 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+`;
 
 // const DocumentWrapper = styled.div`
 //   display: flex;
@@ -108,7 +110,7 @@ const ImageWrapper = styled.div`
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    width: 60%;
-    height: 60%;
+    width: 80%;
+    height: 80%;
   }
 `;

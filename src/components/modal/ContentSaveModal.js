@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { font } from '../../styles/font';
 
 const ContentSaveModal = forwardRef(({ onConfirm }, ref) => {
   const navigate = useNavigate();
@@ -55,55 +56,49 @@ ContentSaveModal.displayName = 'ContentSaveModal';
 
 const Buttons = styled.div`
   display: flex;
-  column-gap: 1.042vw; /* 20px */
-  margin-top: 3vw;
+  gap: 12px;
+  margin-top: 48px;
   justify-content: center;
 `;
 
 const No = styled.button`
-  width: 6.771vw; /* 130px */
-  height: 2.813vw; /* 54px */
-  background-color: #f2f2f2;
-  border-radius: 0.521vw; /* 10px */
-  font-size: 1.146vw; /* 22px */
-  font-weight: 500;
+  background-color: var(--gray4);
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #4f4f4f;
+  color: var(--gray1);
   border: 0;
+  padding: 10.5px 25px;
+  ${font.title3}
 `;
 
 const Yes = styled.button`
   color: white;
-  width: 6.771vw; /* 130px */
-  height: 2.813vw; /* 54px */
-  background-color: #41c3ab;
-  border-radius: 0.521vw; /* 10px */
-  font-size: 1.146vw; /* 22px */
-  font-weight: 500;
+  background-color: var(--green2);
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 0;
+  padding: 10.5px 39px;
+  ${font.title3}
 `;
 
 const Alert = styled.div`
-  font-weight: 600;
-  font-size: 1.875vw; /* 36px */
+  ${font.title0}
   text-align: center;
-  margin-top: 5vw;
 `;
 
 const Dialog = styled.dialog`
-  position: fixed;
-  width: 30vw;
-  height: 15vw; /* 350px */
-  border-radius: 2.604vw; /* 50px */
+  padding: 0px 152px;
+  padding-top: 88px;
+  padding-bottom: 45px;
+  border-radius: 36px;
   background-color: white;
   border: 0;
   ::backdrop {
-    background-color: #0000008c; /* 반투명 배경 */
+    background-color: #0000008c;
   }
 `;
 

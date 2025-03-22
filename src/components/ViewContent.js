@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ViewImagePdfModal from './modal/ViewImagePDFModal';
 import { axiosInstance } from './api/axios-instance';
+import { font } from '../styles/font';
 
 function ViewContent() {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ function ViewContent() {
                   contentInfo.contentDataType === 'PDF' ||
                   contentInfo.contentDataType === 'IMAGE'
                     ? 'flex-start'
-                    : 'center', // 이미지와 PDF 외에는 중앙 정렬 유지
+                    : 'center',
               }}
             >
               {contentInfo.contentDataType === 'LINK'
@@ -137,17 +138,7 @@ function ViewContent() {
               <Link
                 onClick={() => handleLinkClick(`${contentInfo.contentLink}`)}
               >
-                <Icon
-                  icon="ic:twotone-link"
-                  width="1.25vw"
-                  height="1.25vw"
-                  style={{
-                    color: '#4f4f4f',
-                    marginRight: '0.521vw',
-                    paddingBottom: '0.156vw',
-                    verticalAlign: 'middle',
-                  }}
-                />
+                <LinkIcon icon="ic:twotone-link" />
                 {contentInfo.contentLink}
               </Link>
             )}
@@ -178,14 +169,7 @@ function ViewContent() {
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
-                      <FileIcon>
-                        <Icon
-                          icon="file-icons:pdf"
-                          width="40"
-                          height="40"
-                          style={{ color: '#4CAF50' }}
-                        />
-                      </FileIcon>
+                      <FileIcon icon="prime:file" />
                     </FileBox>
                     <FileName key={contentInfo.filename[index]}>
                       {contentInfo.filename[index]}
@@ -208,7 +192,7 @@ function ViewContent() {
             )}
           </ContentDiv>
           <ContentDiv>
-            <Name>태그 (2개 이상)*</Name>
+            <Name>태그 (2개 이상)</Name>
             {contentInfo.tags.map((tag) => (
               <CategoryTag key={tag}>{tag}</CategoryTag>
             ))}
@@ -224,16 +208,7 @@ function ViewContent() {
                 </RemainDay>
               ) : null}
               <Calendar>
-                <Icon
-                  icon="lucide:calendar"
-                  width="1.25vw"
-                  height="1.25vw"
-                  style={{
-                    color: '#4f4f4f',
-                    paddingBottom: '0.156vw',
-                    marginRight: '0.521vw',
-                  }}
-                />
+                <CalendarIcon icon="lucide:calendar" />
                 {remainingDays ? <Date>{contentInfo.dday}</Date> : `yyyy-mm-dd`}
               </Calendar>
             </DdayDiv>
@@ -254,32 +229,30 @@ const ButtonDiv = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 1.04vw; /* 20px */
-  margin-top: -3.13vw; /* -60px */
+  gap: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 114px;
+  margin-right: 72px;
 `;
 
 const LinkShare = styled.button`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 0.052vw solid #21a58c; /* 1px */
-  border-radius: 0.52vw; /* 0.521vw */
+  padding: 12px 24px;
+  border: 1px solid var(--green2);
+  border-radius: 8px;
   background-color: #def3f1;
-  width: 7.45vw; /* 143px */
-  height: 2.97vw; /* 57px */
-  color: #21a58c;
-  font-size: 1.25vw; /* 1.25vwpx */
+  color: var(--green2);
+  font-size: 18px;
 `;
 
 const CloseBtn = styled.button`
-  background-color: #dcdada;
-  color: #9f9f9f;
-  width: 5.31vw; /* 102px */
-  height: 2.97vw; /* 57px */
+  padding: 12px 24px;
   border: none;
-  border-radius: 0.52vw; /* 0.521vw */
-  font-size: 1.25vw; /* 1.25vwpx */
+  border-radius: 8px;
+  background-color: var(--gray3);
+  color: var(--gray2);
+  font-size: 18px;
 `;
 
 const ContentPage = styled.div`
@@ -292,9 +265,8 @@ const ContentPage = styled.div`
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 3.13vw; /* 60px */
-  margin-top: 2.97vw; /* 57px */
-  margin-bottom: 4.17vw; /* 80px */
+  row-gap: 60px;
+  margin-bottom: 60px;
 `;
 
 const UpperDiv = styled.div`
@@ -304,7 +276,7 @@ const UpperDiv = styled.div`
 `;
 
 const TitleDiv = styled.p`
-  font-size: 2.08vw; /* 40px */
+  font-size: 24px;
 `;
 
 const ContentDiv = styled.div`
@@ -315,74 +287,87 @@ const CategoryTag = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #41c3ab;
-  width: auto;
-  height: 2.29vw; /* 44px */
+  background-color: var(--green2);
+  padding: 6.5px 12px;
   color: white;
   border: none;
-  border-radius: 0.26vw; /* 5px */
-  font-size: 1.04vw; /* 20px */
-  margin-right: 1.04vw; /* 20px */
-  padding: 0 0.83vw; /* 16px */
+  border-radius: 4px;
+  ${font.title3}
+  margin-right: 12px;
 `;
 
 const Link = styled.div`
-  font-size: 1.04vw; /* 20px */
-  color: #4f4f4f;
-  border-bottom: 0.052vw solid #9f9f9f; /* 1px */
-  padding-bottom: 0.42vw; /* 8px */
+  ${font.title4}
+  color: var(--gray1);
+  border-bottom: 1px solid var(--gray2);
+  padding-right: 10px;
+  padding-bottom: 8px;
   cursor: pointer;
   display: inline-block;
   width: fit-content;
-  max-width: 41.67vw; /* 800px */
+  max-width: 800px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   &:hover {
-    color: #41c3ab;
+    color: var(--green2);
   }
 `;
 
+const LinkIcon = styled(Icon)`
+  width: 20px;
+  height: 20px;
+  color: var(--gray1);
+  margin-right: 12px;
+  padding-bottom: 2px;
+  vertical-align: middle;
+`;
+
 const Text = styled.div`
-  width: 69.58vw; /* 1334px */
-  height: 12.4vw; /* 238px */
-  border-radius: 0.52vw; /* 0.521vw */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.04vw; /* 20px */
-  padding-left: 1.41vw; /* 27px */
-  padding-top: 1.35vw; /* 26px */
+  width: 1000px;
+  height: 182px;
+  border-radius: 8px;
+  border: 0.6px solid var(--gray2);
+  ${font.title4}
+  padding: 14px 16px;
 `;
 
 const Dday = styled.div``;
 
 const DdayDiv = styled.div`
   display: flex;
-  gap: 1.09vw; /* 21px */
+  gap: 10px;
 `;
 
 const RemainDay = styled.div`
-  background-color: #9f9f9f;
-  border-radius: 0.52vw; /* 0.521vw */
-  width: 3.85vw; /* 74px */
-  height: 2.5vw; /* 48px */
+  background-color: var(--gray2);
+  border-radius: 8px;
+  padding: 8px 12px;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.04vw; /* 20px */
+  ${font.title3}
 `;
 
 const Calendar = styled.div`
   display: flex;
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  border-radius: 0.52vw; /* 0.521vw */
-  width: 12.4vw; /* 238px */
-  height: 2.6vw; /* 50px */
-  color: #4f4f4f;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: var(--gray1);
   align-items: center;
   justify-content: center;
-  font-size: 1.04vw; /* 20px */
-  padding-right: 0.78vw; /* 15px */
+  ${font.title4}
+  padding-right: 30px;
+`;
+
+const CalendarIcon = styled(Icon)`
+  color: var(--gray1);
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  padding-bottom: 2px;
 `;
 
 const Date = styled.div`
@@ -392,22 +377,21 @@ const Date = styled.div`
 const Memo = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 0.83vw; /* 16px */
+  row-gap: 16px;
 `;
 
 const Long = styled.div`
   display: flex;
-  column-gap: 0.52vw; /* 0.521vw */
-  margin-bottom: 1.15vw; /* 22px */
+  margin-bottom: 16px;
 `;
 
 const Name = styled.div`
   font-weight: 400;
-  font-size: 1.56vw; /* 30px */
-  width: 12.4vw; /* 238px */
-  padding-top: 0.26vw; /* 5px */
+  font-size: 20px;
+  width: 161px;
+  padding-top: 3px;
   &.dday {
-    width: 28.65vw; /* 550px */
+    width: 550px;
   }
 `;
 
@@ -415,30 +399,27 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15.05vw; /* 289px */
-  height: 3.96vw; /* 76px */
-  border-radius: 0.52vw; /* 0.521vw */
-  border: 0;
-  background-color: #41c3ab;
+  padding: 12px 90px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--green2);
   color: white;
-  font-size: 1.56vw; /* 30px */
-  font-weight: 500;
-  margin-bottom: 5.1vw; /* 98px */
+  ${font.title1}
+  margin-bottom: 54px;
 `;
 
 // 이미지 조회 컴포넌트
-// 이미지 조회 컴포넌트
 const ImagesWrapper = styled.div`
   display: flex;
-  gap: 1.56vw; /* 30px */
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.78vw; /* 15px */
-  border: 0.052vw solid #ddd; /* 1px */
-  border-radius: 0.42vw; /* 8px */
+  padding: 20px;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
   width: 100%;
-  max-width: 57.29vw; /* 1100px */
-  margin-top: 0.83vw; /* 16px */
+  max-width: 1100px;
+  margin-top: 15px;
 `;
 
 const ImageContainer = styled.div`
@@ -448,11 +429,11 @@ const ImageContainer = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 8.28vw; /* 159px */
-  height: 9.21vw; /* 177px */
+  width: 140px;
+  height: 132px;
   position: relative;
   background-color: #f0f0f0;
-  border-radius: 0.21vw; /* 4px */
+  border-radius: 3.95px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -461,46 +442,46 @@ const ImageBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  left: 0.26vw; /* 5px */
-  background-color: #47c28b;
+  top: 6px;
+  left: 6px;
+  background-color: var(--green2);
   color: white;
-  padding: 0.1vw 0.31vw; /* 2px 6px */
-  font-size: 0.63vw; /* 12px */
-  border-radius: 0.63vw; /* 12px */
+  padding: 3px 7px;
+  font-size: 10px;
+  border-radius: 20px;
 `;
 
 const ImagePreview = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 0.21vw; /* 4px */
+  border-radius: 3.95px;
   object-fit: cover;
 `;
 
 const FileName = styled.div`
-  margin-top: 0.42vw; /* 8px */
-  font-size: 0.73vw; /* 14px */
-  color: #666;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--gray2);
   text-align: center;
-  width: 7.29vw; /* 140px */
+  width: 120px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
-// 링크 조회 관련 스타일
+// pdf 조회 관련 스타일
 const FilesWrapper = styled.div`
   display: flex;
-  gap: 1.56vw; /* 30px */
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.78vw; /* 15px */
-  border: 0.052vw solid #ddd; /* 1px */
-  border-radius: 0.42vw; /* 8px */
+  padding: 20px;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
   width: 100%;
-  max-width: 57.29vw; /* 1100px */
-  margin-top: 0.83vw; /* 16px */
+  max-width: 1100px;
+  margin-top: 15px;
 `;
 
 const FileContainer = styled.div`
@@ -508,23 +489,23 @@ const FileContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
 const FileBox = styled.div`
-  width: 8.28vw; /* 159px */
-  height: 9.21vw; /* 177px */
+  width: 140px;
+  height: 132px;
   position: relative;
-  background-color: #eaf4f4;
-  border-radius: 0.21vw; /* 4px */
+  background-color: var(--green4);
+  border-radius: 3.95px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 `;
 
-const FileIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #4caf50;
+const FileIcon = styled(Icon)`
+  color: var(--gray2);
+  width: 40px;
+  height: 40px;
 `;
 
 export default ViewContent;

@@ -21,8 +21,8 @@ const MainContainer = styled.div`
 
 const Content = styled.div`
   display: flex;
-  margin-left: 15.26vw;
-  margin-top: 8vw;
+  margin: auto;
+  margin-top: 160px;
 `;
 
 export default ContentViewPage;

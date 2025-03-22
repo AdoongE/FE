@@ -179,7 +179,7 @@ const DropdownMenu = styled.ul`
   padding: 4px;
   &.filter {
     left: 365px;
-    transform: translate(-50%, -5%);
+    transform: translate(-75%, -5%);
     width: 148px;
   }
 `;

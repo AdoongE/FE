@@ -691,19 +691,17 @@ const Buttons = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 21.04vw; /* 404px */
-  height: 3.96vw; /* 76px */
-  border-radius: 0.52vw; /* 10px */
+  border-radius: 8px;
   border: 0;
-  background-color: #41c3ab;
+  background-color: var(--green2);
   color: white;
-  font-size: 1.56vw; /* 30px */
-  font-weight: 600;
-  margin-bottom: 4.17vw; /* 80px */
+  ${font.title1}
+  margin-bottom: 60px;
+  padding: 12px 85px;
 
   &:disabled {
-    background-color: #dcdada;
-    color: #9f9f9f;
+    background-color: var(--gray3);
+    color: var(--gray2);
   }
 `;
 
@@ -736,7 +734,6 @@ const TitleDiv = styled.input`
   &:focus {
     outline: none;
   }
-
   &::placeholder {
     font-size: 24px;
     color: #9f9f9f;

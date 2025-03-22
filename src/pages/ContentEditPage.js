@@ -15,6 +15,7 @@ import { ContentEditHandler } from '../components/api/ContentEditApi';
 import { axiosInstance } from '../components/api/axios-instance';
 import Alert from '@mui/material/Alert';
 import Navbar from '../components/Navbar';
+import { font } from '../styles/font';
 
 function ContentEditPage() {
   const navigate = useNavigate();
@@ -445,21 +446,6 @@ function ContentEditPage() {
                       + 태그 선택
                     </InputButton>
                   </TagDiv>
-                  <Recommends>
-                    <Recommend>추천</Recommend>
-                    <RecommendBox>
-                      <Icon
-                        icon="ri:reset-left-line"
-                        style={{
-                          width: '0.781vw',
-                          height: '0.781vw',
-                          marginRight: '0.521vw',
-                          color: '#4F4F4F',
-                        }}
-                      />
-                      태크 추천받기
-                    </RecommendBox>
-                  </Recommends>
                 </TagInputs>
               </Tag>
             )}
@@ -515,24 +501,7 @@ function ContentEditPage() {
             {errorMessage && showLinkModal()}
           </ButtonContainers>
           <ErrorDialog ref={errorRef}>
-            <Alert
-              severity="info"
-              sx={{
-                bgcolor: '#F2F2F2',
-                mt: 2,
-                width: '26.467vw' /* 507.73px */,
-                height: '5.194vw' /* 99.73px */,
-                display: 'flex',
-                fontSize: '1.458vw' /* 28px */,
-                size: '1.458vw' /* 28px */,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: '0.417vw' /* 8px */,
-                border: '0',
-              }}
-            >
-              {errorMessage}
-            </Alert>
+            <AlertDiv severity="info">{errorMessage}</AlertDiv>
           </ErrorDialog>
         </ContentPage>
       </form>
@@ -546,152 +515,124 @@ const ErrorDialog = styled.dialog`
   background: transparent;
   box-shadow: none;
   position: absolute;
-  top: -0.729vw; /* -14px */
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
+`;
+
+const AlertDiv = styled(Alert)`
+  background-color: var(--gray6);
+  padding: 14px 24px;
+  display: flex;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  border: none;
+  color: black;
 `;
 
 const NoButtons = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15.052vw; /* 289px */
-  height: 3.958vw; /* 76px */
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   border: 0;
-  background-color: #dcdada;
-  color: #9f9f9f;
-  font-size: 1.563vw; /* 30px */
-  font-weight: 600;
-  margin-bottom: 4.167vw; /* 80px */
+  background-color: var(--gray3);
+  color: var(--gray2);
+  ${font.title1}
+  margin-bottom: 60px;
+  padding: 12px 85px;
 `;
 
 const Chip = styled.div`
-  width: fit-content;
-  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 0.26vw; /* 5px */
-  column-gap: 0.781vw; /* 0.781vw */
-  background-color: #41c3ab;
-  padding-left: 0.833vw; /* 16px */
-  padding-right: 0.833vw; /* 16px */
-  margin: 0.208vw 0.208vw; /* 4px */
+  border-radius: 4px;
+  background-color: var(--green2);
+  padding: 6.5px 12px;
+  gap: 4px;
 `;
 
 const TagP = styled.p`
-  font-size: 1.042vw; /* 20px */
+  ${font.title3}
 `;
 
 const ButtonContainers = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: 2.083vw; /* 40px */
+  gap: 20px;
 `;
 
 const Count = styled.div`
   width: fit-content;
-  font-weight: 400;
-  font-size: 1.042vw; /* 20px */
-  color: #9f9f9f;
-  transform: translateX(66.042vw) translateY(-2.083vw); /* 1268px, -40px */
-`;
-
-const RecommendBox = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 20.469vw; /* 393px */
-  height: 1.615vw; /* 31px */
-  border-radius: 0.26vw; /* 5px */
-  background-color: #eeeeee;
-  border: 0;
-  color: #4f4f4f;
-  font-weight: 400;
-  font-size: 0.781vw; /* 0.781vw */
-`;
-
-const Recommend = styled.div`
-  font-weight: 400;
-  font-size: 0.938vw; /* 18px */
-  color: #4f4f4f;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Recommends = styled.div`
-  display: flex;
-  column-gap: 0.885vw; /* 17px */
+  ${font.title4}
+  color: var(--gray2);
+  transform: translateX(920px) translateY(-35px);
 `;
 
 const InputButton = styled.button`
-  width: fit-content;
-  height: 2.292vw; /* 44.19px */
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0.052vw solid #9f9f9f; /* 1px */
+  border: none;
   color: white;
-  font-weight: 500;
-  font-size: 1.042vw; /* 20px */
-  background-color: #9f9f9f;
-  padding: 0.521vw 0.938vw; /* 10px 18px */
+  ${font.title3}
+  background-color: var(--gray2);
+  padding: 8px 12px;
 `;
 
 const TagContainer = styled.div`
-  width: 36.927vw; /* 709px */
-  min-height: 3.125vw; /* 60px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  border-radius: 0.521vw; /* 10px */
+  width: 452px;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 0 0.313vw; /* 6px */
+  padding: 8px;
+  gap: 10px;
 `;
 
 const TagInputs = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 0.781vw; /* 0.781vw */
+  row-gap: 8px;
 `;
 
 const TagInput = styled.input`
   flex-grow: 1;
-  padding: 0.26em 0;
   border: none;
   outline: none;
-  font-size: 1.042vw; /* 20px */
+  ${font.title4}
   background-color: transparent;
+  padding: 6px;
 `;
 
 const TagDiv = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1.042vw; /* 20px */
+  gap: 12px;
   align-items: center;
 `;
 
 const Text = styled.textarea`
-  width: 69.479vw; /* 1334px */
-  height: 12.396vw; /* 238px */
-  border-radius: 0.521vw; /* 10px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.042vw; /* 20px */
-  padding-left: 1.406vw; /* 27px */
-  padding-top: 1.354vw; /* 26px */
-  padding-right: 1.406vw; /* 27px */
-
+  width: 1000px;
+  height: 182px;
+  border-radius: 8px;
+  border: 0.6px solid var(--gray1);
+  ${font.title4}
+  padding: 14px 16px;
+  &:focus {
+    outline: none;
+  }
   &::placeholder {
-    color: #4f4f4f;
-    font-weight: 400;
-    font-size: 1.042vw; /* 20px */
+    color: var(--gray2);
   }
 `;
 
@@ -699,36 +640,32 @@ const Dday = styled.div``;
 
 const Tag = styled.div`
   display: flex;
-  column-gap: 2.135vw; /* 41px */
+  column-gap: 46px;
 `;
 
 const Memo = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 0.833vw; /* 16px */
+  row-gap: 16px;
 `;
 
 const Date = styled.input`
-  width: 12.396vw; /* 238px */
-  height: 2.604vw; /* 50px */
-  border-radius: 0.26vw; /* 5px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.042vw; /* 20px */
-  font-weight: 400;
-  color: #4f4f4f;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 0.6px solid var(--gray2);
+  ${font.title4}
+  color: var(--gray1);
 `;
 
 const Short = styled.span`
-  font-weight: 400;
-  font-size: 1.042vw; /* 20px */
-  color: #8b8b8b;
-  margin-left: 0.521vw; /* 10px */
+  ${font.body2}
+  color: var(--gray2);
+  margin-left: 8px;
 `;
 
 const Long = styled.div`
   display: flex;
-  column-gap: 0.521vw; /* 10px */
-  margin-bottom: 1.146vw; /* 22px */
+  margin-bottom: 16px;
 `;
 
 const Inputs = styled.div`
@@ -738,43 +675,39 @@ const Inputs = styled.div`
 
 const Name = styled.div`
   font-weight: 400;
-  font-size: 1.563vw; /* 30px */
+  font-size: 20px;
 `;
 
 const TagName = styled.div`
-  font-weight: 400;
-  font-size: 1.563vw; /* 30px */
-  margin-top: 0.625vw; /* 12px */
+  font-size: 20px;
+  margin-top: 12px;
 `;
 
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 4.167vw; /* 80px */
-  margin-top: 2.969vw; /* 57px */
-  margin-bottom: 4.167vw; /* 80px */
+  row-gap: 60px;
+  margin-top: 60px;
+  margin-bottom: 80px;
 `;
 
 const Buttons = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15.052vw; /* 289px */
-  height: 3.958vw; /* 76px */
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   border: 0;
-  background-color: #41c3ab;
+  background-color: var(--green2);
   color: white;
-  font-size: 1.563vw; /* 30px */
-  font-weight: 600;
-  margin-bottom: 4.167vw; /* 80px */
+  ${font.title1}
+  margin-bottom: 60px;
+  padding: 12px 65.5px;
 `;
 
 const ContentPage = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  width: 69.479vw; /* 1334px */
+  align-items: center;
 `;
 
 const MainDiv = styled.div`
@@ -787,19 +720,21 @@ const LeftDiv = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 69.479vw; /* 1334px */
+  width: 1000.5px;
 `;
 
 const TitleDiv = styled.input`
-  font-size: 2.083vw; /* 40px */
+  font-size: 24px;
   color: #9f9f9f;
   border: none;
-  border-bottom: 0.104vw solid #9f9f9f; /* 2px */
-  margin-bottom: 4.167vw; /* 80px */
-  padding-bottom: 0.521vw; /* 10px */
+  border-bottom: 1px solid var(--gray2);
+  padding-bottom: 16px;
 
+  &:focus {
+    outline: none;
+  }
   &::placeholder {
-    font-size: 2.083vw; /* 40px */
+    font-size: 24px;
     color: #9f9f9f;
   }
 `;

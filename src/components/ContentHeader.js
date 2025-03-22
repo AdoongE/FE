@@ -513,7 +513,7 @@ const Bar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 4.167vw; /* 80px */
+  margin-top: 80px;
 `;
 
 const FilterDiv = styled.div`
@@ -522,16 +522,16 @@ const FilterDiv = styled.div`
 
 const FilterTitle = styled.div`
   font-weight: 700;
-  font-size: 2.083vw; /* 44px */
+  font-size: 44px;
 `;
 
 const FilterBtn = styled.button`
-  margin-top: 2.604vw; /* 50px */
-  width: 8.594vw; /* 165px */
-  height: 2.292vw; /* 44px */
-  font-size: 1.042vw; /* 20px */
+  margin-top: 50px;
+  width: 165px;
+  height: 44px;
+  font-size: 20px;
   border: none;
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 10px;
   background-color: #def3f1;
   display: flex;
   justify-content: center;
@@ -648,7 +648,7 @@ const FilterContainer = styled.div`
 const ParentContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.458vw; /* 2 0.417vw */
+  gap: 20px;
 `;
 
 const SearchTitle = styled.span`
@@ -670,20 +670,20 @@ const ToggleButton = styled.button`
   &:after {
     content: '';
     display: block;
-    width: calc(100% - 0.521vw); /* 10px */
-    height: 0.052vw; /* 1px */
+    width: calc(100% - 10px);
+    height: 1px;
     background-color: #9f9f9f;
     position: absolute;
-    left: 0.26vw; /* 5px */
+    left: 5px;
   }
 `;
 
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.521vw; /* 10px */
+  gap: 10px;
   overflow: hidden;
-  width: 22.292vw; /* 42 0.417vw */
+  width: 22.292vw;
 `;
 
 const Tag = styled.div`

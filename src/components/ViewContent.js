@@ -169,14 +169,7 @@ function ViewContent() {
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
-                      <FileIcon>
-                        <Icon
-                          icon="file-icons:pdf"
-                          width="40"
-                          height="40"
-                          style={{ color: '#4CAF50' }}
-                        />
-                      </FileIcon>
+                      <FileIcon icon="prime:file" />
                     </FileBox>
                     <FileName key={contentInfo.filename[index]}>
                       {contentInfo.filename[index]}
@@ -419,15 +412,15 @@ const Button = styled.button`
 // 이미지 조회 컴포넌트
 const ImagesWrapper = styled.div`
   display: flex;
-  gap: 1.56vw; /* 30px */
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.78vw; /* 15px */
-  border: 0.052vw solid #ddd; /* 1px */
-  border-radius: 0.42vw; /* 8px */
+  padding: 20px;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
   width: 100%;
-  max-width: 57.29vw; /* 1100px */
-  margin-top: 0.83vw; /* 16px */
+  max-width: 1100px;
+  margin-top: 15px;
 `;
 
 const ImageContainer = styled.div`
@@ -437,11 +430,11 @@ const ImageContainer = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 8.28vw; /* 159px */
-  height: 9.21vw; /* 177px */
+  width: 140px;
+  height: 132px;
   position: relative;
   background-color: #f0f0f0;
-  border-radius: 0.21vw; /* 4px */
+  border-radius: 3.95px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -450,46 +443,46 @@ const ImageBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  left: 0.26vw; /* 5px */
-  background-color: #47c28b;
+  top: 6px;
+  left: 6px;
+  background-color: var(--green2);
   color: white;
-  padding: 0.1vw 0.31vw; /* 2px 6px */
-  font-size: 0.63vw; /* 12px */
-  border-radius: 0.63vw; /* 12px */
+  padding: 3px 7px;
+  font-size: 10px;
+  border-radius: 20px;
 `;
 
 const ImagePreview = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 0.21vw; /* 4px */
+  border-radius: 3.95px;
   object-fit: cover;
 `;
 
 const FileName = styled.div`
-  margin-top: 0.42vw; /* 8px */
-  font-size: 0.73vw; /* 14px */
-  color: #666;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--gray2);
   text-align: center;
-  width: 7.29vw; /* 140px */
+  width: 120px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
-// 링크 조회 관련 스타일
+// pdf 조회 관련 스타일
 const FilesWrapper = styled.div`
   display: flex;
-  gap: 1.56vw; /* 30px */
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.78vw; /* 15px */
-  border: 0.052vw solid #ddd; /* 1px */
-  border-radius: 0.42vw; /* 8px */
+  padding: 20px;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
   width: 100%;
-  max-width: 57.29vw; /* 1100px */
-  margin-top: 0.83vw; /* 16px */
+  max-width: 1100px;
+  margin-top: 15px;
 `;
 
 const FileContainer = styled.div`
@@ -497,23 +490,23 @@ const FileContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
 const FileBox = styled.div`
-  width: 8.28vw; /* 159px */
-  height: 9.21vw; /* 177px */
+  width: 140px;
+  height: 132px;
   position: relative;
-  background-color: #eaf4f4;
-  border-radius: 0.21vw; /* 4px */
+  background-color: var(--green4);
+  border-radius: 3.95px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 `;
 
-const FileIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #4caf50;
+const FileIcon = styled(Icon)`
+  color: var(--gray2);
+  width: 40px;
+  height: 40px;
 `;
 
 export default ViewContent;

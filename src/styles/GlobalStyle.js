@@ -1,23 +1,27 @@
 import { createGlobalStyle } from 'styled-components';
-import { reset } from 'styled-reset';
 
-const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
+export const GlobalStyle = createGlobalStyle`
+  :root{
+    --green1: #21A58C;
+    --green2: #41C3AB;
+    --green3: #9AE4D6;
+    --green3: #9AE4D6;
+    --green4: #DEF3F1;
+    --gray1: #4F4F4F;
+    --gray2: #9F9F9F;
+    --gray3: #DCDADA;
+    --gray4: #F2F2F2;
+    --gray6: #F6F6F6;
+    --sidebar: #F8FBFB;
   }
-
-  ${reset}
   
-  * {
-    font-family: 'Pretendard-Regular', sans-serif;
+  html, body, #root {
+    font-family: "Pretendard";
   }
 
-  /* 모든 요소에 대해 px를 vw로 변환하는 함수 적용 */
-  * {
-    transition: all 0.3s ease;
+  p {
+    margin: 0;
+    padding: 0;
   }
 `;
 

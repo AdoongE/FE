@@ -1,8 +1,9 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import { IOSSwitch } from '../switch/PublicCategorySwitch';
+import { PublicToggle } from '../Toggle/PublicCategoryToggle';
 import { axiosInstance } from '../api/axios-instance';
+import { font } from '../../styles/font';
 
 const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
   const [isPublic, setIsPublic] = useState(true);
@@ -63,15 +64,11 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
       <ModalDiv>
         <TopDiv>
           <ModalTitle>카테고리 추가</ModalTitle>
-          <Icon
-            icon="line-md:close"
-            style={{ width: '1.875vw', height: '1.875vw', cursor: 'pointer' }}
-            onClick={closeModal}
-          />
+          <Icons icon="line-md:close" onClick={closeModal} />
         </TopDiv>
         <Label>
           공개 카테고리
-          <IOSSwitch checked={isPublic} onChange={handleToggle} />
+          <PublicToggle checked={isPublic} onChange={handleToggle} />
         </Label>
         <Input
           value={categoryName}
@@ -94,75 +91,91 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
 NewAddCategoryModal.displayName = 'NewAddCategoryModal';
 
 export default NewAddCategoryModal;
+
 const Dialog = styled.dialog`
   position: relative;
-  width: 38.854vw; /* 746px */
-  height: 19.271vw; /* 370px */
-  border-radius: 2.604vw; /* 50px */
+  border-radius: 36px;
+  width: 542px;
   background-color: white;
   border: none;
   ::backdrop {
     background-color: rgba(0, 0, 0, 0.55);
   }
+  padding: 0;
 `;
 
 const ModalDiv = styled.div`
-  margin: 2.604vw; /* 50px */
+  padding: 0 36px;
+  padding-top: 40px;
+  padding-bottom: 25px;
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.406vw; /* 27px */
+  margin-bottom: 18px;
+  &.edit {
+    margin-bottom: 56px;
+  }
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 700;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 0.521vw; /* 10px */
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  &.remove {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const Icons = styled(Icon)`
+  width: 24px;
+  height: 24px;
 `;
 
 const Label = styled.label`
-  font-size: 1.146vw; /* 22px */
-  font-family: 'Pretendard-Regular';
-  color: #4f4f4f;
+  ${font.title4}
+  color: var(--gray1);
   display: flex;
-  justify-content: end;
+  justify-content: right;
   align-items: center;
-  gap: 0.573vw; /* 11px */
+  gap: 8px;
+  margin-bottom: 22px;
 `;
 
 const Input = styled.input`
-  background-color: #f6f6f6;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--gray2);
+  background-color: var(--gray6);
+  display: flex;
   border: none;
-  border-bottom: 0.052vw solid #7f7f7f; /* 1px */
+  border-bottom: 0.73px solid var(--gray2);
   width: 100%;
-  height: 3.542vw; /* 68px */
-  margin-top: 1.354vw; /* 26px */
-  margin-bottom: 0.938vw; /* 18px */
-  font-size: 1.563vw; /* 30px */
+  padding: 12px 0;
+  margin-bottom: 20px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.042vw; /* 10px */
+  gap: 12px;
 `;
 
 const ModalButton = styled.button`
-  height: 2.813vw; /* 54px */
-  width: 5.156vw; /* 99px */
-  font-size: 1.146vw; /* 22px */
+  ${font.title3}
   border: none;
-  border-radius: 2.604vw; /* 50px */
+  border-radius: 36px;
+  padding: 10px 20px;
   cursor: pointer;
   &.ok {
-    background-color: #41c3ab;
+    background-color: var(--green2);
     color: white;
   }
   &.no {
-    background-color: #dcdada;
+    background-color: var(--gray4);
     color: black;
   }
 `;

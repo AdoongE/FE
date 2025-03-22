@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import { font } from '../../styles/font';
 import { axiosInstance } from '../api/axios-instance';
 
 export const EditCategoryModal = ({
@@ -46,17 +46,9 @@ export const EditCategoryModal = ({
     <ModalOverlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <ModalDiv>
-          <TopDiv>
+          <TopDiv className="edit">
             <ModalTitle>카테고리 이름 편집</ModalTitle>
-            <Icon
-              icon="line-md:close"
-              style={{
-                width: '1.875vw',
-                height: '1.875vw',
-                cursor: 'pointer',
-              }}
-              onClick={onClose}
-            />
+            <Icons icon="line-md:close" onClick={onClose} />
           </TopDiv>
           <Input
             type="text"
@@ -78,14 +70,6 @@ export const EditCategoryModal = ({
   );
 };
 
-EditCategoryModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  initialCategoryName: PropTypes.string.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-  categoryId: PropTypes.number.isRequired,
-};
-
 export default EditCategoryModal;
 
 const ModalOverlay = styled.div`
@@ -98,62 +82,89 @@ const ModalOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 1000;
 `;
 
 const ModalContent = styled.div`
   background-color: white;
-  border-radius: 2.604vw; /* 50px */
-  width: 38.854vw; /* 746px */
-  height: 18.229vw; /* 350px */
+  border-radius: 36px;
+  width: 542px;
 `;
 
 const ModalDiv = styled.div`
-  margin: 2.604vw; /* 3.125rem */
+  padding: 0 36px;
+  padding-top: 40px;
+  padding-bottom: 25px;
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.406vw; /* 27px */
+  margin-bottom: 18px;
+  &.edit {
+    margin-bottom: 56px;
+  }
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 700;
-  margin-bottom: 0.521vw; /* 10px */
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  &.remove {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const Icons = styled(Icon)`
+  width: 24px;
+  height: 24px;
 `;
 
 const Input = styled.input`
-  background-color: #f6f6f6;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--gray2);
+  background-color: var(--gray6);
+  display: flex;
   border: none;
-  border-bottom: 0.052vw solid #7f7f7f; /* 1px */
+  border-bottom: 0.73px solid var(--gray2);
   width: 100%;
-  height: 3.542vw; /* 68px */
-  margin-top: 1.354vw; /* 26px */
-  margin-bottom: 0.938vw; /* 18px */
-  font-size: 1.563vw; /* 30px */
+  padding: 12px 0;
+  margin-bottom: 20px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  gap: 12px;
 `;
 
 const ModalButton = styled.button`
-  height: 2.813vw; /* 54px */
-  width: 5.156vw; /* 99px */
-  font-size: 1.146vw; /* 22px */
+  ${font.title3}
   border: none;
-  border-radius: 2.604vw; /* 50px */
+  border-radius: 36px;
+  padding: 10px 20px;
   cursor: pointer;
-  margin-right: 1.042vw; /* 10px */
   &.ok {
-    background-color: #41c3ab;
+    background-color: var(--green2);
     color: white;
   }
   &.no {
-    background-color: #dcdada;
+    background-color: var(--gray4);
     color: black;
+  }
+  &.remove-ok {
+    background-color: var(--green2);
+    color: white;
+    border-radius: 8px;
+    padding: 10.5px 32px;
+  }
+  &.remove-no {
+    background-color: var(--gray4);
+    color: black;
+    border-radius: 8px;
+    padding: 10.5px 32px;
   }
 `;

@@ -14,6 +14,7 @@ import PdfUploadComponent from './PdfUpload';
 import ImageUploadComponent from './ImageUpload';
 import { ContentAddHandler } from './api/ContentAddApi';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { font } from '../styles/font';
 
 function AddContent() {
   const location = useLocation();
@@ -290,15 +291,7 @@ function AddContent() {
         {isModalOpen && (
           <ModalOverlay>
             <ModalContent>
-              <Icon
-                icon="ph:warning-circle-thin"
-                width="7.71vw" /* 148px */
-                height="7.71vw" /* 148px */
-                style={{
-                  color: '#41c3ab',
-                  marginBottom: '1.77vw' /* 34px */,
-                }}
-              />
+              <CloseIcon icon="ph:warning-circle-thin" />
               <ModalTitle>지금 나가시겠습니까?</ModalTitle>
               <ModalText>지금까지 설정한 모든 항목이 초기화됩니다.</ModalText>
               <ButtonContainer>
@@ -777,23 +770,21 @@ const RightDiv = styled.div`
 `;
 
 const Button = styled.button`
-  width: 7.92vw; /* 152px */
-  height: 2.97vw; /* 57px */
-  color: #4f4f4f;
-  font-size: 1.25vw; /* 24px */
-  font-weight: 500;
-  background-color: #dcdada;
+  padding: 10.5px 21px;
+  color: var(--gray1);
+  font-size: 16px;
+  background-color: var(--gray3);
   border: none;
-  border-radius: 0.52vw; /* 10px */
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.31vw; /* 6px */
+  gap: 8px;
 `;
 
 const ArrowIcon = styled(FaArrowRight)`
-  font-size: 1.25vw; /* 24px */
-  color: #4f4f4f;
+  font-size: 16px;
+  color: var(--gray1);
   transform: scale(0.7);
 `;
 
@@ -813,47 +804,51 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background-color: white;
-  border-radius: 2.6vw; /* 50px */
-  width: 46.875vw;
-  height: 27.031vw;
+  border-radius: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 44px 161px;
+`;
+
+const CloseIcon = styled(Icon)`
+  width: 100px;
+  height: 100px;
+  color: var(--green2);
+  margin-bottom: 20px;
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 2.08vw; /* 40px */
-  font-weight: 850;
-  margin-bottom: 0.5vw;
+  ${font.title0}
+  margin-bottom: 8px;
 `;
 
 const ModalText = styled.h2`
-  font-size: 1.35vw; /* 26px */
-  color: #4f4f4f;
+  ${font.title4}
+  color: var(--gray1);
   text-align: center;
-  margin-bottom: 1.5625vw;
+  margin-bottom: 26px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.04vw; /* 20px */
+  gap: 12px;
 `;
 
 const ModalButton = styled.button`
-  width: 6.771vw; /* 130px */
-  height: 2.813vw;
-  font-size: 1.146vw; /* 22px */
+  padding: 10.5px 32px;
+  ${font.title3}
   border: none;
-  border-radius: 0.52vw; /* 10px */
+  border-radius: 8px;
   cursor: pointer;
   &.ok {
-    background-color: #41c3ab;
+    background-color: var(--green2);
     color: white;
   }
   &.no {
-    background-color: #f2f2f2;
+    background-color: var(--gray4);
     color: black;
   }
 `;

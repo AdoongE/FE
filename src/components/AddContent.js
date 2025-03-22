@@ -395,13 +395,8 @@ function AddContent() {
                         {tags.map((tag, idx) => (
                           <Chip key={idx}>
                             <TagP>{tag}</TagP>
-                            <Icon
+                            <CancelIcon
                               icon="ic:round-close"
-                              style={{
-                                width: '1.25vw',
-                                height: '1.25vw',
-                                color: 'white',
-                              }}
                               onClick={() => {
                                 const updatedTags = tags.filter(
                                   (item) => item !== tag,
@@ -446,12 +441,12 @@ function AddContent() {
                   {recoTags.length === 0 ? (
                     <div
                       style={{
-                        padding: '0.26vw 0.625vw', // 5px 12px
-                        backgroundColor: '#dcdada',
+                        padding: '3px 8px',
+                        backgroundColor: 'var(--gray3)',
                         color: '#ff0000',
-                        borderRadius: '0.26vw', // 5px
+                        borderRadius: '4px',
                         textAlign: 'center',
-                        fontSize: '0.833vw', // 16px
+                        fontSize: '12px',
                       }}
                     >
                       태그 추천 불가
@@ -462,14 +457,14 @@ function AddContent() {
                         key={idx}
                         style={{
                           display: 'inline-block',
-                          padding: '0.26vw .625vw',
-                          margin: '0.26vw',
-                          backgroundColor: '#dcdada',
-                          borderRadius: '0.26vw',
+                          padding: '3px 8px',
+                          marginRight: '6px',
+                          backgroundColor: 'var(--gray3)',
+                          borderRadius: '4px',
                           cursor: 'pointer',
-                          color: '#4f4f4f',
+                          color: 'var(--gray1)',
                           fontWeight: '600',
-                          fontSize: '0.833vw',
+                          fontSize: '12px',
                           border: 'none',
                         }}
                         onClick={(event) => handleRecoTagClick(event, tag)}
@@ -530,23 +525,25 @@ function AddContent() {
 }
 
 const Chip = styled.div`
-  width: fit-content;
-  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 0.26vw; /* 5px */
-  column-gap: 0.781vw; /* 15px */
-  background-color: #41c3ab;
-  padding-left: 0.833vw; /* 16px */
-  padding-right: 0.833vw; /* 16px */
-  margin: 0.208vw; /* 4px */
+  border-radius: 4px;
+  background-color: var(--green2);
+  padding: 6.5px 12px;
+  gap: 4px;
 `;
 
 const TagP = styled.p`
-  font-size: 1.042vw; /* 20px */
+  ${font.title3}
+`;
+
+const CancelIcon = styled(Icon)`
+  width: 18px;
+  height: 18px;
+  color: white;
 `;
 
 const ButtonContainers = styled.div`
@@ -557,16 +554,14 @@ const ButtonContainers = styled.div`
 
 const Count = styled.div`
   width: fit-content;
-  font-weight: 400;
-  font-size: 1.04vw; /* 20px */
-  color: #9f9f9f;
-  transform: translateX(66.04vw) translateY(-2.08vw); /* 1268px, -40px */
+  ${font.title4}
+  color: var(--gray2);
+  transform: translateX(940px) translateY(-35px);
 `;
 
 const Recommend = styled.div`
-  font-weight: 400;
-  font-size: 0.94vw; /* 18px */
-  color: #4f4f4f;
+  ${font.body2}
+  color: var(--gray1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -574,73 +569,66 @@ const Recommend = styled.div`
 
 const Recommends = styled.div`
   display: flex;
-  column-gap: 0.89vw; /* 17px */
+  column-gap: 12px;
 `;
 
 const InputButton = styled.button`
-  width: fit-content;
-  height: 2.3vw; /* 44.19px */
-  border-radius: 0.52vw; /* 10px */
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0.05vw solid #9f9f9f; /* 1px */
+  border: none;
   color: white;
-  font-weight: 500;
-  font-size: 1.04vw; /* 20px */
-  background-color: #9f9f9f;
-  padding: 0.52vw 0.94vw; /* 10px, 18px */
+  ${font.title3}
+  background-color: var(--gray2);
+  padding: 8px 12px;
 `;
 
 const TagContainer = styled.div`
-  width: 36.93vw; /* 709px */
-  min-height: 3.13vw; /* 60px */
-  border: 0.05vw solid #9f9f9f; /* 1px */
-  border-radius: 0.52vw; /* 10px */
+  width: 452px;
+  border: 0.6px solid var(--gray2);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 0 0.31vw; /* 0px, 6px */
+  padding: 8px;
+  gap: 10px;
 `;
 
 const TagInputs = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 0.78vw; /* 15px */
+  row-gap: 8px;
 `;
 
 const TagInput = styled.input`
   flex-grow: 1;
-  padding: 0.42vw 0;
   border: none;
   outline: none;
-  font-size: 1.04vw;
+  ${font.title4}
   background-color: transparent;
+  padding: 6px;
 `;
 
 const TagDiv = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1.04vw; /* 20px */
+  gap: 12px;
   align-items: center;
 `;
 
 const Text = styled.textarea`
-  width: 69.48vw; /* 1334px */
-  height: 12.4vw; /* 238px */
-  border-radius: 0.52vw; /* 10px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.04vw; /* 20px */
-  padding-left: 1.41vw; /* 27px */
-  padding-top: 1.35vw; /* 26px */
-  padding-right: 1.41vw; /* 27px */
+  width: 1000px;
+  height: 182px;
+  border-radius: 8px;
+  border: 0.6px solid var(--gray1);
+  ${font.title4}
+  padding: 14px 16px;
   &:focus {
     outline: none;
   }
   &::placeholder {
-    color: #4f4f4f;
-    font-weight: 400;
-    font-size: 1.04vw; /* 20px */
+    color: var(--gray2);
   }
 `;
 
@@ -648,36 +636,32 @@ const Dday = styled.div``;
 
 const Tag = styled.div`
   display: flex;
-  column-gap: 2.14vw; /* 41px */
+  column-gap: 46px;
 `;
 
 const Memo = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 0.83vw; /* 16px */
+  row-gap: 16px;
 `;
 
 const Date = styled.input`
-  width: 12.4vw; /* 238px */
-  height: 2.6vw; /* 50px */
-  border-radius: 0.26vw; /* 5px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.04vw; /* 20px */
-  font-weight: 400;
-  color: #4f4f4f;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 0.6px solid var(--gray2);
+  ${font.title4}
+  color: var(--gray1);
 `;
 
 const Short = styled.span`
-  font-weight: 400;
-  font-size: 1.04vw; /* 20px */
-  color: #8b8b8b;
-  margin-left: 0.52vw; /* 10px */
+  ${font.body2}
+  color: var(--gray2);
+  margin-left: 8px;
 `;
 
 const Long = styled.div`
   display: flex;
-  column-gap: 0.52vw; /* 10px */
-  margin-bottom: 1.15vw; /* 22px */
+  margin-bottom: 16px;
 `;
 
 const Inputs = styled.div`
@@ -687,21 +671,20 @@ const Inputs = styled.div`
 
 const Name = styled.div`
   font-weight: 400;
-  font-size: 1.56vw; /* 30px */
+  font-size: 20px;
 `;
 
 const TagName = styled.div`
-  font-weight: 400;
-  font-size: 1.56vw; /* 30px */
-  margin-top: 0.62vw; /* 12px */
+  font-size: 20px;
+  margin-top: 12px;
 `;
 
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 4.17vw; /* 80px */
-  margin-top: 2.97vw; /* 57px */
-  margin-bottom: 4.17vw; /* 80px */
+  row-gap: 60px;
+  margin-top: 60px;
+  margin-bottom: 80px;
 `;
 
 const Buttons = styled.button`
@@ -727,8 +710,7 @@ const Buttons = styled.button`
 const ContentPage = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  width: 69.48vw; /* 1334px */
+  align-items: center;
 `;
 
 const MainDiv = styled.div`
@@ -741,23 +723,22 @@ const LeftDiv = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 69.48vw; /* 1334px */
+  width: 1000.5px;
 `;
 
 const TitleDiv = styled.input`
-  font-size: 2.08vw; /* 40px */
+  font-size: 24px;
   color: #9f9f9f;
   border: none;
-  border-bottom: 0.1vw solid #9f9f9f; /* 2px */
-  margin-bottom: 1.88vw; /* 36px */
-  padding-bottom: 0.52vw; /* 10px */
+  border-bottom: 1px solid var(--gray2);
+  padding-bottom: 16px;
 
   &:focus {
     outline: none;
   }
 
   &::placeholder {
-    font-size: 2.08vw; /* 40px */
+    font-size: 24px;
     color: #9f9f9f;
   }
 `;
@@ -765,8 +746,8 @@ const TitleDiv = styled.input`
 const RightDiv = styled.div`
   position: absolute;
   right: 0;
-  top: 16vh;
-  padding-right: 3.33vw; /* 64px */
+  top: 132px;
+  padding-right: 48px;
 `;
 
 const Button = styled.button`

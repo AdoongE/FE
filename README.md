@@ -1,12 +1,7 @@
-
-<div align="center">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:A7F0E7,300:EBF8F5&height=180&text=Seedzip%20🌱&animation=fadeIn&fontColor=000000&fontSize=60" />
-</div>
-
+![seedzip](https://github.com/user-attachments/assets/31b86de2-19b9-48b9-bf33-c3469db509e8)
 ----
 
 ### 서비스 개요
-![KakaoTalk_Photo_2025-03-09-00-24-34](https://github.com/user-attachments/assets/8093e1fc-8031-4fb8-ad17-79d3f285604f)
 
 Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에 모아 관리하고, **필요할 때 활용**할 수 있는 서비스를 제공합니다.
 
@@ -17,28 +12,17 @@ Seedzip은 인사이트와 영감의 씨앗(seed)이 될 콘텐츠를 한 곳에
   
 ### 주요 기능
 
-1. **카테고리 및 북마크**
-    - 카테고리 추가/수정/삭제 가능
-    - 특정 카테고리 북마크로 상단 고정
+<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+    <img src="https://github.com/user-attachments/assets/967a67ce-fde2-4746-9a96-20349498149f" width="400">
+    <img src="https://github.com/user-attachments/assets/133de42f-42c9-4931-811a-7d40ec2f35f7" width="400">
+    <br>
+    <img src="https://github.com/user-attachments/assets/3ae351a7-d727-472c-b6e2-67ce384fff04" width="400">
+    <img src="https://github.com/user-attachments/assets/c60a12d6-04f4-4800-9aee-9abb931e1b40" width="400">
+    <br>
+    <img src="https://github.com/user-attachments/assets/99243e29-c704-4d08-872e-0fd5edfd2ffa" width="400">
+    <img src="https://github.com/user-attachments/assets/1ae577ef-7da0-4478-b8b9-954ce94b122d" width="400">
+</div>
 
-2. **메인화면**
-    - 반응형 디자인 적용
-    - 썸네일, 제목, 태그로 저장된 정보 확인 가능
-
-3. **링크 및 이미지 저장**
-    - 클릭 시 해당 링크로 연결
-    - 이미지 및 PDF는 썸네일 확대로 상세 조회 및 다운로드 가능
-
-4. **AI 추천 시스템**
-    - 링크 저장 시 제목, 태그, 요약 자동 제공
-    - 유튜브와 네이버 기사 링크는 AI 추천 태그 정확도 향상
-
-5. **검색 및 필터링**
-    - 검색어 입력으로 저장된 정보 검색
-    - 태그 선택을 통한 필터링 가능
-
-6. **맞춤 필터 저장**
-    - 세부 조건 설정으로 필터링 저장 및 재사용
 
 ---
 

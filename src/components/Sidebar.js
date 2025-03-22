@@ -675,7 +675,9 @@ const CategoryP = styled.p`
   padding: 0 14px;
 `;
 
-const Accordion = styled.div``;
+const Accordion = styled.div`
+  margin-top: 24px;
+`;
 
 const AccordionTitle = styled.div`
   ${font.title3}

@@ -267,9 +267,9 @@ function ContentHeader({
               <Icon
                 icon="stash:search-solid"
                 style={{
-                  width: '1.25vw',
-                  height: '1.25vw',
-                  marginLeft: '0.781vw',
+                  width: '18px',
+                  height: '18px',
+                  marginLeft: '8px',
                   color: 'black',
                 }}
               />
@@ -296,10 +296,9 @@ function ContentHeader({
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '0.417vw',
+                          gap: '12px',
                           background: 'none',
                           border: 'none',
-                          padding: '0',
                           fontSize: 'inherit',
                           cursor: 'pointer',
                           color: '#666',
@@ -339,7 +338,7 @@ function ContentHeader({
                 <SearchTitle>
                   <img
                     src={filterIcon}
-                    style={{ width: '1.042vw', marginRight: '0.417vw' }}
+                    style={{ width: '16px', marginRight: '5px' }}
                     alt="circle check icon"
                   />
                   검색 필터
@@ -351,8 +350,8 @@ function ContentHeader({
                       <Icon
                         icon="ic:round-close"
                         style={{
-                          width: '1.042vw',
-                          marginLeft: '0.208vw',
+                          width: '16px',
+                          marginLeft: '5px',
                           border: 'none',
                           backgroundColor: 'transparent',
                           color: '#9f9f9f',
@@ -388,13 +387,13 @@ function ContentHeader({
 
 const Main = styled.div`
   position: relative;
-  padding-top: 4.323vw; /* 83px */
-  padding-bottom: 3.646vw; /* 70px */
+  padding-top: 40px;
+  padding-bottom: 7px;
 `;
 
 const Title = styled.div`
   font-weight: 700;
-  font-size: 2.083vw; /* 44px */
+  font-size: 28px;
   position: absolute;
   left: 0;
   display: flex;
@@ -404,13 +403,15 @@ const Title = styled.div`
 
 const CategoryName = styled.span`
   font-weight: 400;
-  font-size: 1.563vw; /* 30px */
-  margin-left: 0.573vw; /* 11px */
+  font-size: 16px;
+  margin-left: 5px;
+  color: #666;
 `;
 
 const DropdownContainer = styled.div`
   display: flex;
-  gap: 1.042vw; /* 20px */
+  gap: 8px;
+  align-items: center;
 `;
 
 const Dropdown = styled.div`
@@ -418,44 +419,47 @@ const Dropdown = styled.div`
 `;
 
 const DropdownButton = styled.button`
-  background: white;
-  border: 0.052vw solid #dcdcdc; /* 1px */
-  border-radius: 0.417vw; /*  0.417vw */
-  font-size: 1.146vw; /* 22px */
-  color: ${(props) => (props.isDefault ? '#9f9f9f' : '#333')};
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  height: 2.5vw; /* 4 0.417vw */
-  width: ${(props) => props.width || '10.417vw'}; /* 200px */
-  position: relative;
-  box-shadow: 0 0.052vw 0.104vw rgba(0, 0, 0, 0.1); /* 0 1px 2px */
-  &:hover {
-    background-color: #f9f9f9;
+  justify-content: space-between;
+  background: white;
+  border: 1px solid #9F9F9F;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #9F9F9F;
+  cursor: pointer;
+  padding: 8px 16px;
+
+  width: ${(props) => (props.$isSort ? '106px' : '137px')}
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-icon {
+    margin-left: 8px;
+    font-size: 16px;
+    color: #9F9F9F;
   }
 `;
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: calc(100% + 0.208vw); /* 4px */
+  top: calc(100% + 4px);
   left: 0;
   background: white;
-  border: 0.052vw solid #dcdcdc; /* 1px */
-  border-radius: 0.417vw; /*  0.417vw */
-  box-shadow: 0 0.208vw 0.313vw rgba(0, 0, 0, 0.1); /* 0 4px 6px */
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.12);
   z-index: 10;
-  width: 10.417vw; /* 200px */
+  width: 96px;
 `;
 
 const DropdownItem = styled.div`
-  padding: 0.521vw 0.625vw; /* 10px 12px */
-  font-size: 1.146vw; /* 22px */
+  padding: 12px 33px 12px 16px;
   color: ${(props) => (props.isSelected ? '#333' : '#666')};
+  font-size: 12px;
   font-weight: ${(props) => (props.isSelected ? '700' : '400')};
   cursor: pointer;
   text-align: left;
-  height: 2.5vw; /* 4 0.417vw */
   display: flex;
   align-items: center;
 
@@ -466,11 +470,11 @@ const DropdownItem = styled.div`
 `;
 
 const SearchContainer = styled.div`
-  width: 25.677vw; /* 493px */
-  height: 2.604vw; /* 50px */
-  border-radius: 1.302vw; /* 25px */
-  margin-right: 2.604vw; /* 50px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
+  width: 370px;
+  height: 36px;
+  border-radius: 18.75px;
+  margin-right: 72px;
+  border: 1px solid #9f9f9f;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -478,12 +482,12 @@ const SearchContainer = styled.div`
 `;
 
 const Search = styled.input`
-  width: 15.625vw; /* 300px */
+  width: 220px;
   border: none;
   text-align: start;
-  font-size: 1.302vw; /* 25px */
+  font-size: 12px;
   &::placeholder {
-    font-size: 0.938vw; /* 1 0.417vw */
+    font-size: 12px;
     color: #9f9f9f;
   }
   &:focus {
@@ -492,12 +496,13 @@ const Search = styled.input`
 `;
 
 const SearchButton = styled.button`
-  width: 5.729vw; /* 110px */
-  height: 2.083vw; /* 40px */
+  width: 78px;
+  height: 28px;
   border: 0;
-  border-radius: 2.101vw; /* 40.32px */
+  border-radius: 30.242px;
   background-color: #f2f2f2;
-  font-size: 0.833vw; /* 16px */
+  font-size: 12px;
+  color: #9f9f9f;
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -508,7 +513,7 @@ const Bar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 4.167vw; /* 80px */
+  margin-top: 80px;
 `;
 
 const FilterDiv = styled.div`
@@ -517,16 +522,16 @@ const FilterDiv = styled.div`
 
 const FilterTitle = styled.div`
   font-weight: 700;
-  font-size: 2.083vw; /* 44px */
+  font-size: 44px;
 `;
 
 const FilterBtn = styled.button`
-  margin-top: 2.604vw; /* 50px */
-  width: 8.594vw; /* 165px */
-  height: 2.292vw; /* 44px */
-  font-size: 1.042vw; /* 20px */
+  margin-top: 50px;
+  width: 165px;
+  height: 44px;
+  font-size: 20px;
   border: none;
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 10px;
   background-color: #def3f1;
   display: flex;
   justify-content: center;
@@ -562,23 +567,24 @@ const FilterEditIcon = styled.img`
 
 const RecentSearchList = styled.div`
   position: absolute;
-  top: calc(100% + 0.26vw); /* 5px */
+  top: calc(100% + 5px);
   left: 50%;
   transform: translateX(-50%);
   background: white;
-  border: 0.052vw solid #dcdcdc; /* 1px */
-  border-radius: 0.417vw; /*  0.417vw */
-  width: 23.177vw; /* 445px */
-  box-shadow: 0 0.208vw 0.313vw rgba(0, 0, 0, 0.1); /* 0 4px 6px */
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  width: 370px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
   z-index: 10;
   height: auto;
 `;
 
 const RecentSearchTitle = styled.div`
   font-weight: bold;
-  font-size: 1.042vw; /* 20px */
-  padding: 0.99vw; /* 19px */
+  font-size: 16px;
+  padding: 16px;
   position: relative;
+  color: #4f4f4f;
 
   &:after {
     content: '';
@@ -586,7 +592,7 @@ const RecentSearchTitle = styled.div`
     bottom: 0;
     left: 5%;
     right: 5%;
-    height: 0.052vw; /* 1px */
+    height: 1px;
     background-color: #eaeaea;
   }
 `;
@@ -595,44 +601,46 @@ const RecentSearchItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.781vw 0.99vw; /* 15px 19px */
-  margin-top: 0.781vw; /* 15px */
-  margin-bottom: 0.781vw; /* 15px */
-  font-size: 0.938vw; /* 1 0.417vw */
-  color: #666;
+  padding: 4px 14px;
+  margin-left; 4px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: #9f9f9f;
 
   & > span {
     display: flex;
     align-items: center;
-    gap: 0.833vw; /* 16px */
+    gap: 14px;
   }
 
   & > div {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 0.313vw; /* 6px */
+    gap: 2px;
   }
 `;
 
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  font-size: 0.833vw; /* 16px */
+  font-size: 12px;
   cursor: pointer;
+  color: #9f9f9f;
 `;
 
 // 검색 필터 스타일
 const FilterContainer = styled.div`
   background-color: #f2f2f2;
-  border-radius: 0.521vw; /* 10px */
-  width: 32.917vw; /* 632px */
-  min-height: 2.604vw; /* 50px */
+  border-radius: 8px;
+  width: 560px;
+  min-height: 44px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1.25vw; /* 1.25vw */
-  padding: 0.208vw 0.833vw; /* 4px 16px */
+  padding: 4px 16px;
   transition: height 0.3s ease;
   overflow: hidden;
 `;
@@ -640,12 +648,12 @@ const FilterContainer = styled.div`
 const ParentContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.458vw; /* 2 0.417vw */
+  gap: 20px;
 `;
 
 const SearchTitle = styled.span`
   font-weight: bold;
-  font-size: 0.833vw; /* 16px */
+  font-size: 12px;
   color: #9f9f9f;
   display: flex;
   align-items: center;
@@ -657,35 +665,34 @@ const ToggleButton = styled.button`
   color: #9f9f9f;
   cursor: pointer;
   position: relative;
-  font-size: 0.833vw; /* 16px */
+  font-size: 12px;
 
   &:after {
     content: '';
     display: block;
-    width: calc(100% - 0.521vw); /* 10px */
-    height: 0.052vw; /* 1px */
+    width: calc(100% - 10px);
+    height: 1px;
     background-color: #9f9f9f;
     position: absolute;
-    left: 0.26vw; /* 5px */
+    left: 5px;
   }
 `;
 
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.521vw; /* 10px */
+  gap: 10px;
   overflow: hidden;
-  width: 22.292vw; /* 42 0.417vw */
+  width: 22.292vw;
 `;
 
 const Tag = styled.div`
-  padding: 0.156vw 0.625vw; /* 3px 12px */
-  background-color: #ffffff;
-  border-radius: 0.521vw; /* 10px */
-  font-size: 0.833vw; /* 16px */
-  color: #4f4f4f;
   display: inline-flex;
-  height: 1.788vw; /* 34.33px */
+  padding: 7px 8px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #4f4f4f;
   justify-content: center;
   align-items: center;
 `;

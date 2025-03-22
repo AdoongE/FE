@@ -276,15 +276,21 @@ const MainPage = () => {
                 src={noSearchContent}
                 alt="noSearch"
                 style={{
-                  width: '13.958vw',
-                  height: '9.896vw',
-                  marginBottom: '1.158vw',
+                  width: '220.001px',
+                  height: '156px',
+                  marginBottom: '20px',
                 }}
               />
-              <div style={{ fontSize: '1.563vw', marginBottom: '0.208vw' }}>
+              <div style={{ fontSize: '24px', marginBottom: '5px' }}>
                 해당 조건에 맞는 콘텐츠가 없어요
               </div>
-              <div style={{ fontSize: '1.042vw', color: '#9f9f9f' }}>
+              <div
+                style={{
+                  fontSize: '16px',
+                  color: '#9f9f9f',
+                  marginBottom: '100px',
+                }}
+              >
                 다른 키워드로 검색해보세요
               </div>
             </NoSearchContent>
@@ -365,14 +371,14 @@ const MainPage = () => {
 // 스타일 컴포넌트
 const MainContainer = styled.div`
   display: flex;
-  padding-left: 20.313vw; /* 390px */
+  padding-left: 300px;
   position: relative;
 `;
 
 const SidebarContainer = styled.div`
   position: fixed;
   left: 0;
-  width: 17.969vw; /* 345px */
+  width: 262px;
   height: 100vh;
   z-index: 1;
 `;
@@ -417,9 +423,9 @@ const Pagination = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.417vw; /* 8px */
+  gap: 8px;
   position: absolute;
-  bottom: 1.563vw; /* 30px */
+  bottom: 30px;
   z-index: 1;
   margin-left: calc(100vw * 0.3609);
 `;
@@ -427,7 +433,7 @@ const Pagination = styled.div`
 const PageArrow = styled.button`
   background: transparent;
   border: none;
-  font-size: 0.833vw; /* 16px */
+  font-size: 16px;
   color: ${(props) => (props.disabled ? '#ccc' : '#000')};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   &:hover {
@@ -438,7 +444,7 @@ const PageArrow = styled.button`
 const PageNumber = styled.button`
   background: transparent;
   border: none;
-  font-size: 0.833vw; /* 16px */
+  font-size: 16px;
   font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
   color: ${({ $active }) => ($active ? '#000' : '#999')};
   cursor: pointer;

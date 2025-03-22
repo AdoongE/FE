@@ -42,23 +42,23 @@ const LogoContainer = styled.div`
 `;
 
 const StyledLogoImage = styled.img`
-  width: 1.875vw; /* 36px */
-  height: 1.875vw; /* 36px */
-  margin-left: 2.083vw; /* 40px */
+  width: 27px;
+  height: 27px;
+  margin-left: 24px;
 `;
 
 const StyledLogo = styled.img`
-  width: 7.708vw; /* 148px */
-  height: 2.083vw; /* 40px */
-  margin-left: 0.833vw; /* 16px */
-  margin-top: 0.625vw; /* 12px */
+  width: 111px;
+  height: 30px;
+  margin-left: 7.5px;
+  margin-top: 7px;
 `;
 
 const LoginButton = styled.button`
-  width: 5.573vw; /* 107px */
-  height: 2.344vw; /* 45px */
-  border-radius: 2.1vw; /* 40.32px */
-  padding: 0.625vw 1.563vw; /* 12px 30px */
+  width: 78px;
+  height: 36px;
+  border-radius: 28px;
+  padding: 8px 20px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -66,20 +66,20 @@ const LoginButton = styled.button`
   color: white;
   background-color: #41c3ab;
   font-weight: 600;
-  font-size: 0.924vw; /* 17.74px */
+  font-size: 14px;
   border: 0;
   position: absolute;
-  top: 1.875vw; /* 36px */
-  right: 2.083vw; /* 40px */
+  top: 1.875vw;
+  right: 2.083vw;
 `;
 
 const Bar = styled.div`
   width: 100%;
-  height: 6.146vw; /* 118px */
+  height: 84px;
   position: relative;
   display: flex;
   align-items: center;
-  box-shadow: 0 0 0.156vw 0.052vw rgba(0, 0, 0, 0.05); /* 0px 0px 3px 1px */
+  box-shadow: 0px 0px 7.5px 1.5px rgba(0, 0, 0, 0.07);
   top: 0;
 `;
 

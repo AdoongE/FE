@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
+import { font } from '../styles/font';
 
 const PdfUploadComponent = ({ representativeIndex, files = [] }) => {
   return (
@@ -19,8 +20,8 @@ const PdfUploadComponent = ({ representativeIndex, files = [] }) => {
               <FileIcon>
                 <Icon
                   icon="mdi-light:file"
-                  width="2.604vw"
-                  height="2.604vw"
+                  width="40px"
+                  height="40px"
                   style={{ color: '#9F9F9F' }}
                 />
               </FileIcon>
@@ -41,27 +42,26 @@ const Wrapper = styled.div`
 `;
 
 const Instructions = styled.p`
-  font-size: 1.563vw; /* 30px */
-  font-weight: 400;
-  margin-bottom: 0.833vw; /* 16px */
+  ${font.title1}
+  margin-bottom: 15px;
 
   span {
-    font-size: 0.938vw; /* 18px */
-    color: #999;
+    ${font.body2}
+    color: var(--gray2);
     font-weight: normal;
   }
 `;
 
 const FilesWrapper = styled.div`
   display: flex;
-  gap: 1.563vw; /* 30px */
+  gap: 30px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.781vw; /* 15px */
-  border: 0.052vw solid #ddd; /* 1px */
-  border-radius: 0.417vw; /* 8px */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   width: 100%;
-  max-width: 57.292vw; /* 1100px */
+  max-width: 1000px;
 `;
 
 const FileContainer = styled.div`
@@ -71,11 +71,11 @@ const FileContainer = styled.div`
 `;
 
 const FileBox = styled.div`
-  width: 8.281vw; /* 159px */
-  height: 9.219vw; /* 177px */
+  width: 140px;
+  height: 132px;
   position: relative;
   background-color: #eaf4f4;
-  border-radius: 0.208vw; /* 4px */
+  border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,30 +85,30 @@ const FileBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  left: 0.26vw; /* 5px */
+  top: 5px;
+  left: 5px;
   background-color: #47c28b;
   color: white;
-  padding: 0.104vw 0.313vw; /* 2px 6px */
-  font-size: 0.625vw; /* 12px */
-  border-radius: 0.625vw; /* 12px */
+  padding: 2px 6px;
+  font-size: 10px;
+  border-radius: 20px;
 `;
 
 const FileIcon = styled.div`
   color: #4caf50;
-  font-size: 2.604vw; /* 50px */
+  font-size: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0.417vw; /* 8px */
+  margin-bottom: 8px;
 `;
 
 const FileName = styled.div`
-  margin-top: 0.417vw; /* 8px */
-  font-size: 0.729vw; /* 14px */
-  color: #666;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--gray2);
   text-align: center;
-  width: 7.292vw; /* 140px */
+  width: 140px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

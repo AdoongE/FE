@@ -266,7 +266,6 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 60px;
-  margin-top: 76px;
   margin-bottom: 60px;
 `;
 

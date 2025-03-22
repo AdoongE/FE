@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axios-instance';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { font } from '../../styles/font';
 
 function ImageUploadModal({ onClose }) {
   const [images, setImages] = useState([]);
@@ -263,10 +264,10 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  width: 35.42vw; /* 680px */
-  height: 32.29vw; /* 620px */
-  padding: 2.6vw; /* 50px */
-  border-radius: 1.04vw; /* 20px */
+  width: 542px;
+  height: 500px;
+  padding: 30px 50px;
+  border-radius: 36px;
   display: flex;
   flex-direction: column;
 `;
@@ -278,38 +279,36 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.67vw; /* 32px */
-  font-weight: bold;
-  height: 100%;
+  font-size: 24px;
+  font-weight: 600;
 `;
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 3.13vw; /* 60px */
+  margin-top: 28px;
   justify-content: space-between;
-  height: 100%;
 `;
 
 const DescriptionText = styled.p`
-  color: var(--Color-4, #4f4f4f);
-  font-size: 1.25vw; /* 24px */
+  color: var(--gray1);
+  font-size: 20px;
   font-style: normal;
-  margin-bottom: 0.42vw; /* 8px */
+  margin-bottom: 8px;
 `;
 
 const DescriptionNote = styled.small`
   color: var(--Color-5, #9f9f9f);
-  font-size: 0.83vw; /* 16px */
+  font-size: 12px;
   font-style: normal;
-  margin-bottom: 1.04vw; /* 20px */
+  margin-bottom: 10px;
 `;
 
 const DropArea = styled.div`
   position: relative;
-  height: 12.5vw; /* 240px */
-  border-radius: 0.52vw; /* 10px */
-  background-color: #f6f6f6;
+  height: 202px;
+  border-radius: 8px;
+  background-color: var(--gray6);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -322,7 +321,7 @@ const EmptyState = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%; /* 부모 높이에 맞게 중앙 정렬 */
+  height: 100%;
 `;
 
 const FilesState = styled.div`
@@ -331,42 +330,42 @@ const FilesState = styled.div`
 
 const DropText = styled.div`
   color: #aaa;
-  margin-top: 0.63vw; /* 12px */
-  font-size: 0.83vw; /* 16px */
+  margin-top: 16px;
+  font-size: 18px;
   text-align: center;
 `;
 
 const ImagesWrapper = styled.div`
   position: relative;
   display: flex;
-  gap: 0.52vw; /* 10px */
-  padding: 0.52vw 0; /* 10px */
+  gap: 12px;
+  padding: 5px;
 `;
 
 const ScrollButton = styled.button`
   position: absolute;
-  top: 50%;
+  top: 57%;
   transform: translateY(-50%);
   background-color: transparent;
   border: none;
   cursor: pointer;
-  font-size: 1.04vw; /* 20px */
+  font-size: 20px;
 `;
 
 const ScrollButtonLeft = styled(ScrollButton)`
-  left: -2.08vw; /* -40px */
+  left: -20px;
 `;
 
 const ScrollButtonRight = styled(ScrollButton)`
-  right: -2.08vw; /* -40px */
+  right: -20px;
 `;
 
 const ImageBox = styled.div`
-  width: 6.77vw; /* 130px */
-  height: 6.77vw; /* 130px */
-  margin-top: 1.04vw; /* 20px */
+  width: 110px;
+  height: 110px;
+  margin-top: 20px;
   background-color: #f0f0f0;
-  border-radius: 0.26vw; /* 5px */
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -376,58 +375,61 @@ const ImageBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  left: 0.26vw; /* 5px */
+  top: 5px;
+  left: 5px;
   background-color: #47c28b;
   color: white;
-  padding: 0.1vw 0.31vw; /* 2px 6px */
-  font-size: 0.63vw; /* 12px */
-  border-radius: 0.63vw; /* 12px */
-  font-weight: bold;
+  padding: 2px 6px;
+  font-size: 8px;
+  border-radius: 4px;
+  font-weight: 500;
 `;
 
 const ImagePreview = styled.img`
-  width: 6.77vw; /* 130px */
-  height: 6.77vw; /* 130px */
-  border-radius: 0.26vw; /* 5px */
+  width: 110px;
+  height: 110px;
+  border-radius: 4px;
   object-fit: cover;
 `;
 
 const DeleteButton = styled.button`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  right: 0.26vw; /* 5px */
+  top: 5px;
+  right: 5px;
   background-color: transparent;
   border: none;
   color: #666;
   cursor: pointer;
-  font-size: 1.04vw; /* 20px */
+  font-size: 20px;
 `;
 
 const AddButton = styled.button`
   position: absolute;
-  margin-top: 9.22vw; /* 177px */
+  margin-top: 154px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0.52vw 1.04vw; /* 10px 20px */
-  border-radius: 0.52vw; /* 10px */
+  padding: 10px 20px;
+  border-radius: 10px;
   background: var(--Color-5, #9f9f9f);
   color: white;
   cursor: pointer;
-  font-size: 0.83vw; /* 16px */
+  font-size: 12px;
   border: none;
 `;
 
 const FileLimit = styled.p`
-  font-size: 0.83vw; /* 16px */
+  margin-top: 10px;
+  font-size: 12px;
   color: #9f9f9f;
 `;
 
 const ErrorMessage = styled.p`
-  font-size: 0.83vw; /* 16px */
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
   color: #ff6b6b;
-  margin-top: 0.42vw; /* 8px */
-  margin-bottom: -1.56vw; /* -30px */
+  margin-top: 8px;
+  margin-bottom: -20px;
 `;
 
 const Footer = styled.div`
@@ -436,17 +438,16 @@ const Footer = styled.div`
 `;
 
 const Button = styled.button`
-  margin-top: 6.25vw; /* 120px */
+  position: fixed;
   background-color: #41c3ab;
-  width: 5.16vw; /* 99px */
-  height: 2.81vw; /* 54px */
+  margin-top: 70px;
+  padding: 12px 24px;
   color: white;
   border: none;
-  border-radius: 2.6vw; /* 50px */
-  font-size: 1.15vw; /* 22px */
+  border-radius: 40px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.729vw 1.563vw;
+  ${font.title3}
 `;

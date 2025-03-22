@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 import defaultImage from '../assets/icons/seed_contentbox.png';
+import { font } from '../styles/font';
 // import { Document, Page } from 'react-pdf';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
@@ -59,7 +60,7 @@ function ContentBox({
   };
 
   return (
-    <Box>
+    <div>
       <ImageBox>
         {contentDateType === 'PDF' ? (
           // <PDFThumbnail onClick={open}>
@@ -104,14 +105,8 @@ function ContentBox({
       </TagContainer>
       <ContentTitle>
         <IconBox>
-          <Icon
+          <StyledIcon
             icon={contentIcons[contentDateType] || 'ic:round-link'} // 기본값은 링크
-            style={{
-              width: '1.042vw',
-              height: '1.042vw',
-              color: 'white',
-              zIndex: '2',
-            }}
             onClick={handleIconClick}
           />
         </IconBox>
@@ -121,48 +116,52 @@ function ContentBox({
         {displayCategory}
       </CategoryDisplay>
       {message && <MemoText>{highlightText(message, keyword)}</MemoText>}
-    </Box>
+    </div>
   );
 }
 
-const Dropdown = styled.div`
-  position: absolute;
-  top: 0.521vw; /* 10px */
-  left: 20.833vw; /* 400px */
+const StyledIcon = styled(Icon).attrs((props) => ({
+  icon: props.icon || 'ic:round-link',
+}))`
+  width: 12px;
+  height: 12px;
+  color: white;
+  z-index: 2;
+  cursor: pointer;
 `;
 
-const Box = styled.div`
-  width: 22.917vw; /* 440px */
-  min-height: 20.156vw; /* 387px */
-  z-index: 0;
+const Dropdown = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 6px;
 `;
 
 const ImageBox = styled.div`
-  width: 22.917vw; /* 440px */
-  height: 14.792vw; /* 284px */
-  background-color: #dcdada;
-  border-radius: 0.521vw; /* 10px */
+  width: 328px;
+  height: 212px;
+  background-color: var(--gray3);
+  border-radius: 10px;
   position: relative;
-  margin-bottom: 0.573vw; /* 11px */
+  margin-bottom: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 0.208vw #9a9a9a; /* 4px */
+  box-shadow: 0 0 3.75px #9a9a9a;
 `;
 
 const ContentImage = styled.img`
   ${({ isDefaultImage }) =>
     isDefaultImage
       ? `
-    width: 6.719vw; /* 129px */
-    height: 6.719vw; /* 129px */
+    width: 78px; 
+    height: 78px; 
     filter: invert(10%) sepia(54%) saturate(0%) hue-rotate(125deg) brightness(91%) contrast(90%);
   `
       : `
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0.521vw; /* 10px */
+    border-radius: 10px; 
   `}
 `;
 
@@ -180,32 +179,30 @@ const ContentImage = styled.img`
 // `;
 
 const IconBox = styled.div`
-  width: 1.563vw; /* 30px */
-  height: 1.563vw; /* 30px */
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background-color: #4f4f4f;
+  background-color: var(--gray1);
   z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 0.365vw; /* 7px */
+  margin-right: 8px;
 `;
 
 const Dday = styled.div`
   position: absolute;
   width: fit-content;
-  height: 0.885vw; /* 17px */
-  top: 0.521vw; /* 10px */
-  left: 0.521vw; /* 10px */
-  border-radius: 2.604vw; /* 50px */
-  padding: 0.26vw 0.781vw; /* 5px 15px */
+  height: 17px;
+  top: 12px;
+  left: 16px;
+  border-radius: 37.5px;
+  padding: 4px 8px;
   opacity: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
-  font-size: 0.729vw; /* 14px */
-  line-height: 0.87vw; /* 16.71px */
+  ${font.body1}
   text-align: center;
   color: black;
 
@@ -213,73 +210,63 @@ const Dday = styled.div`
     dDay === 0
       ? '#9AE4D6'
       : dDay === -1 || dDay === -2 || dDay === -3
-        ? '#FFFFFF'
+        ? '#DCDADA'
         : dDay <= -4
-          ? '#9F9F9F'
+          ? '#FFFFFF'
           : 'transparent'};
 `;
 
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.417vw; /* 8px */
+  gap: 8px;
 `;
 
 const Tag = styled.button`
   width: fit-content;
   height: fit-content;
   border: 0;
-  border-radius: 2.604vw; /* 50px */
+  border-radius: 37.5px;
   opacity: 80%;
   background-color: white;
-  border: 0.026vw solid #9f9f9f; /* 0.5px */
-  padding: 0.26vw 0.521vw; /* 5px 10px */
-  font-weight: 400;
-  font-size: 0.625vw; /* 12px */
+  border: 0.375px solid var(--gray2);
+  padding: 4px 6px;
+  ${font.body3}
   display: flex;
   align-items: center;
   justify-content: center;
-  color: black;
 `;
 
 const ContentTitle = styled.div`
-  margin-top: 0.521vw; /* 10px */
+  margin: 8px 0px;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 0.469vw; /* 9px */
-  white-space: normal;
+  align-items: center;
   width: 100%;
-  position: relative; /* relative로 위치 설정 */
 `;
 
 const ContentName = styled.div`
-  font-weight: 500;
-  font-size: 1.146vw; /* 22px */
-  line-height: 1.367vw; /* 26.25px */
-  color: #000000;
-  margin-left: 0.365vw; /* 7px */
-  white-space: normal;
+  ${font.title3}
   word-break: break-word;
-  overflow: hidden; /* 넘치는 텍스트는 숨기기 */
-  text-overflow: ellipsis; /* 텍스트가 넘칠 경우 ... 표시 */
-  width: calc(100% - 35px); /* 아이콘과 여백을 고려한 타이틀의 너비 */
+  flex-shrink: 0;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 35px);
   display: inline-block;
 `;
 
 const CategoryDisplay = styled.div`
-  font-weight: 400;
-  font-size: 0.833vw; /* 16px */
-  line-height: 0.99vw; /* 19px */
-  color: rgb(141, 141, 141);
+  ${font.body2}
+  color: var(--gray1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const MemoText = styled.div`
-  margin-top: 0.417vw; /* 8px */
-  font-size: 0.729vw; /* 14px */
-  color: #555;
+  margin-top: 4px;
+  ${font.body2}
+  color: var(--gray2);
 `;
 
 export default ContentBox;

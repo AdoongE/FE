@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from './style';
 import ImgBox from './ImgBox';
 import BoxInfo from './BoxInfo';
 
@@ -18,7 +17,7 @@ function ContentBox({
   fetchData,
 }) {
   return (
-    <Box>
+    <div>
       <ImgBox
         thumbnailImage={thumbnailImage}
         contentDateType={contentDateType}
@@ -36,7 +35,7 @@ function ContentBox({
         contentDateType={contentDateType}
         updatedDt={updatedDt}
       />
-    </Box>
+    </div>
   );
 }
 

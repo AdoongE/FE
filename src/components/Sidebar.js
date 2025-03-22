@@ -807,6 +807,7 @@ const CustomItem = styled.div`
   padding: 6px;
   gap: 13px;
   &:hover {
+    width: 105%;
     background-color: ${({ active }) =>
       active ? 'rgba(188, 188, 188, 0.2)' : '#eaebeb'};
     border-radius: 8px;

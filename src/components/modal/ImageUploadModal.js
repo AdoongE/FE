@@ -129,7 +129,7 @@ function ImageUploadModal({ onClose }) {
           <Title>씨드 추가</Title>
           <Icon
             icon="line-md:close"
-            style={{ width: '1.25vw', height: '1.25vw', cursor: 'pointer' }}
+            style={{ width: '24px', height: '24px', cursor: 'pointer' }}
             onClick={onClose}
           />
         </Header>
@@ -147,8 +147,8 @@ function ImageUploadModal({ onClose }) {
                 <Icon
                   icon="material-symbols:upload-rounded"
                   style={{
-                    width: '3.07vw',
-                    height: '3.07vw',
+                    width: '48px',
+                    height: '48px',
                     color: '#4F4F4F',
                   }}
                 />
@@ -170,7 +170,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '1.042vw', color: '#666' }}
+                        style={{ fontSize: '20px', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -203,7 +203,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-left"
-                        style={{ fontSize: '1.042vw', color: '#666' }}
+                        style={{ fontSize: '20px', color: '#666' }}
                       />
                     </ScrollButtonLeft>
                   )}
@@ -216,7 +216,7 @@ function ImageUploadModal({ onClose }) {
                     >
                       <Icon
                         icon="fa-solid:angle-right"
-                        style={{ fontSize: '1.042vw', color: '#666' }}
+                        style={{ fontSize: '20px', color: '#666' }}
                       />
                     </ScrollButtonRight>
                   )}
@@ -426,7 +426,7 @@ const FileLimit = styled.p`
 const ErrorMessage = styled.p`
   font-size: 12px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   color: #ff6b6b;
   margin-top: 8px;
   margin-bottom: -20px;

@@ -5,6 +5,7 @@ import checkIcon from '../../assets/icons/Check.png';
 import AddLinkModal from './AddLinkModal';
 import ImageUploadModal from './ImageUploadModal';
 import PdfUploadModal from './PdfUploadModal';
+import { font } from '../../styles/font';
 
 const CheckboxModal = forwardRef((_, ref) => {
   const [dataType, setDataType] = useState(null);
@@ -129,13 +130,12 @@ const CheckboxModal = forwardRef((_, ref) => {
 CheckboxModal.displayName = 'CheckboxModal';
 
 const Dialog = styled.dialog`
-  width: 30.208vw; /* 580px */
-  height: 14.99vw; /* 280px */
-  border-radius: 2.604vw; /* 50px */
+  width: 542px;
+  border-radius: 36px;
   background: #fff;
   border: 0;
-  padding: 2.083vw 2.604vw; /* 40px 50px */
-  top: 50%;
+  padding: 30px 50px;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   ::backdrop {
@@ -144,68 +144,62 @@ const Dialog = styled.dialog`
 `;
 
 const Button = styled.button`
-  border-radius: 2.604vw; /* 50px */
+  ${font.title3}
+  border-radius: 40px;
   background: #41c3ab;
   border: 0;
   display: flex;
-  padding: 0.729vw 1.563vw; /* 14px 30px */
+  padding: 12px 24px;
   justify-content: center;
   align-items: center;
   color: #fff;
-  font-family: 'Pretendard Variable';
-  font-size: 1.146vw; /* 22px */
-  font-weight: 500;
-  width: 5.156vw; /* 99px */
-  height: 2.813vw; /* 54px */
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 700;
-  font-family: 'Pretendard-Regular';
+  font-size: 24px;
+  font-weight: 600;
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 3.229vw; /* 62px */
+  margin-bottom: 30px;
 `;
 
 const Title = styled.div`
   color: #4f4f4f;
-  font-family: 'Pretendard Variable';
-  font-size: 1.25vw; /* 24px */
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-bottom: 1.094vw; /* 21px */
+  margin-bottom: 24px;
 `;
 
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 2.083vw; /* 40px */
-  margin-bottom: 2.292vw; /* 44px */
+  column-gap: 40px;
+  margin-bottom: 52px;
 `;
 
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 0.625vw; /* 12px */
+  gap: 20px;
 
   span {
-    font-size: 1.25vw; /* 24px */
+    font-size: 20px;
     color: #4f4f4f;
   }
 `;
 
 const TypeBox = styled.input`
-  width: 1.458vw; /* 28px */
-  height: 1.458vw; /* 28px */
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   appearance: none;
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  border-radius: 0.26vw; /* 5px */
+  border: 1px solid #9f9f9f;
+  border-radius: 5px;
 
   &:checked {
     background-color: #41c3ab;

@@ -14,10 +14,12 @@ export const GlobalStyle = createGlobalStyle`
     --gray6: #F6F6F6;
     --sidebar: #F8FBFB;
   }
+  
   html, body, #root {
     font-family: "Pretendard";
   }
-  * {
+
+  p {
     margin: 0;
     padding: 0;
   }

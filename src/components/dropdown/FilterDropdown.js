@@ -220,12 +220,11 @@ const ModalContent = styled.div`
   background-color: white;
   border-radius: 36px;
   width: 542px;
+  height: 254px;
 `;
 
 const ModalDiv = styled.div`
-  padding: 0 36px;
-  padding-top: 40px;
-  padding-bottom: 25px;
+  margin-top: 82px;
 `;
 
 const TopDiv = styled.div`
@@ -297,8 +296,6 @@ const ModalButton = styled.button`
 
 const ModalDelTitle = styled.h2`
   ${font.title0}
-  padding-top: 42px;
-  margin-top: 0px;
   margin-bottom: 62px;
   display: flex;
   justify-content: center;

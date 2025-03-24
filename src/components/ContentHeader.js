@@ -210,13 +210,10 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
                   isDefault={!localSelectedFormat}
-                  width="7.135vw"
+                  width="137px"
                 >
                   {selectedFormatState} {/* 선택된 저장형식 표시 */}
-                  <Icon
-                    icon="uil:angle-down"
-                    style={{ marginLeft: ' 0.417vw' }}
-                  />
+                  <Icon icon="uil:angle-down" style={{ marginLeft: ' 8px ' }} />
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
@@ -387,8 +384,8 @@ function ContentHeader({
 
 const Main = styled.div`
   position: relative;
-  padding-top: 40px;
-  padding-bottom: 7px;
+  padding-top: 35px;
+  padding-bottom: 44px;
 `;
 
 const Title = styled.div`
@@ -522,23 +519,22 @@ const FilterDiv = styled.div`
 
 const FilterTitle = styled.div`
   font-weight: 700;
-  font-size: 44px;
+  font-size: 28px;
 `;
 
 const FilterBtn = styled.button`
   margin-top: 50px;
-  width: 165px;
-  height: 44px;
-  font-size: 20px;
+  height: 36px;
+  padding: 8px 16px;
+  font-size: 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: #def3f1;
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
-  padding: 0.26vw 0.938vw;
-  gap: 0.677vw;
+  gap: 2px;
 
   &:hover {
     background-color: #21a58c;
@@ -547,15 +543,15 @@ const FilterBtn = styled.button`
 `;
 
 const FilterName = styled.div`
-  width: 5.5vw;
+  width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const FilterEditIcon = styled.img`
-  width: 1.25vw; /* 1.25vw */
-  height: 1.25vw; /* 1.25vw */
+  width: 16px;
+  height: 16px;
   filter: invert(48%) sepia(59%) saturate(518%) hue-rotate(119deg)
     brightness(98%) contrast(89%);
 
@@ -639,7 +635,7 @@ const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 1.25vw; /* 1.25vw */
+  margin-top: 24px;
   padding: 4px 16px;
   transition: height 0.3s ease;
   overflow: hidden;

@@ -204,7 +204,7 @@ export const StyledLogo = styled.img`
 export const NavbarMenu = styled.div`
   display: flex;
   position: fixed;
-  margin-left: 315px;
+  margin-left: 310px;
 `;
 
 export const MenuButton = styled.button`

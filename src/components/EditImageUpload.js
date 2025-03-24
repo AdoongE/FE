@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import { axiosInstance } from './api/axios-instance';
+import { font } from '../styles/font';
 
 const MAX_IMAGES = 5;
 
@@ -194,23 +195,22 @@ const Wrapper = styled.div`
 `;
 
 const Instructions = styled.p`
-  font-size: 1.563vw; /* 30px */
+  font-size: 20px;
   font-weight: 400;
-  margin-bottom: 0.833vw; /* 16px */
+  margin-bottom: 15px;
 
   span {
-    font-size: 0.938vw; /* 18px */
-    color: #999;
-    font-weight: normal;
+    ${font.body2}
+    color: var(--gray2);
   }
 `;
 
 const DropArea = styled.div`
   width: 100%;
-  max-width: 57.292vw; /* 1100px */
-  height: 10.417vw; /* 200px */
-  border: 0.104vw solid #ddd; /* 2px */
-  border-radius: 0.417vw; /* 8px */
+  width: 140px;
+  height: 132px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -219,7 +219,7 @@ const DropArea = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  margin-bottom: 0.521vw; /* 10px */
+  margin-bottom: 10px;x
 `;
 
 const DropText = styled.div`
@@ -229,14 +229,14 @@ const DropText = styled.div`
 
 const ImagesWrapper = styled.div`
   display: flex;
-  gap: 1.563vw; /* 30px */
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.781vw; /* 15px */
-  border: 0.104vw solid #ddd; /* 2px */
-  border-radius: 0.417vw; /* 8px */
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
   width: 100%;
-  max-width: 57.292vw; /* 1100px */
+  width: 1000px;
 `;
 
 const ImageContainer = styled.div`
@@ -246,11 +246,11 @@ const ImageContainer = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 8.281vw; /* 159px */
-  height: 9.219vw; /* 177px */
+  width: 140px;
+  height: 132px;
   position: relative;
   background-color: #f0f0f0;
-  border-radius: 0.208vw; /* 4px */
+  border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -259,39 +259,39 @@ const ImageBox = styled.div`
 
 const RepresentativeLabel = styled.div`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  left: 0.26vw; /* 5px */
+  top: 5px;
+  left: 5px;
   background-color: #47c28b;
   color: white;
-  padding: 0.104vw 0.313vw; /* 2px 6px */
-  font-size: 0.625vw; /* 12px */
-  border-radius: 0.625vw; /* 12px */
+  padding: 2px; 6px;
+  font-size: 12px;
+  border-radius: 12px;
 `;
 
 const ImagePreview = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 0.208vw; /* 4px */
+  border-radius: 4px;
   object-fit: cover;
 `;
 
 const DeleteButton = styled.button`
   position: absolute;
-  top: 0.26vw; /* 5px */
-  right: 0.26vw; /* 5px */
+  top: 5px;
+  left: 5px;
   background-color: transparent;
   border: none;
   color: #666;
   cursor: pointer;
-  font-size: 1.042vw; /* 20px */
+  font-size: 20px;
 `;
 
 const FileName = styled.div`
-  margin-top: 0.417vw; /* 8px */
-  font-size: 0.729vw; /* 14px */
+  margin-top: 8px;
+  font-size: 14px;
   color: #666;
   text-align: center;
-  width: 7.292vw; /* 140px */
+  width: 140px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -299,29 +299,29 @@ const FileName = styled.div`
 `;
 
 const AddImageBox = styled.div`
-  width: 8.281vw; /* 159px */
-  height: 9.219vw; /* 177px */
-  border: 0.052vw dashed #ccc; /* 1px */
+  width: 140px;
+  height: 132px;
+  border: 1px dashed #ccc;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border-radius: 0.208vw; /* 4px */
+  border-radius: 4px;
 `;
 
 const AddCircle = styled.div`
-  width: 3.958vw; /* 76px */
-  height: 3.958vw; /* 76px */
-  border: 0.052vw dashed #aaa; /* 1px */
+  width: 56px;
+  height: 56px;
+  border: 1px dashed #aaa;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1.042vw; /* 20px */
+  margin-bottom: 20px;
 `;
 
 const AddText = styled.div`
-  color: #aaa;
-  font-size: 0.625vw; /* 12px */
+  color: var(--gray2);
+  font-size: 10px;
 `;

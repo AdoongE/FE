@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import noSearchContent from '../assets/icons/noSearchContent.png';
+import Pagination from './Pagination';
 import { axiosInstance } from '../components/api/axios-instance';
 
 const MainPage = () => {
@@ -210,19 +211,6 @@ const MainPage = () => {
     }
   };
 
-  const getPaginationNumbers = () => {
-    const totalPages = Math.max(
-      1,
-      Math.ceil(sortedData.length / contentPerPage),
-    );
-    const startPage = Math.max(1, currentPage - 2);
-    const endPage = Math.min(startPage + 4, totalPages);
-    return Array.from(
-      { length: endPage - startPage + 1 },
-      (_, i) => startPage + i,
-    );
-  };
-
   const categoryCounts =
     collectData &&
     collectData.reduce((counts, item) => {
@@ -335,34 +323,12 @@ const MainPage = () => {
             })
           )}
         </ContentArea>
-
-        {/* 페이지네이션 */}
-        <Pagination>
-          <PageArrow
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            {'<'}
-          </PageArrow>
-          {getPaginationNumbers().map((page) => (
-            <PageNumber
-              key={page}
-              $active={currentPage === page}
-              onClick={() => handlePageChange(page)}
-            >
-              {page}
-            </PageNumber>
-          ))}
-          <PageArrow
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={
-              currentPage === Math.ceil(sortedData.length / contentPerPage) ||
-              sortedData.length === 0
-            }
-          >
-            {'>'}
-          </PageArrow>
-        </Pagination>
+        <Pagination
+          currentPage={currentPage}
+          totalCount={sortedData.length}
+          contentPerPage={contentPerPage}
+          onPageChange={handlePageChange}
+        />
       </MainContent>
     </MainContainer>
   );
@@ -371,7 +337,7 @@ const MainPage = () => {
 // 스타일 컴포넌트
 const MainContainer = styled.div`
   display: flex;
-  padding-left: 300px;
+  padding-left: 280px;
   position: relative;
 `;
 
@@ -379,7 +345,6 @@ const SidebarContainer = styled.div`
   position: fixed;
   left: 0;
   width: 262px;
-  height: 100vh;
   z-index: 1;
 `;
 
@@ -387,28 +352,27 @@ const MainContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 2.344vw; /* 45px */
-  margin-top: 6.146vw; /* 118px */
+  margin-left: 25px;
+  margin-top: 90px;
+  padding-bottom: 100px;
 `;
 
 const ContentArea = styled.div`
   display: ${(props) => (props.$isBlank ? 'flex' : 'grid')};
-  justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
+  justify-content: center;
   align-items: ${(props) => (props.$isBlank ? 'center' : 'stretch')};
   grid-template-columns: ${(props) =>
-    !props.$isBlank
-      ? 'repeat(auto-fill, minmax(22.917vw, 1fr))'
-      : 'none'}; /* 440px */
-  grid-row-gap: 2.083vw; /* 40px */
+    !props.$isBlank ? 'repeat(3, 360px)' : 'none'};
+  grid-gap: 30px;
   box-sizing: border-box;
   height: auto;
-  padding: ${(props) => (props.$isBlank ? 'center' : 'inherit')};
-  margin-bottom: 5.208vw; /* 100px */
+  padding: 0;
+  margin-bottom: 75px;
 `;
 
 const StyledContentBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(22.917vw, 1fr)); /* 440px */
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
 `;
 
 const NoSearchContent = styled.div`
@@ -416,41 +380,7 @@ const NoSearchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 6.823vw; /* 131px */
-`;
-
-const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  position: absolute;
-  bottom: 30px;
-  z-index: 1;
-  margin-left: calc(100vw * 0.3609);
-`;
-
-const PageArrow = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: ${(props) => (props.disabled ? '#ccc' : '#000')};
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  &:hover {
-    color: ${(props) => (props.disabled ? '#ccc' : '#333')};
-  }
-`;
-
-const PageNumber = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
-  color: ${({ $active }) => ($active ? '#000' : '#999')};
-  cursor: pointer;
-  &:hover {
-    color: #000;
-  }
+  margin-top: 100px;
 `;
 
 export default MainPage;

@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import noSearchContent from '../assets/icons/noSearchContent.png';
+import Pagination from './Pagination';
 import { axiosInstance } from '../components/api/axios-instance';
 
 const MainPage = () => {
@@ -210,19 +211,6 @@ const MainPage = () => {
     }
   };
 
-  const getPaginationNumbers = () => {
-    const totalPages = Math.max(
-      1,
-      Math.ceil(sortedData.length / contentPerPage),
-    );
-    const startPage = Math.max(1, currentPage - 2);
-    const endPage = Math.min(startPage + 4, totalPages);
-    return Array.from(
-      { length: endPage - startPage + 1 },
-      (_, i) => startPage + i,
-    );
-  };
-
   const categoryCounts =
     collectData &&
     collectData.reduce((counts, item) => {
@@ -335,34 +323,12 @@ const MainPage = () => {
             })
           )}
         </ContentArea>
-
-        {/* 페이지네이션 */}
-        <Pagination>
-          <PageArrow
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            {'<'}
-          </PageArrow>
-          {getPaginationNumbers().map((page) => (
-            <PageNumber
-              key={page}
-              $active={currentPage === page}
-              onClick={() => handlePageChange(page)}
-            >
-              {page}
-            </PageNumber>
-          ))}
-          <PageArrow
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={
-              currentPage === Math.ceil(sortedData.length / contentPerPage) ||
-              sortedData.length === 0
-            }
-          >
-            {'>'}
-          </PageArrow>
-        </Pagination>
+        <Pagination
+          currentPage={currentPage}
+          totalCount={sortedData.length}
+          contentPerPage={contentPerPage}
+          onPageChange={handlePageChange}
+        />
       </MainContent>
     </MainContainer>
   );
@@ -379,16 +345,16 @@ const SidebarContainer = styled.div`
   position: fixed;
   left: 0;
   width: 262px;
-  height: 100vh;
   z-index: 1;
 `;
 
-const MainContent = styled.div`
+const MainContent = styled.div`\
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 2.344vw; /* 45px */
-  margin-top: 6.146vw; /* 118px */
+  margin-left: 2.344vw;
+  margin-top: 6.146vw;
+  padding-bottom: 100px;
 `;
 
 const ContentArea = styled.div`
@@ -417,40 +383,6 @@ const NoSearchContent = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 6.823vw; /* 131px */
-`;
-
-const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  position: absolute;
-  bottom: 30px;
-  z-index: 1;
-  margin-left: calc(100vw * 0.3609);
-`;
-
-const PageArrow = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: ${(props) => (props.disabled ? '#ccc' : '#000')};
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  &:hover {
-    color: ${(props) => (props.disabled ? '#ccc' : '#333')};
-  }
-`;
-
-const PageNumber = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
-  color: ${({ $active }) => ($active ? '#000' : '#999')};
-  cursor: pointer;
-  &:hover {
-    color: #000;
-  }
 `;
 
 export default MainPage;

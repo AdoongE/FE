@@ -337,7 +337,7 @@ const MainPage = () => {
 // 스타일 컴포넌트
 const MainContainer = styled.div`
   display: flex;
-  padding-left: 300px;
+  padding-left: 280px;
   position: relative;
 `;
 
@@ -345,40 +345,34 @@ const SidebarContainer = styled.div`
   position: fixed;
   left: 0;
   width: 262px;
-<<<<<<< HEAD
-=======
-  height: 100vh;
->>>>>>> origin/develop
   z-index: 1;
 `;
 
-const MainContent = styled.div`\
+const MainContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 2.344vw;
-  margin-top: 6.146vw;
+  margin-left: 25px;
+  margin-top: 90px;
   padding-bottom: 100px;
 `;
 
 const ContentArea = styled.div`
   display: ${(props) => (props.$isBlank ? 'flex' : 'grid')};
-  justify-content: ${(props) => (props.$isBlank ? 'center' : 'normal')};
+  justify-content: center;
   align-items: ${(props) => (props.$isBlank ? 'center' : 'stretch')};
   grid-template-columns: ${(props) =>
-    !props.$isBlank
-      ? 'repeat(auto-fill, minmax(22.917vw, 1fr))'
-      : 'none'}; /* 440px */
-  grid-row-gap: 2.083vw; /* 40px */
+    !props.$isBlank ? 'repeat(3, 360px)' : 'none'};
+  grid-gap: 30px;
   box-sizing: border-box;
   height: auto;
-  padding: ${(props) => (props.$isBlank ? 'center' : 'inherit')};
-  margin-bottom: 5.208vw; /* 100px */
+  padding: 0;
+  margin-bottom: 75px;
 `;
 
 const StyledContentBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(22.917vw, 1fr)); /* 440px */
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
 `;
 
 const NoSearchContent = styled.div`
@@ -386,44 +380,7 @@ const NoSearchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 6.823vw; /* 131px */
+  margin-top: 100px;
 `;
 
-<<<<<<< HEAD
-=======
-const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  position: absolute;
-  bottom: 30px;
-  z-index: 1;
-  margin-left: calc(100vw * 0.3609);
-`;
-
-const PageArrow = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: ${(props) => (props.disabled ? '#ccc' : '#000')};
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  &:hover {
-    color: ${(props) => (props.disabled ? '#ccc' : '#333')};
-  }
-`;
-
-const PageNumber = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
-  color: ${({ $active }) => ($active ? '#000' : '#999')};
-  cursor: pointer;
-  &:hover {
-    color: #000;
-  }
-`;
-
->>>>>>> origin/develop
 export default MainPage;

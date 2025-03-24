@@ -51,15 +51,16 @@ export default Pagination;
 const PaginationWrapper = styled.div`
   position: fixed;
   bottom: 20px;
-  left: 60%;
-  transform: translateX(-50%);
-  background: transparent;
-  z-index: 10;
+  left: 11.5%;
+  width: 100%;
+  height: 40px;
+  background: white;
+  z-index: -10;
+
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  width: fit-content;
 `;
 
 const PageArrow = styled.button`

@@ -675,7 +675,9 @@ const CategoryP = styled.p`
   padding: 0 14px;
 `;
 
-const Accordion = styled.div``;
+const Accordion = styled.div`
+  margin-top: 24px;
+`;
 
 const AccordionTitle = styled.div`
   ${font.title3}
@@ -805,6 +807,7 @@ const CustomItem = styled.div`
   padding: 6px;
   gap: 13px;
   &:hover {
+    width: 105%;
     background-color: ${({ active }) =>
       active ? 'rgba(188, 188, 188, 0.2)' : '#eaebeb'};
     border-radius: 8px;

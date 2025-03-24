@@ -19,9 +19,13 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Pretendard";
   }
 
-  p {
+  p, h1, h2, h3, input {
     margin: 0;
     padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 `;
 

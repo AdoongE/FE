@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { axiosInstance } from '../api/axios-instance';
+import { font } from '../../styles/font';
 
 const ContentDeleteModal = forwardRef(({ contentId, fetchData }, ref) => {
   const cloesModal = () => {
@@ -48,11 +49,13 @@ const ContentDeleteModal = forwardRef(({ contentId, fetchData }, ref) => {
 
   return (
     <Dialog ref={ref}>
-      <Alert>정말 삭제하시겠습니까?</Alert>
-      <Buttons>
-        <No onClick={cloesModal}>아니오</No>
-        <Yes onClick={handleDelete}>네</Yes>
-      </Buttons>
+      <ModalDiv>
+        <Alert>정말 삭제하시겠습니까?</Alert>
+        <Buttons>
+          <No onClick={cloesModal}>취소</No>
+          <Yes onClick={handleDelete}>삭제</Yes>
+        </Buttons>
+      </ModalDiv>
     </Dialog>
   );
 });
@@ -61,59 +64,56 @@ ContentDeleteModal.displayName = 'ContentDeleteModal';
 
 const Buttons = styled.div`
   display: flex;
-  column-gap: 1.042vw; /* 20px */
-  position: absolute;
-  top: 12.083vw; /* 232px */
-  left: 9.323vw; /* 179px */
+  gap: 12px;
 `;
 
 const No = styled.button`
-  width: 6.771vw; /* 130px */
-  height: 2.813vw; /* 54px */
-  background-color: #f2f2f2;
-  border-radius: 0.521vw; /* 10px */
-  font-size: 1.146vw; /* 22px */
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #4f4f4f;
-  border: 0;
+  ${font.title3}
+  border: none;
+  border-radius: 36px;
+  background-color: var(--gray4);
+  color: black;
+  border-radius: 8px;
+  padding: 10.5px 32px;
 `;
 
 const Yes = styled.button`
+  ${font.title3}
+  border: none;
+  border-radius: 36px;
+  background-color: var(--green2);
   color: white;
-  width: 6.771vw; /* 130px */
-  height: 2.813vw; /* 54px */
-  background-color: #41c3ab;
-  border-radius: 0.521vw; /* 10px */
-  font-size: 1.146vw; /* 22px */
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0;
+  border-radius: 8px;
+  padding: 10.5px 32px;
 `;
 
 const Alert = styled.div`
-  position: absolute;
-  font-weight: 600;
-  font-size: 1.875vw; /* 36px */
+  ${font.title0}
   text-align: center;
-  top: 6.354vw; /* 122px */
-  left: 7.813vw; /* 150px */
+  margin-top: 82px;
+  margin-bottom: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Dialog = styled.dialog`
-  position: relative;
-  width: 30vw;
-  height: 15vw; /* 350px */
-  border-radius: 2.604vw; /* 50px */
+  width: 542px;
+  height: 254px;
+  border-radius: 36px;
   background-color: white;
   border: 0;
   ::backdrop {
     background-color: #0000008c;
   }
+  padding: 0;
+`;
+
+const ModalDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 export default ContentDeleteModal;

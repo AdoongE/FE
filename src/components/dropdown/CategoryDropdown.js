@@ -81,12 +81,11 @@ export default Dropdown;
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  left: 280px;
+  left: 255px;
   background-color: white;
   border-radius: 8px;
   z-index: 1;
-  width: ${({ categoryLength }) =>
-    `calc(${Math.max(12.396, categoryLength * 1.083 + 4.167)}vw)`};
+  width: max-content;
   box-shadow: 0 0 9px #dfdfdf;
   padding: 4px;
   &.filter {

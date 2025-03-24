@@ -204,7 +204,11 @@ export const StyledLogo = styled.img`
 export const NavbarMenu = styled.div`
   display: flex;
   position: fixed;
+<<<<<<< HEAD
   margin-left: 330px;
+=======
+  margin-left: 315px;
+>>>>>>> origin/develop
 `;
 
 export const MenuButton = styled.button`

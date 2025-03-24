@@ -345,6 +345,10 @@ const SidebarContainer = styled.div`
   position: fixed;
   left: 0;
   width: 262px;
+<<<<<<< HEAD
+=======
+  height: 100vh;
+>>>>>>> origin/develop
   z-index: 1;
 `;
 
@@ -385,4 +389,41 @@ const NoSearchContent = styled.div`
   margin-top: 6.823vw; /* 131px */
 `;
 
+<<<<<<< HEAD
+=======
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 30px;
+  z-index: 1;
+  margin-left: calc(100vw * 0.3609);
+`;
+
+const PageArrow = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: ${(props) => (props.disabled ? '#ccc' : '#000')};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  &:hover {
+    color: ${(props) => (props.disabled ? '#ccc' : '#333')};
+  }
+`;
+
+const PageNumber = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: ${({ $active }) => ($active ? 'bold' : 'normal')};
+  color: ${({ $active }) => ($active ? '#000' : '#999')};
+  cursor: pointer;
+  &:hover {
+    color: #000;
+  }
+`;
+
+>>>>>>> origin/develop
 export default MainPage;

@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import Alert from '@mui/material/Alert';
+import { font } from '../../styles/font';
 
 const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   const closeModal = () => {
@@ -81,11 +82,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
       <ModalDiv>
         <TopDiv>
           <ModalTitle>링크 업로드</ModalTitle>
-          <Icon
-            icon="line-md:close"
-            style={{ width: '1.875vw', height: '1.875vw', cursor: 'pointer' }}
-            onClick={closeLinkModal}
-          />
+          <Icons icon="line-md:close" onClick={closeLinkModal} />
         </TopDiv>
 
         <Input
@@ -138,62 +135,69 @@ const ErrorDialog = styled.dialog`
 `;
 
 const Input = styled.input`
-  background-color: #f6f6f6;
-  border: 0;
-  border-bottom: 0.052vw solid #7f7f7f; /* 1px */
-  width: 42.396vw; /* 814px */
-  height: 3.542vw; /* 68px */
-  margin-top: 2.5vw; /* 48px */
-  margin-bottom: 2.448vw; /* 47px */
-  font-size: 1.563vw; /* 30px */
-  padding-left: 1.042vw; /* 20px */
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--gray2);
+  background-color: var(--gray6);
   display: flex;
-  flex-wrap: wrap;
-  overflow-x: auto;
+  border: none;
+  border-bottom: 0.73px solid var(--gray2);
+  width: 100%;
+  padding: 12px 0;
+  margin-bottom: 20px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  column-gap: 2.292vw; /* 44px */
+  gap: 12px;
 `;
 
 const ModalButton = styled.button`
-  height: 2.813vw; /* 54px */
-  width: 5.156vw; /* 99px */
-  padding: 0.729vw 1.563vw; /* 14px 30px */
-  font-size: 1.146vw; /* 22px */
+  ${font.title3}
   border: none;
-  border-radius: 2.604vw; /* 50px */
+  border-radius: 36px;
+  padding: 10px 20px;
   cursor: pointer;
   &.ok {
-    background-color: #41c3ab;
+    background-color: var(--green2);
     color: white;
   }
   &.no {
-    background-color: #dcdada;
+    background-color: var(--gray4);
     color: black;
   }
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 850;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 0.521vw; /* 10px */
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  &.remove {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const Icons = styled(Icon)`
+  width: 24px;
+  height: 24px;
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.406vw; /* 27px */
+  margin-bottom: 30px;
+  &.edit {
+    margin-bottom: 56px;
+  }
 `;
 
 const Dialog = styled.dialog`
   position: relative;
-  width: 50.625vw; /* 972px */
-  height: 19.01vw; /* 365px */
-  border-radius: 2.604vw; /* 50px */
+  width: 542px;
+  border-radius: 36px;
   background-color: white;
   border: none;
   ::backdrop {
@@ -202,7 +206,9 @@ const Dialog = styled.dialog`
 `;
 
 const ModalDiv = styled.div`
-  margin: 2.604vw; /* 50px */
+  padding: 0 36px;
+  padding-top: 40px;
+  padding-bottom: 25px;
 `;
 
 export default AddLinkModal;

@@ -120,7 +120,7 @@ const AddLinkModal = ({ onClose }) => {
           <ModalTitle>씨드 추가</ModalTitle>
           <Icon
             icon="line-md:close"
-            style={{ width: '1.875vw', height: '1.875vw', cursor: 'pointer' }}
+            style={{ width: '24px', height: '24px', cursor: 'pointer' }}
             onClick={() => closeModal()}
           />
         </TopDiv>
@@ -169,80 +169,76 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  width: 30.208vw; /* 580px */
-  padding: 2.083vw; /* 40px */
-  border-radius: 2.604vw; /* 20px */
+  width: 542px;
+  padding: 30px 50px;
+  border-radius: 36px;
   display: flex;
   flex-direction: column;
 `;
 
 const Error = styled.div`
   color: #f00;
-  font-family: 'Pretendard Variable';
-  font-size: 0.625vw; /* 12px */
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  height: 0.729vw; /* 14px */
-  margin-bottom: 0.104vw; /* 2px */
-  margin-top: 0.365vw; /* 7px */
+  height: 14px;
+  margin-bottom: 5px;
+  margin-top: 4px;
 `;
 
 const Input = styled.input`
-  padding-left: 0.99vw; /* 19px */
+  padding-left: 15px;
   background-color: #f6f6f6;
-  margin-bottom: 0.365vw; /* 7px */
-  width: 29.115vw; /* 559px */
-  height: 2.656vw; /* 51px */
-  font-size: 1.146vw; /* 22px */
+  margin-bottom: 7pxl
+  width: 470px;
+  height: 45px;
+  font-size: 16px;
   display: flex;
   flex-wrap: wrap;
   overflow-x: auto;
   border: none;
   box-shadow: none;
   &::placeholder {
-    font-size: 0.938vw; /* 18px */
+    font-size: 16px;
     font-weight: 400;
-    transform: translateY(-0.104vw); /* -2px */
+    transform: translateY(-2px);
   }
 `;
 
 const Button = styled.button`
-  border-radius: 2.604vw; /* 50px */
+  border-radius: 40px;
   background: #41c3ab;
   border: 0;
   display: flex;
-  padding: 0.729vw 1.563vw; /* 14px 30px */
+  padding: 12px 24px;
   justify-content: center;
   align-items: center;
   color: #fff;
   font-family: 'Pretendard Variable';
-  font-size: 1.146vw; /* 22px */
+  font-size: 16px;
   font-weight: 500;
-  width: 5.156vw; /* 99px */
-  height: 2.813vw; /* 54px */
 `;
 
 const ModalTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
   font-family: 'Pretendard-Regular';
 `;
 
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 3.229vw; /* 62px */
+  margin-bottom: 42px;
 `;
 
 const Title = styled.div`
   color: #4f4f4f;
-  font-family: 'Pretendard Variable';
-  font-size: 1.25vw; /* 24px */
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-bottom: 1.094vw; /* 21px */
+  margin-bottom: 21px;
 `;
 
 export default AddLinkModal;

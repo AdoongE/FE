@@ -1,40 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-
-const DropdownMenu = styled.ul`
-  position: absolute;
-  left: 17.188vw; /* 330px */
-  background-color: white;
-  border-radius: 0.521vw; /* 10px */
-  list-style: none;
-  z-index: 1;
-  width: ${({ categoryLength }) =>
-    `calc(${Math.max(12.396, categoryLength * 1.083 + 4.167)}vw)`};
-  box-shadow: 0 0 0.417vw #dfdfdf; /* 8px */
-`;
-
-const DropdownItem = styled.li`
-  padding-left: 0.781vw; /* 15px */
-  margin: 0.469vw 0.365vw; /* 9px 7px */
-  border-radius: 0.521vw; /* 10px */
-  cursor: pointer;
-  height: 2.292vw; /* 44px */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  &:hover {
-    background-color: rgba(188, 188, 188, 0.5);
-  }
-  font-size: 0.938vw; /* 18px */
-`;
-
-const Icons = styled(Icon)`
-  width: 1.25vw; /* 24px */
-  height: 1.25vw; /* 24px */
-  margin-right: 0.885vw; /* 17px */
-`;
+import { font } from '../../styles/font';
 
 const Dropdown = ({
   isOpen,
@@ -110,14 +77,39 @@ const Dropdown = ({
   );
 };
 
-Dropdown.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  categoryName: PropTypes.string.isRequired,
-  isBookmarked: PropTypes.bool.isRequired,
-  onBookmarkAdd: PropTypes.func.isRequired,
-  onEditCategory: PropTypes.func.isRequired,
-  onRemoveCategory: PropTypes.func.isRequired,
-};
-
 export default Dropdown;
+
+const DropdownMenu = styled.ul`
+  position: absolute;
+  left: 255px;
+  background-color: white;
+  border-radius: 8px;
+  z-index: 1;
+  width: max-content;
+  box-shadow: 0 0 9px #dfdfdf;
+  padding: 4px;
+  &.filter {
+    left: 365px;
+    transform: translate(-50%, -5%);
+    width: 148px;
+  }
+`;
+
+const DropdownItem = styled.li`
+  ${font.body2}
+  padding: 9px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  &:hover {
+    background-color: #ededed;
+  }
+`;
+
+const Icons = styled(Icon)`
+  width: 16px;
+  height: 16px;
+`;

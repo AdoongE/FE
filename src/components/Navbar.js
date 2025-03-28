@@ -21,8 +21,8 @@ function Navbar() {
     const button = event.currentTarget;
     const { offsetWidth, offsetLeft } = button;
 
-    setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
-    setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
+    setActiveBarWidth((offsetWidth / window.innerWidth) * 100);
+    setActiveBarLeft((offsetLeft / window.innerWidth) * 100);
 
     if (tabName === '모아보기') {
       window.location.reload(); // 페이지 새로 고침
@@ -42,8 +42,8 @@ function Navbar() {
     if (activeButton) {
       const { offsetWidth, offsetLeft } = activeButton;
 
-      setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
-      setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
+      setActiveBarWidth((offsetWidth / window.innerWidth) * 100);
+      setActiveBarLeft((offsetLeft / window.innerWidth) * 100);
     }
   }, [activeTab]);
 
@@ -56,8 +56,8 @@ function Navbar() {
       if (activeButton) {
         const { offsetWidth, offsetLeft } = activeButton;
 
-        setActiveBarWidth((offsetWidth / window.innerWidth) * 100); // px -> vw 변환
-        setActiveBarLeft((offsetLeft / window.innerWidth) * 100); // px -> vw 변환
+        setActiveBarWidth((offsetWidth / window.innerWidth) * 100);
+        setActiveBarLeft((offsetLeft / window.innerWidth) * 100);
       }
     };
 
@@ -143,15 +143,15 @@ function Navbar() {
       <NavbarRight>
         <Icon
           icon="iconoir:bell"
-          width="1.5625vw"
-          height="1.5625vw"
+          width="24px"
+          height="24px"
           style={{ color: 'black' }}
         />
         <NewContentButton onClick={handleNewContentClick}>
           <Icon
             icon="iconoir:plus"
-            width="1.5625vw"
-            height="1.5625vw"
+            width="24px"
+            height="24px"
             style={{ color: '#00000' }}
           />
           새로운 씨드
@@ -172,9 +172,9 @@ const NavbarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 6.146vw; /* 118px */
-  border-bottom: 0.052vw solid #ffffff; /* 1px */
-  box-shadow: 0 0.104vw 0.26vw rgba(0, 0, 0, 0.1); /* 0 2px 5px */
+  height: 84px;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: 0px 0px 7.5px 1.5px rgba(0, 0, 0, 0.07);
   position: fixed;
   top: 0;
   left: 0;
@@ -188,97 +188,73 @@ const LogoContainer = styled.div`
   align-items: center;
 `;
 
-const StyledLogoImage = styled.img`
-  width: 1.875vw; /* 36px */
-  height: 1.875vw; /* 36px */
-  margin-left: 2.083vw; /* 40px */
+export const StyledLogoImage = styled.img`
+  width: 27px;
+  height: 27px;
+  margin-left: 24px;
 `;
 
-const StyledLogo = styled.img`
-  width: 7.708vw; /* 148px */
-  height: 2.083vw; /* 40px */
-  margin-left: 0.833vw; /* 16px */
-  margin-top: 0.625vw; /* 12px */
+export const StyledLogo = styled.img`
+  width: 111px;
+  height: 30px;
+  margin-left: 7.5px;
+  margin-top: 4px;
 `;
 
-const NavbarMenu = styled.div`
+export const NavbarMenu = styled.div`
   display: flex;
-  gap: 3.333vw; /* 64px */
   position: fixed;
-  left: 20.729vw; /* 398px */
+  margin-left: 310px;
 `;
 
-const MenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  color: #666;
-  padding: 0.708vw; /* 13.6px */
-  font-size: 1.354vw; /* 26px */
-  margin-left: 2.76vw; /* 53px */
+export const MenuButton = styled.button`
+  font-size: 20px;
+  margin-right: 80px;
   background: transparent;
   border: none;
   cursor: pointer;
   font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
   color: ${(props) => (props.active ? '#000' : '#666')};
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  svg {
-    margin-right: 0.521vw; /* 10px */
-  }
 `;
 
-const ActiveBar = styled.div`
+export const ActiveBar = styled.div`
   position: absolute;
-  width: ${({ width }) => width}vw;
-  height: 0.365vw;
+  width: 78px;
+  height: 8px;
   background-color: #41c3ab;
-  bottom: -1.8vw;
+  top: 50px;
   left: ${({ left }) => left}vw;
   transition:
     width 0.3s ease,
     left 0.3s ease;
 `;
 
-const NavbarRight = styled.div`
+export const NavbarRight = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.833vw; /* 16px */
+  gap: 16px;
   position: absolute;
-  right: 2.083vw; /* 40px */
-  top: 50%;
-  transform: translateY(-50%);
+  right: 30px;
 `;
 
-const NewContentButton = styled.button`
+export const NewContentButton = styled.button`
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: #41c3ab;
-  font-size: 0.924vw; /* 17.742px */
-  font-style: normal;
+  font-size: 14px;
   font-weight: 600;
-  line-height: normal;
   color: #fff;
   border: none;
-  width: 8.342vw; /* 160.19px */
-  height: 2.51vw; /* 48.19px */
-  border-radius: 2.101vw; /* 40.323px */
+  width: 120px;
+  height: 36px;
+  border-radius: 28px;
   cursor: pointer;
-  margin-left: 0.521vw; /* 10px */
-  padding: 0.521vw; /* 10px */
-  gap: 0.156vw; /* 3px */
-
-  svg {
-    margin-left: 0.521vw; /* 10px */
-  }
 `;
 
-const Profile = styled.img`
-  width: 2.5vw; /* 48px */
-  height: 2.5vw; /* 48px */
-  margin-left: 0.521vw; /* 10px */
+export const Profile = styled.img`
+  width: 36px;
+  height: 36px;
 `;
 
 export default Navbar;

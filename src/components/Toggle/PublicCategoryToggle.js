@@ -4,18 +4,17 @@ import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-export const IOSSwitch = styled((props) => (
+export const PublicToggle = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
-  width: '3.6vw',
-  height: '1.719vw',
+  width: '42px',
+  height: '24px',
   padding: 0,
   '& .MuiSwitch-switchBase': {
-    padding: 0,
-    margin: 3.5,
+    padding: 3,
     transitionDuration: '300ms',
     '&.Mui-checked': {
-      transform: 'translateX(27px)',
+      transform: 'translateX(18px)',
       color: '#fff',
       '& + .MuiSwitch-track': {
         backgroundColor: '#41C3AB',
@@ -48,8 +47,8 @@ export const IOSSwitch = styled((props) => (
   },
   '& .MuiSwitch-thumb': {
     boxSizing: 'border-box',
-    width: '1.302vw',
-    height: '1.302vw',
+    width: '18px',
+    height: '18px',
   },
   '& .MuiSwitch-track': {
     borderRadius: 20,
@@ -68,7 +67,7 @@ export default function CustomizedSwitches() {
   return (
     <FormGroup>
       <FormControlLabel
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+        control={<PublicToggle sx={{ m: 1 }} defaultChecked />}
         label="iOS style"
       />
     </FormGroup>

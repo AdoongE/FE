@@ -11,6 +11,7 @@ import { axiosInstance } from '../api/axios-instance';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { font } from '../../styles/font';
 
 const ITEM_HEIGHT = 65;
 const ITEM_PADDING_TOP = 8;
@@ -18,7 +19,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: '13.021vw',
+      width: '452px',
     },
   },
 };
@@ -70,7 +71,7 @@ export default function AddCategory({ value = [], onChange }) {
           input={<OutlinedInput id="demo-multiple-chip" />}
           renderValue={() => {
             if (value.length === 0) {
-              return <em>최대 5개까지 선택 가능합니다</em>;
+              return <>최대 5개까지 선택 가능합니다</>;
             }
             return (
               <Box
@@ -83,13 +84,8 @@ export default function AddCategory({ value = [], onChange }) {
                 {value.map((val) => (
                   <Chip key={val}>
                     {val}
-                    <Icon
+                    <CancelIcon
                       icon="ic:round-close"
-                      style={{
-                        width: '1.25vw',
-                        height: '1.25vw',
-                        color: 'white',
-                      }}
                       onMouseDown={(e) => {
                         e.stopPropagation();
                         handleDelete(val);
@@ -142,47 +138,47 @@ export default function AddCategory({ value = [], onChange }) {
 }
 
 const Chip = styled.div`
-  width: fit-content;
-  height: 2.292vw; /* 44px */
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 0;
-  border-radius: 0.26vw; /* 5px */
-  column-gap: 0.26vw; /* 5px */
-  background-color: #41c3ab;
-  padding-left: 0.833vw; /* 16px */
-  padding-right: 0.833vw; /* 16px */
+  border-radius: 4px;
+  background-color: var(--green2);
+  padding: 6.5px 12px;
+  gap: 4px;
+  margin-right: 12px;
+`;
+
+const CancelIcon = styled(Icon)`
+  width: 18px;
+  height: 18px;
+  color: white;
 `;
 
 const Title = styled.div`
-  font-weight: 500;
-  font-size: 1.042vw; /* 20px */
-  margin: 1.25vw 1.042vw; /* 1.25vw 20px */
+  ${font.title3}
+  margin: 12px 16px;
 `;
 
 const StyledFormControl = styled(FormControl)`
   && {
     margin: 0;
-    width: 36.927vw; /* 709px */
+    width: 452px;
     height: fit-content;
-    margin-top: 0;
-    border-radius: 0.521vw; /* 10px */
-    border: 0.052vw solid #9f9f9f; /* 1px */
-    margin-left: 3.125vw; /* 60px */
-    margin-right: 1.042vw; /* 20px */
-    padding-top: -0.521vw; /* -10px */
-    padding-bottom: -0.521vw; /* -10px */
+    border-radius: 8px;
+    border: 0.6px solid var(--gray2);
+    margin-left: 59px;
+    margin-right: 12px;
   }
 `;
 
 const StyledSelect = styled(Select)`
   && {
-    height: 3.125vw; /* 60px */
+    height: 48px;
     display: flex;
     align-items: center;
-    font-size: 1.042vw; /* 20px */
-    color: #9f9f9f;
+    ${font.title4}
+    color: var(--gray2);
   }
 `;

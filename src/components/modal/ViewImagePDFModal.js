@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 // import { Document, Page } from 'react-pdf';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Icon } from '@iconify/react';
@@ -52,7 +52,7 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
   };
 
   return (
-    <Modal
+    <ModalDiv
       isOpen={!!file}
       onRequestClose={onClose}
       style={{
@@ -63,34 +63,16 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
           backgroundColor: 'rgba(0, 0, 0, 0.6)',
           zIndex: 1000,
         },
-        content: {
-          position: 'relative',
-          inset: 'auto',
-          width: '54.53vw',
-          height: '39.48vw',
-          maxWidth: '80%',
-          maxHeight: '80%',
-          margin: 'auto',
-          padding: '1.04vw',
-          background: '#fff',
-          borderRadius: '1.04vw',
-          overflow: 'hidden',
-        },
       }}
     >
       <ModalHeader>
         <SaveButton
-          top="0px"
           className="only"
           onClick={() => window.open(file, '_blank')}
         >
           이 파일만 저장
         </SaveButton>
-        <SaveButton
-          top="2.604vw"
-          className="all"
-          onClick={() => handleDownloadAll(files)}
-        >
+        <SaveButton className="all" onClick={() => handleDownloadAll(files)}>
           모든 파일 저장
         </SaveButton>
       </ModalHeader>
@@ -118,7 +100,7 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
           )}
         </Slider>
       </SliderWrapper>
-    </Modal>
+    </ModalDiv>
   );
 };
 
@@ -132,32 +114,42 @@ const CustomArrow = ({ contentDataType, direction, onClick }) => {
       onClick={onClick}
     >
       {direction === 'left' ? (
-        <FaChevronLeft size={'2.083vw'} />
+        <IoIosArrowBack size={'50px'} />
       ) : (
-        <FaChevronRight size={'2.083vw'} />
+        <IoIosArrowForward size={'50px'} />
       )}
     </ArrowButton>
   );
 };
 
-const ModalHeader = styled.div`
+const ModalDiv = styled(Modal)`
+  background-color: #fff;
   position: relative;
+  inset: auto;
+  margin: auto;
+  width: 55%;
+  height: 56%;
+  padding: 16px;
+  border-radius: 16px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 7.031vw;
-  gap: 0.52vw;
+`;
+
+const ModalHeader = styled.div`
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 `;
 
 const SaveButton = styled.button`
-  position: absolute;
-  top: ${({ top }) => top || '0.93vh'}; /* 10px */
-  right: 0;
   border: none;
-  width: 8.9vw; /* 170.92px */
-  height: 2.03vw;
-  border-radius: 0.52vw; /* 10px */
-  font-size: 0.83vw; /* 16px */
+  padding: 8px 30px;
+  border-radius: 6px;
+  font-size: 12px;
   cursor: pointer;
 
   &.only {
@@ -171,7 +163,7 @@ const SaveButton = styled.button`
 `;
 
 const SliderWrapper = styled.div`
-  /* margin-top: 20px; */
+  margin-top: 60px;
 `;
 
 // const DocumentWrapper = styled.div`
@@ -214,10 +206,9 @@ const ImageWrapper = styled.div`
 
 const ArrowButton = styled.div`
   position: absolute;
-  top: ${({ contentDataType }) => (contentDataType === 'PDF' ? '43%' : '50%')};
+  top: ${({ contentDataType }) => (contentDataType === 'PDF' ? '43%' : '40%')};
   z-index: 1000;
   cursor: pointer;
   color: #9f9f9f;
-  ${({ direction }) =>
-    direction === 'left' ? `left: 0.52vw;` : `right: 0.52vw;`}/* 10px */
+  ${({ direction }) => (direction === 'left' ? `left: 0;` : `right: 0;`)}
 `;

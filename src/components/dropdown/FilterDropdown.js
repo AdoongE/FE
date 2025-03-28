@@ -1,153 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import { font } from '../../styles/font';
 import { axiosInstance } from '../api/axios-instance';
-
-const DropdownMenu = styled.ul`
-  position: absolute;
-  left: 22.396vw; /* 430px */
-  transform: translate(-50%, -5%);
-  background-color: white;
-  border-radius: 0.521vw; /* 10px */
-  list-style: none;
-  z-index: 1;
-  width: 10.417vw; /* 200px */
-  box-shadow: 0 0 0.417vw #dfdfdf; /* 8px */
-`;
-
-const DropdownItem = styled.li`
-  padding-left: 0.781vw; /* 15px */
-  margin: 0.469vw 0.365vw; /* 9px 7px */
-  border-radius: 0.521vw; /* 10px */
-  cursor: pointer;
-  height: 1.823vw; /* 35px */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  &:hover {
-    background-color: rgba(188, 188, 188, 0.5);
-  }
-  font-size: 0.938vw; /* 18px */
-`;
-
-const Icons = styled(Icon)`
-  width: 1.25vw; /* 24px */
-  height: 1.25vw; /* 24px */
-  margin-right: 0.885vw; /* 17px */
-`;
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-`;
-
-const ModalContent = styled.div`
-  background-color: white;
-  border-radius: 2.604vw; /* 50px */
-  width: 38.854vw; /* 46.625rem → 891px */
-  height: 18.229vw; /* 21.875rem → 350px */
-`;
-
-const ModalDiv = styled.div`
-  margin: 2.604vw; /* 3.125rem → 60px */
-`;
-
-const TopDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1.406vw; /* 27px */
-`;
-
-const ModalTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 850;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 0.521vw; /* 10px */
-`;
-
-const Input = styled.input`
-  background-color: #f6f6f6;
-  border: none;
-  border-bottom: 0.052vw solid #7f7f7f; /* 1px */
-  width: 100%;
-  height: 3.542vw; /* 4.25rem → 85px */
-  margin-top: 1.354vw; /* 26px */
-  margin-bottom: 0.938vw; /* 18px */
-  font-size: 1.563vw; /* 30px */
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const ModalButton = styled.button`
-  height: 2.813vw; /* 3.375rem → 65px */
-  width: 5.156vw; /* 6.188rem → 120px */
-  font-size: 1.146vw; /* 22px */
-  border: none;
-  border-radius: 2.604vw; /* 50px */
-  cursor: pointer;
-  margin-right: 1.042vw; /* 10px */
-  &.ok {
-    background-color: #41c3ab;
-    color: white;
-  }
-  &.no {
-    background-color: #dcdada;
-    color: black;
-  }
-`;
-
-const ModalDelContent = styled.div`
-  background-color: white;
-  border-radius: 2.604vw; /* 50px */
-  width: 33.177vw; /* 39.813rem → 763px */
-  height: 18.229vw; /* 21.875rem → 350px */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ModalDelTitle = styled.h2`
-  font-size: 1.667vw; /* 32px */
-  font-weight: 850;
-  font-family: 'Pretendard-Regular';
-  margin-bottom: 2.969vw; /* 3.563rem → 68px */
-`;
-
-const ButtonDelContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 0.781vw; /* 15px */
-`;
-
-const ModalDelButton = styled.button`
-  width: 6.771vw; /* 130px */
-  height: 2.813vw;
-  font-size: 1.146vw; /* 22px */
-  border: none;
-  border-radius: 0.521vw; /* 10px */
-  cursor: pointer;
-  &.ok {
-    background-color: #41c3ab;
-    color: white;
-  }
-  &.no {
-    background-color: #f2f2f2;
-    color: black;
-  }
-`;
 
 const FilterDropdown = ({
   isOpen,
@@ -230,7 +85,11 @@ const FilterDropdown = ({
 
   return (
     <>
-      <DropdownMenu ref={dropdownRef} onClick={(e) => e.stopPropagation()}>
+      <DropdownMenu
+        className="filter"
+        ref={dropdownRef}
+        onClick={(e) => e.stopPropagation()}
+      >
         <DropdownItem onClick={() => setShowEditModal(true)}>
           <Icons icon="iconamoon:edit-light" />
           이름 변경하기
@@ -245,7 +104,7 @@ const FilterDropdown = ({
         <ModalOverlay onClick={() => setShowEditModal(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <ModalDiv>
-              <TopDiv>
+              <TopDiv className="edit">
                 <ModalTitle>맞춤 필터 이름 변경</ModalTitle>
                 <Icon
                   icon="line-md:close"
@@ -281,32 +140,163 @@ const FilterDropdown = ({
 
       {showDeleteModal && (
         <ModalOverlay onClick={() => setShowDeleteModal(false)}>
-          <ModalDelContent onClick={(e) => e.stopPropagation()}>
-            <ModalDelTitle>정말 삭제하시겠습니까?</ModalDelTitle>
-            <ButtonDelContainer>
-              <ModalDelButton
-                className="no"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                아니오
-              </ModalDelButton>
-              <ModalDelButton className="ok" onClick={handleDeleteConfirm}>
-                네
-              </ModalDelButton>
-            </ButtonDelContainer>
-          </ModalDelContent>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalDiv>
+              <ModalDelTitle>정말 삭제하시겠습니까?</ModalDelTitle>
+              <ButtonContainer>
+                <ModalButton
+                  className="remove-no"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  취소
+                </ModalButton>
+                <ModalButton
+                  className="remove-ok"
+                  onClick={handleDeleteConfirm}
+                >
+                  삭제
+                </ModalButton>
+              </ButtonContainer>
+            </ModalDiv>
+          </ModalContent>
         </ModalOverlay>
       )}
     </>
   );
 };
 
-FilterDropdown.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  initialFilterName: PropTypes.string.isRequired,
-  onEditFilter: PropTypes.func.isRequired,
-  onRemoveFilter: PropTypes.func.isRequired,
-};
-
 export default FilterDropdown;
+
+const DropdownMenu = styled.ul`
+  position: absolute;
+  left: 280px;
+  background-color: white;
+  border-radius: 8px;
+  z-index: 1;
+  width: ${({ categoryLength }) =>
+    `calc(${Math.max(12.396, categoryLength * 1.083 + 4.167)}vw)`};
+  box-shadow: 0 0 9px #dfdfdf;
+  padding: 4px;
+  &.filter {
+    left: 365px;
+    transform: translate(-75%, -5%);
+    width: 148px;
+  }
+`;
+
+const DropdownItem = styled.li`
+  ${font.body2}
+  padding: 9px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  &:hover {
+    background-color: #ededed;
+  }
+`;
+
+const Icons = styled(Icon)`
+  width: 16px;
+  height: 16px;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  border-radius: 36px;
+  width: 542px;
+  height: 254px;
+`;
+
+const ModalDiv = styled.div`
+  margin-top: 82px;
+`;
+
+const TopDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  &.edit {
+    margin-bottom: 56px;
+  }
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  &.remove {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const Input = styled.input`
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--gray2);
+  background-color: var(--gray6);
+  display: flex;
+  border: none;
+  border-bottom: 0.73px solid var(--gray2);
+  width: 100%;
+  padding: 12px 0;
+  margin-bottom: 20px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+`;
+
+const ModalButton = styled.button`
+  ${font.title3}
+  border: none;
+  border-radius: 36px;
+  padding: 10px 20px;
+  cursor: pointer;
+  &.ok {
+    background-color: var(--green2);
+    color: white;
+  }
+  &.no {
+    background-color: var(--gray4);
+    color: black;
+  }
+  &.remove-ok {
+    background-color: var(--green2);
+    color: white;
+    border-radius: 8px;
+    padding: 10.5px 32px;
+  }
+  &.remove-no {
+    background-color: var(--gray4);
+    color: black;
+    border-radius: 8px;
+    padding: 10.5px 32px;
+  }
+`;
+
+const ModalDelTitle = styled.h2`
+  ${font.title0}
+  margin-bottom: 62px;
+  display: flex;
+  justify-content: center;
+`;

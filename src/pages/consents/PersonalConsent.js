@@ -15,16 +15,10 @@ function PersonalConsent() {
         >
           <Button onClick={() => navigate('/signup')}>
             나가기
-            <img
-              src={arrowRight}
-              alt="arrow"
-              style={{ width: '1.25vw', height: '1.25vw' }}
-            />
+            <ArrowImg src={arrowRight} alt="arrow" />
           </Button>
         </div>
-        <Title>서비스 이용 약관</Title>
-        <Short>회원가입을 위해 서비스 이용 약관에 동의해주세요</Short>
-        <Line />
+        <Title>개인정보 수집.이용 동의</Title>
         <Box>
           <Info>
             <div style={{ fontWeight: '400' }}>
@@ -91,10 +85,14 @@ function PersonalConsent() {
   );
 }
 
+const ArrowImg = styled.img`
+  width: 16px;
+  height: 16px;
+`;
+
 const Info = styled.div`
-  color: #232323;
-  font-family: 'Pretendard Variable';
-  font-size: 1.0417vw;
+  color: var(--gray1, #4f4f4f);
+  font-size: 16px;
   font-style: normal;
   line-height: 130%;
   white-space: 'pre-line';
@@ -110,20 +108,18 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  margin-top: 2.812vw;
-  width: 7.917vw;
-  height: 2.969vw;
+  margin-top: 34px;
+  width: 108px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  column-gap: 0.26vw;
-  border-radius: 0.52vw;
+  border-radius: 8px;
   background: var(--Color-7, #dcdada);
   border: none;
   color: #4f4f4f;
-  font-family: 'Pretendard Variable';
-  font-size: 1.25vw;
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -132,43 +128,24 @@ const Button = styled.button`
 const Title = styled.div`
   color: #000;
   text-align: center;
-  font-family: 'Pretendard Variable';
-  font-size: 2.604vw;
+  font-size: 38px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-`;
-
-const Short = styled.div`
-  margin-top: 1.354vw;
-  margin-bottom: 1.042vw;
-  color: var(--Color-5, #9f9f9f);
-  text-align: center;
-  font-family: 'Pretendard Variable';
-  font-size: 1.25vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
-const Line = styled.div`
-  width: 26.615vw;
-  height: 0.052vw;
-  background: var(--Color-5, #9f9f9f);
-  margin-bottom: 4.167vw;
+  margin-bottom: 100px;
 `;
 
 const Box = styled.div`
-  margin-bottom: 6.25vw;
-  padding: 2.812vw 3.854vw;
-  width: 69.167vw;
+  margin-bottom: 100px;
+  padding: 50px;
+  width: 1076px;
   height: auto-fit;
-  border-radius: 0.26vw;
-  border: 0.05vw solid var(--Color-5, #9f9f9f);
+  border-radius: 5px;
+  border: 1px solid var(--gray2, #9f9f9f);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  row-gap: 2.29vw;
+  row-gap: 50px;
 `;
 
 export default PersonalConsent;

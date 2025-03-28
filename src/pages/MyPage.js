@@ -311,7 +311,7 @@ function MyPage() {
                   <NewContent>
                     <Checkbox
                       sx={{
-                        '& .MuiSvgIcon-root': { fontSize: '1.563vw' },
+                        '& .MuiSvgIcon-root': { fontSize: '20px' },
                         '&.Mui-checked': {
                           color: '#41C3AB',
                         },
@@ -330,19 +330,14 @@ function MyPage() {
             <Button disabled={!isValid} type="submit">
               수정하기
             </Button>
+            <Out onClick={() => showModal()}>탈퇴하기</Out>
           </Page>
         </div>
       </form>
-      <Out onClick={() => showModal()}>탈퇴하기</Out>
       {open && (
         <Backdrop onClick={closeModal}>
           <Dialog onClick={(e) => e.stopPropagation()}>
-            <Icon
-              icon="ph:warning-circle-thin"
-              width="7.708vw"
-              height="7.708vw"
-              style={{ color: '#41c3ab', marginBottom: '1.771vw' }}
-            />
+            <OutIcon icon="ph:warning-circle-thin" />
             <ModalTitle>정말 탈퇴하시겠습니까?</ModalTitle>
             <ModalContent>
               회원탈퇴 시 모든 정보가 삭제되며, 복구되지 않습니다.
@@ -358,15 +353,22 @@ function MyPage() {
   );
 }
 
+const OutIcon = styled(Icon)`
+  width: 120px;
+  height: 120px;
+  color: #41c3ab;
+  margin-bottom: 24px;
+`;
+
 const ModalButton1 = styled.button`
   font-weight: 500;
-  font-size: 1.146vw; /* 22px */
-  width: 7.604vw; /* 146px */
-  height: 3.125vw; /* 60px */
+  font-size: 20px;
+  width: 110px;
+  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   border: 0;
   color: #4f4f4f;
   background-color: #f2f2f2;
@@ -374,13 +376,13 @@ const ModalButton1 = styled.button`
 
 const ModalButton2 = styled.button`
   font-weight: 500;
-  font-size: 1.146vw; /* 22px */
-  width: 7.604vw; /* 146px */
-  height: 3.125vw; /* 60px */
+  font-size: 20px;
+  width: 110px;
+  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   border: 0;
   color: white;
   background-color: #41c3ab;
@@ -388,20 +390,20 @@ const ModalButton2 = styled.button`
 
 const Buttons = styled.div`
   display: flex;
-  column-gap: 1.042vw; /* 20px */
+  column-gap: 19px;
 `;
 
 const ModalContent = styled.div`
   font-weight: 400;
-  font-size: 1.354vw; /* 26px */
+  font-size: 18px;
   color: #4f4f4f;
-  margin-bottom: 1.563vw; /* 30px */
+  margin-bottom: 36px;
 `;
 
 const ModalTitle = styled.div`
   font-weight: 600;
-  font-size: 2.083vw; /* 40px */
-  margin-bottom: 0.521vw; /* 10px */
+  font-size: 32px;
+  margin-bottom: 12px;
 `;
 
 const Backdrop = styled.div`
@@ -410,7 +412,7 @@ const Backdrop = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -419,9 +421,9 @@ const Backdrop = styled.div`
 
 const Dialog = styled.div`
   position: relative;
-  width: 46.875vw; /* 900px */
-  height: 27.031vw; /* 519px */
-  border-radius: 2.604vw; /* 50px */
+  width: 712px;
+  height: 410px;
+  border-radius: 40px;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -434,49 +436,49 @@ const Out = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 5.365vw; /* 103px */
-  font-weight: 500;
-  font-size: 1.25vw; /* 24px */
+  margin-bottom: 74px;
+  font-weight: 400;
+  font-size: 16px;
   text-decoration: underline;
 `;
 
 const Lines = styled.div`
-  width: 56.979vw; /* 1094px */
-  height: 0px;
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  margin-top: 0.208vw; /* 4px */
-  margin-bottom: 1.25vw; /* 24px */
+  width: 858px;
+  height: 1px;
+  background: var(--gray2, #9f9f9f);
+  margin-bottom: 20px;
 `;
 
 const Error = styled.div`
   color: red;
-  font-size: 0.938vw; /* 18px */
-  margin-top: 0.625vw; /* 12px */
-  height: 0.938vw; /* 18px */
+  font-size: 12px;
+  margin-top: 8px;
+  height: 15px;
 `;
 
 const Date = styled.input`
-  font-size: 0.938vw; /* 18px */
-  width: 12.396vw; /* 238px */
-  height: 2.604vw; /* 50px */
-  border-radius: 0.26vw; /* 5px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
+  font-size: 16px;
+  width: 200px;
+  height: 48px;
+  border-radius: 3.75px;
+  border: 1px solid var(--gray2, #9f9f9f);
+  padding-left: 14px;
 `;
 
 const Button = styled.button`
-  width: 36.667vw; /* 704px */
-  height: 3.958vw; /* 76px */
+  width: 520px;
+  height: 60px;
   font-weight: 600;
-  font-size: 1.563vw; /* 30px */
+  font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 8.333vw; /* 160px */
+  margin-top: 119px;
+  margin-bottom: 20px;
   background-color: #41c3ab;
   border: 0;
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   color: white;
-  margin-bottom: 1.042vw; /* 20px */
 
   &:disabled {
     background-color: #dcdada;
@@ -486,73 +488,75 @@ const Button = styled.button`
 
 const NewContent = styled.div`
   display: flex;
-  column-gap: 0.833vw; /* 16px */
   align-items: center;
 `;
 
 const Content = styled.div`
-  font-size: 1.042vw; /* 20px */
+  font-size: 16px;
+  font-style: normal;
   font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  column-gap: 6px;
+  cursor: pointer;
 `;
 
 const Input = styled.input`
-  width: 11.667vw; /* 224px */
-  height: 3.385vw; /* 65px */
-  border-radius: 0.26vw; /* 5px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.302vw; /* 25px */
+  width: 168px;
+  height: 48px;
+  border-radius: 3.75px;
+  border: 1px solid var(--gray2, #9f9f9f);
+  font-size: 18px;
+  padding-left: 24px;
 
   &::placeholder {
     font-weight: 400;
-    font-size: 1.042vw; /* 20px */
-    line-height: 1.243vw; /* 23.87px */
-    color: #9f9f9f;
-    transform: translateX(1.771vw); /* 34px */
+    font-size: 16px;
+    color: var(--gray2, #9f9f9f);
   }
 `;
 
 const Choice = styled.div`
   display: flex;
-  column-gap: 1.927vw; /* 37px */
+  column-gap: 20px;
 `;
 
 const GenderChoice = styled.div`
-  width: 9.323vw; /* 179px */
-  height: 3.021vw; /* 58px */
+  width: 130px;
+  height: 43px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  border-radius: 0.26vw; /* 5px */
+  border-radius: 4px;
   border: 0;
-
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : '#DCDADA')};
 `;
 
 const Gender = styled.div`
   display: flex;
-  column-gap: 1.042vw; /* 20px */
+  column-gap: 16px;
 `;
 
 const Inputs = styled.input`
-  width: 56.979vw; /* 1094px */
-  height: 3.385vw; /* 65px */
-  border-radius: 0.26vw; /* 5px */
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  font-size: 1.302vw; /* 25px */
-  padding-left: 1.667vw; /* 32px */
+  width: 858px;
+  height: 48px;
+  border-radius: 4px;
+  border: 1px solid var(--gray2);
+  font-size: 18px;
+  padding-left: 20px;
 
   &::placeholder {
     font-weight: 400;
-    font-size: 1.042vw; /* 20px */
-    color: #9f9f9f;
+    font-size: 16px;
+    color: var(--gray2);
   }
 `;
 
 const Name = styled.div`
   font-weight: 500;
-  font-size: 1.25vw; /* 24px */
-  margin-bottom: 1.042vw; /* 20px */
+  font-size: 18px;
+  margin-bottom: 16px;
 `;
 
 const Option = styled.div`
@@ -573,23 +577,23 @@ const Page = styled.div`
 const Signup = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 4.167vw; /* 80px */
-  margin-top: 3.125vw; /* 60px */
+  row-gap: 45px;
+  margin-top: 47px;
 `;
 
 const Line = styled.div`
-  width: 22.969vw; /* 441px */
-  height: 0px;
-  border: 0.052vw solid #9f9f9f; /* 1px */
+  width: 858px;
+  height: 1px;
+  background: var(--gray2, #9f9f9f);
 `;
 
 const Short = styled.div`
   font-weight: 400;
-  font-size: 1.25vw; /* 24px */
+  font-size: 18px;
   text-align: center;
   color: #9f9f9f;
-  margin-top: 1.354vw; /* 26px */
-  margin-bottom: 1.042vw; /* 20px */
+  margin-top: 18px;
+  margin-bottom: 20px;
 `;
 
 const Header = styled.div`
@@ -597,12 +601,12 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 4.479vw; /* 86px */
+  margin-top: 72px;
 `;
 
 const Titles = styled.div`
   font-weight: 600;
-  font-size: 2.604vw; /* 50px */
+  font-size: 38px;
   text-align: center;
 `;
 

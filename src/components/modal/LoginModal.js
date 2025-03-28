@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react';
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
-import Logo from '../../assets/icons/logo.png';
+import LogoImage from '../../assets/icons/seedzip_logo.png';
+import Logo from '../../assets/icons/seedzip.png';
 
 const LoginModal = forwardRef((props, ref) => {
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
@@ -43,19 +44,10 @@ const LoginModal = forwardRef((props, ref) => {
 
   return (
     <Dialog ref={ref}>
-      <Icon
-        onClick={closeModal}
-        icon="material-symbols-light:close"
-        style={{
-          width: '1.56vw',
-          height: '1.56vw',
-          position: 'absolute',
-          top: '2.08vw',
-          right: '2.08vw',
-        }}
-      />
+      <CloseIcon onClick={closeModal} icon="mingcute:close-line" />
       <Contents>
-        <LogoBox src={Logo} />
+        <StyledLogoImage src={LogoImage} alt="seedzip_logo" />
+        <StyledLogo src={Logo} alt="seedzip" />
         <Sentence>
           당신만의 인사이트를 놓치지 않게
           <br />
@@ -63,40 +55,17 @@ const LoginModal = forwardRef((props, ref) => {
         </Sentence>
         <Logins>
           <LoginButtons type="kakao" onClick={loginHandler}>
-            <Icon
-              icon="raphael:bubble"
-              style={{
-                width: '2.02vw', // 38.85px
-                height: '0.92vw', // 17.59px
-                color: 'black',
-                marginRight: '-0.15vw', // -2.79px
-              }}
-            />
+            <SocialLogo icon="raphael:bubble" />
             카카오톡으로 로그인하기
           </LoginButtons>
           <LoginButtons type="naver">
             {' '}
-            <Icon
-              icon="simple-icons:naver"
-              style={{
-                width: '0.98vw', // 18.85px
-                height: '0.98vw', // 18.85px
-                color: 'white',
-                marginRight: '0.31vw', // 5.99px
-              }}
-            />
+            <SocialLogo icon="simple-icons:naver" />
             네이버로 로그인하기
           </LoginButtons>
           <LoginButtons type="google">
             {' '}
-            <Icon
-              icon="flat-color-icons:google"
-              style={{
-                width: '1.68vw', // 32.2px
-                height: '1.68vw', // 32.2px
-                marginRight: '0.3vw', // 5.79px
-              }}
-            />
+            <GoogleLogo icon="flat-color-icons:google" />
             구글로 로그인하기
           </LoginButtons>
         </Logins>
@@ -105,16 +74,37 @@ const LoginModal = forwardRef((props, ref) => {
   );
 });
 
+const GoogleLogo = styled(Icon)`
+  width: 23px;
+  height: 23px;
+  margin-right: 8px;
+`;
+
+const SocialLogo = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+`;
+
+const CloseIcon = styled(Icon)`
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  top: 36px;
+  right: 36px;
+`;
+
 const LoginButtons = styled.button`
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 20.37vw; // 391.16px
-  height: 3.68vw; // 70.69px
-  border-radius: 0.27vw; // 5.24px
+  width: 328px;
+  height: 58px;
+  border-radius: 4px;
   border: 0;
   font-weight: 500;
-  font-size: 1.04vw; // 20px
+  font-size: 17.875px;
+  line-height: 100%;
 
   background-color: ${(props) =>
     props.type === 'kakao'
@@ -133,16 +123,16 @@ const LoginButtons = styled.button`
 const Logins = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 1.08vw; // 20.69px
+  row-gap: 20px;
 `;
 
 const Sentence = styled.div`
   font-weight: 500;
-  font-size: 1.25vw; // 24px
-  line-height: 1.63vw; // 31.2px
+  font-size: 16px;
+  line-height: 150%;
   text-align: center;
-  margin-top: 1.47vw; // 28.33px
-  margin-bottom: 3.28vw; // 63px
+  margin-top: 26px;
+  margin-bottom: 47px;
 `;
 
 const Contents = styled.div`
@@ -150,23 +140,31 @@ const Contents = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 5.1vw; // 98px
+  margin-top: 101px;
 `;
 
-const LogoBox = styled.img`
-  width: 15.05vw; // 289px
-  height: 6.6vw; // 126.66px
+const StyledLogo = styled.img`
+  width: 193px;
+  height: 52px;
+  margin-top: 4px;
+`;
+
+const StyledLogoImage = styled.img`
+  width: 48px;
+  height: 48px;
+  transform: translateX(-8px);
 `;
 
 const Dialog = styled.dialog`
-  width: 31.98vw; // 614px
-  height: 38.23vw; // 734px
-  border-radius: 2.86vw; // 54.98px
+  width: 520px;
+  height: 620px;
+  border-radius: 40px;
   border: 0;
-  box-shadow: 0px 0px 0.26vw 0px #0000004d; // 5px
+  box-shadow: 0px 0px 4.235px 0px rgba(0, 0, 0, 0.3);
   position: relative;
+  padding: 0;
   ::backdrop {
-    background-color: #0000008c;
+    background-color: rgba(0, 0, 0, 0.55);
   }
 `;
 

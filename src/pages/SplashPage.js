@@ -35,7 +35,6 @@ function SplashPage() {
 
 const Page = styled.div`
   background-color: #f9fffe;
-  /* height: 50.1vw; */
   width: 100%;
   display: flex;
 `;

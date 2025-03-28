@@ -69,17 +69,16 @@ export default function SingleSelectPlaceholder({ value, onChange }) {
 const StyledFormControl = styled(FormControl)`
   && {
     margin: 0;
-    width: 23.177vw; /* 445px */
-    height: 3.385vw; /* 65px */
-    margin-top: 0;
-    border-radius: 0.26vw; /* 5px */
-    border: 0.052vw solid #9f9f9f; /* 1px */
+    width: 330px;
+    height: 48px;
+    border-radius: 3.75px;
+    border: 1px solid var(--gray2, #9f9f9f);
   }
 `;
 
 const StyledSelect = styled(Select)`
   && {
-    height: 3.385vw; /* 65px */
+    height: 48px;
     display: flex;
     align-items: center;
   }

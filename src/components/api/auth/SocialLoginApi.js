@@ -39,7 +39,6 @@ const SocialLogin = ({ socialType }) => {
         const jwtToken = response.headers['authorization'];
 
         localStorage.setItem('jwtToken', jwtToken);
-        // const savedJwtToken = localStorage.getItem('jwtToken');
 
         // 메인 페이지로 이동
         navigate('/main');
@@ -50,6 +49,7 @@ const SocialLogin = ({ socialType }) => {
 
         // 액세스 토큰을 로컬 스토리지에 저장
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('socialType', socialType);
 
         // 저장 후 확인하고 페이지 이동
         if (localStorage.getItem('accessToken')) {

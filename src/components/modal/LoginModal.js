@@ -3,14 +3,11 @@ import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 import LogoImage from '../../assets/icons/seedzip_logo.png';
 import Logo from '../../assets/icons/seedzip.png';
+import handleKakaoLogin from '../../components/api/auth/Kakao';
+import handleGoogleLogin from '../../components/api/auth/Google';
+import handleNaverLogin from '../../components/api/auth/Naver';
 
 const LoginModal = forwardRef((props, ref) => {
-  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
-
-  const loginHandler = () => {
-    window.location.href = link;
-  };
-
   const closeModal = () => {
     ref.current?.close();
   };
@@ -54,16 +51,15 @@ const LoginModal = forwardRef((props, ref) => {
           seedzip으로 콘텐츠를 한 곳에 모아 관리하세요!
         </Sentence>
         <Logins>
-          <LoginButtons type="kakao" onClick={loginHandler}>
+          <LoginButtons type="kakao" onClick={handleKakaoLogin}>
             <SocialLogo icon="raphael:bubble" />
             카카오톡으로 로그인하기
           </LoginButtons>
-          <LoginButtons type="naver">
-            {' '}
+          <LoginButtons type="naver" onClick={handleNaverLogin}>
             <SocialLogo icon="simple-icons:naver" />
             네이버로 로그인하기
           </LoginButtons>
-          <LoginButtons type="google">
+          <LoginButtons type="google" onClick={handleGoogleLogin}>
             {' '}
             <GoogleLogo icon="flat-color-icons:google" />
             구글로 로그인하기

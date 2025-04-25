@@ -2,15 +2,14 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// axios 인스턴스 생성
 const api = axios.create({
-  baseURL: `${process.env.REACT_APP_SERVER_URL}`, // 백엔드 서버 주소로 설정
+  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded', // 필요 시 헤더 추가
+    'Content-Type': 'application/x-www-form-urlencoded',
   },
 });
 
-const KakaoRedirect = () => {
+const SocialLogin = ({ socialType }) => {
   const code = new URL(window.location.href).searchParams.get('code');
   const navigate = useNavigate();
 
@@ -28,7 +27,9 @@ const KakaoRedirect = () => {
 
   const handleGetToken = async () => {
     try {
-      const response = await api.post(`/api/v1/auth/login/kakao?code=${code}`);
+      const response = await api.post(`/api/v1/auth/login/${socialType}`, {
+        code: code,
+      });
 
       if (response.data.status.code === 200) {
         console.log('로그인 성공: ', response.data.status.message);
@@ -38,8 +39,7 @@ const KakaoRedirect = () => {
         const jwtToken = response.headers['authorization'];
 
         localStorage.setItem('jwtToken', jwtToken);
-        const savedJwtToken = localStorage.getItem('jwtToken');
-        console.log('저장된 JWT Token:', savedJwtToken);
+        // const savedJwtToken = localStorage.getItem('jwtToken');
 
         // 메인 페이지로 이동
         navigate('/main');
@@ -47,20 +47,12 @@ const KakaoRedirect = () => {
         console.log(response.data.status.message);
 
         const accessToken = response.data.results[0].result;
-        const socialType = response.data.results[0].socialType;
 
         // 액세스 토큰을 로컬 스토리지에 저장
         localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('socialType', socialType);
-
-        console.log('AccessToken:', localStorage.getItem('accessToken'));
-        console.log('SocialType:', localStorage.getItem('socialType'));
 
         // 저장 후 확인하고 페이지 이동
-        if (
-          localStorage.getItem('accessToken') &&
-          localStorage.getItem('socialType')
-        ) {
+        if (localStorage.getItem('accessToken')) {
           navigate('/signup');
         }
       }
@@ -74,4 +66,4 @@ const KakaoRedirect = () => {
   return <div>로그인 중입니다...</div>;
 };
 
-export default KakaoRedirect;
+export default SocialLogin;

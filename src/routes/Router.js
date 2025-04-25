@@ -3,7 +3,6 @@ import React from 'react';
 import MainPage from '../pages/MainPage';
 import ContentAddPage from '../pages/ContentAddPage';
 import SplashPage from '../pages/SplashPage';
-import KakaoRedirect from '../components/api/KakaoRedirect';
 import SignupPage from '../pages/SignupPage';
 import AddContent from '../components/AddContent';
 import ContentViewPage from '../pages/ContentViewPage';
@@ -12,6 +11,7 @@ import MyPage from '../pages/MyPage';
 import ServiceConsent from '../pages/consents/ServiceConsent';
 import PersonalConsent from '../pages/consents/PersonalConsent';
 import MarketingConsent from '../pages/consents/MarketingConsent';
+import SocialLogin from '../components/api/auth/SocialLoginApi';
 
 const Router = () => {
   return (
@@ -22,7 +22,18 @@ const Router = () => {
         <Route path="/" element={<MainPage />} /> {/* "/" 도 MainPage로 연결 */}
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/kakao/callback" element={<KakaoRedirect />} />
+        <Route
+          path="/kakao/callback"
+          element={<SocialLogin socialType="kakao" />}
+        />
+        <Route
+          path="/google/callback"
+          element={<SocialLogin socialType="google" />}
+        />
+        <Route
+          path="/naver/callback"
+          element={<SocialLogin socialType="naver" />}
+        />
         <Route path="/content" element={<AddContent />} />
         <Route path="/content-add" element={<ContentAddPage />} />
         <Route path="/content-view" element={<ContentViewPage />} />

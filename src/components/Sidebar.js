@@ -69,11 +69,7 @@ const Sidebar = ({
       const names = results.map((item) => item.name);
       setCategories(names); // 카테고리 조회 연동
 
-      if (response.status === 200) {
-        console.log('카테고리 조회 성공');
-      } else {
-        console.error('카테고리 조회 실패');
-      }
+      console.log('카테고리 조회 성공');
     } catch (error) {
       console.error('에러 발생:', error);
     }
@@ -82,7 +78,9 @@ const Sidebar = ({
     setIsBookmarkOpen(!isBookmarkOpen);
 
     try {
-      const response = await axiosInstance.get('/api/v1/bookmark');
+      const response = await axiosInstance.get(
+        '/api/v1/bookmark/category/bookmark',
+      );
       const results = response.data.results;
       const ids = results.map((item) => item.bookmarkId);
       setBookmarkIds(ids);
@@ -91,11 +89,7 @@ const Sidebar = ({
       const names = results.map((item) => item.name);
       setBookmarks(names);
 
-      if (response.status === 200) {
-        console.log('북마크 조회 성공');
-      } else {
-        console.error('북마크 조회 실패');
-      }
+      console.log('북마크 조회 성공', response.data.results);
     } catch (error) {
       console.error('에러 발생:', error);
     }
@@ -139,13 +133,9 @@ const Sidebar = ({
 
     try {
       const response = await axiosInstance.post(
-        `/api/v1/category/${categoryId}/bookmark`,
+        `/api/v1/bookmark/category/${categoryId}`,
       );
-      if (response.status === 200) {
-        console.log('북마크 생성 성공');
-      } else {
-        console.error('북마크 생성 실패');
-      }
+      console.log('북마크 추가 성공', response.data.results);
     } catch (error) {
       console.error('에러 발생:', error);
     }
@@ -196,13 +186,9 @@ const Sidebar = ({
 
     try {
       const response = await axiosInstance.delete(
-        `/api/v1/bookmark/${bookmarkId}`,
+        `/api/v1/bookmark/category/${bookmarkId}`,
       );
-      if (response.status === 200) {
-        console.log('북마크 삭제 성공');
-      } else {
-        console.error('북마크 삭제 실패');
-      }
+      console.log('북마크 삭제 성공', response.data.results);
     } catch (error) {
       console.error('에러 발생:', error);
     }
@@ -233,11 +219,7 @@ const Sidebar = ({
       const response = await axiosInstance.delete(
         `/api/v1/category/${categoryId}`,
       );
-      if (response.status === 200) {
-        console.log('카테고리 삭제 성공');
-      } else {
-        console.error('카테고리 삭제 실패');
-      }
+      console.log('카테고리 삭제 성공');
     } catch (error) {
       console.error('에러 발생:', error);
     }

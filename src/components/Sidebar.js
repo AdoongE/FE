@@ -216,9 +216,7 @@ const Sidebar = ({
     setDeleteModalOpen(false);
 
     try {
-      const response = await axiosInstance.delete(
-        `/api/v1/category/${categoryId}`,
-      );
+      await axiosInstance.delete(`/api/v1/category/${categoryId}`);
       console.log('카테고리 삭제 성공');
     } catch (error) {
       console.error('에러 발생:', error);

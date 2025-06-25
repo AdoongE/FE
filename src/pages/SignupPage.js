@@ -55,7 +55,7 @@ function SignupPage() {
       .string()
       .matches(/^\d{4}-\d{2}-\d{2}$/, '*필수 항목입니다.')
       .required('*필수 항목입니다.'),
-    gender: yup.string().required('*필수 항목입니다.'),
+    gender: yup.string(),
     occupation: yup.string(),
     field: yup.string(),
     consentToTermsOfService: yup
@@ -158,7 +158,7 @@ function SignupPage() {
               )}
             </Option>
             <Option>
-              <Name>성별 *</Name>
+              <Name>성별</Name>
 
               <Controller
                 onClick={handleClick}

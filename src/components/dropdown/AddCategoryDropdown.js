@@ -44,15 +44,10 @@ export default function AddCategory({ value = [], onChange }) {
     try {
       const response = await axiosInstance.get('/api/v1/category');
       const results = response.data.results;
-      console.log('카테고리 이름 좀 보자', results);
       const names = results.map((item) => item.name);
       setCategories(names);
 
-      if (response.status === 200) {
-        console.log('카테고리 조회 성공');
-      } else {
-        console.error('카테고리 조회 실패');
-      }
+      console.log('카테고리 조회 성공');
     } catch (error) {
       console.error('에러 발생:', error);
     }

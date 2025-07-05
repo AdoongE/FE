@@ -18,7 +18,7 @@ import { font } from '../styles/font';
 
 function AddContent() {
   const location = useLocation();
-  const [dataType, setDataType] = useState(null);
+  const [seedType, setSeedType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const representativeIndex = location.state?.representativeIndex || 0;
   const [tags, setTags] = useState([]);
@@ -45,20 +45,20 @@ function AddContent() {
     );
     let option = '';
     if (images.length > 0) {
-      setDataType('IMAGE');
+      setSeedType('IMAGE');
       option = 'IMAGE';
     } else if (files.length > 0) {
-      setDataType('PDF');
+      setSeedType('PDF');
       option = 'PDF';
     } else if (link !== '') {
-      setDataType('LINK');
+      setSeedType('LINK');
       option = 'LINK';
     }
-    setValue('dataType', option, { shouldValidate: true });
-    setValue('contentName', title);
-    setValue('contentLink', link);
+    setValue('seedType', option, { shouldValidate: true });
+    setValue('seedName', title);
+    setValue('seedLink', link);
     setValue('thumbnailImage', representativeIndex, { shouldValidate: true });
-    setValue('contentDetail', summary);
+    setValue('seedDetail', summary);
     trigger('thumbnailImage');
   }, []);
 
@@ -148,8 +148,8 @@ function AddContent() {
   }, []);
 
   const schema = yup.object().shape({
-    contentName: yup.string(),
-    boardCategory: yup
+    seedName: yup.string(),
+    boardCategories: yup
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
@@ -162,19 +162,19 @@ function AddContent() {
         'is-thumbnail-required',
         '대표 이미지/PDF를 선택해주세요.',
         function (value) {
-          const { dataType } = this.parent;
-          if (dataType === 'IMAGE' || dataType === 'PDF') {
+          const { seedType } = this.parent;
+          if (seedType === 'IMAGE' || seedType === 'PDF') {
             return value !== null && value !== undefined;
           }
           return true;
         },
       ),
-    contentLink: yup
+    seedLink: yup
       .string()
       .nullable()
       .test('is-link-required', '링크를 입력해주세요.', function (value) {
-        const { dataType } = this.parent;
-        if (dataType === 'LINK') {
+        const { seedType } = this.parent;
+        if (seedType === 'LINK') {
           return value && value.trim() !== '';
         }
         return true;
@@ -184,7 +184,7 @@ function AddContent() {
       .of(yup.string())
       .min(2, '2개 이상의 태그를 선택해주세요.')
       .required(),
-    dday: yup
+    dDay: yup
       .string()
       .matches(/^\d{4}-\d{2}-\d{2}$/, {
         message: '유효한 날짜 형식이어야 합니다.',
@@ -192,7 +192,7 @@ function AddContent() {
       })
       .nullable()
       .notRequired(),
-    contentDetail: yup.string().max(1500).nullable().notRequired(),
+    seedDetail: yup.string().max(1500).nullable().notRequired(),
   });
 
   const {
@@ -207,22 +207,22 @@ function AddContent() {
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      dataType: '',
+      seedType: '',
       thumbnailImage: 0,
-      contentName: '',
-      boardCategory: [],
-      contentLink: '',
+      seedName: '',
+      boardCategories: [],
+      seedLink: '',
       tags: [],
-      dday: null,
-      contentDetail: null,
+      dDay: null,
+      seedDetail: null,
     },
   });
 
   useEffect(() => {
-    if (dataType) {
+    if (seedType) {
       trigger();
     }
-  }, [dataType]);
+  }, [seedType]);
 
   const onSubmit = (data) => {
     if (isSubmitting) return;
@@ -231,21 +231,21 @@ function AddContent() {
     if (!isValid) return;
     try {
       let updateData = {
-        dataType: data.dataType,
-        contentName: data.contentName,
-        boardCategory: data.boardCategory,
+        seedType: data.seedType,
+        seedName: data.seedName,
+        boardCategories: data.boardCategories,
         tags: data.tags,
-        dday: data.dday || null,
-        contentDetail: data.contentDetail || null,
+        dDay: data.dDay || null,
+        seedDetail: data.seedDetail || null,
       };
 
-      if (dataType === 'LINK') {
-        updateData.contentLink = data.contentLink;
+      if (seedType === 'LINK') {
+        updateData.seedLink = data.seedLink;
       } else {
         updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
       }
 
-      ContentAddHandler(data.dataType, updateData, images, files);
+      ContentAddHandler(data.seedType, updateData, images, files);
       if (TagRef.current) {
         TagRef.current.resetTags();
       }
@@ -256,7 +256,7 @@ function AddContent() {
     }
   };
 
-  const contentDetail = watch('contentDetail', '');
+  const seedDetail = watch('seedDetail', '');
 
   const formValues = watch();
   useEffect(() => {
@@ -278,8 +278,8 @@ function AddContent() {
           <TitleDiv
             placeholder="제목을 입력하세요 (선택)"
             type="text"
-            name="contentName"
-            {...register('contentName')}
+            name="seedName"
+            {...register('seedName')}
           />
         </LeftDiv>
         <RightDiv>
@@ -317,20 +317,20 @@ function AddContent() {
             <Name>카테고리 지정*</Name>
             <Inputs>
               <Controller
-                name="boardCategory"
+                name="boardCategories"
                 control={control}
                 defaultValue={[]}
                 render={({ field, fieldState }) => (
                   <>
                     <AddCategory
-                      label="boardCategory"
+                      label="boardCategories"
                       $error={fieldState.error ? true : undefined}
                       $helperText={fieldState.error && fieldState.error.message}
                       value={field.value || []}
                       onChange={(newValue) => {
                         if (newValue.length <= 5) {
                           field.onChange(newValue);
-                          trigger('boardCategory');
+                          trigger('boardCategories');
                         }
                       }}
                     />
@@ -351,31 +351,31 @@ function AddContent() {
             </Inputs>
           </Inputs>
 
-          {dataType === 'LINK' && (
+          {seedType === 'LINK' && (
             <Controller
-              name="contentLink"
+              name="seedLink"
               control={control}
               render={({ field, fieldState }) => (
                 <LinkUploader
-                  label="contentLink"
+                  label="seedLink"
                   $error={fieldState.error ? true : undefined}
                   $helperText={fieldState.error && fieldState.error.message}
                   value={link || ''}
                   onChange={(value) => {
                     field.onChange(value);
-                    trigger('contentLink');
+                    trigger('seedLink');
                   }}
                 />
               )}
             />
           )}
-          {dataType === 'IMAGE' && (
+          {seedType === 'IMAGE' && (
             <ImageUploadComponent
               representativeIndex={representativeIndex}
               images={images}
             />
           )}
-          {dataType === 'PDF' && (
+          {seedType === 'PDF' && (
             <PdfUploadComponent
               representativeIndex={representativeIndex}
               files={files}
@@ -486,7 +486,7 @@ function AddContent() {
                 </Short>
               </Name>
             </Long>
-            <Date type="date" {...register('dday')} defaultValue={null} />
+            <Date type="date" {...register('dDay')} defaultValue={null} />
           </Dday>
           <Memo>
             <Name>메모 입력</Name>
@@ -494,14 +494,12 @@ function AddContent() {
               <Text
                 defaultValue={null}
                 maxLength={1500}
-                name="contentDetail"
+                name="seedDetail"
                 type="text"
-                {...register('contentDetail')}
+                {...register('seedDetail')}
                 placeholder="메모를 입력하세요."
               />
-              <Count>
-                {contentDetail === null ? 0 : contentDetail.length}/1500
-              </Count>
+              <Count>{seedDetail === null ? 0 : seedDetail.length}/1500</Count>
             </div>
           </Memo>
         </Contents>

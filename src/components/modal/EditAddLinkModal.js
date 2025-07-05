@@ -14,7 +14,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
     dialogRef.current?.showModal();
   };
 
-  const [contentLinks, setContentLinks] = useState('');
+  const [seedLinks, setContentLinks] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const closeLinkModal = () => {
@@ -23,18 +23,18 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
   };
 
   const handleAddLink = () => {
-    if (contentLinks === '') {
+    if (seedLinks === '') {
       setErrorMessage('URL을 입력해주세요.');
       return;
     }
 
     const regex = /^(http|https):\/\/[^\s$.?#].[^\s]*$/i;
-    const isValid = regex.test(contentLinks);
+    const isValid = regex.test(seedLinks);
 
     if (!isValid) {
       setErrorMessage('유효하지 않은 링크입니다.');
     } else {
-      onConfirm(contentLinks);
+      onConfirm(seedLinks);
       setErrorMessage('');
       closeModal();
       setContentLinks('');
@@ -86,7 +86,7 @@ const AddLinkModal = forwardRef(({ onConfirm }, ref) => {
         </TopDiv>
 
         <Input
-          value={contentLinks}
+          value={seedLinks}
           onChange={(event) => setContentLinks(event.target.value)}
           placeholder="링크를 입력하세요."
         />

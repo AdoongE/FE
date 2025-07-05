@@ -33,9 +33,9 @@ function ContentEditPage() {
   });
 
   const location = useLocation();
-  const { dataType } = location.state || {};
+  const { seedType } = location.state || {};
 
-  console.log('dataType, images :', dataType, images);
+  console.log('seedType, images :', seedType, images);
 
   const handleTagInput = (event) => {
     if (isComposing) return;
@@ -109,7 +109,7 @@ function ContentEditPage() {
 
   const getDetail = async () => {
     try {
-      const response = await axiosInstance.get(`/api/v1/content/all/${Id}`);
+      const response = await axiosInstance.get(`/api/v1/seed/${Id}`);
       const results = response.data.results[0];
       console.log('수정 전 data: ', results);
       setOriginalContentDetail(results);
@@ -129,8 +129,8 @@ function ContentEditPage() {
   }, [Id]);
 
   useEffect(() => {
-    if (originalContentDetail && originalContentDetail.tags) {
-      setTags(originalContentDetail.tags);
+    if (originalContentDetail && originalContentDetail.tagNames) {
+      setTags(originalContentDetail.tagNames);
     }
   }, [originalContentDetail]);
 
@@ -139,8 +139,8 @@ function ContentEditPage() {
       .string()
       .required('콘텐츠 형식을 선택하세요.')
       .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
-    contentName: yup.string(),
-    boardCategory: yup
+    seedName: yup.string(),
+    boardCategories: yup
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
@@ -153,19 +153,19 @@ function ContentEditPage() {
         'is-thumbnail-required',
         '대표 이미지/PDF를 선택해주세요.',
         function (value) {
-          const { dataType } = this.parent;
-          if (dataType === 'IMAGE' || dataType === 'PDF') {
+          const { seedType } = this.parent;
+          if (seedType === 'IMAGE' || seedType === 'PDF') {
             return value !== null && value !== undefined;
           }
           return true;
         },
       ),
-    contentLink: yup
+    seedLink: yup
       .string()
       .nullable()
       .test('is-link-required', '링크를 입력해주세요.', function (value) {
-        const { dataType } = this.parent;
-        if (dataType === 'LINK') {
+        const { seedType } = this.parent;
+        if (seedType === 'LINK') {
           return value && value.trim() !== '';
         }
         return true;
@@ -175,7 +175,7 @@ function ContentEditPage() {
       .of(yup.string())
       .min(2, '2개 이상의 태그를 선택해주세요.')
       .required(),
-    dday: yup
+    dDay: yup
       .string()
       .matches(/^\d{4}-\d{2}-\d{2}$/, {
         message: '유효한 날짜 형식이어야 합니다.',
@@ -183,7 +183,7 @@ function ContentEditPage() {
       })
       .nullable()
       .notRequired(),
-    contentDetail: yup.string().max(1500).nullable().notRequired(),
+    seedDetail: yup.string().max(1500).nullable().notRequired(),
   });
 
   const {
@@ -215,25 +215,25 @@ function ContentEditPage() {
     try {
       // 유효성 검사 통과된 데이터만 처리됨
       let updateData = {
-        contentDataType: dataType,
-        contentName: data.contentName,
-        boardCategory: data.boardCategory,
+        seedType: seedType,
+        seedName: data.seedName,
+        boardCategories: data.boardCategories,
         tags: data.tags,
-        dday: data.dday || null,
-        contentDetail: data.contentDetail || null,
-        contentLink: data.contentLink || null,
+        dDay: data.dDay || null,
+        seedDetail: data.seedDetail || null,
+        seedLink: data.seedLink || null,
         thumbnailImage: representativeIndex || null,
       };
 
-      if (dataType === 'LINK') {
-        updateData.contentLink = data.contentLink;
+      if (seedType === 'LINK') {
+        updateData.seedLink = data.seedLink;
       } else {
         updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
       }
 
       console.log('콘텐츠 값:', updateData);
 
-      await ContentEditHandler(dataType, updateData, images, files, Id);
+      await ContentEditHandler(seedType, updateData, images, files, Id);
 
       if (TagRef.current) {
         TagRef.current.resetTags();
@@ -267,7 +267,7 @@ function ContentEditPage() {
     }
   }, [errorMessage, setErrorMessage]);
 
-  const contentDetail = watch('contentDetail', '');
+  const seedDetail = watch('seedDetail', '');
 
   const formValues = watch();
 
@@ -297,8 +297,8 @@ function ContentEditPage() {
             <TitleDiv
               placeholder="제목을 입력하세요 (선택)"
               type="text"
-              name="contentName"
-              {...register('contentName')}
+              name="seedName"
+              {...register('seedName')}
             />
           </LeftDiv>
         </MainDiv>
@@ -309,13 +309,13 @@ function ContentEditPage() {
               <Name>카테고리 지정*</Name>
               <Inputs>
                 <Controller
-                  name="boardCategory"
+                  name="boardCategories"
                   control={control}
                   defaultValue={[]}
                   render={({ field, fieldState }) => (
                     <>
                       <AddCategory
-                        label="boardCategory"
+                        label="boardCategories"
                         $error={fieldState.error ? true : undefined}
                         $helperText={
                           fieldState.error && fieldState.error.message
@@ -324,7 +324,7 @@ function ContentEditPage() {
                         onChange={(newValue) => {
                           if (newValue.length <= 5) {
                             field.onChange(newValue);
-                            trigger('boardCategory');
+                            trigger('boardCategories');
                           }
                         }}
                       />
@@ -351,32 +351,32 @@ function ContentEditPage() {
               </Inputs>
             </Inputs>
 
-            {dataType === 'LINK' && (
+            {seedType === 'LINK' && (
               <Controller
-                name="contentLink"
+                name="seedLink"
                 control={control}
                 render={({ field, fieldState }) => (
                   <EditLinkUpload
-                    label="contentLink"
+                    label="seedLink"
                     $error={fieldState.error ? true : undefined}
                     $helperText={fieldState.error && fieldState.error.message}
                     value={field.value || []}
                     onChange={(value) => {
                       field.onChange(value);
-                      trigger('contentLink');
+                      trigger('seedLink');
                     }}
                   />
                 )}
               />
             )}
-            {dataType === 'IMAGE' && (
+            {seedType === 'IMAGE' && (
               <EditImageUpload
                 onSetRepresentative={handleImage}
                 setImages={setImages}
                 Id={Id}
               />
             )}
-            {dataType === 'PDF' && (
+            {seedType === 'PDF' && (
               <EditPdfUpload
                 onSetRepresentative={handlePdf}
                 setFiles={setFiles}
@@ -384,7 +384,7 @@ function ContentEditPage() {
               />
             )}
 
-            {originalContentDetail && originalContentDetail.tags && (
+            {originalContentDetail && originalContentDetail.tagNames && (
               <Tag>
                 <TagName>태그 (2개 이상)*</TagName>
                 <TagInputs>
@@ -393,7 +393,7 @@ function ContentEditPage() {
                       <Controller
                         name="tags"
                         control={control}
-                        defaultValue={[...originalContentDetail.tags]}
+                        defaultValue={[...originalContentDetail.tagNames]}
                         render={({ field }) => (
                           <>
                             {tags.map((tag, idx) => (
@@ -432,7 +432,7 @@ function ContentEditPage() {
                             />
                             <AddTagModal
                               ref={TagRef}
-                              originalTags={originalContentDetail.tags}
+                              originalTags={originalContentDetail.tagNames}
                               onConfirm={(newTags) => {
                                 setTags(newTags);
                                 setValue('tags', newTags);
@@ -458,7 +458,7 @@ function ContentEditPage() {
                   </Short>
                 </Name>
               </Long>
-              <Date type="date" {...register('dday')} defaultValue={null} />
+              <Date type="date" {...register('dDay')} defaultValue={null} />
             </Dday>
             <Memo>
               <Name>메모 입력</Name>
@@ -466,13 +466,13 @@ function ContentEditPage() {
                 <Text
                   defaultValue={null}
                   maxLength={1500}
-                  name="contentDetail"
+                  name="seedDetail"
                   type="text"
-                  {...register('contentDetail')}
+                  {...register('seedDetail')}
                   placeholder="메모를 입력하세요."
                 />
                 <Count>
-                  {contentDetail === null ? 0 : contentDetail.length}/1500
+                  {seedDetail === null ? 0 : seedDetail.length}/1500
                 </Count>
               </div>
             </Memo>

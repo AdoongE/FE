@@ -12,9 +12,7 @@ const ContentDeleteModal = forwardRef(({ contentId, fetchData }, ref) => {
     e.stopPropagation();
     console.log('콘텐츠 삭제 id: ', contentId);
     try {
-      const response = await axiosInstance.delete(
-        `/api/v1/content/${contentId}`,
-      );
+      const response = await axiosInstance.delete(`/api/v1/seed/${contentId}`);
 
       console.log('삭제 성공: ', response?.data.results);
       cloesModal();

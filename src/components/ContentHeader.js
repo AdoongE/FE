@@ -84,12 +84,12 @@ function ContentHeader({
       const requestData = {
         keyword: query.trim(), // 검색어
         sortOrder: selectedFilter || undefined,
-        dataType: localSelectedFormat || undefined,
+        seedType: localSelectedFormat || undefined,
         tags: tags.length > 0 ? tags : undefined,
       };
 
       const response = await axiosInstance.post(
-        '/api/v1/content/filtering',
+        '/api/v1/seed/filtering',
         requestData,
       );
 
@@ -97,14 +97,14 @@ function ContentHeader({
 
       const results = response.data.results.map((item) => ({
         id: item.contentId || 'ID 없음',
-        title: item.contentName || '제목 없음',
+        title: item.seedName || '제목 없음',
         category: item.categoryName || [],
         tags: item.tagName || [],
-        dDay: item.dday ?? null,
+        dDay: item.dDay ?? null,
         contentDateType: item.contentDateType || '타입 없음',
         thumbnailImage: item.thumbnailImage || null,
         updatedDt: item.updatedDt || '업데이트 정보 없음',
-        message: item.contentDetail || '',
+        message: item.seedDetail || '',
       }));
 
       if (results.length === 0) {
@@ -420,21 +420,20 @@ const DropdownButton = styled.button`
   align-items: center;
   justify-content: space-between;
   background: white;
-  border: 1px solid #9F9F9F;
+  border: 1px solid #9f9f9f;
   border-radius: 8px;
   font-size: 12px;
-  color: #9F9F9F;
+  color: #9f9f9f;
   cursor: pointer;
   padding: 8px 16px;
 
-  width: ${(props) => (props.$isSort ? '106px' : '137px')}
+  width: ${(props) => (props.$isSort ? '106px' : '137px')};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
 
   .dropdown-icon {
     margin-left: 8px;
     font-size: 16px;
-    color: #9F9F9F;
+    color: #9f9f9f;
   }
 `;
 
@@ -598,7 +597,7 @@ const RecentSearchItem = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 4px 14px;
-  margin-left; 4px;
+  margin-left: 4px;
   margin-top: 14px;
   margin-bottom: 14px;
   font-size: 12px;

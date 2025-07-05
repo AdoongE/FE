@@ -60,7 +60,7 @@ function ContentBox({
   };
 
   return (
-    <div>
+    <Box>
       <ImageBox>
         {contentDateType === 'PDF' ? (
           // <PDFThumbnail onClick={open}>
@@ -116,9 +116,15 @@ function ContentBox({
         {displayCategory}
       </CategoryDisplay>
       {message && <MemoText>{highlightText(message, keyword)}</MemoText>}
-    </div>
+    </Box>
   );
 }
+
+const Box = styled.div`
+  width: 328px;
+  min-height: 212px;
+  z-index: 0;
+`;
 
 const StyledIcon = styled(Icon).attrs((props) => ({
   icon: props.icon || 'ic:round-link',
@@ -137,7 +143,6 @@ const Dropdown = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 328px;
   height: 212px;
   background-color: var(--gray3);
   border-radius: 10px;
@@ -240,8 +245,10 @@ const Tag = styled.button`
 const ContentTitle = styled.div`
   margin: 8px 0px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  white-space: normal;
   width: 100%;
+  position: relative;
 `;
 
 const ContentName = styled.div`

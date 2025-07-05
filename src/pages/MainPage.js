@@ -47,7 +47,7 @@ const MainPage = () => {
       if (activeTab === '검색필터') {
         const data = { tags: tags };
         const response = await axiosInstance.post(
-          '/api/v1/content/filtering',
+          '/api/v1/seed/filtering',
           data,
         );
 
@@ -61,14 +61,14 @@ const MainPage = () => {
           results = response.data.results.map((item) => ({
             id: item.contentId || 'ID 없음',
             title:
-              item.contentName ||
+              item.seedName ||
               (item.updatedDt
                 ? new Date(item.updatedDt).toISOString().split('T')[0]
                 : '날짜 정보 없음'),
             categoryId: item.categoryId || [],
             category: item.categoryName || [],
             tags: item.tagName || [],
-            dDay: item.dday,
+            dDay: item.dDay,
             contentDateType: item.contentDateType || '타입 없음',
             thumbnailImage: item.thumbnailImage || '',
             updatedDt: item.updatedDt || '업데이트 정보 없음',
@@ -78,13 +78,13 @@ const MainPage = () => {
         if (activeTab === '모아보기' || activeTab === '나의 씨드') {
           setFilterId(null);
           setCategoryId(null);
-          url = '/api/v1/content/';
+          url = '/api/v1/seed/';
           const res = await axiosInstance.get(url);
           const responseData = res.data.results?.[0]?.contentsInfoList || [];
           setCollectData(responseData); // null 방지
         } else if (activeTab === '카테고리') {
           setFilterId(null);
-          url = `/api/v1/content/${categoryId}`;
+          url = `/api/v1/seed/${categoryId}`;
         } else if (activeTab === '맞춤필터') {
           console.log('필터 ID :', filterId);
           url = `/api/v1/filter/${filterId}`;
@@ -105,7 +105,7 @@ const MainPage = () => {
               return {
                 id: item.contentId || 'ID 없음',
                 title:
-                  item.contentName ||
+                  item.seedName ||
                   (item.updatedDt
                     ? new Date(item.updatedDt).toISOString().split('T')[0]
                     : '날짜 정보 없음'),
@@ -116,7 +116,7 @@ const MainPage = () => {
                 updatedDt: item.updatedDt || '업데이트 정보 없음',
                 tagId: item.tagId || [],
                 tags: item.tagName || [],
-                dDay: item.dday || null,
+                dDay: item.dDay || null,
                 createdAt: item.createdAt || Date.now(), // 기본값 설정
               };
             } else {
@@ -127,11 +127,11 @@ const MainPage = () => {
 
                 return {
                   id: content.contentId || 'ID 없음',
-                  title: content.contentName || formattedDate,
+                  title: content.seedName || formattedDate,
                   user: item.nickname || '사용자 정보 없음',
                   category: content.categoryName || [],
                   tags: content.tagName || [],
-                  dDay: content.dday,
+                  dDay: content.dDay,
                   contentDateType: content.contentDateType || '타입 없음',
                   thumbnailImage: content.thumbnailImage || '',
                   updatedDt: content.updatedDt || '업데이트 정보 없음',
@@ -158,7 +158,7 @@ const MainPage = () => {
     fetchData();
   }, [fetchData]);
 
-  const contentTypeMapping = {
+  const seedTypeMapping = {
     IMAGE: '이미지',
     LINK: '링크',
     PDF: 'PDF',
@@ -171,7 +171,7 @@ const MainPage = () => {
     // 저장형식 필터링
     if (localSelectedFormat && localSelectedFormat !== '전체보기') {
       filteredData = filteredData.filter((item) => {
-        const koreanType = contentTypeMapping[item.contentDateType];
+        const koreanType = seedTypeMapping[item.contentDateType];
         return koreanType === localSelectedFormat;
       });
     }

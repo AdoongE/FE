@@ -146,25 +146,11 @@ const AddTagModal = forwardRef(
         <Head>
           <Title>{title}</Title>
           <Icons>
-            <Icon
-              icon="ri:reset-left-line"
-              width="1.667vw"
-              height="1.667vw"
-              color="black"
-              onClick={handleReset}
-            />
-            <Icon
-              icon="ic:round-close"
-              style={{
-                width: '1.875vw',
-                height: '1.875vw',
-                color: 'black',
-              }}
-              onClick={handleClose}
-            />
+            <HeaderIcon icon="ri:reset-left-line" onClick={handleReset} />
+            <HeaderIcon icon="mingcute:close-line" onClick={handleClose} />
           </Icons>
         </Head>
-        <OptionContainer>
+        <div>
           <Options>
             <Option
               $isSelected={selectedFilter === '기본 태그'}
@@ -181,17 +167,16 @@ const AddTagModal = forwardRef(
             </Option>
           </Options>
           <Short>
-            <Icon
-              icon="prime:check-square"
-              style={{
-                width: '1.25vw',
-                height: '1.25vw',
-                color: '#4F4F4F',
-              }}
-            />
-            <div>적절한 태그를 선택해보세요!</div>
+            <CheckIcon icon="prime:check-square" />
+            {selectedFilter === '기본 태그' ? (
+              <div>적절한 태그를 선택해보세요!</div>
+            ) : (
+              <div>
+                이전에 만들었던 태그를 다시 사용하면 검색/관리하기 편해요!
+              </div>
+            )}
           </Short>
-        </OptionContainer>
+        </div>
 
         {selectedFilter === '기본 태그' ? (
           <TagContainer>
@@ -213,7 +198,7 @@ const AddTagModal = forwardRef(
                 {tags.map((tag) => (
                   <TagItem
                     type="button"
-                    key={tag.id}
+                    key={tag.tagId}
                     onClick={() => handleSelectTag(tag.name)}
                     $isSelected={selectedTags.includes(tag.name)}
                   >
@@ -232,9 +217,11 @@ const AddTagModal = forwardRef(
         )}
 
         <Line />
-        <Button type="button" onClick={handleApply}>
-          선택완료
-        </Button>
+        <FlexBox>
+          <Button type="button" onClick={handleApply}>
+            선택완료
+          </Button>
+        </FlexBox>
       </Dialog>
     );
   },
@@ -242,128 +229,133 @@ const AddTagModal = forwardRef(
 
 AddTagModal.displayName = 'AddTagModal';
 
+const FlexBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const CheckIcon = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  transform: translateY(-1px);
+`;
+
+const HeaderIcon = styled(Icon)`
+  width: 24px;
+  height: 24px;
+`;
+
 const TagImage = styled.img`
-  width: 6.875vw; /* 132px */
-  height: 6.875vw; /* 132px */
+  width: 83px;
+  height: 83px;
 `;
 
 const Notag = styled.div`
-  margin-left: 3.073vw; /* 59px */
-  width: 33.333vw; /* 640px */
-  height: 20.833vw; /* 400px */
+  height: 230px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  row-gap: 0.521vw; /* 10px */
   font-weight: 500;
-  font-size: 1.667vw; /* 32px */
-`;
-
-const OptionContainer = styled.div`
-  margin-left: 3.021vw; /* 58px */
-  margin-bottom: 1.875vw; /* 36px */
+  font-size: 20px;
+  color: var(--gray1);
 `;
 
 const Short = styled.div`
   display: flex;
-  column-gap: 0.521vw; /* 10px */
+  align-items: center;
+  column-gap: 5px;
   color: #4f4f4f;
-  font-size: 1.042vw; /* 20px */
+  font-size: 14px;
   font-weight: 400;
+  margin-bottom: 48px;
 `;
 
 const Option = styled.div`
   cursor: pointer;
   color: ${(props) => (props.$isSelected ? '#21A58C' : '#9F9F9F')};
+  font-weight: ${(props) => (props.$isSelected ? 500 : 400)};
 `;
 
 const Options = styled.div`
   display: flex;
-  column-gap: 0.833vw; /* 16px */
+  column-gap: 8px;
   text-align: center;
-  font-size: 1.146vw; /* 22px */
-  color: #9f9f9f;
-  margin-bottom: 0.625vw; /* 12px */
+  font-size: 14px;
+  margin-bottom: 8px;
 `;
 
 const TagItem = styled.button`
-  height: 2.813vw; /* 54px */
+  height: 30px;
   width: fit-content;
-  border-radius: 2.604vw; /* 50px */
-  font-size: 1.146vw; /* 22px */
-  font-weight: 500;
-  padding: 0.729vw 1.563vw; /* 14px 30px */
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
-  border: ${(props) => (props.$isSelected ? 0 : '0.052vw solid #9F9F9F')};
+  border: ${(props) => (props.$isSelected ? 0 : '1px solid var(--gray2)')};
 `;
 
 const Button = styled.button`
-  width: 11.563vw; /* 222px */
-  height: 3.021vw; /* 58px */
+  width: 150px;
+  height: 40px;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.521vw; /* 10px */
+  border-radius: 8px;
   border: 0;
   background-color: #41c3ab;
   font-weight: 600;
-  font-size: 1.146vw; /* 22px */
-  margin-left: 13.646vw; /* 262px */
+  font-size: 16px;
 `;
 
 const TagContainer = styled.div`
-  margin-left: 3.073vw; /* 59px */
-  width: 33.333vw; /* 640px */
-  height: 20.833vw; /* 400px */
+  width: 480px;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 0.573vw; /* 11px */
-  row-gap: 1.042vw; /* 20px */
+  column-gap: 6px;
+  row-gap: 10px;
   overflow-y: auto;
   align-content: flex-start;
+  box-sizing: border-box;
 `;
 
 const Line = styled.div`
-  width: 36.406vw; /* 699px */
-  height: 0;
-  border: 0.052vw solid #9f9f9f; /* 1px */
-  margin-top: 2.5vw; /* 48px */
-  margin-bottom: 1.979vw; /* 38px */
-  margin-left: 1.198vw; /* 23px */
+  width: 536px;
+  height: 1px;
+  background: var(--gray3, #dcdada);
+  margin: 36px 0px 36px 0px;
 `;
 
 const Head = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-left: 3.021vw; /* 58px */
-  margin-right: 2.552vw; /* 49px */
-  margin-bottom: 1.042vw; /* 20px */
+  margin-bottom: 20px;
 `;
 
 const Icons = styled.div`
   display: flex;
-  column-gap: 0.833vw; /* 16px */
+  column-gap: 12px;
   align-items: center;
 `;
 
-const Title = styled.div`
-  font-size: 1.667vw; /* 32px */
+export const Title = styled.div`
+  font-size: 24px;
+  font-style: normal;
   font-weight: 600;
 `;
 
 const Dialog = styled.dialog`
   overflow-y: hidden;
-  padding-top: 2.865vw; /* 55px */
-  padding-bottom: 2.083vw; /* 40px */
-  position: relative;
-  width: 38.854vw; /* 746px */
-  height: 35.99vw; /* 691px */
-  border-radius: 2.604vw; /* 50px */
+  padding: 48px 32px 36px 48px;
+  position: absolute !important;
+  border-radius: 40px;
   background-color: white;
   border: 0;
+  box-sizing: border-box;
   ::backdrop {
     background-color: #0000008c;
   }

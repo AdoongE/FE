@@ -17,25 +17,25 @@ const api_ = axios.create({
   },
 });
 
-export const ContentAddHandler = async (dataType, data, images, pdfs) => {
+export const ContentAddHandler = async (seedType, data, images, pdfs) => {
   try {
-    const response = await api.post('/api/v1/content/', data);
+    const response = await api.post('/api/v1/seed/', data);
 
     if (response.data.status.code === 200) {
       console.log('콘텐츠 생성 성공:', response.data.status.message);
 
-      if (dataType !== 'LINK') {
+      if (seedType !== 'LINK') {
         try {
-          const contentsId = response.data.results[0].contentId;
+          const contentsId = response.data.results[0].seedId;
           const formData = new FormData();
 
-          if (dataType === 'IMAGE') {
+          if (seedType === 'IMAGE') {
             for (const image of images) {
               const blob = await fetch(image.preview).then((res) => res.blob());
               const file = new File([blob], image.label, { type: blob.type });
               formData.append('file', file);
             }
-          } else if (dataType === 'PDF') {
+          } else if (seedType === 'PDF') {
             for (const pdf of pdfs) {
               const blob = await fetch(pdf.preview).then((res) => res.blob());
               const file = new File([blob], pdf.label, { type: blob.type });
@@ -44,7 +44,7 @@ export const ContentAddHandler = async (dataType, data, images, pdfs) => {
           }
 
           const res = await api_.post(
-            `/api/v1/content/upload/${contentsId}`,
+            `/api/v1/seed/upload/${contentsId}`,
             formData,
           );
           if (res.data.status.code === 200) {

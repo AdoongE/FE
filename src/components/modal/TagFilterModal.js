@@ -15,25 +15,26 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
 import { format } from 'date-fns';
 import tagImage from '../../assets/icons/tag.png';
+import { font } from '../../styles/font';
 
 const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
   <div
     style={{
-      width: '12.4vw', // 238px
-      height: '2.6vw', // 50px
+      width: '128px',
+      height: '32px',
       fontWeight: '400',
-      fontSize: '1.04vw', // 20px
       color: '#4f4f4f',
-      border: '0.05vw solid #9f9f9f', // 1px
-      borderRadius: '0.52vw', // 10px
+      fontSize: '12px',
+      border: '0.825px solid var(--gray2, #9F9F9F)',
+      borderRadius: '6px',
       display: 'flex',
       alignItems: 'center',
-      paddingLeft: '0.78vw', // 15px
+      paddingLeft: '10px',
     }}
   >
     <Icon
       icon="uit:calender"
-      style={{ width: '1.25vw', height: '1.25vw', marginRight: '0.521vw' }}
+      style={{ width: '12px', height: '12px', marginRight: '6px' }}
       onClick={onClick}
     />
     <InputDate
@@ -49,7 +50,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
   const [usedTags, setUsedTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tags, setTags] = useState([]);
-  const [dataType, setDataType] = useState([]);
+  const [seedType, setSeedType] = useState([]);
   const dialogRef = useRef(null);
 
   const [startDate, setStartDate] = useState(null);
@@ -94,24 +95,24 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
 
   const handleCheckboxChange = (event) => {
     const option = event.target.name;
-    setDataType((prevDataType) =>
+    setSeedType((prevDataType) =>
       prevDataType.includes(option)
         ? prevDataType.filter((t) => t !== option)
         : [...prevDataType, option],
     );
   };
 
-  console.log('데이터 타입 목록: ', dataType);
+  console.log('데이터 타입 목록: ', seedType);
 
   useEffect(() => {
-    console.log('dataType: ', dataType);
-  }, [dataType]);
+    console.log('seedType: ', seedType);
+  }, [seedType]);
 
   const handleClose = () => {
     setSelectedTags([]);
     setStartDate(null);
     setEndDate(null);
-    setDataType([]);
+    setSeedType([]);
     dialogRef.current?.close();
   };
 
@@ -119,7 +120,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     setSelectedTags([]);
     setStartDate(null);
     setEndDate(null);
-    setDataType([]);
+    setSeedType([]);
   };
 
   const handleFilterClick = (filterOption) => {
@@ -203,7 +204,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
 
   const handleSave = async () => {
     const modalData = {
-      storageFormats: dataType,
+      storageFormats: seedType,
       tags: selectedTags,
       startDate: startDate ? format(startDate, 'yyyy-MM-dd') : null,
       endDate: endDate ? format(endDate, 'yyyy-MM-dd') : null,
@@ -214,7 +215,7 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     console.log(modalData);
     dialogRef.current?.close();
     setResetKey((prevKey) => prevKey + 1);
-    setDataType([]);
+    setSeedType([]);
     setSelectedTags([]);
     setStartDate(null);
     setEndDate(null);
@@ -224,200 +225,170 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
 
   return (
     <Dialog ref={dialogRef}>
-      <PaddingDiv>
-        <Head>
-          <Title>맞춤 필터 조건 설정</Title>
-          <Icons>
-            <Icon
-              icon="ri:reset-left-line"
-              style={{
-                width: '1.667vw',
-                height: '1.667vw',
-                color: 'black',
-              }}
-              onClick={handleReset}
-            />
-            <Icon
-              icon="ic:round-close"
-              style={{
-                width: '1.875vw',
-                height: '1.875vw',
-                color: 'black',
-              }}
-              onClick={handleClose}
-            />
-          </Icons>
-        </Head>
-        <Word>태그 선택</Word>
-        <OptionContainer>
-          <Options>
-            <Option
-              $isSelected={selectedFilter === '기본 태그'}
-              onClick={() => handleFilterClick('기본 태그')}
-            >
-              기본 태그
-            </Option>
-            <div>|</div>
-            <Option
-              $isSelected={selectedFilter === '나의 태그'}
-              onClick={() => handleFilterClick('나의 태그')}
-            >
-              나의 태그
-            </Option>
-          </Options>
-          <Short>
-            <Icon
-              icon="prime:check-square"
-              style={{
-                width: '1.25vw',
-                height: '1.25vw',
-                color: '#4F4F4F',
-              }}
-            />
+      <Head>
+        <Title>맞춤 필터 조건 설정</Title>
+        <Icons>
+          <HeaderIcon icon="ri:reset-left-line" onClick={handleReset} />
+          <HeaderIcon icon="mingcute:close-line" onClick={handleClose} />
+        </Icons>
+      </Head>
+      <Word>태그 선택</Word>
+      <div>
+        <Options>
+          <Option
+            $isSelected={selectedFilter === '기본 태그'}
+            onClick={() => handleFilterClick('기본 태그')}
+          >
+            기본 태그
+          </Option>
+          <div>|</div>
+          <Option
+            $isSelected={selectedFilter === '나의 태그'}
+            onClick={() => handleFilterClick('나의 태그')}
+          >
+            나의 태그
+          </Option>
+        </Options>
+        <Short>
+          <CheckIcon icon="prime:check-square" />
+          {selectedFilter === '기본 태그' ? (
             <div>적절한 태그를 선택해보세요!</div>
-          </Short>
-        </OptionContainer>
-        {selectedFilter === '기본 태그' ? (
-          <TagContainer>
-            <TagPadding>
-              {Array.isArray(usedTags) &&
-                usedTags.map((usedTag) => (
-                  <TagItem
-                    type="button"
-                    key={usedTag.id}
-                    onClick={() => handleSelectTag(usedTag.name)}
-                    $isSelected={selectedTags.includes(usedTag.name)}
-                  >
-                    {usedTag.name}
-                  </TagItem>
-                ))}
-            </TagPadding>
-          </TagContainer>
-        ) : (
-          <div>
-            {Array.isArray(tags) && tags.length > 0 ? (
-              <TagContainer>
-                <TagPadding>
-                  {tags.map((tag) => (
-                    <TagItem
-                      type="button"
-                      key={tag.id}
-                      onClick={() => handleSelectTag(tag.name)}
-                      $isSelected={selectedTags.includes(tag.name)}
-                    >
-                      {tag.name}
-                    </TagItem>
-                  ))}
-                </TagPadding>
-              </TagContainer>
-            ) : (
-              <Notag>
-                <TagImage src={tagImage} alt="tagImage" />
-                <div>나만의 태그를</div>
-                <div>직접 만들어보세요!</div>
-              </Notag>
-            )}
-          </div>
-        )}
-        <Word>저장 형식</Word>
-        <Group>
-          <CheckboxLabel>
-            <TypeBox
-              type="checkbox"
-              name="LINK"
-              checked={dataType.includes('LINK')}
-              onChange={handleCheckboxChange}
-            />
-            <span>링크</span>
-          </CheckboxLabel>
-          <CheckboxLabel>
-            <TypeBox
-              type="checkbox"
-              name="IMAGE"
-              checked={dataType.includes('IMAGE')}
-              onChange={handleCheckboxChange}
-            />
-            <span>이미지</span>
-          </CheckboxLabel>
-          <CheckboxLabel>
-            <TypeBox
-              type="checkbox"
-              name="PDF"
-              checked={dataType.includes('PDF')}
-              onChange={handleCheckboxChange}
-            />
-            <span>PDF</span>
-          </CheckboxLabel>
-        </Group>
-        <Word>저장 날짜</Word>
-        <Date>
-          <DatePicker
-            key={`start-${resetKey}`}
-            locale={ko}
-            selected={startDate || null}
-            onChange={(date) => setStartDate(date || null)}
-            placeholderText="시작일"
-            dateFormat="yyyy/MM/dd"
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            className="custom-date-picker"
-            customInput={<CustomInput />}
-          />
-          <span>~</span>
-          <DatePicker
-            key={`end-${resetKey}`}
-            locale={ko}
-            selected={endDate || null}
-            onChange={(date) => setEndDate(date || null)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            placeholderText="종료일"
-            dateFormat="yyyy/MM/dd"
-            customInput={<CustomInput />}
-          />
-        </Date>
-        <NewWord>디데이 기간</NewWord>
-        <Short style={{ marginBottom: '1.024vw' }}>
-          <Icon
-            icon="prime:check-square"
-            style={{
-              width: '1.25vw',
-              height: '1.25vw',
-              color: '#4F4F4F',
-            }}
-          />
-          <div>D-day는 D-0입니다</div>
+          ) : (
+            <div>
+              이전에 만들었던 태그를 다시 사용하면 검색/관리하기 편해요!
+            </div>
+          )}{' '}
         </Short>
-        <Date>
-          <Dday>
-            <span>D-</span>
-            <DdayInput
-              placeholder="직접입력"
-              type="number"
-              min={0}
-              onChange={handleChangeStartDay}
-            />
-          </Dday>
-          <span>~</span>
-          <Dday>
-            <span>D-</span>
-            <DdayInput
-              placeholder="직접입력"
-              type="number"
-              min={0}
-              onChange={handleChangeEndDay}
-            />
-          </Dday>
-        </Date>
-        <div style={{ display: 'flex', justifyContent: ' center' }}>
-          <Button disabled={!isValid} onClick={handleSave}>
-            저장하기
-          </Button>
+      </div>
+      {selectedFilter === '기본 태그' ? (
+        <TagContainer>
+          {Array.isArray(usedTags) &&
+            usedTags.map((usedTag) => (
+              <TagItem
+                type="button"
+                key={usedTag.tagId}
+                onClick={() => handleSelectTag(usedTag.name)}
+                $isSelected={selectedTags.includes(usedTag.name)}
+              >
+                {usedTag.name}
+              </TagItem>
+            ))}
+        </TagContainer>
+      ) : (
+        <div>
+          {Array.isArray(tags) && tags.length > 0 ? (
+            <TagContainer>
+              {tags.map((tag) => (
+                <TagItem
+                  type="button"
+                  key={tag.id}
+                  onClick={() => handleSelectTag(tag.name)}
+                  $isSelected={selectedTags.includes(tag.name)}
+                >
+                  {tag.name}
+                </TagItem>
+              ))}
+            </TagContainer>
+          ) : (
+            <Notag>
+              <TagImage src={tagImage} alt="tagImage" />
+              <div>나만의 태그를</div>
+              <div>직접 만들어보세요!</div>
+            </Notag>
+          )}
         </div>
-      </PaddingDiv>
+      )}
+      <Word>저장 형식</Word>
+      <Group>
+        <CheckboxLabel>
+          <TypeBox
+            type="checkbox"
+            name="LINK"
+            checked={seedType.includes('LINK')}
+            onChange={handleCheckboxChange}
+          />
+          <span>링크</span>
+        </CheckboxLabel>
+        <CheckboxLabel>
+          <TypeBox
+            type="checkbox"
+            name="IMAGE"
+            checked={seedType.includes('IMAGE')}
+            onChange={handleCheckboxChange}
+          />
+          <span>이미지</span>
+        </CheckboxLabel>
+        <CheckboxLabel>
+          <TypeBox
+            type="checkbox"
+            name="PDF"
+            checked={seedType.includes('PDF')}
+            onChange={handleCheckboxChange}
+          />
+          <span>PDF</span>
+        </CheckboxLabel>
+      </Group>
+      <Word>저장 날짜</Word>
+      <Date>
+        <DatePicker
+          key={`start-${resetKey}`}
+          locale={ko}
+          selected={startDate || null}
+          onChange={(date) => setStartDate(date || null)}
+          placeholderText="시작일"
+          dateFormat="yyyy/MM/dd"
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          className="custom-date-picker"
+          customInput={<CustomInput />}
+        />
+        <span>~</span>
+        <DatePicker
+          key={`end-${resetKey}`}
+          locale={ko}
+          selected={endDate || null}
+          onChange={(date) => setEndDate(date || null)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          placeholderText="종료일"
+          dateFormat="yyyy/MM/dd"
+          customInput={<CustomInput />}
+        />
+      </Date>
+      <Word>디데이 기간</Word>
+      <Short style={{ marginBottom: '11px' }}>
+        <CheckIcon icon="prime:check-square" />
+        <div>D-day는 D-0입니다. ex) D-0 ~ D~10</div>
+      </Short>
+      <Date>
+        <Dday>
+          <span>D-</span>
+          <DdayInput
+            placeholder="직접입력"
+            type="number"
+            min={0}
+            onChange={handleChangeStartDay}
+          />
+        </Dday>
+        <span>~</span>
+        <Dday>
+          <span>D-</span>
+          <DdayInput
+            placeholder="직접입력"
+            type="number"
+            min={0}
+            onChange={handleChangeEndDay}
+          />
+        </Dday>
+      </Date>
+      <div style={{ display: 'flex', justifyContent: ' center' }}>
+        <Button disabled={!isValid} onClick={handleSave}>
+          저장하기
+        </Button>
+      </div>
     </Dialog>
   );
 });
@@ -425,67 +396,77 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
 TagFilterModal.displayName = 'TagFilterModal';
 CustomInput.displayName = 'CustomInput';
 
+const CheckIcon = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  transform: translateY(-1px);
+`;
+
+const HeaderIcon = styled(Icon)`
+  width: 24px;
+  height: 24px;
+`;
+
 const TagImage = styled.img`
-  width: 6.88vw; // 132px
-  height: 6.88vw; // 132px
+  width: 100px;
+  height: 100px;
 `;
 
 const TagContainer = styled.div`
-  width: 51vw; // 979px
-  height: 25.94vw; // 498px
+  width: 537px;
+  height: 270px;
   overflow-y: auto;
   background-color: #fafafa;
   border: 0;
-  border-radius: 1.04vw; // 20px
-  margin-bottom: 3.13vw; // 60px
-`;
-
-const TagPadding = styled.div`
+  border-radius: 11.692px;
+  margin-bottom: 30px;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 0.42vw; // 8px
-  row-gap: 0.83vw; // 16px
-  padding: 2.76vw 2.45vw; // 53px 47px
+  column-gap: 5px;
+  row-gap: 10px;
   align-content: flex-start;
+  padding: 20px 67px 20px 20px;
+  box-sizing: border-box;
 `;
 
 const Notag = styled.div`
-  width: 51vw; // 979px
-  height: 25.94vw; // 498px
+  width: 680px;
+  height: 376px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  row-gap: 0.52vw; // 10px
+  row-gap: 9px;
   font-weight: 500;
-  font-size: 1.67vw; // 32px
+  font-size: 23.639px;
   overflow-y: auto;
   background-color: #fafafa;
-  margin-bottom: 3.13vw; // 60px
+  margin-bottom: 40px;
   border: 0;
-  border-radius: 1.04vw; // 20px
+  border-radius: 14.176px;
 `;
 
 const Button = styled.button`
-  width: 11.56vw; // 222px
-  height: 3.02vw; // 58px
+  width: 150px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.52vw; // 10px
+  border-radius: 8px;
   border: 0;
   color: white;
   background-color: #41c3ab;
   font-weight: 600;
-  font-size: 1.15vw; // 22px
+  font-size: 16px;
 `;
 
 const DdayInput = styled.input`
-  width: 6.82vw; // 131px
-  height: 2.6vw; // 50px
-  border-radius: 0.52vw; // 10px
-  border: 0.05vw solid #9f9f9f; // 1px
-  font-size: 1.04vw; // 20px
+  width: 77px;
+  height: 32px;
+  border-radius: 6px;
+  border: 0.825px solid var(--gray2, #9f9f9f);
+  font-size: 12px;
   font-weight: 400;
   text-align: center;
   ::placeholder {
@@ -495,23 +476,17 @@ const DdayInput = styled.input`
 
 const Dday = styled.div`
   display: flex;
-  font-size: 1.25vw; // 그대로 유지
+  font-size: 12px;
   font-weight: 500;
   color: #4f4f4f;
   align-items: center;
-  column-gap: 0.52vw; // 10px
-`;
-
-const NewWord = styled.div`
-  font-size: 1.25vw; // 그대로 유지
-  font-weight: 600;
-  margin-bottom: 0.47vw; // 9px
+  column-gap: 4px;
 `;
 
 const InputDate = styled.input`
   border: none;
   padding: 0;
-  font-size: 1.04vw; // 20px
+  font-size: 12px;
   font-weight: 400;
   color: #4f4f4f;
   &:focus {
@@ -522,33 +497,35 @@ const InputDate = styled.input`
 
 const Date = styled.div`
   display: flex;
-  column-gap: 0.83vw; // 16px
-  font-size: 2.08vw; // 40px
-  font-weight: 600;
-  margin-bottom: 3.13vw; // 60px
+  column-gap: 5px;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 30px;
   z-index: 1000 !important;
   position: relative !important;
   overflow: visible !important;
+  align-items: center;
 `;
 
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 0.63vw; // 12px
+  gap: 8px;
 
   span {
-    font-size: 1.25vw; // 그대로 유지
+    font-size: 12px;
     color: #4f4f4f;
+    font-weight: 500;
   }
 `;
 
 const TypeBox = styled.input`
-  width: 1.46vw; // 28px
-  height: 1.46vw; // 28px
+  width: 14px;
+  height: 14px;
   cursor: pointer;
   appearance: none;
-  border: 0.05vw solid #9f9f9f; // 1px
-  border-radius: 0.26vw; // 5px
+  border: 1px solid #9f9f9f;
+  border-radius: 2px;
 
   &:checked {
     background-color: #41c3ab;
@@ -563,82 +540,78 @@ const TypeBox = styled.input`
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1.04vw; // 20px
-  margin-bottom: 3.13vw; // 60px
-`;
-
-const OptionContainer = styled.div`
-  margin-bottom: 1.88vw; // 36px
+  gap: 20px;
+  margin-bottom: 33px;
 `;
 
 const Word = styled.div`
-  font-size: 1.25vw; // 그대로 유지
-  font-weight: 600;
-  margin-bottom: 1.04vw; // 20px
+  ${font.title2}
+  margin-bottom: 9px;
 `;
 
 const TagItem = styled.button`
-  height: 2.81vw; // 54px
+  height: 30px;
   width: fit-content;
-  border-radius: 2.6vw; // 50px
-  font-size: 1.15vw; // 22px
-  font-weight: 500;
-  padding: 0.73vw 1.56vw; // 14px 30px
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
-  border: ${(props) => (props.$isSelected ? 0 : '0.05vw solid #9F9F9F')}; // 1px
+  border: ${(props) => (props.$isSelected ? 0 : '1px solid var(--gray2)')};
 `;
 
 const Option = styled.div`
   cursor: pointer;
   color: ${(props) => (props.$isSelected ? '#21A58C' : '#9F9F9F')};
+  font-weight: ${(props) => (props.$isSelected ? 500 : 400)};
 `;
 
 const Options = styled.div`
   display: flex;
-  column-gap: 0.83vw; // 16px
+  column-gap: 4px;
   text-align: center;
-  font-size: 1.15vw; // 22px
-  color: #9f9f9f;
-  margin-bottom: 0.63vw; // 12px
+  font-size: 14px;
+  margin-bottom: 10px;
 `;
 
 const Short = styled.div`
   display: flex;
-  column-gap: 0.52vw; // 10px
+  align-items: center;
+  column-gap: 5px;
   color: #4f4f4f;
-  font-size: 1.04vw; // 20px
+  font-size: 14px;
   font-weight: 400;
+  margin-bottom: 12px;
 `;
 
 const Icons = styled.div`
   display: flex;
-  column-gap: 0.83vw; // 16px
+  column-gap: 12px;
+  align-items: center;
 `;
 
 const Head = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 3.39vw; // 65px
+  margin-bottom: 20px;
 `;
 
-const Title = styled.div`
-  font-size: 1.67vw; // 32px
+export const Title = styled.div`
+  font-size: 24px;
+  font-style: normal;
   font-weight: 600;
 `;
 
 const Dialog = styled.dialog`
-  height: 44.375vw;
-  width: 57.24vw; // 1099px
+  height: 462px;
   border: 0;
-  border-radius: 2.6vw; // 50px
-  /* padding: 3.13vw; // 60px */
+  border-radius: 40px;
   overflow-y: visible;
   z-index: 1000 !important;
   position: absolute !important;
-`;
-const PaddingDiv = styled.div`
-  padding: 3.13vw; // 60px
+  padding: 48px 41px 30px 40px;
+  box-sizing: border-box;
 `;
 
 export default TagFilterModal;

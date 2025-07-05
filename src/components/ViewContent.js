@@ -12,15 +12,15 @@ function ViewContent() {
   const [contentInfo, setContentInfo] = useState({
     contentId: '',
     contentDataType: '',
-    contentName: '',
-    contentLink: '',
+    seedName: '',
+    seedLink: '',
     contentImage: [],
     contentDoc: [],
     thumbnailImage: '',
-    boardCategory: [],
+    categoryNames: [],
     tags: [],
-    dday: '',
-    contentDetail: '',
+    dDay: '',
+    seedDetail: '',
   });
   const [remainingDays, setRemainingDays] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -30,15 +30,15 @@ function ViewContent() {
 
   useEffect(() => {
     handleViewContent();
-    if (contentInfo.dday) {
-      calRemainingDays(contentInfo.dday);
+    if (contentInfo.dDay) {
+      calRemainingDays(contentInfo.dDay);
     }
-  }, [contentInfo.dday]);
+  }, [contentInfo.dDay]);
 
   const calRemainingDays = () => {
     const currentDate = new globalThis.Date();
-    const ddayDate = new globalThis.Date(contentInfo.dday);
-    const timeDiff = ddayDate - currentDate;
+    const dDayDate = new globalThis.Date(contentInfo.dDay);
+    const timeDiff = dDayDate - currentDate;
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     setRemainingDays(dayDiff);
   };
@@ -47,22 +47,22 @@ function ViewContent() {
   const handleViewContent = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/content/all/${state.contentId}`,
+        `/api/v1/seed/${state.contentId}`,
       );
       const results = response.data.results[0];
       console.log('결과', results);
       setContentInfo({
-        contentId: results.contentId,
+        contentId: results.seedId,
         contentDataType: results.contentDataType,
-        contentName: results.contentName,
-        contentLink: results.contentLink,
-        contentImage: results.contentImage,
-        contentDoc: results.contentDoc,
+        seedName: results.seedName,
+        seedLink: results.seedLink,
+        contentImage: results.fileLinks,
+        contentDoc: results.fileLinks,
         thumbnailImage: results.thumbnailImage,
-        boardCategory: results.boardCategory,
-        tags: results.tags,
-        dday: results.dday,
-        contentDetail: results.contentDetail,
+        categoryNames: results.categoryNames,
+        tags: results.tagNames,
+        dDay: results.dDay,
+        seedDetail: results.seedDetail,
         filename: results.title,
       });
 
@@ -88,7 +88,7 @@ function ViewContent() {
       replace: false,
       state: {
         Id: contentInfo.contentId,
-        dataType: contentInfo.contentDataType,
+        seedType: contentInfo.contentDataType,
       },
     });
   };
@@ -98,7 +98,7 @@ function ViewContent() {
       <ContentPage>
         <Contents>
           <UpperDiv>
-            <TitleDiv>{contentInfo.contentName}</TitleDiv>
+            <TitleDiv>{contentInfo.seedName}</TitleDiv>
             <ButtonDiv>
               <LinkShare>링크공유</LinkShare>
               <CloseBtn onClick={handleClose}>닫기</CloseBtn>
@@ -106,7 +106,7 @@ function ViewContent() {
           </UpperDiv>
           <ContentDiv>
             <Name>카테고리</Name>
-            {contentInfo.boardCategory.map((category) => (
+            {contentInfo.categoryNames.map((category) => (
               <CategoryTag key={category}>{category}</CategoryTag>
             ))}
           </ContentDiv>
@@ -135,11 +135,9 @@ function ViewContent() {
                   : 'PDF 파일'}
             </Name>
             {contentInfo.contentDataType === 'LINK' && (
-              <Link
-                onClick={() => handleLinkClick(`${contentInfo.contentLink}`)}
-              >
+              <Link onClick={() => handleLinkClick(`${contentInfo.seedLink}`)}>
                 <LinkIcon icon="ic:twotone-link" />
-                {contentInfo.contentLink}
+                {contentInfo.seedLink}
               </Link>
             )}
             {contentInfo.contentDataType === 'IMAGE' && (
@@ -199,7 +197,7 @@ function ViewContent() {
           </ContentDiv>
           <Dday>
             <Long>
-              <Name className="dday">디데이</Name>
+              <Name className="dDay">디데이</Name>
             </Long>
             <DdayDiv>
               {remainingDays !== null ? (
@@ -209,13 +207,13 @@ function ViewContent() {
               ) : null}
               <Calendar>
                 <CalendarIcon icon="lucide:calendar" />
-                {remainingDays ? <Date>{contentInfo.dday}</Date> : `yyyy-mm-dd`}
+                {remainingDays ? <Date>{contentInfo.dDay}</Date> : `yyyy-mm-dd`}
               </Calendar>
             </DdayDiv>
           </Dday>
           <Memo>
             <Name>메모</Name>
-            <Text>{contentInfo.contentDetail}</Text>
+            <Text>{contentInfo.seedDetail}</Text>
           </Memo>
         </Contents>
         <Button onClick={editContent}>수정하기</Button>
@@ -390,7 +388,7 @@ const Name = styled.div`
   font-size: 20px;
   width: 161px;
   padding-top: 3px;
-  &.dday {
+  &.dDay {
     width: 550px;
   }
 `;

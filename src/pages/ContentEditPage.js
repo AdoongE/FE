@@ -140,7 +140,7 @@ function ContentEditPage() {
       .required('콘텐츠 형식을 선택하세요.')
       .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
     seedName: yup.string(),
-    categoryNames: yup
+    boardCategories: yup
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
@@ -309,13 +309,13 @@ function ContentEditPage() {
               <Name>카테고리 지정*</Name>
               <Inputs>
                 <Controller
-                  name="categoryNames"
+                  name="boardCategories"
                   control={control}
                   defaultValue={[]}
                   render={({ field, fieldState }) => (
                     <>
                       <AddCategory
-                        label="categoryNames"
+                        label="boardCategories"
                         $error={fieldState.error ? true : undefined}
                         $helperText={
                           fieldState.error && fieldState.error.message
@@ -324,7 +324,7 @@ function ContentEditPage() {
                         onChange={(newValue) => {
                           if (newValue.length <= 5) {
                             field.onChange(newValue);
-                            trigger('categoryNames');
+                            trigger('boardCategories');
                           }
                         }}
                       />

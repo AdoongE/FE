@@ -175,7 +175,7 @@ function ContentEditPage() {
       .of(yup.string())
       .min(2, '2개 이상의 태그를 선택해주세요.')
       .required(),
-    dday: yup
+    dDay: yup
       .string()
       .matches(/^\d{4}-\d{2}-\d{2}$/, {
         message: '유효한 날짜 형식이어야 합니다.',
@@ -215,11 +215,11 @@ function ContentEditPage() {
     try {
       // 유효성 검사 통과된 데이터만 처리됨
       let updateData = {
-        contentDataType: seedType,
+        seedType: seedType,
         seedName: data.seedName,
-        categoryNames: data.categoryNames,
+        boardCategories: data.boardCategories,
         tags: data.tags,
-        dday: data.dday || null,
+        dDay: data.dDay || null,
         seedDetail: data.seedDetail || null,
         seedLink: data.seedLink || null,
         thumbnailImage: representativeIndex || null,
@@ -458,7 +458,7 @@ function ContentEditPage() {
                   </Short>
                 </Name>
               </Long>
-              <Date type="date" {...register('dday')} defaultValue={null} />
+              <Date type="date" {...register('dDay')} defaultValue={null} />
             </Dday>
             <Memo>
               <Name>메모 입력</Name>

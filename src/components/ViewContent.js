@@ -19,7 +19,7 @@ function ViewContent() {
     thumbnailImage: '',
     categoryNames: [],
     tags: [],
-    dday: '',
+    dDay: '',
     seedDetail: '',
   });
   const [remainingDays, setRemainingDays] = useState(null);
@@ -30,15 +30,15 @@ function ViewContent() {
 
   useEffect(() => {
     handleViewContent();
-    if (contentInfo.dday) {
-      calRemainingDays(contentInfo.dday);
+    if (contentInfo.dDay) {
+      calRemainingDays(contentInfo.dDay);
     }
-  }, [contentInfo.dday]);
+  }, [contentInfo.dDay]);
 
   const calRemainingDays = () => {
     const currentDate = new globalThis.Date();
-    const ddayDate = new globalThis.Date(contentInfo.dday);
-    const timeDiff = ddayDate - currentDate;
+    const dDayDate = new globalThis.Date(contentInfo.dDay);
+    const timeDiff = dDayDate - currentDate;
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     setRemainingDays(dayDiff);
   };
@@ -61,7 +61,7 @@ function ViewContent() {
         thumbnailImage: results.thumbnailImage,
         categoryNames: results.categoryNames,
         tags: results.tagNames,
-        dday: results.dday,
+        dDay: results.dDay,
         seedDetail: results.seedDetail,
         filename: results.title,
       });
@@ -197,7 +197,7 @@ function ViewContent() {
           </ContentDiv>
           <Dday>
             <Long>
-              <Name className="dday">디데이</Name>
+              <Name className="dDay">디데이</Name>
             </Long>
             <DdayDiv>
               {remainingDays !== null ? (
@@ -207,7 +207,7 @@ function ViewContent() {
               ) : null}
               <Calendar>
                 <CalendarIcon icon="lucide:calendar" />
-                {remainingDays ? <Date>{contentInfo.dday}</Date> : `yyyy-mm-dd`}
+                {remainingDays ? <Date>{contentInfo.dDay}</Date> : `yyyy-mm-dd`}
               </Calendar>
             </DdayDiv>
           </Dday>
@@ -388,7 +388,7 @@ const Name = styled.div`
   font-size: 20px;
   width: 161px;
   padding-top: 3px;
-  &.dday {
+  &.dDay {
     width: 550px;
   }
 `;

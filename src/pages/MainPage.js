@@ -68,7 +68,7 @@ const MainPage = () => {
             categoryId: item.categoryId || [],
             category: item.categoryName || [],
             tags: item.tagName || [],
-            dDay: item.dday,
+            dDay: item.dDay,
             contentDateType: item.contentDateType || '타입 없음',
             thumbnailImage: item.thumbnailImage || '',
             updatedDt: item.updatedDt || '업데이트 정보 없음',
@@ -116,7 +116,7 @@ const MainPage = () => {
                 updatedDt: item.updatedDt || '업데이트 정보 없음',
                 tagId: item.tagId || [],
                 tags: item.tagName || [],
-                dDay: item.dday || null,
+                dDay: item.dDay || null,
                 createdAt: item.createdAt || Date.now(), // 기본값 설정
               };
             } else {
@@ -131,7 +131,7 @@ const MainPage = () => {
                   user: item.nickname || '사용자 정보 없음',
                   category: content.categoryName || [],
                   tags: content.tagName || [],
-                  dDay: content.dday,
+                  dDay: content.dDay,
                   contentDateType: content.contentDateType || '타입 없음',
                   thumbnailImage: content.thumbnailImage || '',
                   updatedDt: content.updatedDt || '업데이트 정보 없음',

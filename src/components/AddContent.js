@@ -184,7 +184,7 @@ function AddContent() {
       .of(yup.string())
       .min(2, '2개 이상의 태그를 선택해주세요.')
       .required(),
-    dday: yup
+    dDay: yup
       .string()
       .matches(/^\d{4}-\d{2}-\d{2}$/, {
         message: '유효한 날짜 형식이어야 합니다.',
@@ -213,7 +213,7 @@ function AddContent() {
       categoryNames: [],
       seedLink: '',
       tags: [],
-      dday: null,
+      dDay: null,
       seedDetail: null,
     },
   });
@@ -233,9 +233,9 @@ function AddContent() {
       let updateData = {
         seedType: data.seedType,
         seedName: data.seedName,
-        categoryNames: data.categoryNames,
+        boardCategories: data.boardCategories,
         tags: data.tags,
-        dDay: data.dday || null,
+        dDay: data.dDay || null,
         seedDetail: data.seedDetail || null,
       };
 
@@ -486,7 +486,7 @@ function AddContent() {
                 </Short>
               </Name>
             </Long>
-            <Date type="date" {...register('dday')} defaultValue={null} />
+            <Date type="date" {...register('dDay')} defaultValue={null} />
           </Dday>
           <Memo>
             <Name>메모 입력</Name>

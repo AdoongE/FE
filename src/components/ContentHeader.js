@@ -100,7 +100,7 @@ function ContentHeader({
         title: item.seedName || '제목 없음',
         category: item.categoryName || [],
         tags: item.tagName || [],
-        dDay: item.dday ?? null,
+        dDay: item.dDay ?? null,
         contentDateType: item.contentDateType || '타입 없음',
         thumbnailImage: item.thumbnailImage || null,
         updatedDt: item.updatedDt || '업데이트 정보 없음',

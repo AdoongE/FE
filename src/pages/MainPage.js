@@ -11,152 +11,25 @@ import Pagination from './Pagination';
 import { axiosInstance } from '../components/api/axios-instance';
 
 const MainPage = () => {
-  const [collectData, setCollectData] = useState([]); // 모아보기 전체 콘텐츠 수
-  const [sortedData, setSortedData] = useState([]);
-  const [originalData, setOriginalData] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCateName] = useState('');
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
-  const [sortOrder, setSortOrder] = useState('최신순'); // 정렬 기준
+  const [sortOrder, setSortOrder] = useState('최신순');
   const [currentPage, setCurrentPage] = useState(1);
   const contentPerPage = 9;
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
-  const [filteredData, setFilteredData] = useState([]);
-  const [keyword, setKeyword] = useState(''); // 검색 키워드 상태 추가
-  const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [keyword, setKeyword] = useState('');
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
-
-  // keyword 상태 업데이트 로그 출력
-  useEffect(() => {
-    console.log('Updated Keyword:', keyword); // keyword 값 출력
-  }, [keyword]); // keyword가 업데이트 될 때마다 출력
-
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-      let url = '';
-      let results = [];
-
-      if (activeTab === '검색필터') {
-        const data = { tags: tags };
-        const response = await axiosInstance.post(
-          '/api/v1/seed/filtering',
-          data,
-        );
-
-        if (response.data.status.code === 200) {
-          console.log('검색 태그 전송 성공:', response.data.status.message);
-          console.log('검색 필터링 결과', response.data);
-          if (response.data.metadata.resultCount === 0) {
-            setSearchState(true);
-          }
-
-          results = response.data.results.map((item) => ({
-            id: item.contentId || 'ID 없음',
-            title:
-              item.seedName ||
-              (item.updatedDt
-                ? new Date(item.updatedDt).toISOString().split('T')[0]
-                : '날짜 정보 없음'),
-            categoryId: item.categoryId || [],
-            category: item.categoryName || [],
-            tags: item.tagName || [],
-            dDay: item.dDay,
-            contentDateType: item.contentDateType || '타입 없음',
-            thumbnailImage: item.thumbnailImage || '',
-            updatedDt: item.updatedDt || '업데이트 정보 없음',
-          }));
-        }
-      } else {
-        if (activeTab === '모아보기' || activeTab === '나의 씨드') {
-          setFilterId(null);
-          setCategoryId(null);
-          url = '/api/v1/seed/';
-          const res = await axiosInstance.get(url);
-          const responseData = res.data.results?.[0]?.contentsInfoList || [];
-          setCollectData(responseData); // null 방지
-        } else if (activeTab === '카테고리') {
-          setFilterId(null);
-          url = `/api/v1/seed/${categoryId}`;
-        } else if (activeTab === '맞춤필터') {
-          console.log('필터 ID :', filterId);
-          url = `/api/v1/filter/${filterId}`;
-        }
-
-        if (!url) {
-          console.warn('유효하지 않은 URL 요청입니다.');
-          return;
-        }
-
-        console.log('GET 요청할 URL:', url);
-        const response = await axiosInstance.get(url);
-        console.log('응답 데이터:', response.data.results);
-
-        results =
-          (response?.data?.results || []).flatMap((item) => {
-            if (activeTab === '맞춤필터') {
-              return {
-                id: item.contentId || 'ID 없음',
-                title:
-                  item.seedName ||
-                  (item.updatedDt
-                    ? new Date(item.updatedDt).toISOString().split('T')[0]
-                    : '날짜 정보 없음'),
-                categoryId: item.categoryId || [],
-                category: item.categoryName?.[0] || '카테고리 없음',
-                contentDateType: item.contentDateType || '타입 없음',
-                thumbnailImage: item.thumbnailImage || '',
-                updatedDt: item.updatedDt || '업데이트 정보 없음',
-                tagId: item.tagId || [],
-                tags: item.tagName || [],
-                dDay: item.dDay || null,
-                createdAt: item.createdAt || Date.now(), // 기본값 설정
-              };
-            } else {
-              return (item.contentsInfoList || []).map((content) => {
-                const formattedDate = content.updatedDt
-                  ? new Date(content.updatedDt).toISOString().split('T')[0]
-                  : '날짜 정보 없음';
-
-                return {
-                  id: content.contentId || 'ID 없음',
-                  title: content.seedName || formattedDate,
-                  user: item.nickname || '사용자 정보 없음',
-                  category: content.categoryName || [],
-                  tags: content.tagName || [],
-                  dDay: content.dDay,
-                  contentDateType: content.contentDateType || '타입 없음',
-                  thumbnailImage: content.thumbnailImage || '',
-                  updatedDt: content.updatedDt || '업데이트 정보 없음',
-                  createdAt: content.createdAt || Date.now(), // 기본값 설정
-                };
-              });
-            }
-          }) ?? [];
-      }
-      setOriginalData(results);
-      setSortedData(results); // 초기 데이터 설정
-      setSearchState(false);
-    } catch (error) {
-      console.error(
-        '데이터 가져오기 실패:',
-        error.response ? error.response.data : error,
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [activeTab, categoryId, filterId, tags]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   const seedTypeMapping = {
     IMAGE: '이미지',
@@ -164,63 +37,47 @@ const MainPage = () => {
     PDF: 'PDF',
   };
 
-  // 데이터 필터링 및 정렬
-  useEffect(() => {
-    let filteredData = [...originalData];
+  const fetchData = useCallback(
+    async (page = 0) => {
+      try {
+        setLoading(true);
+        const params = {
+          page,
+          size: contentPerPage,
+          sortBy: sortOrder === '이름순' ? 'name' : 'latest',
+          isAsc: sortOrder === '이름순',
+        };
 
-    // 저장형식 필터링
-    if (localSelectedFormat && localSelectedFormat !== '전체보기') {
-      filteredData = filteredData.filter((item) => {
-        const koreanType = seedTypeMapping[item.contentDateType];
-        return koreanType === localSelectedFormat;
-      });
-    }
+        if (localSelectedFormat && localSelectedFormat !== '전체보기') {
+          const seedTypeKey = Object.keys(seedTypeMapping).find(
+            (key) => seedTypeMapping[key] === localSelectedFormat,
+          );
+          if (seedTypeKey) params.seedType = seedTypeKey;
+        }
 
-    // 정렬
-    filteredData.sort((a, b) => {
-      if (sortOrder === '최신순') {
-        return new Date(b.createdAt) - new Date(a.createdAt);
+        const response = await axiosInstance.get('/api/v1/seed', { params });
+        const result = response.data.results[0];
+        setData(result.seedInfoList || []);
+        setTotalPages(result.pageInfo.totalPages || 1);
+        setSearchState(false);
+      } catch (error) {
+        console.error('데이터 로딩 실패:', error);
+      } finally {
+        setLoading(false);
       }
-      if (sortOrder === '이름순') {
-        return a.title.localeCompare(b.title);
-      }
-      return 0;
-    });
-
-    setSortedData(filteredData);
-  }, [originalData, localSelectedFormat, sortOrder]);
-
-  useEffect(() => {
-    fetchData(); // 데이터 초기 로드
-  }, []);
-
-  const dataToRender = filteredData.length > 0 ? filteredData : sortedData;
-
-  const displayedContentBoxes = dataToRender.slice(
-    (currentPage - 1) * contentPerPage,
-    currentPage * contentPerPage,
+    },
+    [contentPerPage, sortOrder, localSelectedFormat],
   );
 
-  // 페이지네이션 처리
+  useEffect(() => {
+    fetchData(currentPage - 1);
+  }, [fetchData, currentPage]);
+
   const handlePageChange = (newPage) => {
-    if (
-      newPage >= 1 &&
-      newPage <= Math.ceil(sortedData.length / contentPerPage)
-    ) {
+    if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
   };
-
-  const categoryCounts =
-    collectData &&
-    collectData.reduce((counts, item) => {
-      if (Array.isArray(item.categoryName)) {
-        item.categoryName.forEach((category) => {
-          counts[category] = (counts[category] || 0) + 1;
-        });
-      }
-      return counts;
-    }, {});
 
   return (
     <MainContainer>
@@ -231,7 +88,6 @@ const MainPage = () => {
           setActiveTab={setActiveTab}
           setCategoryId={setCategoryId}
           setCateName={setCateName}
-          categoryCounts={categoryCounts}
           filterId={filterId}
           setFilterId={setFilterId}
           setFilterName={setFilterName}
@@ -241,7 +97,6 @@ const MainPage = () => {
         <ContentHeader
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          setFilteredData={setFilteredData}
           setSortOrder={setSortOrder}
           setSelectedFormat={setLocalSelectedFormat}
           setSearchState={setSearchState}
@@ -253,10 +108,10 @@ const MainPage = () => {
           tags={tags}
           setTags={setTags}
         />
-        <ContentArea $isBlank={searchState || sortedData.length === 0}>
+        <ContentArea $isBlank={searchState || data.length === 0}>
           {loading ? (
             <div>로딩 중...</div>
-          ) : sortedData.length === 0 ? (
+          ) : data.length === 0 ? (
             <ContentBlank />
           ) : searchState ? (
             <NoSearchContent>
@@ -264,7 +119,7 @@ const MainPage = () => {
                 src={noSearchContent}
                 alt="noSearch"
                 style={{
-                  width: '220.001px',
+                  width: '220px',
                   height: '156px',
                   marginBottom: '20px',
                 }}
@@ -283,49 +138,38 @@ const MainPage = () => {
               </div>
             </NoSearchContent>
           ) : (
-            (displayedContentBoxes || []).map((data, index) => {
-              const formattedDate = data?.createdAt
-                ? new Date(data.createdAt).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })
-                : '날짜 정보 없음';
-
-              return (
-                <React.Fragment key={data?.id || index}>
-                  <StyledContentBox>
-                    <ContentBox
-                      key={data?.id || index}
-                      contentId={data?.id || 'ID 없음'}
-                      title={data?.title || formattedDate}
-                      category={data?.category || []}
-                      tags={data?.tags || []}
-                      dDay={data?.dDay ?? null}
-                      contentDateType={data?.contentDateType || '타입 없음'}
-                      thumbnailImage={data?.thumbnailImage || null}
-                      updatedDt={data?.updatedDt || '업데이트 정보 없음'}
-                      message={data?.message || ''}
-                      keyword={keyword}
-                      open={() => openModal(data)}
-                      fetchData={fetchData}
-                    />
-                  </StyledContentBox>
-                  {selectedData && selectedData.id === data?.id && (
-                    <ViewThumbnailModal
-                      file={data?.thumbnailImage}
-                      onClose={closeModal}
-                      contentDataType={selectedData.contentDateType}
-                    />
-                  )}
-                </React.Fragment>
-              );
-            })
+            data.map((item, index) => (
+              <React.Fragment key={item.seedId || index}>
+                <StyledContentBox>
+                  <ContentBox
+                    contentId={item.seedId}
+                    title={item.seedName}
+                    category={item.categoryName}
+                    tags={item.tagName}
+                    dDay={item.dDay}
+                    contentDateType={item.seedType}
+                    thumbnailImage={item.thumbnailImage}
+                    updatedDt={item.updatedDt}
+                    message={item.message || ''}
+                    keyword={keyword}
+                    open={() => openModal(item)}
+                    fetchData={fetchData}
+                  />
+                </StyledContentBox>
+                {selectedData && selectedData.seedId === item.seedId && (
+                  <ViewThumbnailModal
+                    file={item.thumbnailImage}
+                    onClose={closeModal}
+                    contentDataType={item.seedType}
+                  />
+                )}
+              </React.Fragment>
+            ))
           )}
         </ContentArea>
         <Pagination
           currentPage={currentPage}
-          totalCount={sortedData.length}
+          totalCount={data.length}
           contentPerPage={contentPerPage}
           onPageChange={handlePageChange}
         />
@@ -334,7 +178,6 @@ const MainPage = () => {
   );
 };
 
-// 스타일 컴포넌트
 const MainContainer = styled.div`
   display: flex;
   padding-left: 280px;

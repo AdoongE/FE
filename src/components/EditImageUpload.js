@@ -19,13 +19,13 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
   useEffect(() => {
     const fetchContentInfo = async () => {
       try {
-        const response = await axiosInstance.get(`/api/v1/content/all/${Id}`);
+        const response = await axiosInstance.get(`/api/v1/seed/${Id}`);
         const results = response.data.results[0];
         console.log('결과', results);
 
         setContentInfo({
-          filename: results.title,
-          contentImage: results.contentImage,
+          filename: results.titles,
+          contentImage: results.fileLinks,
         });
 
         if (response.status === 200) {

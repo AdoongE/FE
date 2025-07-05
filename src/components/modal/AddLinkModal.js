@@ -7,7 +7,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 
 const AddLinkModal = ({ onClose }) => {
   const navigate = useNavigate();
-  const [contentLinks, setContentLinks] = useState('');
+  const [seedLinks, setContentLinks] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +17,7 @@ const AddLinkModal = ({ onClose }) => {
   };
 
   const handleAddLink = async () => {
-    if (contentLinks === '') {
+    if (seedLinks === '') {
       setErrorMessage('링크를 입력해주세요.');
       return;
     }
@@ -26,18 +26,18 @@ const AddLinkModal = ({ onClose }) => {
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/watch\?v=[^&]+/;
     const naverNewsRegex = /^https:\/\/n\.news\.naver\.com/;
 
-    if (!regex.test(contentLinks)) {
+    if (!regex.test(seedLinks)) {
       setErrorMessage('유효하지 않은 링크입니다.');
       return;
     } else {
       setIsLoading(true);
 
-      if (youtubeRegex.test(contentLinks)) {
-        console.log('유튜브 링크:', contentLinks);
+      if (youtubeRegex.test(seedLinks)) {
+        console.log('유튜브 링크:', seedLinks);
         try {
-          const params = { youtubeUrl: contentLinks };
+          const params = { youtubeUrl: seedLinks };
           const response = await axiosInstance.post(
-            '/api/v1/simplification/youtube/v2',
+            '/api/v1/simplification/youtube',
             null,
             { params },
           );
@@ -46,7 +46,7 @@ const AddLinkModal = ({ onClose }) => {
           if (response.data.status?.code === 200) {
             console.log('유튜브 링크 간략화 성공');
             console.log('간략화 내용 : ', simplificationInfo);
-            console.log('간략화 link : ', contentLinks);
+            console.log('간략화 link : ', seedLinks);
             const tagsString = simplificationInfo.tags || '';
             const tagsArray = tagsString.split(/,\s*/);
             navigate('/content-add', {
@@ -55,7 +55,7 @@ const AddLinkModal = ({ onClose }) => {
                 title: simplificationInfo.title || '',
                 summary: simplificationInfo.summary || '',
                 tags: tagsArray || [],
-                link: contentLinks,
+                link: seedLinks,
               },
             });
           }
@@ -64,12 +64,12 @@ const AddLinkModal = ({ onClose }) => {
         } finally {
           setIsLoading(false);
         }
-      } else if (naverNewsRegex.test(contentLinks)) {
-        console.log('네이버 뉴스 링크:', contentLinks);
+      } else if (naverNewsRegex.test(seedLinks)) {
+        console.log('네이버 뉴스 링크:', seedLinks);
         try {
-          const params = { naverNewsUrl: contentLinks };
+          const params = { naverNewsUrl: seedLinks };
           const response = await axiosInstance.post(
-            '/api/v1/simplification/naver-news/v2',
+            '/api/v1/simplification/naver-news',
             null,
             { params },
           );
@@ -78,7 +78,7 @@ const AddLinkModal = ({ onClose }) => {
           if (response.data.status?.code === 200) {
             console.log('네이버 뉴스 링크 간략화 성공');
             console.log('간략화 내용 : ', simplificationInfo);
-            console.log('간략화 link : ', contentLinks);
+            console.log('간략화 link : ', seedLinks);
             const tagsString = simplificationInfo.tags || '';
             const tagsArray = tagsString.split(/,\s*/);
             navigate('/content-add', {
@@ -87,7 +87,7 @@ const AddLinkModal = ({ onClose }) => {
                 title: simplificationInfo.title || '',
                 summary: simplificationInfo.summary || '',
                 tags: tagsArray || [],
-                link: contentLinks,
+                link: seedLinks,
               },
             });
           }
@@ -104,7 +104,7 @@ const AddLinkModal = ({ onClose }) => {
             title: '',
             summary: '',
             tags: [],
-            link: contentLinks,
+            link: seedLinks,
           },
         });
       }
@@ -127,7 +127,7 @@ const AddLinkModal = ({ onClose }) => {
         <Title>링크를 입력하세요.</Title>
 
         <Input
-          value={contentLinks}
+          value={seedLinks}
           onChange={(event) => setContentLinks(event.target.value)}
           placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
         />

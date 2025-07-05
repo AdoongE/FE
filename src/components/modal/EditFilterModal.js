@@ -50,7 +50,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
   const [usedTags, setUsedTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tags, setTags] = useState([]);
-  const [dataType, setDataType] = useState([]);
+  const [seedType, setSeedType] = useState([]);
   const dialogRef = useRef(null);
 
   const [startDate, setStartDate] = useState(null);
@@ -69,7 +69,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
       const results = response.data.results[0];
       console.log('수정 전 data: ', results);
       //   setOriginalFilterDetail(results);
-      setDataType(results.storageFormats || []);
+      setSeedType(results.storageFormats || []);
       setSelectedTags(results.tags || []);
       setStartDate(results.startDate ? parseISO(results.startDate) : null);
       setEndDate(results.endDate ? parseISO(results.endDate) : null);
@@ -125,24 +125,24 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
 
   const handleCheckboxChange = (event) => {
     const option = event.target.name;
-    setDataType((prevDataType) =>
+    setSeedType((prevDataType) =>
       prevDataType.includes(option)
         ? prevDataType.filter((t) => t !== option)
         : [...prevDataType, option],
     );
   };
 
-  console.log('데이터 타입 목록: ', dataType);
+  console.log('데이터 타입 목록: ', seedType);
 
   useEffect(() => {
-    console.log('dataType: ', dataType);
-  }, [dataType]);
+    console.log('seedType: ', seedType);
+  }, [seedType]);
 
   const handleClose = () => {
     setSelectedTags([]);
     setStartDate(null);
     setEndDate(null);
-    setDataType([]);
+    setSeedType([]);
     dialogRef.current?.close();
   };
 
@@ -150,7 +150,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
     setSelectedTags([]);
     setStartDate(null);
     setEndDate(null);
-    setDataType([]);
+    setSeedType([]);
   };
 
   const handleFilterClick = (filterOption) => {
@@ -234,7 +234,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
 
   const handleSave = async () => {
     const modalData = {
-      storageFormats: dataType,
+      storageFormats: seedType,
       tags: selectedTags,
       startDate: startDate ? format(startDate, 'yyyy-MM-dd') : null,
       endDate: endDate ? format(endDate, 'yyyy-MM-dd') : null,
@@ -295,7 +295,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
             usedTags.map((usedTag) => (
               <TagItem
                 type="button"
-                key={usedTag.id}
+                key={usedTag.tagId}
                 onClick={() => handleSelectTag(usedTag.name)}
                 $isSelected={selectedTags.includes(usedTag.name)}
               >
@@ -324,7 +324,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           <TypeBox
             type="checkbox"
             name="LINK"
-            checked={dataType.includes('LINK')}
+            checked={seedType.includes('LINK')}
             onChange={handleCheckboxChange}
           />
           <span>링크</span>
@@ -333,7 +333,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           <TypeBox
             type="checkbox"
             name="IMAGE"
-            checked={dataType.includes('IMAGE')}
+            checked={seedType.includes('IMAGE')}
             onChange={handleCheckboxChange}
           />
           <span>이미지</span>
@@ -342,7 +342,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
           <TypeBox
             type="checkbox"
             name="PDF"
-            checked={dataType.includes('PDF')}
+            checked={seedType.includes('PDF')}
             onChange={handleCheckboxChange}
           />
           <span>PDF</span>

@@ -198,7 +198,7 @@ const AddTagModal = forwardRef(
                 {tags.map((tag) => (
                   <TagItem
                     type="button"
-                    key={tag.id}
+                    key={tag.tagId}
                     onClick={() => handleSelectTag(tag.name)}
                     $isSelected={selectedTags.includes(tag.name)}
                   >

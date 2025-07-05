@@ -8,7 +8,7 @@ import PdfUploadModal from './PdfUploadModal';
 import { font } from '../../styles/font';
 
 const CheckboxModal = forwardRef((_, ref) => {
-  const [dataType, setDataType] = useState(null);
+  const [seedType, setSeedType] = useState(null);
   //   const [isOpen, setIsOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState({
@@ -19,20 +19,20 @@ const CheckboxModal = forwardRef((_, ref) => {
 
   const closeModal = () => {
     ref.current?.close();
-    setDataType(null);
+    setSeedType(null);
   };
 
   const handleCheckboxChange = (event) => {
-    setDataType(event.target.name);
+    setSeedType(event.target.name);
   };
 
   const handleChangeModal = () => {
-    if (dataType) {
+    if (seedType) {
       closeModal();
       setTimeout(() => {
         setIsModalOpen((prev) => ({
           ...prev,
-          [dataType]: true,
+          [seedType]: true,
         }));
       }, 200);
     }
@@ -43,7 +43,7 @@ const CheckboxModal = forwardRef((_, ref) => {
       ...prev,
       [type]: false,
     }));
-    setDataType(null);
+    setSeedType(null);
   };
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const CheckboxModal = forwardRef((_, ref) => {
             <TypeBox
               type="checkbox"
               name="LINK"
-              checked={dataType === 'LINK'}
+              checked={seedType === 'LINK'}
               onChange={handleCheckboxChange}
             />
             <span>링크</span>
@@ -95,7 +95,7 @@ const CheckboxModal = forwardRef((_, ref) => {
             <TypeBox
               type="checkbox"
               name="IMAGE"
-              checked={dataType === 'IMAGE'}
+              checked={seedType === 'IMAGE'}
               onChange={handleCheckboxChange}
             />
             <span>이미지</span>
@@ -104,7 +104,7 @@ const CheckboxModal = forwardRef((_, ref) => {
             <TypeBox
               type="checkbox"
               name="PDF"
-              checked={dataType === 'PDF'}
+              checked={seedType === 'PDF'}
               onChange={handleCheckboxChange}
             />
             <span>PDF</span>

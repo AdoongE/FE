@@ -79,6 +79,17 @@ const MainPage = () => {
     }
   };
 
+  const categoryCounts =
+    data &&
+    data.reduce((counts, item) => {
+      if (Array.isArray(item.categoryName)) {
+        item.categoryName.forEach((category) => {
+          counts[category] = (counts[category] || 0) + 1;
+        });
+      }
+      return counts;
+    }, {});
+
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -88,6 +99,7 @@ const MainPage = () => {
           setActiveTab={setActiveTab}
           setCategoryId={setCategoryId}
           setCateName={setCateName}
+          categoryCounts={categoryCounts}
           filterId={filterId}
           setFilterId={setFilterId}
           setFilterName={setFilterName}
@@ -160,7 +172,7 @@ const MainPage = () => {
                   <ViewThumbnailModal
                     file={item.thumbnailImage}
                     onClose={closeModal}
-                    contentDataType={item.seedType}
+                    seedType={item.seedType}
                   />
                 )}
               </React.Fragment>

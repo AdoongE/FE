@@ -37,6 +37,7 @@ const MainPage = () => {
     async (page = 0) => {
       try {
         setLoading(true);
+        setSearchState(false);
         const params = {
           page,
           size: contentPerPage,
@@ -58,15 +59,60 @@ const MainPage = () => {
         if (activeTab === '검색필터') {
           url = '/api/v1/seed/filtering';
           const data = { tags: tags };
-          const response = await axiosInstance.post(url, data, params);
-          pageInfos = response.data.results[0];
+          const response = await axiosInstance.post(url, data, { params });
 
           if (response.data.status.code === 200) {
-            console.log('검색 필터링 성공 결과', response.data.results[0]);
-            if (response.data.metadata.resultCount === 0) {
+            if (response.data.status.message === '씨드가 존재하지 않습니다.') {
               setSearchState(true);
+            } else {
+              pageInfos = response.data.results[0];
+              setTotalPages(pageInfos.pageInfo.totalPages || 1);
+              results = response.data.results[0]?.seedInfoList.map((item) => ({
+                id: item.seedId || 'ID 없음',
+                seedName:
+                  item.seedName ||
+                  (item.updatedDt
+                    ? new Date(item.updatedDt).toISOString().split('T')[0]
+                    : '날짜 정보 없음'),
+                categoryId: item.categoryId || [],
+                categoryName: item.categoryName || [],
+                tagName: item.tagName || [],
+                dDay: item.dDay,
+                seedType: item.seedType || '타입 없음',
+                thumbnailImage: item.thumbnailImage || '',
+                updatedDt: item.updatedDt || '업데이트 정보 없음',
+              }));
             }
+          }
+        } else if (activeTab === '모아보기' || activeTab === '나의 씨드') {
+          setFilterId(null);
+          setCategoryId(null);
+          url = '/api/v1/seed';
+          const response = await axiosInstance.get(url, { params });
 
+          results = response.data.results[0].seedInfoList;
+          pageInfos = response.data.results[0];
+          setTotalPages(pageInfos.pageInfo.totalPages || 1);
+          setFullData(results || []);
+        } else {
+          if (activeTab === '카테고리') {
+            setFilterId(null);
+            url = `/api/v1/seed/category/${categoryId}`;
+          } else if (activeTab === '맞춤필터') {
+            url = `/api/v1/filter/${filterId}`;
+          }
+
+          if (!url) {
+            console.warn('유효하지 않은 URL 요청입니다.');
+            return;
+          }
+
+          const response = await axiosInstance.get(url, { params });
+          if (response.data.status.message === '씨드가 존재하지 않습니다.') {
+            setData(results || []);
+          } else {
+            pageInfos = response.data.results[0];
+            setTotalPages(pageInfos.pageInfo.totalPages || 1);
             results = response.data.results[0]?.seedInfoList.map((item) => ({
               id: item.seedId || 'ID 없음',
               seedName:
@@ -83,51 +129,8 @@ const MainPage = () => {
               updatedDt: item.updatedDt || '업데이트 정보 없음',
             }));
           }
-        } else if (activeTab === '모아보기' || activeTab === '나의 씨드') {
-          setFilterId(null);
-          setCategoryId(null);
-          url = '/api/v1/seed';
-          const response = await axiosInstance.get(url, { params });
-
-          results = response.data.results[0].seedInfoList;
-          pageInfos = response.data.results[0];
-          setFullData(results || []);
-        } else {
-          if (activeTab === '카테고리') {
-            setFilterId(null);
-            url = `/api/v1/seed/category/${categoryId}`;
-          } else if (activeTab === '맞춤필터') {
-            console.log('필터 ID :', filterId);
-            url = `/api/v1/filter/${filterId}`;
-          }
-
-          if (!url) {
-            console.warn('유효하지 않은 URL 요청입니다.');
-            return;
-          }
-
-          const response = await axiosInstance.get(url, { params });
-          console.log('포미닛', response, data.length);
-          pageInfos = response.data.results[0];
-          results = response.data.results[0]?.seedInfoList.map((item) => ({
-            id: item.seedId || 'ID 없음',
-            seedName:
-              item.seedName ||
-              (item.updatedDt
-                ? new Date(item.updatedDt).toISOString().split('T')[0]
-                : '날짜 정보 없음'),
-            categoryId: item.categoryId || [],
-            categoryName: item.categoryName || [],
-            tagName: item.tagName || [],
-            dDay: item.dDay,
-            seedType: item.seedType || '타입 없음',
-            thumbnailImage: item.thumbnailImage || '',
-            updatedDt: item.updatedDt || '업데이트 정보 없음',
-          }));
         }
         setData(results || []);
-        setTotalPages(pageInfos.pageInfo.totalPages || 1);
-        setSearchState(false);
       } catch (error) {
         console.error(
           '데이터 가져오기 실패:',
@@ -197,8 +200,6 @@ const MainPage = () => {
         <ContentArea $isBlank={searchState || data.length === 0}>
           {loading ? (
             <div>로딩 중...</div>
-          ) : data.length === 0 ? (
-            <ContentBlank />
           ) : searchState ? (
             <NoSearchContent>
               <img
@@ -223,6 +224,8 @@ const MainPage = () => {
                 다른 키워드로 검색해보세요
               </div>
             </NoSearchContent>
+          ) : data.length === 0 ? (
+            <ContentBlank />
           ) : (
             data.map((item, index) => (
               <React.Fragment key={item.seedId || index}>

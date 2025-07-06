@@ -12,6 +12,7 @@ import { axiosInstance } from '../components/api/axios-instance';
 
 const MainPage = () => {
   const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]); // 카테고리 내 씨드 개수 count를 위한
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
@@ -24,18 +25,13 @@ const MainPage = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
+  const [, setFilteredData] = useState([]);
+  const [keyword, setKeyword] = useState(''); // 검색 키워드 상태 추가
+  const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
-  const [tags, setTags] = useState([]);
-  const [keyword, setKeyword] = useState('');
 
   const openModal = (data) => setSelectedData(data);
   const closeModal = () => setSelectedData(null);
-
-  const seedTypeMapping = {
-    IMAGE: '이미지',
-    LINK: '링크',
-    PDF: 'PDF',
-  };
 
   const fetchData = useCallback(
     async (page = 0) => {
@@ -55,23 +51,104 @@ const MainPage = () => {
           if (seedTypeKey) params.seedType = seedTypeKey;
         }
 
-        const response = await axiosInstance.get('/api/v1/seed', { params });
-        const result = response.data.results[0];
-        setData(result.seedInfoList || []);
-        setTotalPages(result.pageInfo.totalPages || 1);
+        let url = '';
+        let results = [];
+        let pageInfos = [];
+
+        if (activeTab === '검색필터') {
+          url = '/api/v1/seed/filtering';
+          const data = { tags: tags };
+          const response = await axiosInstance.post(url, data, params);
+          pageInfos = response.data.results[0];
+
+          if (response.data.status.code === 200) {
+            console.log('검색 필터링 성공 결과', response.data.results[0]);
+            if (response.data.metadata.resultCount === 0) {
+              setSearchState(true);
+            }
+
+            results = response.data.results[0]?.seedInfoList.map((item) => ({
+              id: item.seedId || 'ID 없음',
+              seedName:
+                item.seedName ||
+                (item.updatedDt
+                  ? new Date(item.updatedDt).toISOString().split('T')[0]
+                  : '날짜 정보 없음'),
+              categoryId: item.categoryId || [],
+              categoryName: item.categoryName || [],
+              tagName: item.tagName || [],
+              dDay: item.dDay,
+              seedType: item.seedType || '타입 없음',
+              thumbnailImage: item.thumbnailImage || '',
+              updatedDt: item.updatedDt || '업데이트 정보 없음',
+            }));
+          }
+        } else if (activeTab === '모아보기' || activeTab === '나의 씨드') {
+          setFilterId(null);
+          setCategoryId(null);
+          url = '/api/v1/seed';
+          const response = await axiosInstance.get(url, { params });
+
+          results = response.data.results[0].seedInfoList;
+          pageInfos = response.data.results[0];
+          setFullData(results || []);
+        } else {
+          if (activeTab === '카테고리') {
+            setFilterId(null);
+            url = `/api/v1/seed/category/${categoryId}`;
+          } else if (activeTab === '맞춤필터') {
+            console.log('필터 ID :', filterId);
+            url = `/api/v1/filter/${filterId}`;
+          }
+
+          if (!url) {
+            console.warn('유효하지 않은 URL 요청입니다.');
+            return;
+          }
+
+          const response = await axiosInstance.get(url, { params });
+          console.log('포미닛', response, data.length);
+          pageInfos = response.data.results[0];
+          results = response.data.results[0]?.seedInfoList.map((item) => ({
+            id: item.seedId || 'ID 없음',
+            seedName:
+              item.seedName ||
+              (item.updatedDt
+                ? new Date(item.updatedDt).toISOString().split('T')[0]
+                : '날짜 정보 없음'),
+            categoryId: item.categoryId || [],
+            categoryName: item.categoryName || [],
+            tagName: item.tagName || [],
+            dDay: item.dDay,
+            seedType: item.seedType || '타입 없음',
+            thumbnailImage: item.thumbnailImage || '',
+            updatedDt: item.updatedDt || '업데이트 정보 없음',
+          }));
+        }
+        setData(results || []);
+        setTotalPages(pageInfos.pageInfo.totalPages || 1);
         setSearchState(false);
       } catch (error) {
-        console.error('데이터 로딩 실패:', error);
+        console.error(
+          '데이터 가져오기 실패:',
+          error.response ? error.response.data : error,
+        );
       } finally {
         setLoading(false);
       }
     },
-    [contentPerPage, sortOrder, localSelectedFormat],
+    [currentPage, activeTab, categoryId, filterId, tags],
   );
 
   useEffect(() => {
     fetchData(currentPage - 1);
-  }, [fetchData, currentPage]);
+  }, [fetchData]);
+
+  const seedTypeMapping = {
+    IMAGE: '이미지',
+    LINK: '링크',
+    PDF: 'PDF',
+  };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -79,16 +156,12 @@ const MainPage = () => {
     }
   };
 
-  const categoryCounts =
-    data &&
-    data.reduce((counts, item) => {
-      if (Array.isArray(item.categoryName)) {
-        item.categoryName.forEach((category) => {
-          counts[category] = (counts[category] || 0) + 1;
-        });
-      }
-      return counts;
-    }, {});
+  const categoryCounts = fullData.reduce((acc, item) => {
+    item.categoryName.forEach((cat) => {
+      acc[cat] = (acc[cat] || 0) + 1;
+    });
+    return acc;
+  }, {});
 
   return (
     <MainContainer>
@@ -109,6 +182,7 @@ const MainPage = () => {
         <ContentHeader
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          setFilteredData={setFilteredData}
           setSortOrder={setSortOrder}
           setSelectedFormat={setLocalSelectedFormat}
           setSearchState={setSearchState}
@@ -159,7 +233,7 @@ const MainPage = () => {
                     category={item.categoryName}
                     tags={item.tagName}
                     dDay={item.dDay}
-                    contentDateType={item.seedType}
+                    seedType={item.seedType}
                     thumbnailImage={item.thumbnailImage}
                     updatedDt={item.updatedDt}
                     message={item.message || ''}
@@ -184,6 +258,7 @@ const MainPage = () => {
           totalCount={data.length}
           contentPerPage={contentPerPage}
           onPageChange={handlePageChange}
+          totalPages={totalPages}
         />
       </MainContent>
     </MainContainer>

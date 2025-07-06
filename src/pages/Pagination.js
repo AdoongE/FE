@@ -1,14 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Pagination = ({
-  currentPage,
-  totalCount,
-  contentPerPage,
-  onPageChange,
-}) => {
-  const totalPages = Math.max(1, Math.ceil(totalCount / contentPerPage));
-
+const Pagination = ({ currentPage, totalCount, onPageChange, totalPages }) => {
   const getPaginationNumbers = () => {
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(startPage + 4, totalPages);
@@ -47,15 +40,12 @@ const Pagination = ({
 
 export default Pagination;
 
-// 스타일 컴포넌트
 const PaginationWrapper = styled.div`
-  position: fixed;
   bottom: 20px;
   left: 11.5%;
   width: 100%;
-  height: 40px;
-  background: white;
-  z-index: -10;
+  height: 100%;
+  z-index: 10;
 
   display: flex;
   justify-content: center;

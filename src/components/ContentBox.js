@@ -17,7 +17,6 @@ function ContentBox({
   thumbnailImage,
   open,
   seedType,
-  updatedDt,
   message,
   keyword,
   fetchData,
@@ -38,11 +37,6 @@ function ContentBox({
       ),
     );
   };
-
-  // 제목이 없을 경우 업데이트 날짜로 대체
-  const displayTitle =
-    title ||
-    (updatedDt ? new Date(updatedDt).toLocaleDateString('ko-KR') : '날짜 없음');
 
   // 카테고리 텍스트 생성
   const displayCategory = Array.isArray(category)
@@ -110,7 +104,7 @@ function ContentBox({
             onClick={handleIconClick}
           />
         </IconBox>
-        <ContentName>{displayTitle}</ContentName>
+        <ContentName>{title}</ContentName>
       </ContentTitle>
       <CategoryDisplay title={displayCategory}>
         {displayCategory}

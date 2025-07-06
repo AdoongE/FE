@@ -135,7 +135,7 @@ function ContentEditPage() {
   }, [originalContentDetail]);
 
   const schema = yup.object().shape({
-    contentDataType: yup
+    seedType: yup
       .string()
       .required('콘텐츠 형식을 선택하세요.')
       .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),

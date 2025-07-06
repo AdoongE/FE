@@ -21,7 +21,6 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
       try {
         const response = await axiosInstance.get(`/api/v1/seed/${Id}`);
         const results = response.data.results[0];
-        console.log('결과', results);
 
         setContentInfo({
           filename: results.titles,

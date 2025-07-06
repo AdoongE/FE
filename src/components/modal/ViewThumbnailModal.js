@@ -13,8 +13,8 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 // import pdfjsWorker from './pdf.worker.mjs';
 // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
-  console.log('ViewThumbnailModal file:', contentDataType);
+const ViewThumbnailModal = ({ file, onClose, seedType }) => {
+  console.log('ViewThumbnailModal file:', seedType);
   // const fileObject = useMemo(
   //   () => ({
   //     url: file,
@@ -37,7 +37,7 @@ const ViewThumbnailModal = ({ file, onClose, contentDataType }) => {
         },
       }}
     >
-      {contentDataType === 'PDF' ? (
+      {seedType === 'PDF' ? (
         // <DocumentWrapper>
         //   <Document
         //     file={file}

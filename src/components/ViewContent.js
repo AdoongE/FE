@@ -11,7 +11,7 @@ function ViewContent() {
   const { state } = useLocation();
   const [contentInfo, setContentInfo] = useState({
     contentId: '',
-    contentDataType: '',
+    seedType: '',
     seedName: '',
     seedLink: '',
     contentImage: [],
@@ -33,7 +33,7 @@ function ViewContent() {
     if (contentInfo.dDay) {
       calRemainingDays(contentInfo.dDay);
     }
-  }, [contentInfo.dDay]);
+  }, []);
 
   const calRemainingDays = () => {
     const currentDate = new globalThis.Date();
@@ -42,7 +42,6 @@ function ViewContent() {
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     setRemainingDays(dayDiff);
   };
-  console.log('썸네일 인덱스', contentInfo.thumbnailImage);
 
   const handleViewContent = async () => {
     try {
@@ -50,10 +49,9 @@ function ViewContent() {
         `/api/v1/seed/${state.contentId}`,
       );
       const results = response.data.results[0];
-      console.log('결과', results);
       setContentInfo({
         contentId: results.seedId,
-        contentDataType: results.contentDataType,
+        seedType: results.seedType,
         seedName: results.seedName,
         seedLink: results.seedLink,
         contentImage: results.fileLinks,
@@ -63,7 +61,7 @@ function ViewContent() {
         tags: results.tagNames,
         dDay: results.dDay,
         seedDetail: results.seedDetail,
-        filename: results.title,
+        filename: results.titles,
       });
 
       if (response.status === 200) {
@@ -88,7 +86,7 @@ function ViewContent() {
       replace: false,
       state: {
         Id: contentInfo.contentId,
-        seedType: contentInfo.contentDataType,
+        seedType: contentInfo.seedType,
       },
     });
   };
@@ -113,8 +111,8 @@ function ViewContent() {
           <ContentDiv
             style={{
               flexDirection:
-                contentInfo.contentDataType === 'PDF' ||
-                contentInfo.contentDataType === 'IMAGE'
+                contentInfo.seedType === 'PDF' ||
+                contentInfo.seedType === 'IMAGE'
                   ? 'column'
                   : 'row',
             }}
@@ -122,25 +120,25 @@ function ViewContent() {
             <Name
               style={{
                 alignSelf:
-                  contentInfo.contentDataType === 'PDF' ||
-                  contentInfo.contentDataType === 'IMAGE'
+                  contentInfo.seedType === 'PDF' ||
+                  contentInfo.seedType === 'IMAGE'
                     ? 'flex-start'
                     : 'center',
               }}
             >
-              {contentInfo.contentDataType === 'LINK'
+              {contentInfo.seedType === 'LINK'
                 ? '링크'
-                : contentInfo.contentDataType === 'IMAGE'
+                : contentInfo.seedType === 'IMAGE'
                   ? '이미지'
                   : 'PDF 파일'}
             </Name>
-            {contentInfo.contentDataType === 'LINK' && (
+            {contentInfo.seedType === 'LINK' && (
               <Link onClick={() => handleLinkClick(`${contentInfo.seedLink}`)}>
                 <LinkIcon icon="ic:twotone-link" />
                 {contentInfo.seedLink}
               </Link>
             )}
-            {contentInfo.contentDataType === 'IMAGE' && (
+            {contentInfo.seedType === 'IMAGE' && (
               <ImagesWrapper>
                 {contentInfo.contentImage.map((image, index) => (
                   <ImageContainer key={image}>
@@ -159,7 +157,7 @@ function ViewContent() {
                 ))}
               </ImagesWrapper>
             )}
-            {contentInfo.contentDataType === 'PDF' && (
+            {contentInfo.seedType === 'PDF' && (
               <FilesWrapper>
                 {contentInfo.contentDoc.map((file, index) => (
                   <FileContainer key={file}>
@@ -180,12 +178,12 @@ function ViewContent() {
               <ViewImagePdfModal
                 file={selectedFile}
                 files={
-                  contentInfo.contentDataType === 'PDF'
+                  contentInfo.seedType === 'PDF'
                     ? contentInfo.contentDoc
                     : contentInfo.contentImage
                 }
                 onClose={closeModal}
-                contentDataType={contentInfo.contentDataType}
+                seedType={contentInfo.seedType}
               />
             )}
           </ContentDiv>

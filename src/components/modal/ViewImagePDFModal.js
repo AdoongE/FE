@@ -10,7 +10,7 @@ import { Icon } from '@iconify/react';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
-const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
+const ViewImagePdfModal = ({ file, files, onClose, seedType }) => {
   const settings = {
     dots: false,
     infinite: false,
@@ -18,14 +18,10 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    prevArrow: (
-      <CustomArrow direction="left" contentDataType={contentDataType} />
-    ),
-    nextArrow: (
-      <CustomArrow direction="right" contentDataType={contentDataType} />
-    ),
+    prevArrow: <CustomArrow direction="left" seedType={seedType} />,
+    nextArrow: <CustomArrow direction="right" seedType={seedType} />,
   };
-  console.log(contentDataType);
+  console.log(seedType);
 
   const handleDownloadAll = async (files) => {
     for (const file of files) {
@@ -79,7 +75,7 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
       <SliderWrapper>
         <Slider {...settings}>
           {files.map((file, index) =>
-            contentDataType === 'PDF' ? (
+            seedType === 'PDF' ? (
               // <DocumentWrapper key={index}>
               //   <Documents file={file}>
               //     <Page pageNumber={1} />
@@ -106,13 +102,9 @@ const ViewImagePdfModal = ({ file, files, onClose, contentDataType }) => {
 
 export default ViewImagePdfModal;
 
-const CustomArrow = ({ contentDataType, direction, onClick }) => {
+const CustomArrow = ({ seedType, direction, onClick }) => {
   return (
-    <ArrowButton
-      contentDataType={contentDataType}
-      direction={direction}
-      onClick={onClick}
-    >
+    <ArrowButton seedType={seedType} direction={direction} onClick={onClick}>
       {direction === 'left' ? (
         <IoIosArrowBack size={'50px'} />
       ) : (
@@ -206,7 +198,7 @@ const ImageWrapper = styled.div`
 
 const ArrowButton = styled.div`
   position: absolute;
-  top: ${({ contentDataType }) => (contentDataType === 'PDF' ? '43%' : '40%')};
+  top: ${({ seedType }) => (seedType === 'PDF' ? '43%' : '40%')};
   z-index: 1000;
   cursor: pointer;
   color: #9f9f9f;

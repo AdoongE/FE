@@ -19,7 +19,7 @@ const api_ = axios.create({
 
 export const ContentAddHandler = async (seedType, data, images, pdfs) => {
   try {
-    const response = await api.post('/api/v1/seed/', data);
+    const response = await api.post('/api/v1/seed', data);
 
     if (response.data.status.code === 200) {
       console.log('콘텐츠 생성 성공:', response.data.status.message);

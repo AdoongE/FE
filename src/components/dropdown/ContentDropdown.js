@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import ContentDeleteModal from '../modal/ContentDeleteModal';
@@ -8,10 +8,6 @@ import { font } from '../../styles/font';
 function ContentDropdown({ contentId, fetchData }) {
   const [isKebabOpen, setIsKebabOpen] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log('contentId: ', contentId);
-  }, [contentId]);
 
   const dialogRef = useRef(null);
 

@@ -98,7 +98,11 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
         }
       }
     },
-    accept: 'image/jpeg, image/png, image/svg+xml',
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+      'image/svg+xml': [],
+    },
     maxSize: 10 * 1024 * 1024, // 10 MB 제한
   });
 

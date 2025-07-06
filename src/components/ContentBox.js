@@ -16,7 +16,7 @@ function ContentBox({
   dDay,
   thumbnailImage,
   open,
-  contentDateType,
+  seedType,
   updatedDt,
   message,
   keyword,
@@ -62,7 +62,7 @@ function ContentBox({
   return (
     <Box>
       <ImageBox>
-        {contentDateType === 'PDF' ? (
+        {seedType === 'PDF' ? (
           // <PDFThumbnail onClick={open}>
           //   <Document file={thumbnailImage} loading={<div>Loading PDF...</div>}>
           //     <Page pageNumber={1} width={200} />
@@ -74,7 +74,7 @@ function ContentBox({
             alt="content thumbnail"
             isDefaultImage={true}
           />
-        ) : contentDateType === 'LINK' ? (
+        ) : seedType === 'LINK' ? (
           <ContentImage
             src={defaultImage}
             alt="content thumbnail"
@@ -106,7 +106,7 @@ function ContentBox({
       <ContentTitle>
         <IconBox>
           <StyledIcon
-            icon={contentIcons[contentDateType] || 'ic:round-link'} // 기본값은 링크
+            icon={contentIcons[seedType] || 'ic:round-link'} // 기본값은 링크
             onClick={handleIconClick}
           />
         </IconBox>

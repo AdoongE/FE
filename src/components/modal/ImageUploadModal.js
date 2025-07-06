@@ -35,7 +35,11 @@ function ImageUploadModal({ onClose }) {
       });
       setError(false); // 파일 업로드 시 에러 상태 초기화
     },
-    accept: 'image/jpeg, image/png, image/svg+xml',
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+      'image/svg+xml': [],
+    },
     maxSize: 10 * 1024 * 1024, // 10MB 제한
     noClick: images.length > 0,
     noKeyboard: true,

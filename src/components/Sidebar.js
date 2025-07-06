@@ -89,7 +89,7 @@ const Sidebar = ({
       const names = results.map((item) => item.name);
       setBookmarks(names);
 
-      console.log('북마크 조회 성공', response.data.results);
+      console.log('북마크 조회 성공');
     } catch (error) {
       console.error('에러 발생:', error);
     }
@@ -352,7 +352,7 @@ const Sidebar = ({
       setCustomFilter(filterNames);
 
       if (response.status === 200) {
-        console.log('Custom 필터 조회 성공:', response.data);
+        console.log('Custom 필터 조회 성공:');
       } else {
         console.error('Custom 필터 조회 실패:', response.data);
       }

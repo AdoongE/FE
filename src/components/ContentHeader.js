@@ -101,7 +101,7 @@ function ContentHeader({
         category: item.categoryName || [],
         tags: item.tagName || [],
         dDay: item.dDay ?? null,
-        contentDateType: item.contentDateType || '타입 없음',
+        seedType: item.seedType || '타입 없음',
         thumbnailImage: item.thumbnailImage || null,
         updatedDt: item.updatedDt || '업데이트 정보 없음',
         message: item.seedDetail || '',

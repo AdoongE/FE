@@ -95,16 +95,16 @@ function ContentHeader({
 
       console.log('검색 응답 데이터:', response.data); // API 응답 확인
 
-      const results = response.data.results.map((item) => ({
-        id: item.contentId || 'ID 없음',
-        title: item.seedName || '제목 없음',
-        category: item.categoryName || [],
-        tags: item.tagName || [],
+      const results = response.data.results[0].seedInfoList.map((item) => ({
+        id: item.seedId || 'ID 없음',
+        seedName: item.seedName || '제목 없음',
+        categoryName: item.categoryName || [],
+        tagName: item.tagName || [],
         dDay: item.dDay ?? null,
         seedType: item.seedType || '타입 없음',
         thumbnailImage: item.thumbnailImage || null,
         updatedDt: item.updatedDt || '업데이트 정보 없음',
-        message: item.seedDetail || '',
+        seedDetail: item.seedDetail || '',
       }));
 
       if (results.length === 0) {

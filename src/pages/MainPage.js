@@ -25,7 +25,7 @@ const MainPage = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
-  const [, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [keyword, setKeyword] = useState(''); // 검색 키워드 상태 추가
   const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
@@ -227,33 +227,35 @@ const MainPage = () => {
           ) : data.length === 0 ? (
             <ContentBlank />
           ) : (
-            data.map((item, index) => (
-              <React.Fragment key={item.seedId || index}>
-                <StyledContentBox>
-                  <ContentBox
-                    contentId={item.seedId}
-                    title={item.seedName}
-                    category={item.categoryName}
-                    tags={item.tagName}
-                    dDay={item.dDay}
-                    seedType={item.seedType}
-                    thumbnailImage={item.thumbnailImage}
-                    updatedDt={item.updatedDt}
-                    message={item.message || ''}
-                    keyword={keyword}
-                    open={() => openModal(item)}
-                    fetchData={fetchData}
-                  />
-                </StyledContentBox>
-                {selectedData && selectedData.seedId === item.seedId && (
-                  <ViewThumbnailModal
-                    file={item.thumbnailImage}
-                    onClose={closeModal}
-                    seedType={item.seedType}
-                  />
-                )}
-              </React.Fragment>
-            ))
+            (filteredData.length > 0 ? filteredData : data).map(
+              (item, index) => (
+                <React.Fragment key={item.seedId || index}>
+                  <StyledContentBox>
+                    <ContentBox
+                      contentId={item.seedId}
+                      title={item.seedName}
+                      category={item.categoryName}
+                      tags={item.tagName}
+                      dDay={item.dDay}
+                      seedType={item.seedType}
+                      thumbnailImage={item.thumbnailImage}
+                      updatedDt={item.updatedDt}
+                      message={item.seedDetail || ''}
+                      keyword={keyword}
+                      open={() => openModal(item)}
+                      fetchData={fetchData}
+                    />
+                  </StyledContentBox>
+                  {selectedData && selectedData.seedId === item.seedId && (
+                    <ViewThumbnailModal
+                      file={item.thumbnailImage}
+                      onClose={closeModal}
+                      seedType={item.seedType}
+                    />
+                  )}
+                </React.Fragment>
+              ),
+            )
           )}
         </ContentArea>
         <Pagination

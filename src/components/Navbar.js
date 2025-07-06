@@ -76,14 +76,6 @@ function Navbar() {
 
   useEffect(() => {
     if (dialogRef.current) {
-      console.log('dialogRef:', dialogRef.current);
-    } else {
-      console.error('dialogRef가 올바르게 연결되지 않았습니다.');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (dialogRef.current) {
       const dialogElement = dialogRef.current;
 
       const handleClickOutside = (event) => {

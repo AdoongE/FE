@@ -41,8 +41,7 @@ const AddLinkModal = ({ onClose }) => {
             null,
             { params },
           );
-          const simplificationInfo =
-            response.data?.results[0]?.simplificationInfo;
+          const simplificationInfo = response.data?.results[0];
           if (response.data.status?.code === 200) {
             console.log('유튜브 링크 간략화 성공');
             console.log('간략화 내용 : ', simplificationInfo);
@@ -73,8 +72,7 @@ const AddLinkModal = ({ onClose }) => {
             null,
             { params },
           );
-          const simplificationInfo =
-            response.data?.results[0]?.simplificationInfo;
+          const simplificationInfo = response.data?.results[0];
           if (response.data.status?.code === 200) {
             console.log('네이버 뉴스 링크 간략화 성공');
             console.log('간략화 내용 : ', simplificationInfo);
@@ -190,7 +188,7 @@ const Error = styled.div`
 const Input = styled.input`
   padding-left: 15px;
   background-color: #f6f6f6;
-  margin-bottom: 7pxl
+  margin-bottom: 7px;
   width: 470px;
   height: 45px;
   font-size: 16px;

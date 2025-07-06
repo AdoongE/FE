@@ -219,7 +219,7 @@ const DropArea = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  margin-bottom: 10px;x
+  margin-bottom: 10px;
 `;
 
 const DropText = styled.div`
@@ -263,7 +263,7 @@ const RepresentativeLabel = styled.div`
   left: 5px;
   background-color: #47c28b;
   color: white;
-  padding: 2px; 6px;
+  padding: 2px 6px;
   font-size: 12px;
   border-radius: 12px;
 `;

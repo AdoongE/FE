@@ -1,24 +1,8 @@
-import axios from 'axios';
-
-const token = localStorage.getItem('jwtToken');
-
-const api = axios.create({
-  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
-  headers: {
-    Authorization: `${token}`,
-  },
-});
-const api_ = axios.create({
-  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
-  headers: {
-    Authorization: `${token}`,
-    'Content-Type': 'multipart/form-data',
-  },
-});
+import { axiosInstance } from './axios-instance';
 
 export const ContentEditHandler = async (seedType, data, images, pdfs, Id) => {
   try {
-    const response = await api.patch(`/api/v1/seed/${Id}`, data);
+    const response = await axiosInstance.patch(`/api/v1/seed/${Id}`, data);
 
     if (response.data.status.code === 200) {
       console.log('콘텐츠 수정 성공:', response.data.status.message);
@@ -41,7 +25,7 @@ export const ContentEditHandler = async (seedType, data, images, pdfs, Id) => {
             }
           }
 
-          const res = await api_.patch(`/api/v1/seed/${Id}`, formData);
+          const res = await axiosInstance.patch(`/api/v1/seed/${Id}`, formData);
           if (res.data.status.code === 200) {
             console.log('콘텐츠 file 수정 성공:', response.data.status.message);
           }

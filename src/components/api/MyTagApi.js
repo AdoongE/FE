@@ -4,7 +4,6 @@ export const MyTag = async () => {
   try {
     const response = await axiosInstance.get('/api/v1/tag/member');
     const myTags = response.data.results || [];
-    console.log('나의 태그 목록: ', myTags);
 
     if (response.status) {
       console.log('나의 태그 가져오기 성공');

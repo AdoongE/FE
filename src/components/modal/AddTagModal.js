@@ -110,7 +110,6 @@ const AddTagModal = forwardRef(
       const fetchTags = async () => {
         const myTags = await MyTag();
         if (Array.isArray(myTags)) {
-          console.log('가져온 내 태그:', myTags);
           setTags(myTags);
         } else {
           console.log('태그 데이터를 가져오지 못했습니다.');

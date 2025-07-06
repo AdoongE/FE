@@ -80,8 +80,6 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     setEndDday(event.target.value);
   };
 
-  console.log(startDday, endDday);
-
   useImperativeHandle(ref, () => ({
     resetTags: () => setSelectedTags([]),
     removeTags: (tag) =>
@@ -101,12 +99,6 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
         : [...prevDataType, option],
     );
   };
-
-  console.log('데이터 타입 목록: ', seedType);
-
-  useEffect(() => {
-    console.log('seedType: ', seedType);
-  }, [seedType]);
 
   const handleClose = () => {
     setSelectedTags([]);
@@ -135,17 +127,10 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     );
   };
 
-  console.log(selectedTags);
-
-  useEffect(() => {
-    console.log('isValid: ', isValid);
-  }, [isValid]);
-
   const selectTag = async () => {
     try {
       const response = await axiosInstance.get('api/v1/tag/default/used');
       const result = response.data.results || [];
-      console.log('사용한 기본 태그: ', result);
       if (response.status) {
         console.log('사용한 기본 태그 가져오기 성공');
         setUsedTags(result);
@@ -165,7 +150,6 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     const fetchTags = async () => {
       const myTags = await MyTag();
       if (Array.isArray(myTags)) {
-        console.log('가져온 내 태그: ', myTags);
         setTags(myTags);
       } else {
         console.log('태그 데이터를 가져오지 못했습니다.');
@@ -174,9 +158,6 @@ const TagFilterModal = forwardRef(({ onSave }, ref) => {
     };
     fetchTags();
   }, []);
-
-  console.log('시작일:', startDate ? format(startDate, 'yyyy-MM-dd') : '');
-  console.log('종료일:', endDate ? format(endDate, 'yyyy-MM-dd') : '');
 
   useEffect(() => {
     const dialogElement = dialogRef.current;

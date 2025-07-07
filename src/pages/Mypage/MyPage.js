@@ -5,11 +5,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import * as yup from 'yup';
-import { axiosInstance } from '../components/api/axios-instance';
-import FieldSelectPlaceholder from '../components/dropdown/FieldDropdown';
-import SingleSelectPlaceholder from '../components/dropdown/JobDropdown';
+import { axiosInstance } from '../../components/api/axios-instance';
+import FieldSelectPlaceholder from '../../components/dropdown/FieldDropdown';
+import SingleSelectPlaceholder from '../../components/dropdown/JobDropdown';
 import { Icon } from '@iconify/react';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 
 function MyPage() {
   const [isOtherSelected, setIsOtherSelected] = useState(false);
@@ -63,7 +63,7 @@ function MyPage() {
       .string()
       .matches(/^\d{4}-\d{2}-\d{2}$/, '*필수 항목입니다.')
       .required('*필수 항목입니다.'),
-    gender: yup.string().required('*필수 항목입니다.'),
+    gender: yup.string(),
     occupation: yup.string(),
     field: yup.string(),
     consentToMarketingAndAds: yup.boolean(),
@@ -152,12 +152,13 @@ function MyPage() {
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Page>
-            <Header>
-              <Titles>마이페이지</Titles>
-              <Short>개인 정보 수정</Short>
-
-              <Line />
-            </Header>
+            <HeaderContainer>
+              <Header>
+                <Titles>회원 정보 수정</Titles>
+                <Short>변경 사항을 저장하려면 ‘수정하기’를 클릭하세요.</Short>
+                <Line />
+              </Header>
+            </HeaderContainer>
             <Signup>
               <Option>
                 <Name>닉네임 *</Name>
@@ -187,7 +188,7 @@ function MyPage() {
                 )}
               </Option>
               <Option>
-                <Name>성별 *</Name>
+                <Name>성별</Name>
 
                 <Controller
                   onClick={handleClick}
@@ -352,6 +353,10 @@ function MyPage() {
     </div>
   );
 }
+
+const HeaderContainer = styled.div`
+  width: 100%;
+`;
 
 const OutIcon = styled(Icon)`
   width: 120px;
@@ -582,14 +587,14 @@ const Signup = styled.div`
 `;
 
 const Line = styled.div`
-  width: 858px;
+  width: 374px;
   height: 1px;
   background: var(--gray2, #9f9f9f);
 `;
 
 const Short = styled.div`
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   color: #9f9f9f;
   margin-top: 18px;
@@ -599,14 +604,14 @@ const Short = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
   margin-top: 72px;
 `;
 
 const Titles = styled.div`
   font-weight: 600;
-  font-size: 38px;
+  font-size: 32px;
   text-align: center;
 `;
 

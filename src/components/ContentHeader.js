@@ -210,10 +210,9 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
                   isDefault={!localSelectedFormat}
-                  width="137px"
                 >
                   {selectedFormatState} {/* 선택된 저장형식 표시 */}
-                  <Icon icon="uil:angle-down" style={{ marginLeft: ' 8px ' }} />
+                  <Icon icon="uil:angle-down" fontSize={18} />
                 </DropdownButton>
                 {showFormatDropdown && (
                   <DropdownMenu>
@@ -239,13 +238,9 @@ function ContentHeader({
                 <DropdownButton
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
                   isDefault={!selectedFilter}
-                  width="5.521vw"
                 >
                   {selectedFilter} {/* 선택된 정렬 표시 */}
-                  <Icon
-                    icon="uil:angle-down"
-                    style={{ marginLeft: ' 0.417vw' }}
-                  />
+                  <Icon icon="uil:angle-down" fontSize={18} />
                 </DropdownButton>
                 {showSortDropdown && (
                   <DropdownMenu>
@@ -418,26 +413,19 @@ const Dropdown = styled.div`
 const DropdownButton = styled.button`
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
   background: white;
   border: 1px solid #9f9f9f;
   border-radius: 8px;
   font-size: 12px;
-  color: #9f9f9f;
+  color: var(--gray2);
   cursor: pointer;
-  padding: 8px 16px;
-
-  width: ${(props) => (props.$isSort ? '106px' : '137px')};
+  padding: 7px 16px;
+  gap: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
-  .dropdown-icon {
-    margin-left: 8px;
-    font-size: 16px;
-    color: #9f9f9f;
-  }
 `;
 
 const DropdownMenu = styled.div`
+  width: 100%;
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -446,7 +434,6 @@ const DropdownMenu = styled.div`
   border-radius: 4px;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.12);
   z-index: 10;
-  width: 96px;
 `;
 
 const DropdownItem = styled.div`
@@ -470,7 +457,8 @@ const SearchContainer = styled.div`
   height: 36px;
   border-radius: 18.75px;
   margin-right: 72px;
-  border: 1px solid #9f9f9f;
+  border: 0.75px solid var(--gray2);
+  background-color: rgb(251, 251, 251);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -482,6 +470,7 @@ const Search = styled.input`
   border: none;
   text-align: start;
   font-size: 12px;
+  background-color: transparent;
   &::placeholder {
     font-size: 12px;
     color: #9f9f9f;
@@ -496,13 +485,13 @@ const SearchButton = styled.button`
   height: 28px;
   border: 0;
   border-radius: 30.242px;
-  background-color: #f2f2f2;
   font-size: 12px;
   color: #9f9f9f;
   font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 10px;
 `;
 
 const Bar = styled.div`

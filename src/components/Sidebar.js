@@ -769,6 +769,7 @@ const FilterContent = styled.div`
   ${font.body2}
   color: var(--gray2);
   padding: 0 10px;
+  line-height: 0;
 `;
 
 const CustomList = styled.div`

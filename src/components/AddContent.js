@@ -149,7 +149,7 @@ function AddContent() {
 
   const schema = yup.object().shape({
     seedName: yup.string(),
-    boardCategories: yup
+    categoryName: yup
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
@@ -210,9 +210,9 @@ function AddContent() {
       seedType: '',
       thumbnailImage: 0,
       seedName: '',
-      boardCategories: [],
+      categoryName: [],
       seedLink: '',
-      tags: [],
+      tagName: [],
       dDay: null,
       seedDetail: null,
     },
@@ -233,8 +233,8 @@ function AddContent() {
       let updateData = {
         seedType: data.seedType,
         seedName: data.seedName,
-        boardCategories: data.boardCategories,
-        tags: data.tags,
+        categoryName: data.categoryName,
+        tagName: data.tags,
         dDay: data.dDay || null,
         seedDetail: data.seedDetail || null,
       };
@@ -317,20 +317,20 @@ function AddContent() {
             <Name>카테고리 지정*</Name>
             <Inputs>
               <Controller
-                name="boardCategories"
+                name="categoryName"
                 control={control}
                 defaultValue={[]}
                 render={({ field, fieldState }) => (
                   <>
                     <AddCategory
-                      label="boardCategories"
+                      label="categoryName"
                       $error={fieldState.error ? true : undefined}
                       $helperText={fieldState.error && fieldState.error.message}
                       value={field.value || []}
                       onChange={(newValue) => {
                         if (newValue.length <= 5) {
                           field.onChange(newValue);
-                          trigger('boardCategories');
+                          trigger('categoryName');
                         }
                       }}
                     />

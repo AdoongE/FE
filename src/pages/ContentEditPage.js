@@ -28,9 +28,7 @@ function ContentEditPage() {
   const [files, setFiles] = useState([]);
 
   const { Id } = useParams();
-  const [originalContentDetail, setOriginalContentDetail] = useState({
-    // tags: [],
-  });
+  const [originalContentDetail, setOriginalContentDetail] = useState({});
 
   const location = useLocation();
   const { seedType } = location.state || {};
@@ -129,8 +127,8 @@ function ContentEditPage() {
   }, [Id]);
 
   useEffect(() => {
-    if (originalContentDetail && originalContentDetail.tagNames) {
-      setTags(originalContentDetail.tagNames);
+    if (originalContentDetail && originalContentDetail.tagName) {
+      setTags(originalContentDetail.tagName);
     }
   }, [originalContentDetail]);
 
@@ -140,7 +138,7 @@ function ContentEditPage() {
       .required('콘텐츠 형식을 선택하세요.')
       .oneOf(['LINK', 'IMAGE', 'PDF'], '유효한 콘텐츠 형식을 선택하세요.'),
     seedName: yup.string(),
-    boardCategories: yup
+    categoryName: yup
       .array()
       .of(yup.string())
       .max(5, '최대 5개의 항목만 선택 가능합니다')
@@ -217,8 +215,8 @@ function ContentEditPage() {
       let updateData = {
         seedType: seedType,
         seedName: data.seedName,
-        boardCategories: data.boardCategories,
-        tags: data.tags,
+        categoryName: data.categoryName,
+        tagName: data.tags,
         dDay: data.dDay || null,
         seedDetail: data.seedDetail || null,
         seedLink: data.seedLink || null,
@@ -309,13 +307,13 @@ function ContentEditPage() {
               <Name>카테고리 지정*</Name>
               <Inputs>
                 <Controller
-                  name="boardCategories"
+                  name="categoryName"
                   control={control}
                   defaultValue={[]}
                   render={({ field, fieldState }) => (
                     <>
                       <AddCategory
-                        label="boardCategories"
+                        label="categoryName"
                         $error={fieldState.error ? true : undefined}
                         $helperText={
                           fieldState.error && fieldState.error.message
@@ -324,7 +322,7 @@ function ContentEditPage() {
                         onChange={(newValue) => {
                           if (newValue.length <= 5) {
                             field.onChange(newValue);
-                            trigger('boardCategories');
+                            trigger('categoryName');
                           }
                         }}
                       />
@@ -384,7 +382,7 @@ function ContentEditPage() {
               />
             )}
 
-            {originalContentDetail && originalContentDetail.tagNames && (
+            {originalContentDetail && originalContentDetail.tagName && (
               <Tag>
                 <TagName>태그 (2개 이상)*</TagName>
                 <TagInputs>
@@ -393,7 +391,7 @@ function ContentEditPage() {
                       <Controller
                         name="tags"
                         control={control}
-                        defaultValue={[...originalContentDetail.tagNames]}
+                        defaultValue={[...originalContentDetail.tagName]}
                         render={({ field }) => (
                           <>
                             {tags.map((tag, idx) => (
@@ -432,7 +430,7 @@ function ContentEditPage() {
                             />
                             <AddTagModal
                               ref={TagRef}
-                              originalTags={originalContentDetail.tagNames}
+                              originalTags={originalContentDetail.tagName}
                               onConfirm={(newTags) => {
                                 setTags(newTags);
                                 setValue('tags', newTags);

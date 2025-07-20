@@ -189,7 +189,6 @@ const Input = styled.input`
   padding-left: 15px;
   background-color: #f6f6f6;
   margin-bottom: 7px;
-  width: 470px;
   height: 45px;
   font-size: 16px;
   display: flex;

@@ -70,7 +70,7 @@ function ContentDropdown({ contentId, fetchData }) {
 }
 
 const DotIcon = styled(Icon)`
-  width: '18px';
+  width: 18px;
   height: 18px;
 `;
 

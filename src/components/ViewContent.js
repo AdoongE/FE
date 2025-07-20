@@ -17,7 +17,7 @@ function ViewContent() {
     contentImage: [],
     contentDoc: [],
     thumbnailImage: '',
-    categoryNames: [],
+    categoryName: [],
     tags: [],
     dDay: '',
     seedDetail: '',
@@ -57,8 +57,8 @@ function ViewContent() {
         contentImage: results.fileLinks,
         contentDoc: results.fileLinks,
         thumbnailImage: results.thumbnailImage,
-        categoryNames: results.categoryNames,
-        tags: results.tagNames,
+        categoryName: results.categoryName,
+        tags: results.tagName,
         dDay: results.dDay,
         seedDetail: results.seedDetail,
         filename: results.titles,
@@ -104,7 +104,7 @@ function ViewContent() {
           </UpperDiv>
           <ContentDiv>
             <Name>카테고리</Name>
-            {contentInfo.categoryNames.map((category) => (
+            {contentInfo.categoryName.map((category) => (
               <CategoryTag key={category}>{category}</CategoryTag>
             ))}
           </ContentDiv>

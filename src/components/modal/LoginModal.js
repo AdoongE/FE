@@ -3,6 +3,7 @@ import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 import LogoImage from '../../assets/icons/seedzip_logo.png';
 import Logo from '../../assets/icons/seedzip.png';
+import KakaoLogo from '../../assets/icons/kakaoLogo.svg';
 import handleKakaoLogin from '../../components/api/auth/Kakao';
 import handleGoogleLogin from '../../components/api/auth/Google';
 import handleNaverLogin from '../../components/api/auth/Naver';
@@ -52,7 +53,11 @@ const LoginModal = forwardRef((props, ref) => {
         </Sentence>
         <Logins>
           <LoginButtons type="kakao" onClick={handleKakaoLogin}>
-            <SocialLogo icon="raphael:bubble" />
+            <img
+              src={KakaoLogo}
+              alt="kakao_logo"
+              style={{ width: '16px', height: '16px' }}
+            />
             카카오톡으로 로그인하기
           </LoginButtons>
           <LoginButtons type="naver" onClick={handleNaverLogin}>
@@ -71,15 +76,13 @@ const LoginModal = forwardRef((props, ref) => {
 });
 
 const GoogleLogo = styled(Icon)`
-  width: 23px;
-  height: 23px;
-  margin-right: 8px;
+  width: 18px;
+  height: 18px;
 `;
 
 const SocialLogo = styled(Icon)`
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
+  width: 14px;
+  height: 14px;
 `;
 
 const CloseIcon = styled(Icon)`
@@ -96,6 +99,7 @@ const LoginButtons = styled.button`
   align-items: center;
   width: 328px;
   height: 58px;
+  gap: 8px;
   border-radius: 4px;
   border: 0;
   font-weight: 500;

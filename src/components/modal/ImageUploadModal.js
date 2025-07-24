@@ -270,7 +270,7 @@ const ModalContent = styled.div`
   background: white;
   width: 542px;
   height: 500px;
-  padding: 30px 50px;
+  padding: 36px 32px;
   border-radius: 36px;
   display: flex;
   flex-direction: column;
@@ -282,7 +282,7 @@ const Header = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h2`
+const Title = styled.p`
   font-size: 24px;
   font-weight: 600;
 `;
@@ -444,7 +444,7 @@ const Footer = styled.div`
 const Button = styled.button`
   position: fixed;
   background-color: #41c3ab;
-  margin-top: 70px;
+  margin-top: 40px;
   padding: 12px 24px;
   color: white;
   border: none;

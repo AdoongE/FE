@@ -134,10 +134,7 @@ const Dialog = styled.dialog`
   border-radius: 36px;
   background: #fff;
   border: 0;
-  padding: 30px 50px;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 40px 36px;
   ::backdrop {
     background-color: rgba(0, 0, 0, 0.55);
   }
@@ -155,7 +152,7 @@ const Button = styled.button`
   color: #fff;
 `;
 
-const ModalTitle = styled.h2`
+const ModalTitle = styled.p`
   font-size: 24px;
   font-weight: 600;
 `;

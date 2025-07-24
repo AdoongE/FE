@@ -68,7 +68,7 @@ const ModalDiv = styled.div`
   padding-bottom: 25px;
 `;
 
-const ModalTitle = styled.h2`
+const ModalTitle = styled.p`
   font-size: 24px;
   font-weight: 600;
   margin: 0;
@@ -113,7 +113,7 @@ const ModalButton = styled.button`
   }
 `;
 
-const ModalText = styled.h2`
+const ModalText = styled.p`
   ${font.title3}
   color: var(--gray1);
   margin-bottom: 37px;

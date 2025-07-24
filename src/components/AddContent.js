@@ -795,12 +795,12 @@ const CloseIcon = styled(Icon)`
   margin-bottom: 20px;
 `;
 
-const ModalTitle = styled.h2`
+const ModalTitle = styled.p`
   ${font.title0}
   margin-bottom: 8px;
 `;
 
-const ModalText = styled.h2`
+const ModalText = styled.p`
   ${font.title4}
   color: var(--gray1);
   text-align: center;

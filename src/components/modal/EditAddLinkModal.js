@@ -169,7 +169,7 @@ const ModalButton = styled.button`
   }
 `;
 
-const ModalTitle = styled.h2`
+const ModalTitle = styled.p`
   font-size: 24px;
   font-weight: 600;
   margin: 0;

@@ -236,7 +236,7 @@ const TopDiv = styled.div`
   }
 `;
 
-const ModalTitle = styled.h2`
+const ModalTitle = styled.p`
   font-size: 24px;
   font-weight: 600;
   margin: 0;
@@ -294,7 +294,7 @@ const ModalButton = styled.button`
   }
 `;
 
-const ModalDelTitle = styled.h2`
+const ModalDelTitle = styled.p`
   ${font.title0}
   margin-bottom: 62px;
   display: flex;

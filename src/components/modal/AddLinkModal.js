@@ -168,7 +168,7 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background: white;
   width: 542px;
-  padding: 30px 50px;
+  padding: 40px 36px;
   border-radius: 36px;
   display: flex;
   flex-direction: column;
@@ -217,7 +217,7 @@ const Button = styled.button`
   font-weight: 500;
 `;
 
-const ModalTitle = styled.h2`
+const ModalTitle = styled.p`
   font-size: 24px;
   font-weight: 600;
   font-family: 'Pretendard-Regular';
@@ -226,7 +226,7 @@ const ModalTitle = styled.h2`
 const TopDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 42px;
+  margin-bottom: 28px;
 `;
 
 const Title = styled.div`

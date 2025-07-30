@@ -1,27 +1,11 @@
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-// import { Icon } from '@iconify/react';
-// import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-// const pdfVersion = '2.6.347';
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
-// pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-// import * as pdfjsLib from 'pdfjs-dist';
-// import pdfjsWorker from './pdf.worker.mjs';
-// pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 const ViewThumbnailModal = ({ file, onClose, seedType }) => {
-  console.log('ViewThumbnailModal file:', seedType);
-  // const fileObject = useMemo(
-  //   () => ({
-  //     url: file,
-  //     withCredentials: true,
-  //   }),
-  //   [file],
-  // );
   return (
     <ModalDiv
       ariaHideApp={false}
@@ -38,26 +22,11 @@ const ViewThumbnailModal = ({ file, onClose, seedType }) => {
       }}
     >
       {seedType === 'PDF' ? (
-        // <DocumentWrapper>
-        //   <Document
-        //     file={file}
-        //     // options={{
-        //     //   cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
-        //     //   cMapPacked: true,
-        //     // }}
-        //     onLoadError={(error) => console.error('PDF Load Error:', error)}
-        //     onSourceError={(error) => console.error('PDF Source Error:', error)}
-        //   >
-        //     <Page pageNumber={1} />
-        //   </Document>
-        // </DocumentWrapper>
-        // <Icon
-        //   icon="iconamoon:file-thin"
-        //   width="24vw"
-        //   height="24vw"
-        //   color="#aaa"
-        // />
-        <></>
+        <DocumentWrapper>
+          <Document file={file} loading={<div>Loading PDF...</div>}>
+            <Page pageNumber={1} />
+          </Document>
+        </DocumentWrapper>
       ) : (
         <ImageWrapper>
           <img src={file} alt="Preview" />
@@ -72,31 +41,28 @@ export default ViewThumbnailModal;
 const ModalDiv = styled(Modal)`
   background-color: #fff;
   position: relative;
-  inset: auto;
-  margin: auto;
-  width: 55%;
-  height: 56%;
-  padding: 16px;
+  width: 800px;
+  height: 580px;
   border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 `;
 
-// const DocumentWrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   height: 100%;
+const DocumentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 
-//   canvas {
-//     margin: auto;
-//     max-width: 100%;
-//     max-height: 100%;
-//     object-fit: contain;
-//   }
-// `;
+  canvas {
+    margin: auto;
+    max-width: 800px;
+    max-height: 580px;
+    object-fit: contain;
+  }
+`;
 
 const ImageWrapper = styled.div`
   display: flex;

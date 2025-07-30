@@ -4,9 +4,7 @@ import { Icon } from '@iconify/react';
 import ContentDropdown from './dropdown/ContentDropdown';
 import defaultImage from '../assets/icons/seed_contentbox.png';
 import { font } from '../styles/font';
-import { Document, Page, pdfjs } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+import { Document, Page } from 'react-pdf';
 
 function ContentBox({
   contentId,
@@ -62,13 +60,7 @@ function ContentBox({
               <Page pageNumber={1} width={200} />
             </Document>
           </PDFThumbnail>
-        ) : // <ContentImage
-        //   onClick={open}
-        //   src={defaultImage}
-        //   alt="content thumbnail"
-        //   isDefaultImage={true}
-        // />
-        seedType === 'LINK' ? (
+        ) : seedType === 'LINK' ? (
           <ContentImage
             src={defaultImage}
             alt="content thumbnail"
@@ -161,6 +153,7 @@ const ContentImage = styled.img`
     height: 100%;
     object-fit: cover;
     border-radius: 10px; 
+    margin: auto;
   `}
 `;
 
@@ -168,12 +161,17 @@ const PDFThumbnail = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
 
   canvas {
-    width: 22.917vw !important; /* 440px */
-    height: 14.792vw !important; /* 284px */
+    margin: auto;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 0.521vw; /* 10px */
+    border-radius: 10px;
+    display: block;
   }
 `;
 

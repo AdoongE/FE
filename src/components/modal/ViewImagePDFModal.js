@@ -2,13 +2,10 @@ import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import Slider from 'react-slick';
-// import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Icon } from '@iconify/react';
-
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 const ViewImagePdfModal = ({ file, files, onClose, seedType }) => {
   const settings = {
@@ -76,18 +73,11 @@ const ViewImagePdfModal = ({ file, files, onClose, seedType }) => {
         <Slider {...settings}>
           {files.map((file, index) =>
             seedType === 'PDF' ? (
-              // <DocumentWrapper key={index}>
-              //   <Documents file={file}>
-              //     <Page pageNumber={1} />
-              //   </Documents>
-              // </DocumentWrapper>
-              <Icon
-                key={index}
-                icon="iconamoon:file-thin"
-                width="24vw"
-                height="24vw"
-                color="#aaa"
-              />
+              <DocumentWrapper key={index}>
+                <Documents file={file}>
+                  <Page pageNumber={1} />
+                </Documents>
+              </DocumentWrapper>
             ) : (
               <ImageWrapper key={index}>
                 <img src={file} alt={`Preview ${index + 1}`} />
@@ -119,8 +109,8 @@ const ModalDiv = styled(Modal)`
   position: relative;
   inset: auto;
   margin: auto;
-  width: 55%;
-  height: 56%;
+  width: 800px;
+  height: 580px;
   padding: 16px;
   border-radius: 16px;
   overflow: hidden;
@@ -155,29 +145,31 @@ const SaveButton = styled.button`
 `;
 
 const SliderWrapper = styled.div`
-  margin-top: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
-// const DocumentWrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   height: 100%;
+const DocumentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 
-//   canvas {
-//     margin: auto;
-//     max-width: 100%;
-//     max-height: 100%;
-//     object-fit: contain;
-//   }
-// `;
+  canvas {
+    margin: auto;
+    max-width: 800px;
+    max-height: 470px;
+    object-fit: contain;
+  }
+`;
 
-// const Documents = styled(Document)`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
+const Documents = styled(Document)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const ImageWrapper = styled.div`
   display: flex;

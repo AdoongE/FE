@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import ContentHeader from '../components/ContentHeader';
 import ContentBox from '../components/ContentBox';
@@ -11,6 +12,7 @@ import Pagination from './Pagination';
 import { axiosInstance } from '../components/api/axios-instance';
 
 const MainPage = () => {
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]); // 카테고리 내 씨드 개수 count를 위한
   const [loading, setLoading] = useState(true);
@@ -145,7 +147,7 @@ const MainPage = () => {
 
   useEffect(() => {
     fetchData(currentPage - 1);
-  }, [fetchData]);
+  }, [fetchData, location]);
 
   const seedTypeMapping = {
     IMAGE: '이미지',

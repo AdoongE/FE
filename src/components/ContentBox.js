@@ -15,6 +15,7 @@ function ContentBox({
   thumbnailImage,
   open,
   seedType,
+  updatedDt,
   message,
   keyword,
   fetchData,
@@ -40,6 +41,10 @@ function ContentBox({
   const displayCategory = Array.isArray(category)
     ? category.slice(0, 5).join('ㅣ') + (category.length > 5 ? '...' : '') // 최대 5개 표시 후 "..." 추가
     : ''; // 배열이 아닐 경우 빈 문자열 처리
+
+  const displayTitle =
+    title ||
+    (updatedDt ? new Date(updatedDt).toISOString().split('T')[0] : '날짜 없음');
 
   const handleIconClick = () => {
     setShowNewImage(!showNewImage);
@@ -96,7 +101,7 @@ function ContentBox({
             onClick={handleIconClick}
           />
         </IconBox>
-        <ContentName>{title}</ContentName>
+        <ContentName>{displayTitle}</ContentName>
       </ContentTitle>
       <CategoryDisplay title={displayCategory}>
         {displayCategory}

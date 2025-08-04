@@ -224,7 +224,7 @@ function AddContent() {
     }
   }, [seedType]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
     trigger();
@@ -245,14 +245,16 @@ function AddContent() {
         updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
       }
 
-      ContentAddHandler(data.seedType, updateData, images, files);
+      await ContentAddHandler(data.seedType, updateData, images, files);
       if (TagRef.current) {
         TagRef.current.resetTags();
       }
-      navigate('/main');
     } catch (error) {
       console.error(error);
       throw error;
+    } finally {
+      setIsSubmitting(false);
+      navigate('/main');
     }
   };
 

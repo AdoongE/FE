@@ -50,15 +50,20 @@ function ImageUploadModal({ onClose }) {
     setRepresentativeIndex(index);
   };
 
-  const handleDeleteImage = (id) => {
+  const handleDeleteImage = (id, idx, e) => {
+    if (e) e.stopPropagation();
+
+    const isRepresentative = idx === representativeIndex;
     const updatedImages = images.filter((image) => image.id !== id);
     setImages(updatedImages);
 
     // 현재 대표 이미지가 삭제된 경우, 첫 번째 이미지를 대표로 설정
-    if (updatedImages.length > 0 && id === images[representativeIndex]?.id) {
-      setRepresentativeIndex(0); // 첫 번째 이미지를 대표 이미지로 설정
-    } else if (updatedImages.length === 0) {
-      setRepresentativeIndex(null); // 파일이 모두 삭제된 경우 대표 이미지 초기화
+    if (isRepresentative && updatedImages.length > 0) {
+      setRepresentativeIndex(0);
+    } else if (isRepresentative) {
+      setRepresentativeIndex(null);
+    } else if (idx < representativeIndex) {
+      setRepresentativeIndex(representativeIndex - 1);
     }
   };
 
@@ -192,7 +197,7 @@ function ImageUploadModal({ onClose }) {
                         )}
                         <ImagePreview src={image.preview} alt={image.label} />
                         <DeleteButton
-                          onClick={(e) => handleDeleteImage(image.id, e)}
+                          onClick={(e) => handleDeleteImage(image.id, index, e)}
                         >
                           ×
                         </DeleteButton>

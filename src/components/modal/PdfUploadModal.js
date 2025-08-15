@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axios-instance';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { font } from '../../styles/font';
+import ImpossibleAlert from '../../assets/icons/impossible-alert.svg';
 
 function PdfUploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
@@ -14,6 +15,8 @@ function PdfUploadModal({ onClose }) {
   const [scrollIndex, setScrollIndex] = useState(0);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -33,6 +36,19 @@ function PdfUploadModal({ onClose }) {
         return updatedFiles;
       });
       setError(false);
+    },
+    onDropRejected: (fileRejections) => {
+      const isOverSize = fileRejections.some((file) =>
+        file.errors.some((err) => err.code === 'file-too-large'),
+      );
+
+      if (isOverSize) {
+        setToastMessage('업로드 가능한 용량을 초과했습니다.');
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
+      }
     },
     accept: 'application/pdf',
     maxSize: 10 * 1024 * 1024,
@@ -230,6 +246,14 @@ function PdfUploadModal({ onClose }) {
           </Button>
         </Footer>
       </ModalContent>
+      {showToast && (
+        <CustomToast>
+          <ToastIcon>
+            <img src={ImpossibleAlert} alt="Alert" />
+          </ToastIcon>
+          <ToastMessage>{toastMessage}</ToastMessage>
+        </CustomToast>
+      )}
     </ModalOverlay>
   );
 }
@@ -449,4 +473,56 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   ${font.title3}
+`;
+
+const CustomToast = styled.div`
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  padding: 14px 24px;
+  align-items: center;
+  gap: 16px;
+  border-radius: 8px;
+  background: var(--gray-gray4, #f2f2f2);
+  box-shadow: 0 0 4.808px 0 rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  animation:
+    fadeIn 0.3s,
+    fadeOut 0.3s 2.7s;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+    }
+  }
+`;
+
+const ToastIcon = styled.div`
+  width: 40px;
+  height: 40px;
+`;
+
+const ToastMessage = styled.div`
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;

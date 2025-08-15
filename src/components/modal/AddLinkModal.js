@@ -133,6 +133,7 @@ const AddLinkModal = ({ onClose }) => {
           placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
           hasError={!!errorMessage}
         />
+        <Info>*유튜브와 네이버 기사에 한해 AI 기능을 제공합니다</Info>
         {errorMessage && <Error>{errorMessage}</Error>}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button onClick={handleAddLink}>
@@ -199,6 +200,17 @@ const Input = styled.input`
     font-weight: 400;
     transform: translateY(-2px);
   }
+`;
+
+const Info = styled.p`
+  color: #9f9f9f;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  height: 14px;
+  margin-bottom: 5px;
+  margin-top: 4px;
 `;
 
 const Button = styled.button`

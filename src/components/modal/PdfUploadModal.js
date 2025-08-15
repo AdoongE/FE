@@ -50,7 +50,7 @@ function PdfUploadModal({ onClose }) {
         }, 3000);
       }
     },
-    accept: 'application/pdf',
+    accept: { 'application/pdf': [] },
     maxSize: 10 * 1024 * 1024,
     noClick: files.length > 0, // 파일이 있을 때 클릭 비활성화
     noKeyboard: true, // 키보드 동작 비활성화

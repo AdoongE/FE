@@ -126,16 +126,14 @@ const AddLinkModal = ({ onClose }) => {
 
         <Input
           value={seedLinks}
-          onChange={(event) => setContentLinks(event.target.value)}
+          onChange={(event) => {
+            setContentLinks(event.target.value);
+            setErrorMessage('');
+          }}
           placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
+          hasError={!!errorMessage}
         />
-        {errorMessage === '링크를 입력해주세요.' ? (
-          <Error>{errorMessage}</Error>
-        ) : errorMessage === '' ? (
-          <Error></Error>
-        ) : (
-          <Error>유효하지 않은 링크입니다.</Error>
-        )}
+        {errorMessage && <Error>{errorMessage}</Error>}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button onClick={handleAddLink}>
             {isLoading ? (
@@ -194,7 +192,7 @@ const Input = styled.input`
   display: flex;
   flex-wrap: wrap;
   overflow-x: auto;
-  border: none;
+  border: ${({ hasError }) => (hasError ? '1px solid #FF0000' : 'none')};
   box-shadow: none;
   &::placeholder {
     font-size: 16px;

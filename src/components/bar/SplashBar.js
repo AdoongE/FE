@@ -55,10 +55,9 @@ const StyledLogo = styled.img`
 `;
 
 const LoginButton = styled.button`
-  width: 78px;
-  height: 36px;
+  width: fit-content;
   border-radius: 28px;
-  padding: 8px 20px;
+  padding: 9.5px 20.5px;
   display: flex;
   flex-direction: row;
   justify-content: center;

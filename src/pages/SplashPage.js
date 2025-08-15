@@ -52,11 +52,10 @@ const SplashImg = styled.img`
 `;
 
 const StartButton = styled.button`
-  width: 281px;
-  height: 53px;
+  width: fit-content;
+  padding: 12px 52px;
   border-radius: 8px;
   border: 0;
-  padding: 12px 50px;
   background-color: #41c3ab;
   color: white;
   font-weight: 600;

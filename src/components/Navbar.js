@@ -8,30 +8,16 @@ import { Icon } from '@iconify/react';
 import CheckboxModal from './modal/CheckboxModal';
 
 function Navbar() {
-  const [activeTab, setActiveTab] = useState('모아보기'); // 상단바 내부 전용 상태
+  const [activeTab, setActiveTab] = useState('모아보기');
   const [activeBarWidth, setActiveBarWidth] = useState(0); // ActiveBar 너비
   const [activeBarLeft, setActiveBarLeft] = useState(0); // ActiveBar 위치
-  const navbarMenuRef = useRef(null); // Navbar 메뉴 참조
+  const navbarMenuRef = useRef(null);
   const navigate = useNavigate();
   const dialogRef = useRef();
 
-  // 탭 클릭 시 ActiveBar의 위치와 너비 업데이트
-  const handleTabClick = (tabName, event) => {
-    setActiveTab(tabName); // 탭 클릭 시 활성화된 탭 설정
-    const button = event.currentTarget;
-    const { offsetWidth, offsetLeft } = button;
-
-    setActiveBarWidth((offsetWidth / window.innerWidth) * 100);
-    setActiveBarLeft((offsetLeft / window.innerWidth) * 100);
-
-    if (tabName === '모아보기') {
-      window.location.reload(); // 페이지 새로 고침
-    }
-  };
-
   const handleLogoClick = () => {
-    navigate('/main'); // 로고 클릭 시 '/main'으로 이동
-    window.location.reload(); // 페이지 새로 고침
+    navigate('/main');
+    window.location.reload();
   };
 
   // 초기 ActiveBar 설정
@@ -101,23 +87,17 @@ function Navbar() {
       <LogoContainer>
         <StyledLogoImage
           src={LogoImage}
-          alt="seedzip_logo"
+          alt="seedzipLogo"
           onClick={handleLogoClick}
-          style={{ cursor: 'pointer' }} // 클릭 가능 표시
         />
-        <StyledLogo
-          src={Logo}
-          alt="seedzip"
-          onClick={handleLogoClick}
-          style={{ cursor: 'pointer' }} // 클릭 가능 표시
-        />
+        <StyledLogo src={Logo} alt="seedzip" onClick={handleLogoClick} />
       </LogoContainer>
       <NavbarMenu ref={navbarMenuRef}>
         <MenuButton
           data-tab="모아보기"
-          onClick={(e) => {
-            handleTabClick('모아보기', e);
-            navigate('/main'); // "모아보기" 클릭 시 메인 페이지 이동
+          onClick={() => {
+            setActiveTab('모아보기');
+            navigate('/main');
           }}
           active={activeTab === '모아보기'}
         >
@@ -125,7 +105,9 @@ function Navbar() {
         </MenuButton>
         <MenuButton
           data-tab="탐색하기"
-          onClick={(e) => handleTabClick('탐색하기', e)}
+          onClick={() => {
+            setActiveTab('탐색하기');
+          }}
           active={activeTab === '탐색하기'}
         >
           탐색하기

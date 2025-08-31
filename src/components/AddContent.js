@@ -492,7 +492,13 @@ function AddContent() {
           </Dday>
           <Memo>
             <Name>메모 입력</Name>
-            <div>
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
               <Text
                 defaultValue={null}
                 maxLength={1500}
@@ -556,7 +562,9 @@ const Count = styled.div`
   width: fit-content;
   ${font.title4}
   color: var(--gray2);
-  transform: translateX(940px) translateY(-35px);
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
 `;
 
 const Recommend = styled.div`

@@ -18,8 +18,6 @@ export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
       category.startsWith('새로운 카테고리'),
     ).length;
     const newCategoryName = categoryName || `새로운 카테고리 ${count + 1}`;
-    onConfirm(newCategoryName);
-    setCategoryName('');
 
     try {
       const response = await axiosInstance.post('/api/v1/category', {
@@ -29,6 +27,8 @@ export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
 
       if (response.status === 200) {
         console.log('카테고리 생성 성공');
+        onConfirm(newCategoryName);
+        setCategoryName('');
       } else {
         console.error('카테고리 생성 실패');
       }

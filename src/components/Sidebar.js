@@ -25,7 +25,7 @@ const Sidebar = ({
   activeTab,
   setActiveTab,
 }) => {
-  const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
+  const [isBookmarkOpen, setIsBookmarkOpen] = useState(true);
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
   const [hoveredCategory, setHoveredCategory] = useState(false);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
@@ -53,12 +53,7 @@ const Sidebar = ({
 
   const handleViewCategory = async (source) => {
     if (source === 'click') {
-      setIsCategoryOpen((prev) => {
-        if (!prev) {
-          console.log('카테고리를 처음 열었따!');
-        }
-        return !prev;
-      });
+      setIsCategoryOpen((prev) => !prev);
     }
 
     try {
@@ -74,8 +69,10 @@ const Sidebar = ({
       console.error('에러 발생:', error);
     }
   };
-  const handleViewBookmark = async () => {
-    setIsBookmarkOpen(!isBookmarkOpen);
+  const handleViewBookmark = async (source) => {
+    if (source === 'click') {
+      setIsBookmarkOpen((prev) => !prev);
+    }
 
     try {
       const response = await axiosInstance.get(
@@ -108,7 +105,6 @@ const Sidebar = ({
 
   const openModal = () => {
     setIsModalOpen(true);
-    setIsCategoryOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
@@ -117,27 +113,25 @@ const Sidebar = ({
 
   const handleConfirm = (newCategoryName) => {
     if (!newCategoryName) return;
-    setCategories([...categories, newCategoryName]);
+    handleViewCategory();
     closeModal();
   };
 
   const handleBookmarkAdd = async (categoryName) => {
     const categoryIndex = categories.indexOf(categoryName);
     const categoryId = categoryIds[categoryIndex];
-
-    if (!bookmarks.includes(categoryName)) {
-      setBookmarks([...bookmarks, categoryName]);
-    }
     setIsAddingBookmark(true);
-    console.log(`Bookmark added: Category ID = ${categoryId}`);
 
     try {
       const response = await axiosInstance.post(
         `/api/v1/bookmark/category/${categoryId}`,
       );
       console.log('북마크 추가 성공', response.data.results);
+      await handleViewBookmark();
     } catch (error) {
       console.error('에러 발생:', error);
+    } finally {
+      setIsAddingBookmark(false);
     }
   };
 
@@ -390,7 +384,7 @@ const Sidebar = ({
         <CategoryDiv>
           <CategoryP>모든 카테고리 ({categoryIds.length})</CategoryP>
           <Accordion>
-            <AccordionTitle onClick={handleViewBookmark}>
+            <AccordionTitle onClick={() => handleViewBookmark('click')}>
               <Icons icon="meteor-icons:bookmark" />
               북마크
               <RightArrowIcon open={isBookmarkOpen} />
@@ -447,7 +441,13 @@ const Sidebar = ({
               {`내 카테고리`}
               <RightArrowIcon open={isCategoryOpen} />
               {hoveredCategory && (
-                <AddButton className="category" onClick={openModal}>
+                <AddButton
+                  className="category"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openModal();
+                  }}
+                >
                   <AddRoundedIcon />
                 </AddButton>
               )}
@@ -473,7 +473,12 @@ const Sidebar = ({
                       {category}
                       {` (${categoryCounts[category] || 0})`}
                       {hoveredCategoryIndex === index && (
-                        <DotBox onClick={() => setOpenDropdown(index)}>
+                        <DotBox
+                          onClick={(e) => {
+                            setOpenDropdown(index);
+                            e.stopPropagation();
+                          }}
+                        >
                           <MoreVertIcon />
                         </DotBox>
                       )}

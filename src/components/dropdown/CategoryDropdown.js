@@ -34,7 +34,8 @@ const Dropdown = ({
 
   if (!isOpen) return null;
 
-  const toggleBookmark = () => {
+  const toggleBookmark = (e) => {
+    e.stopPropagation();
     if (isBookmarked) {
       onBookmarkRemove(categoryName);
     } else {
@@ -43,12 +44,14 @@ const Dropdown = ({
     onClose();
   };
 
-  const handleEditCategory = () => {
+  const handleEditCategory = (e) => {
+    e.stopPropagation();
     onEditCategory(categoryName);
     onClose();
   };
 
-  const handleDeleteCategory = () => {
+  const handleDeleteCategory = (e) => {
+    e.stopPropagation();
     onRemoveCategory(categoryName);
     onClose();
   };

@@ -723,7 +723,9 @@ const LeftDiv = styled.div`
 
 const TitleDiv = styled.input`
   font-size: 24px;
-  color: #9f9f9f;
+  ::placeholder {
+    color: #9f9f9f;
+  }
   border: none;
   border-bottom: 1px solid var(--gray2);
   padding-bottom: 16px;

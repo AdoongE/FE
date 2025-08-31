@@ -472,16 +472,17 @@ const Sidebar = ({
                     >
                       {category}
                       {` (${categoryCounts[category] || 0})`}
-                      {hoveredCategoryIndex === index && (
-                        <DotBox
-                          onClick={(e) => {
-                            setOpenDropdown(index);
-                            e.stopPropagation();
-                          }}
-                        >
-                          <MoreVertIcon />
-                        </DotBox>
-                      )}
+                      {hoveredCategoryIndex === index &&
+                        category !== '미분류' && (
+                          <DotBox
+                            onClick={(e) => {
+                              setOpenDropdown(index);
+                              e.stopPropagation();
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </DotBox>
+                        )}
                       {openDropdown === index && (
                         <Dropdown
                           isOpen={openDropdown === index}

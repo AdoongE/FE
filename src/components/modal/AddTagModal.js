@@ -295,6 +295,9 @@ const TagItem = styled.button`
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
   border: ${(props) => (props.$isSelected ? 0 : '1px solid var(--gray2)')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Button = styled.button`

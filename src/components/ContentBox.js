@@ -226,7 +226,7 @@ const TagContainer = styled.div`
 
 const Tag = styled.button`
   width: fit-content;
-  height: fit-content;
+  height: 18px;
   border: 0;
   border-radius: 37.5px;
   opacity: 80%;

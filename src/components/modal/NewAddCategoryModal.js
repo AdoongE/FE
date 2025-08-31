@@ -66,10 +66,10 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
           <ModalTitle>카테고리 추가</ModalTitle>
           <Icons icon="line-md:close" onClick={closeModal} />
         </TopDiv>
-        <Label>
-          공개 카테고리
+        <LabelDiv>
+          <Label>공개 카테고리</Label>
           <PublicToggle checked={isPublic} onChange={handleToggle} />
-        </Label>
+        </LabelDiv>
         <Input
           value={categoryName}
           onChange={(event) => setCategoryName(event.target.value)}
@@ -135,14 +135,17 @@ const Icons = styled(Icon)`
   height: 24px;
 `;
 
-const Label = styled.label`
-  ${font.title4}
-  color: var(--gray1);
+const LabelDiv = styled.div`
   display: flex;
   justify-content: right;
   align-items: center;
   gap: 8px;
   margin-bottom: 22px;
+`;
+
+const Label = styled.label`
+  ${font.title4}
+  color: var(--gray1);
 `;
 
 const Input = styled.input`

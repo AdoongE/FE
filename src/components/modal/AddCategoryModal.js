@@ -45,14 +45,14 @@ export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
             <ModalTitle>카테고리 추가</ModalTitle>
             <Icons icon="line-md:close" onClick={onClose} />
           </TopDiv>
-          <Label>
-            공개 카테고리
+          <LabelDiv>
+            <Label>공개 카테고리</Label>
             <PublicToggle checked={isPublic} onChange={handleToggle} />
-          </Label>
+          </LabelDiv>
           <Input
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
-            placeholder=" 카테고리 이름을 입력하세요. (선택)"
+            placeholder="카테고리 이름을 입력하세요. (선택)"
           />
           <ButtonContainer>
             <ModalButton className="no" onClick={onClose}>
@@ -120,9 +120,7 @@ const Icons = styled(Icon)`
   height: 24px;
 `;
 
-const Label = styled.label`
-  ${font.title4}
-  color: var(--gray1);
+const LabelDiv = styled.div`
   display: flex;
   justify-content: right;
   align-items: center;
@@ -130,10 +128,17 @@ const Label = styled.label`
   margin-bottom: 22px;
 `;
 
+const Label = styled.label`
+  ${font.title4}
+  color: var(--gray1);
+`;
+
 const Input = styled.input`
   font-size: 20px;
   font-weight: 500;
-  color: var(--gray2);
+  ::placeholder {
+    color: var(--gray2);
+  }
   background-color: var(--gray6);
   display: flex;
   border: none;
@@ -141,6 +146,7 @@ const Input = styled.input`
   width: 100%;
   padding: 12px 0;
   margin-bottom: 20px;
+  padding-left: 14px;
 `;
 
 const ButtonContainer = styled.div`

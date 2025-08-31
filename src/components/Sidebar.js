@@ -517,6 +517,7 @@ const Sidebar = ({
           initialCategoryName={editCategoryName}
           onConfirm={handleConfirmEdit}
           categoryId={editIds}
+          categories={categories}
         />
         {/* 삭제 모달 창 */}
         {categories.map((category) => (

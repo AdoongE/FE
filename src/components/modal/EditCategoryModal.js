@@ -10,6 +10,7 @@ export const EditCategoryModal = ({
   initialCategoryName,
   onConfirm,
   categoryId,
+  categories,
 }) => {
   const [newCategoryName, setNewCategoryName] = useState(initialCategoryName);
 
@@ -22,13 +23,18 @@ export const EditCategoryModal = ({
   if (!isOpen) return null;
 
   const handleConfirm = async () => {
-    onConfirm(newCategoryName);
+    const count = categories.filter((category) =>
+      category.startsWith('새로운 카테고리'),
+    ).length;
+    const newCategory = newCategoryName || `새로운 카테고리 ${count + 1}`;
+
+    onConfirm(newCategory);
     setNewCategoryName('');
     console.log('이름 편집 아이디', categoryId);
 
     try {
       const response = await axiosInstance.patch(`/api/v1/category`, {
-        name: newCategoryName,
+        name: newCategory,
         categoryId: categoryId,
       });
 
@@ -125,7 +131,9 @@ const Icons = styled(Icon)`
 const Input = styled.input`
   font-size: 20px;
   font-weight: 500;
-  color: var(--gray2);
+  ::placeholder {
+    color: var(--gray2);
+  }
   background-color: var(--gray6);
   display: flex;
   border: none;
@@ -133,6 +141,7 @@ const Input = styled.input`
   width: 100%;
   padding: 12px 0;
   margin-bottom: 20px;
+  padding-left: 14px;
 `;
 
 const ButtonContainer = styled.div`

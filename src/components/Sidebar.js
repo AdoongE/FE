@@ -622,6 +622,8 @@ const SideDiv = styled.div`
   background-color: var(--sidebar);
   display: inline-block;
   position: relative;
+  overflow-y: auto;
+  padding-bottom: 100px;
 `;
 
 const BtnDiv = styled.div`
@@ -793,7 +795,8 @@ const CustomItem = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 6px;
+  height: 36px;
+  padding: 8px;
   gap: 13px;
   &:hover {
     width: 105%;

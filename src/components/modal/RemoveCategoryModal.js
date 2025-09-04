@@ -14,6 +14,7 @@ export const RemoveCategoryModal = ({
   const handleConfirmDelete = () => {
     onConfirm(categoryId, categoryName);
     onClose();
+    window.location.reload();
   };
 
   return (

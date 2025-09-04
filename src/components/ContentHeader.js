@@ -197,7 +197,13 @@ function ContentHeader({
           <Title>
             {categoryId ? (
               <>
-                나의 씨드<CategoryName>&gt; {categoryName}</CategoryName>
+                나의 씨드{' '}
+                <Icon
+                  icon="uil:angle-right"
+                  fontSize={28}
+                  style={{ marginLeft: 4, marginRight: 4 }}
+                />
+                <CategoryName>{categoryName}</CategoryName>
               </>
             ) : (
               '나의 씨드'
@@ -396,7 +402,6 @@ const Title = styled.div`
 const CategoryName = styled.span`
   font-weight: 400;
   font-size: 16px;
-  margin-left: 5px;
   color: #666;
 `;
 

@@ -737,7 +737,8 @@ const CategoryItem = styled.button`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 6px;
+  height: 36px;
+  padding: 8px;
   padding-left: 40px;
   &:hover {
     background-color: ${({ active }) =>

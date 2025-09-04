@@ -80,18 +80,21 @@ const DropDownIcon = styled(Icon)`
   color: #4f4f4f;
 `;
 
-const Text = styled.div`
-  margin-left: 11px;
+const Text = styled.p`
   ${font.body2}
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Options = styled.button`
-  width: 110px;
+  width: fit-content;
   border: 0;
   background-color: white;
-  margin-left: 8px;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 10px;
 `;
 
 const Button = styled.button`
@@ -109,12 +112,13 @@ const Open = styled.div`
   justify-content: center;
   row-gap: 8px;
   align-items: flex-start;
-  width: 120px;
-  height: 52px;
+  /* width: 120px; */
+  /* height: 52px; */
   border-radius: 6.518px;
   background-color: white;
   color: #4f4f4f;
-  padding: 6px 0px;
+  padding: 10px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
 `;
 
 export default ContentDropdown;

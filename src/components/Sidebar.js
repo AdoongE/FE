@@ -573,7 +573,7 @@ const Sidebar = ({
                   onMouseLeave={() => setHoveredFilterIndex(null)}
                   onClick={() => CustomFilterClick(condition)}
                 >
-                  <Icon icon="ri:align-left" width="1.25vw" height="1.25vw" />
+                  <Icon icon="ri:align-left" width="18" height="18" />
                   <Right>
                     {condition}
                     {hoveredFilterIndex === index && (

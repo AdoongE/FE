@@ -165,7 +165,7 @@ function ViewContent() {
                       {index === contentInfo.thumbnailImage && (
                         <RepresentativeLabel>대표</RepresentativeLabel>
                       )}
-                      <FileIcon icon="prime:file" />
+                      <FileIcon icon="mdi-light:file" />
                     </FileBox>
                     <FileName key={contentInfo.filename[index]}>
                       {contentInfo.filename[index]}

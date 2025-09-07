@@ -24,7 +24,7 @@ const EditPdfUpload = ({ onSetRepresentative, setFiles, Id }) => {
         console.log('결과', results);
 
         setContentInfo({
-          filename: results.title,
+          filename: results.titles,
           contentDoc: results.fileLinks,
         });
 
@@ -139,70 +139,56 @@ const EditPdfUpload = ({ onSetRepresentative, setFiles, Id }) => {
         PDF 파일 업로드*{' '}
         <span>최대 10MB 이하의 PDF 파일만 첨부할 수 있습니다.</span>
       </Instructions>
-      {blobImage.length === 0 ? (
-        <DropArea {...getRootProps()}>
-          <input {...getInputProps()} />
-          <IconWrapper>
-            <Icon
-              icon="iconoir:upload"
-              width="7.292vw"
-              height="7.292vw"
-              style={{ color: '#aaa' }}
-            />
-          </IconWrapper>
-          <DropText>PDF 파일 선택 혹은 여기로 파일을 끌어오세요.</DropText>
-        </DropArea>
-      ) : (
-        <FilesWrapper>
-          {blobImage.map((file, index) => (
-            <FileContainer key={file.id}>
-              <FileBox onClick={() => handleSetRepresentative(index)}>
-                {index === representativeIndex && (
-                  <RepresentativeLabel>대표</RepresentativeLabel>
-                )}
-                <FileIcon>
-                  <Icon
-                    icon="mdi-light:file"
-                    width="2.604vw"
-                    height="2.604vw"
-                    style={{ color: '#9F9F9F' }}
-                  />
-                </FileIcon>
-                <DeleteButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteFile(file.id);
-                  }}
-                >
-                  ×
-                </DeleteButton>
-              </FileBox>
-              <FileName>{file.label}</FileName>
-            </FileContainer>
-          ))}
-          {blobImage.length < MAX_FILES && (
-            <AddFileBox {...getRootProps()}>
-              <input {...getInputProps()} />
-              <AddCircle>
+
+      <FilesWrapper>
+        {blobImage.map((file, index) => (
+          <FileContainer key={file.id}>
+            <FileBox onClick={() => handleSetRepresentative(index)}>
+              {index === representativeIndex && (
+                <RepresentativeLabel>대표</RepresentativeLabel>
+              )}
+              <FileIcon>
                 <Icon
                   icon="mdi-light:file"
-                  width="50"
-                  height="50"
+                  width="40"
+                  height="40"
                   style={{ color: '#9F9F9F' }}
                 />
-              </AddCircle>
-              <AddText>PDF 추가하기</AddText>
-            </AddFileBox>
-          )}
-        </FilesWrapper>
-      )}
+              </FileIcon>
+
+              <DeleteButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteFile(file.id);
+                }}
+              >
+                <CancelIcon icon="ic:round-close" />
+              </DeleteButton>
+            </FileBox>
+            <FileName>{file.label}</FileName>
+          </FileContainer>
+        ))}
+        {blobImage.length < MAX_FILES && (
+          <AddFileBox {...getRootProps()}>
+            <input {...getInputProps()} />
+            <AddCircle>
+              <Icon
+                icon="mdi-light:file"
+                width="32"
+                height="32"
+                style={{ color: '#9F9F9F', marginLeft: 3 }}
+              />
+            </AddCircle>
+            <AddText>PDF 추가하기</AddText>
+          </AddFileBox>
+        )}
+      </FilesWrapper>
     </Wrapper>
   );
 };
 
 export default EditPdfUpload;
 
-// 스타일 컴포넌트
 const Wrapper = styled.div`
   margin: 0;
   padding: 0;
@@ -217,28 +203,6 @@ const Instructions = styled.p`
     ${font.body2}
     color: var(--gray2);
   }
-`;
-
-const DropArea = styled.div`
-  width: 100%;
-  width: 140px;
-  height: 132px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const IconWrapper = styled.div`
-  margin-bottom: 10px;
-`;
-
-const DropText = styled.div`
-  color: #aaa;
-  font-size: 16px;
 `;
 
 const FilesWrapper = styled.div`
@@ -263,7 +227,7 @@ const FileBox = styled.div`
   width: 140px;
   height: 132px;
   position: relative;
-  background-color: #f0f0f0;
+  background-color: var(--green4);
   border-radius: 4px;
   display: flex;
   justify-content: center;
@@ -294,12 +258,16 @@ const FileIcon = styled.div`
 const DeleteButton = styled.button`
   position: absolute;
   top: 5px;
-  left: 5px;
+  right: 5px;
   background-color: transparent;
   border: none;
-  color: #666;
   cursor: pointer;
-  font-size: 20px;
+`;
+
+const CancelIcon = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  color: var(--gray1);
 `;
 
 const FileName = styled.div`

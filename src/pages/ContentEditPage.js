@@ -33,105 +33,6 @@ function ContentEditPage() {
   const location = useLocation();
   const { seedType } = location.state || {};
 
-  console.log('seedType, images :', seedType, images);
-
-  const handleTagInput = (event) => {
-    if (isComposing) return;
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const newTag = event.target.value;
-      if (
-        newTag &&
-        !tags.includes(newTag) &&
-        newTag.length <= 8 &&
-        !/\s/.test(newTag)
-      ) {
-        const updatedTags = [...tags, newTag];
-        setTags(updatedTags);
-        setValue('tags', updatedTags, { shouldValidate: true });
-        trigger('tags');
-        event.target.value = '';
-      }
-    }
-  };
-
-  const ChangeRef = useRef(null);
-
-  const handleImage = (index) => {
-    setRepresentativeIndex(index); // 대표 이미지 상태 업데이트
-    setValue('thumbnailImage', index, { shouldValidate: true });
-    trigger('thumbnailImage');
-    // if (onSetRepresentativeImage) {
-    //   onSetRepresentativeImage(index); // 부모 컴포넌트로 콜백 전달
-    // }
-  };
-
-  const handlePdf = (index) => {
-    setRepresentativeIndex(index); // 대표 파일 인덱스 관리
-    setValue('thumbnailImage', index, { shouldValidate: true }); // Form 값 설정
-    trigger('thumbnailImage');
-  };
-
-  const dialogeRef = useRef(null);
-  const TagRef = useRef(null);
-
-  const showModal = () => {
-    dialogeRef.current?.showModal();
-  };
-
-  const showTagModal = () => {
-    TagRef.current?.showModal();
-  };
-
-  useEffect(() => {
-    if (ChangeRef.current) {
-      const dialogElement = ChangeRef.current;
-
-      const handleClickOutside = (event) => {
-        const dialogArea = dialogElement.getBoundingClientRect();
-        if (
-          event.clientX < dialogArea.left ||
-          event.clientX > dialogArea.right ||
-          event.clientY < dialogArea.top ||
-          event.clientY > dialogArea.bottom
-        ) {
-          dialogElement.close();
-        }
-      };
-      dialogElement.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        dialogElement.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, []);
-
-  const getDetail = async () => {
-    try {
-      const response = await axiosInstance.get(`/api/v1/seed/${Id}`);
-      const results = response.data.results[0];
-      console.log('수정 전 data: ', results);
-      setOriginalContentDetail(results);
-      reset(results);
-      if (response.status === 200) {
-        console.log('콘텐츠 상세 조회 성공');
-      } else {
-        console.error('콘텐츠 상세 조회 실패');
-      }
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
-  };
-
-  useEffect(() => {
-    getDetail();
-  }, [Id]);
-
-  useEffect(() => {
-    if (originalContentDetail && originalContentDetail.tagName) {
-      setTags(originalContentDetail.tagName);
-    }
-  }, [originalContentDetail]);
-
   const schema = yup.object().shape({
     seedType: yup
       .string()
@@ -182,24 +83,124 @@ function ContentEditPage() {
       .nullable()
       .notRequired(),
     seedDetail: yup.string().max(1500).nullable().notRequired(),
+    filesForValidation: yup.array().when('seedType', {
+      is: (val) => val === 'IMAGE' || val === 'PDF',
+      then: () => yup.array().min(1, '파일을 하나 이상 업로드해야 합니다.'),
+      otherwise: () => yup.array().notRequired(),
+    }),
   });
 
-  const {
-    reset,
-    register,
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    trigger,
-    formState: { isValid },
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onChange',
-    defaultValues: {
-      originalContentDetail,
-    },
-  });
+  const { reset, register, control, handleSubmit, watch, setValue, trigger } =
+    useForm({
+      resolver: yupResolver(schema),
+      mode: 'onChange',
+      defaultValues: {
+        seedName: '',
+        categoryName: [],
+        seedLink: '',
+        tags: [],
+        dDay: null,
+        seedDetail: '',
+        filesForValidation: [],
+      },
+    });
+
+  useEffect(() => {
+    if (seedType === 'IMAGE') {
+      setValue('filesForValidation', images, { shouldValidate: true });
+    } else if (seedType === 'PDF') {
+      setValue('filesForValidation', files, { shouldValidate: true });
+    } else {
+      setValue('filesForValidation', [], { shouldValidate: true });
+    }
+  }, [images, files, seedType, setValue]);
+
+  const handleTagInput = (event) => {
+    if (isComposing) return;
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const newTag = event.target.value;
+      if (
+        newTag &&
+        !tags.includes(newTag) &&
+        newTag.length <= 8 &&
+        !/\s/.test(newTag)
+      ) {
+        const updatedTags = [...tags, newTag];
+        setTags(updatedTags);
+        setValue('tags', updatedTags, { shouldValidate: true });
+        event.target.value = '';
+      }
+    }
+  };
+
+  const ChangeRef = useRef(null);
+
+  const handleImage = (index) => {
+    setRepresentativeIndex(index);
+    setValue('thumbnailImage', index, { shouldValidate: true });
+  };
+
+  const handlePdf = (index) => {
+    setRepresentativeIndex(index);
+    setValue('thumbnailImage', index, { shouldValidate: true });
+  };
+
+  const dialogeRef = useRef(null);
+  const TagRef = useRef(null);
+
+  const showModal = () => {
+    dialogeRef.current?.showModal();
+  };
+
+  const showTagModal = () => {
+    TagRef.current?.showModal(tags);
+  };
+
+  useEffect(() => {
+    if (ChangeRef.current) {
+      const dialogElement = ChangeRef.current;
+
+      const handleClickOutside = (event) => {
+        const dialogArea = dialogElement.getBoundingClientRect();
+        if (
+          event.clientX < dialogArea.left ||
+          event.clientX > dialogArea.right ||
+          event.clientY < dialogArea.top ||
+          event.clientY > dialogArea.bottom
+        ) {
+          dialogElement.close();
+        }
+      };
+      dialogElement.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        dialogElement.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    const getDetail = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/v1/seed/${Id}`);
+        const results = response.data.results[0];
+        setOriginalContentDetail(results);
+        reset({
+          ...results,
+          tags: results.tagName || [],
+        });
+        setTags(results.tagName || []);
+        if (seedType === 'IMAGE') {
+          setImages(results.fileLinks || []);
+        } else if (seedType === 'PDF') {
+          setFiles(results.fileLinks || []);
+        }
+      } catch (error) {
+        console.error('에러 발생:', error);
+      }
+    };
+    getDetail();
+  }, [Id, reset, seedType]);
 
   const errorRef = useRef(null);
   const showLinkModal = () => {
@@ -211,7 +212,6 @@ function ContentEditPage() {
     setIsSubmitting(true);
 
     try {
-      // 유효성 검사 통과된 데이터만 처리됨
       let updateData = {
         seedType: seedType,
         seedName: data.seedName,
@@ -226,10 +226,8 @@ function ContentEditPage() {
       if (seedType === 'LINK') {
         updateData.seedLink = data.seedLink;
       } else {
-        updateData.thumbnailImage = representativeIndex; // 대표 이미지 포함
+        updateData.thumbnailImage = representativeIndex;
       }
-
-      console.log('콘텐츠 값:', updateData);
 
       await ContentEditHandler(seedType, updateData, images, files, Id);
 
@@ -241,14 +239,16 @@ function ContentEditPage() {
     } catch (error) {
       console.error('수정 실패:', error);
     } finally {
-      setIsSubmitting(false); // 제출 상태 해제
+      setIsSubmitting(false);
     }
   };
 
   const onInvalid = (errors) => {
-    // 유효성 검사 실패 시 에러 메시지 표시
     console.error('유효성 검사 실패:', errors);
-    setErrorMessage('필수 항목을 모두 입력하세요.');
+    const messages = Object.values(errors)
+      .map((e) => e.message)
+      .join('\n');
+    setErrorMessage(messages || '필수 항목을 모두 입력하세요.');
   };
 
   useEffect(() => {
@@ -263,23 +263,9 @@ function ContentEditPage() {
         clearTimeout(timer);
       };
     }
-  }, [errorMessage, setErrorMessage]);
+  }, [errorMessage]);
 
   const seedDetail = watch('seedDetail', '');
-
-  const formValues = watch();
-
-  useEffect(() => {
-    console.log('현재 폼 값:', formValues);
-  }, [formValues]);
-
-  useEffect(() => {
-    console.log('현재 isValid 상태:', isValid);
-  }, [isValid]);
-
-  useEffect(() => {
-    trigger('tags');
-  }, [tags]);
 
   const noChange = () => {
     reset(originalContentDetail);
@@ -358,7 +344,7 @@ function ContentEditPage() {
                     label="seedLink"
                     $error={fieldState.error ? true : undefined}
                     $helperText={fieldState.error && fieldState.error.message}
-                    value={field.value || []}
+                    value={field.value || ''}
                     onChange={(value) => {
                       field.onChange(value);
                       trigger('seedLink');
@@ -391,7 +377,6 @@ function ContentEditPage() {
                       <Controller
                         name="tags"
                         control={control}
-                        defaultValue={[...originalContentDetail.tagName]}
                         render={({ field }) => (
                           <>
                             {tags.map((tag, idx) => (
@@ -410,9 +395,6 @@ function ContentEditPage() {
                                     );
                                     setTags(updatedTags);
                                     field.onChange(updatedTags);
-                                    if (TagRef.current) {
-                                      TagRef.current.removeTags(tag);
-                                    }
                                   }}
                                 />
                               </Chip>
@@ -423,17 +405,22 @@ function ContentEditPage() {
                               onCompositionEnd={() => setIsComposing(false)}
                               onKeyDown={handleTagInput}
                               placeholder={
-                                tags.length == 0
+                                tags.length === 0
                                   ? '엔터를 입력하여 태그를 등록해주세요'
                                   : ''
                               }
                             />
                             <AddTagModal
                               ref={TagRef}
-                              originalTags={originalContentDetail.tagName}
+                              originalTags={tags}
                               onConfirm={(newTags) => {
-                                setTags(newTags);
-                                setValue('tags', newTags);
+                                const finalTags = [
+                                  ...new Set([...tags, ...newTags]),
+                                ];
+                                setTags(finalTags);
+                                setValue('tags', finalTags, {
+                                  shouldValidate: true,
+                                });
                               }}
                             />
                           </>
@@ -486,13 +473,7 @@ function ContentEditPage() {
             </NoButtons>
             <Buttons
               type="button"
-              onClick={() => {
-                if (isValid) {
-                  handleSubmit((data) => handleCustomSubmit(data))();
-                } else {
-                  onInvalid();
-                }
-              }}
+              onClick={handleSubmit(handleCustomSubmit, onInvalid)}
             >
               수정 완료하기
             </Buttons>

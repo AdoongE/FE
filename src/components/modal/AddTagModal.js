@@ -56,7 +56,7 @@ const AddTagModal = forwardRef(
     ];
 
     const dialogRef = useRef(null);
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState(originalTags);
     const [selectedFilter, setSelectedFilter] = useState('기본 태그');
     const [tags, setTags] = useState([]);
 
@@ -68,17 +68,16 @@ const AddTagModal = forwardRef(
       resetTags: () => setSelectedTags([]),
       removeTags: (tag) =>
         setSelectedTags((prevTags) => prevTags.filter((item) => item !== tag)),
-      showModal: () => {
+      showModal: (initialTags) => {
+        if (initialTags) {
+          setSelectedTags(initialTags);
+        } else {
+          setSelectedTags(originalTags);
+        }
         dialogRef.current?.showModal();
       },
-
       close: () => dialogRef.current?.close(),
     }));
-
-    useEffect(() => {
-      // 컴포넌트 처음 렌더링 시 originalTags로 초기화
-      setSelectedTags(originalTags);
-    }, []);
 
     const handleSelectTag = (tag) => {
       setSelectedTags((prevTags) =>
@@ -89,17 +88,12 @@ const AddTagModal = forwardRef(
     };
 
     const handleClose = () => {
-      setSelectedTags([]);
       dialogRef.current?.close();
     };
 
     const handleApply = () => {
-      onConfirm([
-        ...originalTags,
-        ...selectedTags.filter((tag) => !originalTags.includes(tag)),
-      ]);
+      onConfirm(selectedTags);
       dialogRef.current?.close();
-      console.log('모달 tag: ', selectedTags);
     };
 
     const handleReset = () => {

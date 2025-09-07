@@ -25,7 +25,10 @@ export const ContentEditHandler = async (seedType, data, images, pdfs, Id) => {
             }
           }
 
-          const res = await axiosInstance.patch(`/api/v1/seed/${Id}`, formData);
+          const res = await axiosInstance.post(
+            `/api/v1/seed/upload/${Id}`,
+            formData,
+          );
           if (res.data.status.code === 200) {
             console.log('콘텐츠 file 수정 성공:', response.data.status.message);
           }

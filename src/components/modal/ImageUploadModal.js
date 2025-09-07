@@ -215,7 +215,7 @@ function ImageUploadModal({ onClose }) {
                         <DeleteButton
                           onClick={(e) => handleDeleteImage(image.id, index, e)}
                         >
-                          ×
+                          <CancelIcon icon="ic:round-close" />
                         </DeleteButton>
                       </ImageBox>
                     ))}
@@ -431,9 +431,13 @@ const DeleteButton = styled.button`
   right: 5px;
   background-color: transparent;
   border: none;
-  color: #666;
   cursor: pointer;
-  font-size: 20px;
+`;
+
+const CancelIcon = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  color: var(--gray1);
 `;
 
 const AddButton = styled.button`

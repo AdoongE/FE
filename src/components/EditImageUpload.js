@@ -94,7 +94,7 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
         // 첫 이미지 업로드 시 자동으로 대표 이미지 설정
         if (blobImage.length === 0) {
           setRepresentativeIndex(0);
-          onSetRepresentative(newImages[0]);
+          onSetRepresentative(0);
         }
       }
     },
@@ -107,18 +107,14 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
   });
 
   const handleDeleteImage = (id) => {
-    console.log('삭제', id);
     const updatedBlobImages = blobImage.filter((image) => image.id !== id);
-    const updatedImages = contentInfo.contentImage.filter(
-      (image) => image.id !== id,
-    );
-
     setBlobUrls(updatedBlobImages);
     setImages(updatedBlobImages);
 
-    if (representativeIndex >= updatedImages.length) {
-      setRepresentativeIndex(0);
-      onSetRepresentative(updatedImages[0] || null);
+    if (representativeIndex >= updatedBlobImages.length) {
+      const newRepresentativeIndex = updatedBlobImages.length > 0 ? 0 : null;
+      setRepresentativeIndex(newRepresentativeIndex);
+      onSetRepresentative(newRepresentativeIndex);
     }
   };
 
@@ -135,63 +131,48 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
           최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
         </span>
       </Instructions>
-      {blobImage.length === 0 ? (
-        <DropArea {...getRootProps()}>
-          <input {...getInputProps()} />
-          <IconWrapper>
-            <Icon
-              icon="iconoir:upload"
-              width="40"
-              height="40"
-              style={{ color: '#aaa' }}
-            />
-          </IconWrapper>
-          <DropText>이미지 선택 혹은 여기로 파일을 끌어오세요.</DropText>
-        </DropArea>
-      ) : (
-        <ImagesWrapper>
-          {blobImage.map((image, index) => (
-            <ImageContainer key={image.id}>
-              <ImageBox onClick={() => handleSetRepresentative(index)}>
-                {index === representativeIndex && (
-                  <RepresentativeLabel>대표</RepresentativeLabel>
-                )}
-                <ImagePreview src={image.preview} alt={image.label} />
-                <DeleteButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteImage(image.id);
-                  }}
-                >
-                  ×
-                </DeleteButton>
-              </ImageBox>
-              <FileName>{image.label}</FileName>
-            </ImageContainer>
-          ))}
-          {blobImage.length < MAX_IMAGES && (
-            <AddImageBox {...getRootProps()}>
-              <input {...getInputProps()} />
-              <AddCircle>
-                <Icon
-                  icon="iconoir:plus"
-                  width="1.823vw"
-                  height="1.823vw"
-                  style={{ color: '#aaa' }}
-                />
-              </AddCircle>
-              <AddText>이미지 추가하기</AddText>
-            </AddImageBox>
-          )}
-        </ImagesWrapper>
-      )}
+
+      <ImagesWrapper>
+        {blobImage.map((image, index) => (
+          <ImageContainer key={image.id}>
+            <ImageBox onClick={() => handleSetRepresentative(index)}>
+              {index === representativeIndex && (
+                <RepresentativeLabel>대표</RepresentativeLabel>
+              )}
+              <ImagePreview src={image.preview} alt={image.label} />
+              <DeleteButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteImage(image.id);
+                }}
+              >
+                <CancelIcon icon="ic:round-close" />
+              </DeleteButton>
+            </ImageBox>
+            <FileName>{image.label}</FileName>
+          </ImageContainer>
+        ))}
+        {blobImage.length < MAX_IMAGES && (
+          <AddImageBox {...getRootProps()}>
+            <input {...getInputProps()} />
+            <AddCircle>
+              <Icon
+                icon="iconoir:plus"
+                width="1.823vw"
+                height="1.823vw"
+                style={{ color: '#aaa' }}
+              />
+            </AddCircle>
+            <AddText>이미지 추가하기</AddText>
+          </AddImageBox>
+        )}
+      </ImagesWrapper>
     </Wrapper>
   );
 };
 
 export default EditImageUploadComponent;
 
-// 스타일 컴포넌트
 const Wrapper = styled.div`
   margin: 0;
   padding: 0;
@@ -206,28 +187,6 @@ const Instructions = styled.p`
     ${font.body2}
     color: var(--gray2);
   }
-`;
-
-const DropArea = styled.div`
-  width: 100%;
-  width: 140px;
-  height: 132px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const IconWrapper = styled.div`
-  margin-bottom: 10px;
-`;
-
-const DropText = styled.div`
-  color: #aaa;
-  font-size: 16px;
 `;
 
 const ImagesWrapper = styled.div`
@@ -281,12 +240,16 @@ const ImagePreview = styled.img`
 const DeleteButton = styled.button`
   position: absolute;
   top: 5px;
-  left: 5px;
+  right: 5px;
   background-color: transparent;
   border: none;
-  color: #666;
   cursor: pointer;
-  font-size: 20px;
+`;
+
+const CancelIcon = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  color: var(--gray1);
 `;
 
 const FileName = styled.div`

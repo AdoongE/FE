@@ -209,7 +209,7 @@ function PdfUploadModal({ onClose }) {
                         <DeleteButton
                           onClick={(e) => handleDeleteFile(file.id, e)}
                         >
-                          ×
+                          <CancelIcon icon="ic:round-close" />
                         </DeleteButton>
                       </FileContainer>
                     ))}
@@ -421,9 +421,13 @@ const DeleteButton = styled.button`
   right: 5px;
   background-color: transparent;
   border: none;
-  color: #666;
   cursor: pointer;
-  font-size: 20px;
+`;
+
+const CancelIcon = styled(Icon)`
+  width: 16px;
+  height: 16px;
+  color: var(--gray1);
 `;
 
 const AddButton = styled.button`

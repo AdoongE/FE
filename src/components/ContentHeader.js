@@ -304,14 +304,14 @@ function ContentHeader({
                       >
                         <Icon
                           icon="ion:search-outline"
-                          style={{ fontSize: '1.042vw' }}
+                          style={{ fontSize: 16 }}
                         />
                         {search.query}
                       </button>
                       <div>
                         <span>{formatDate(search.date)}</span>
                         <DeleteButton onClick={() => deleteSearch(index)}>
-                          X
+                          <Icon icon="mdi:close" />
                         </DeleteButton>
                       </div>
                     </RecentSearchItem>
@@ -560,7 +560,6 @@ const RecentSearchList = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: white;
-  border: 1px solid #dcdcdc;
   border-radius: 4px;
   width: 370px;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
@@ -591,9 +590,7 @@ const RecentSearchItem = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 4px 14px;
-  margin-left: 4px;
-  margin-top: 14px;
-  margin-bottom: 14px;
+  margin: 14px 4px;
   font-size: 12px;
   color: #9f9f9f;
 
@@ -614,9 +611,11 @@ const RecentSearchItem = styled.div`
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
   color: #9f9f9f;
+  margin-left: 8px;
+  display: flex;
 `;
 
 // 검색 필터 스타일

@@ -39,6 +39,10 @@ const SocialLogin = ({ socialType }) => {
         const jwtToken = response.headers['authorization'];
 
         localStorage.setItem('jwtToken', jwtToken);
+
+        if (localStorage.getItem('jwtToken')) {
+          navigate('/main');
+        }
       } else if (response.data.status.code === 404) {
         console.log(response.data.status.message);
 
@@ -57,8 +61,6 @@ const SocialLogin = ({ socialType }) => {
       console.error('소셜 로그인 에러', error);
       window.alert('로그인에 실패하였습니다.');
       navigate('/');
-    } finally {
-      navigate('/main');
     }
   };
 

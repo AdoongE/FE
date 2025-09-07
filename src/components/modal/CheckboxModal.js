@@ -76,7 +76,7 @@ const CheckboxModal = forwardRef((_, ref) => {
           <ModalTitle>씨드 추가</ModalTitle>
           <Icon
             icon="line-md:close"
-            style={{ width: '1.875vw', height: '1.875vw', cursor: 'pointer' }}
+            style={{ width: '24', height: '24', cursor: 'pointer' }}
             onClick={() => closeModal()}
           />
         </TopDiv>
@@ -175,14 +175,14 @@ const Title = styled.div`
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 40px;
-  margin-bottom: 52px;
+  column-gap: 28px;
+  margin-bottom: 34px;
 `;
 
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
 
   span {
     font-size: 20px;

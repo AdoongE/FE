@@ -133,8 +133,11 @@ const AddLinkModal = ({ onClose }) => {
           placeholder="링크를 입력하면 제목과 태그, 요약 내용이 자동 입력됩니다."
           hasError={!!errorMessage}
         />
-        <Info>*유튜브와 네이버 기사에 한해 AI 기능을 제공합니다</Info>
-        {errorMessage && <Error>{errorMessage}</Error>}
+        {errorMessage ? (
+          <Error>{errorMessage}</Error>
+        ) : (
+          <Info>유튜브와 네이버 기사에 한해 AI 기능을 제공합니다</Info>
+        )}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button onClick={handleAddLink}>
             {isLoading ? (
@@ -187,7 +190,6 @@ const Error = styled.div`
 const Input = styled.input`
   padding-left: 15px;
   background-color: #f6f6f6;
-  margin-bottom: 7px;
   height: 45px;
   font-size: 16px;
   display: flex;
@@ -203,7 +205,7 @@ const Input = styled.input`
 `;
 
 const Info = styled.p`
-  color: #9f9f9f;
+  color: var(--gray1);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

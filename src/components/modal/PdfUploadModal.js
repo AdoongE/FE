@@ -61,16 +61,18 @@ function PdfUploadModal({ onClose }) {
     setRepresentativeIndex(index);
   };
 
-  // 삭제 시 대표 이미지 유지 로직 수정
-  const handleDeleteFile = (id) => {
+  const handleDeleteFile = (id, index) => {
     const updatedFiles = files.filter((file) => file.id !== id);
     setFiles(updatedFiles);
 
-    // 현재 대표 이미지가 삭제된 경우, 첫 번째 이미지를 대표로 설정
-    if (updatedFiles.length > 0 && id === files[representativeIndex]?.id) {
-      setRepresentativeIndex(0); // 첫 번째 이미지를 대표 이미지로 설정
-    } else if (updatedFiles.length === 0) {
-      setRepresentativeIndex(null); // 파일이 모두 삭제된 경우 대표 이미지 초기화
+    if (index === representativeIndex) {
+      if (updatedFiles.length > 0) {
+        setRepresentativeIndex(0);
+      } else {
+        setRepresentativeIndex(null);
+      }
+    } else if (index < representativeIndex) {
+      setRepresentativeIndex((prev) => prev - 1);
     }
   };
 
@@ -207,7 +209,9 @@ function PdfUploadModal({ onClose }) {
                         </FileIcon>
                         <FileName>{file.label}</FileName>
                         <DeleteButton
-                          onClick={(e) => handleDeleteFile(file.id, e)}
+                          onClick={() =>
+                            handleDeleteFile(file.id, index + scrollIndex)
+                          }
                         >
                           <CancelIcon icon="ic:round-close" />
                         </DeleteButton>
@@ -216,7 +220,7 @@ function PdfUploadModal({ onClose }) {
                   {scrollIndex + 4 < files.length && (
                     <ScrollButtonRight
                       onClick={(e) => {
-                        e.stopPropagation(); // 이벤트 전파 방지
+                        e.stopPropagation();
                         handleScrollRight();
                       }}
                     >

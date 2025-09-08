@@ -26,7 +26,6 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<SplashPage />} />
           <Route path="/main" element={<MainPage />} />
-          <Route path="/" element={<MainPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route
             path="/kakao/callback"

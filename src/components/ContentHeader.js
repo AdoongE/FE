@@ -188,7 +188,21 @@ function ContentHeader({
     }
   };
 
-  useEffect(() => console.log('선택한 태그: ', tags), [tags]);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowFormatDropdown(false);
+        setShowSortDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFormatDropdown, showSortDropdown]);
 
   return (
     <Main>
@@ -214,6 +228,7 @@ function ContentHeader({
             <DropdownContainer>
               <Dropdown>
                 <DropdownButton
+                  context="saveFormat"
                   onClick={() => setShowFormatDropdown(!showFormatDropdown)}
                   isDefault={!localSelectedFormat}
                 >
@@ -221,7 +236,7 @@ function ContentHeader({
                   <Icon icon="uil:angle-down" fontSize={18} />
                 </DropdownButton>
                 {showFormatDropdown && (
-                  <DropdownMenu>
+                  <DropdownMenu ref={dropdownRef}>
                     <DropdownItem
                       onClick={() => handleFormatChange('전체보기')}
                     >
@@ -242,6 +257,7 @@ function ContentHeader({
 
               <Dropdown>
                 <DropdownButton
+                  context="sort"
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
                   isDefault={!selectedFilter}
                 >
@@ -249,7 +265,7 @@ function ContentHeader({
                   <Icon icon="uil:angle-down" fontSize={18} />
                 </DropdownButton>
                 {showSortDropdown && (
-                  <DropdownMenu>
+                  <DropdownMenu ref={dropdownRef}>
                     <DropdownItem onClick={() => handleSortChange('최신순')}>
                       최신순
                     </DropdownItem>
@@ -418,15 +434,16 @@ const Dropdown = styled.div`
 const DropdownButton = styled.button`
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;
   background: white;
   border: 1px solid #9f9f9f;
   border-radius: 8px;
   font-size: 12px;
   color: var(--gray2);
   cursor: pointer;
-  padding: 7px 16px;
-  gap: 4px;
+  padding: 7px 15px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  width: ${({ context }) => (context === 'saveFormat' ? '96px' : '83px')};
 `;
 
 const DropdownMenu = styled.div`
@@ -450,6 +467,7 @@ const DropdownItem = styled.div`
   text-align: left;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 
   &:hover {
     color: #21a58c;

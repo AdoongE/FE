@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status.code === 401) {
       alert('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
       localStorage.removeItem('jwtToken');
       const navigate = useNavigate();

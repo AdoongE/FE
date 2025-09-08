@@ -71,11 +71,7 @@ const MainPage = () => {
               setTotalPages(pageInfos.pageInfo.totalPages || 1);
               results = response.data.results[0]?.seedInfoList.map((item) => ({
                 id: item.seedId || 'ID 없음',
-                seedName:
-                  item.seedName ||
-                  (item.updatedDt
-                    ? new Date(item.updatedDt).toISOString().split('T')[0]
-                    : '날짜 정보 없음'),
+                seedName: item.seedName,
                 categoryId: item.categoryId || [],
                 categoryName: item.categoryName || [],
                 tagName: item.tagName || [],
@@ -92,10 +88,16 @@ const MainPage = () => {
           url = '/api/v1/seed';
           const response = await axiosInstance.get(url, { params });
 
-          results = response.data.results[0].seedInfoList;
-          pageInfos = response.data.results[0];
-          setTotalPages(pageInfos.pageInfo.totalPages || 1);
-          setFullData(results || []);
+          if (response.data.status.code === 200) {
+            if (response.data.status.message === '씨드가 존재하지 않습니다.') {
+              setSearchState(true);
+            } else {
+              results = response.data.results[0].seedInfoList;
+              pageInfos = response.data.results[0];
+              setTotalPages(pageInfos.pageInfo.totalPages || 1);
+              setFullData(results || []);
+            }
+          }
         } else {
           if (activeTab === '카테고리') {
             setFilterId(null);
@@ -117,11 +119,7 @@ const MainPage = () => {
             setTotalPages(pageInfos.pageInfo.totalPages || 1);
             results = response.data.results[0]?.seedInfoList.map((item) => ({
               id: item.seedId || 'ID 없음',
-              seedName:
-                item.seedName ||
-                (item.updatedDt
-                  ? new Date(item.updatedDt).toISOString().split('T')[0]
-                  : '날짜 정보 없음'),
+              seedName: item.seedName,
               categoryId: item.categoryId || [],
               categoryName: item.categoryName || [],
               tagName: item.tagName || [],
@@ -142,12 +140,20 @@ const MainPage = () => {
         setLoading(false);
       }
     },
-    [currentPage, activeTab, categoryId, filterId, tags],
+    [
+      currentPage,
+      activeTab,
+      categoryId,
+      filterId,
+      tags,
+      sortOrder,
+      localSelectedFormat,
+    ],
   );
 
   useEffect(() => {
     fetchData(currentPage - 1);
-  }, [fetchData, location]);
+  }, [fetchData, location, sortOrder, localSelectedFormat]);
 
   const seedTypeMapping = {
     IMAGE: '이미지',
@@ -241,7 +247,6 @@ const MainPage = () => {
                       dDay={item.dDay}
                       seedType={item.seedType}
                       thumbnailImage={item.thumbnailImage}
-                      updatedDt={item.updatedDt}
                       message={item.seedDetail || ''}
                       keyword={keyword}
                       open={() => openModal(item)}

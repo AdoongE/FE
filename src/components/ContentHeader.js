@@ -545,7 +545,7 @@ const FilterBtn = styled.button`
   justify-content: center;
   align-items: center;
   color: black;
-  gap: 2px;
+  gap: 12px;
 
   &:hover {
     background-color: #21a58c;
@@ -554,7 +554,6 @@ const FilterBtn = styled.button`
 `;
 
 const FilterName = styled.div`
-  width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -113,7 +113,11 @@ const MainPage = () => {
 
           const response = await axiosInstance.get(url, { params });
           if (response.data.status.message === '씨드가 존재하지 않습니다.') {
-            setData(results || []);
+            if (activeTab === '카테고리') {
+              setData(results || []);
+            } else if (activeTab === '맞춤필터') {
+              setSearchState(true);
+            }
           } else {
             pageInfos = response.data.results[0];
             setTotalPages(pageInfos.pageInfo.totalPages || 1);

@@ -152,7 +152,7 @@ const Input = styled.input`
   font-size: 20px;
   font-weight: 500;
   color: var(--gray2);
-  background-color: var(--gray6);
+  background-color: var(--sidebar);
   display: flex;
   border: none;
   border-bottom: 0.73px solid var(--gray2);

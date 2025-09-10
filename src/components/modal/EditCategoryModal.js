@@ -134,7 +134,7 @@ const Input = styled.input`
   ::placeholder {
     color: var(--gray2);
   }
-  background-color: var(--gray6);
+  background-color: var(--sidebar);
   display: flex;
   border: none;
   border-bottom: 0.73px solid var(--gray2);

@@ -50,6 +50,33 @@ const Sidebar = ({
   const [customFilter, setCustomFilter] = useState([]);
   const [customFilterIds, setCustomFilterIds] = useState([]);
   const [message, setMessage] = useState('');
+  const [dropdownPosition, setDropdownPosition] = useState(null);
+
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    const scrollElement = scrollContainerRef.current;
+    if (!scrollElement) return;
+
+    const handleScroll = () => {
+      setOpenDropdown(null);
+      setOpenBookmarkDropdowns({});
+      setOpenFilterDropdown(null);
+    };
+
+    const isAnyDropdownOpen =
+      openDropdown !== null ||
+      Object.values(openBookmarkDropdowns).some((isOpen) => isOpen) ||
+      openFilterDropdown !== null;
+
+    if (isAnyDropdownOpen) {
+      scrollElement.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      scrollElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [openDropdown, openBookmarkDropdowns, openFilterDropdown]);
 
   const handleViewCategory = async (source) => {
     if (source === 'click') {
@@ -156,11 +183,17 @@ const Sidebar = ({
     setEditModalOpen(false);
   };
 
-  const handleBookmarkDotBoxClick = (index) => {
+  const handleBookmarkDotBoxClick = (e, index) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setDropdownPosition({
+      top: rect.top + rect.height / 2,
+      left: rect.left + rect.width / 2,
+    });
     setOpenBookmarkDropdowns((prev) => ({
       ...prev,
       [index]: !prev[index],
     }));
+    e.stopPropagation();
   };
 
   const handleBookmarkCloseDropdown = (index) => {
@@ -363,7 +396,7 @@ const Sidebar = ({
 
   return (
     <StMainPage>
-      <SideDiv>
+      <SideDiv ref={scrollContainerRef}>
         <BtnDiv>
           <CollectBtn
             active={activeTab === '나의 씨드'}
@@ -405,11 +438,16 @@ const Sidebar = ({
                     key={index}
                     onMouseEnter={() => setHoveredBookmarkIndex(index)}
                     onMouseLeave={() => setHoveredBookmarkIndex(null)}
+                    isActive={openBookmarkDropdowns[index]}
                   >
                     {bookmark}
                     {` (${categoryCounts[bookmark] || 0})`}
-                    {hoveredBookdmarkIndex === index && (
-                      <DotBox onClick={() => handleBookmarkDotBoxClick(index)}>
+                    {(hoveredBookdmarkIndex === index ||
+                      openBookmarkDropdowns[index]) && (
+                      <DotBox
+                        onClick={(e) => handleBookmarkDotBoxClick(e, index)}
+                        isActive={openBookmarkDropdowns[index]}
+                      >
                         <MoreVertIcon />
                       </DotBox>
                     )}
@@ -417,6 +455,7 @@ const Sidebar = ({
                       <Dropdown
                         isOpen={openBookmarkDropdowns[index]}
                         onClose={() => handleBookmarkCloseDropdown(index)}
+                        position={dropdownPosition}
                         categoryName={bookmark}
                         categoryLength={bookmark.length}
                         isBookmarked={bookmarks.includes(bookmark)}
@@ -469,16 +508,25 @@ const Sidebar = ({
                       key={index}
                       onMouseEnter={() => setHoveredCategoryIndex(index)}
                       onMouseLeave={() => setHoveredCategoryIndex(null)}
+                      isActive={openDropdown === index}
                     >
                       {category}
                       {` (${categoryCounts[category] || 0})`}
-                      {hoveredCategoryIndex === index &&
+                      {(hoveredCategoryIndex === index ||
+                        openDropdown === index) &&
                         category !== '미분류' && (
                           <DotBox
                             onClick={(e) => {
+                              const rect =
+                                e.currentTarget.getBoundingClientRect();
+                              setDropdownPosition({
+                                top: rect.top + rect.height / 2,
+                                left: rect.left + rect.width / 2,
+                              });
                               setOpenDropdown(index);
                               e.stopPropagation();
                             }}
+                            isActive={openDropdown === index}
                           >
                             <MoreVertIcon />
                           </DotBox>
@@ -487,6 +535,7 @@ const Sidebar = ({
                         <Dropdown
                           isOpen={openDropdown === index}
                           onClose={() => setOpenDropdown(null)}
+                          position={dropdownPosition}
                           categoryName={category}
                           categoryLength={category.length}
                           onBookmarkAdd={handleBookmarkAdd}
@@ -572,12 +621,25 @@ const Sidebar = ({
                   onMouseEnter={() => setHoveredFilterIndex(index)}
                   onMouseLeave={() => setHoveredFilterIndex(null)}
                   onClick={() => CustomFilterClick(condition)}
+                  isActive={openFilterDropdown === index}
                 >
                   <Icon icon="ri:align-left" width="18" height="18" />
                   <Right>
                     {condition}
-                    {hoveredFilterIndex === index && (
-                      <DotBox onClick={() => setOpenFilterDropdown(index)}>
+                    {(hoveredFilterIndex === index ||
+                      openFilterDropdown === index) && (
+                      <DotBox
+                        onClick={(e) => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setDropdownPosition({
+                            top: rect.top + rect.height / 2,
+                            left: rect.left + rect.width / 2,
+                          });
+                          setOpenFilterDropdown(index);
+                          e.stopPropagation();
+                        }}
+                        isActive={openFilterDropdown === index}
+                      >
                         <MoreVertIcon />
                       </DotBox>
                     )}
@@ -585,6 +647,7 @@ const Sidebar = ({
                       <FilterDropdown
                         isOpen={openFilterDropdown === index}
                         onClose={() => setOpenFilterDropdown(null)}
+                        position={dropdownPosition}
                         initialFilterName={condition}
                         onEditFilter={(newName) =>
                           handleEditFilter(index, newName)
@@ -732,8 +795,9 @@ const AccordionContent = styled.div`
 const CategoryItem = styled.button`
   ${font.title4}
   margin: auto;
-  background: transparent;
+  background: ${({ isActive }) => (isActive ? '#eaebeb' : 'transparent')};
   border: none;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -750,7 +814,7 @@ const CategoryItem = styled.button`
 `;
 
 const DotBox = styled.div`
-  background-color: #c5c5c5;
+  background-color: ${({ isActive }) => (isActive ? '#adadad' : '#c5c5c5')};
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -798,6 +862,8 @@ const CustomItem = styled.div`
   height: 36px;
   padding: 8px;
   gap: 13px;
+  border-radius: 8px;
+  background-color: ${({ isActive }) => (isActive ? '#eaebeb' : 'transparent')};
   &:hover {
     width: 105%;
     background-color: ${({ active }) =>

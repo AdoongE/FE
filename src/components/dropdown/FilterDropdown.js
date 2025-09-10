@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { font } from '../../styles/font';
@@ -7,6 +8,7 @@ import { axiosInstance } from '../api/axios-instance';
 const FilterDropdown = ({
   isOpen,
   onClose,
+  position,
   initialFilterName,
   onEditFilter,
   onRemoveFilter,
@@ -35,7 +37,7 @@ const FilterDropdown = ({
     };
   }, [isOpen, onClose, showEditModal, showDeleteModal]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !position) return null;
 
   const handleEditConfirm = async () => {
     const filterIndex = customFilter.indexOf(initialFilterName);
@@ -85,20 +87,25 @@ const FilterDropdown = ({
 
   return (
     <>
-      <DropdownMenu
-        className="filter"
-        ref={dropdownRef}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <DropdownItem onClick={() => setShowEditModal(true)}>
-          <Icons icon="iconamoon:edit-light" />
-          이름 변경하기
-        </DropdownItem>
-        <DropdownItem onClick={() => setShowDeleteModal(true)}>
-          <Icons icon="mage:trash" />
-          삭제하기
-        </DropdownItem>
-      </DropdownMenu>
+      {ReactDOM.createPortal(
+        <DropdownMenu
+          className="filter"
+          ref={dropdownRef}
+          onClick={(e) => e.stopPropagation()}
+          top={position.top}
+          left={position.left}
+        >
+          <DropdownItem onClick={() => setShowEditModal(true)}>
+            <Icons icon="iconamoon:edit-light" />
+            이름 변경하기
+          </DropdownItem>
+          <DropdownItem onClick={() => setShowDeleteModal(true)}>
+            <Icons icon="mage:trash" />
+            삭제하기
+          </DropdownItem>
+        </DropdownMenu>,
+        document.body,
+      )}
 
       {showEditModal && (
         <ModalOverlay onClick={() => setShowEditModal(false)}>
@@ -168,20 +175,16 @@ const FilterDropdown = ({
 export default FilterDropdown;
 
 const DropdownMenu = styled.ul`
-  position: absolute;
-  left: 280px;
+  position: fixed;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
+  transform: translate(20%, -65%);
   background-color: white;
   border-radius: 8px;
-  z-index: 1;
-  width: ${({ categoryLength }) =>
-    `calc(${Math.max(12.396, categoryLength * 1.083 + 4.167)}vw)`};
+  z-index: 1000;
+  width: 148px;
   box-shadow: 0 0 9px #dfdfdf;
   padding: 4px;
-  &.filter {
-    left: 365px;
-    transform: translate(-75%, -5%);
-    width: 148px;
-  }
 `;
 
 const DropdownItem = styled.li`
@@ -220,11 +223,12 @@ const ModalContent = styled.div`
   background-color: white;
   border-radius: 36px;
   width: 542px;
-  height: 254px;
 `;
 
 const ModalDiv = styled.div`
-  margin-top: 82px;
+  padding: 0 36px;
+  padding-top: 40px;
+  padding-bottom: 25px;
 `;
 
 const TopDiv = styled.div`
@@ -250,14 +254,17 @@ const ModalTitle = styled.p`
 const Input = styled.input`
   font-size: 20px;
   font-weight: 500;
-  color: var(--gray2);
-  background-color: var(--gray6);
+  ::placeholder {
+    color: var(--gray2);
+  }
+  background-color: var(--sidebar);
   display: flex;
   border: none;
   border-bottom: 0.73px solid var(--gray2);
   width: 100%;
   padding: 12px 0;
   margin-bottom: 20px;
+  padding-left: 14px;
 `;
 
 const ButtonContainer = styled.div`

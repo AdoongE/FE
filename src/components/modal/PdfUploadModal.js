@@ -324,7 +324,7 @@ const DropArea = styled.div`
   position: relative;
   height: 202px;
   border-radius: 8px;
-  background-color: var(--gray6);
+  background-color: var(--sidebar);
   display: flex;
   flex-direction: column;
   align-items: center;

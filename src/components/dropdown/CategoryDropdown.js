@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { font } from '../../styles/font';
@@ -6,6 +7,7 @@ import { font } from '../../styles/font';
 const Dropdown = ({
   isOpen,
   onClose,
+  position,
   categoryName,
   categoryLength,
   isBookmarked,
@@ -32,7 +34,7 @@ const Dropdown = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !position) return null;
 
   const toggleBookmark = (e) => {
     e.stopPropagation();
@@ -56,8 +58,13 @@ const Dropdown = ({
     onClose();
   };
 
-  return (
-    <DropdownMenu ref={dropdownRef} categoryLength={categoryLength}>
+  return ReactDOM.createPortal(
+    <DropdownMenu
+      ref={dropdownRef}
+      top={position.top}
+      left={position.left}
+      categoryLength={categoryLength}
+    >
       <DropdownItem onClick={toggleBookmark}>
         <Icons
           icon={
@@ -76,18 +83,21 @@ const Dropdown = ({
         <Icons icon="mage:trash" />
         {`'${categoryName}' 삭제`}
       </DropdownItem>
-    </DropdownMenu>
+    </DropdownMenu>,
+    document.body,
   );
 };
 
 export default Dropdown;
 
 const DropdownMenu = styled.ul`
-  position: absolute;
-  left: 255px;
+  position: fixed;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
+  transform: translate(20%, -65%);
   background-color: white;
   border-radius: 8px;
-  z-index: 1;
+  z-index: 1000;
   width: max-content;
   box-shadow: 0 0 9px #dfdfdf;
   padding: 4px;

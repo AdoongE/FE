@@ -54,7 +54,6 @@ function ImageUploadModal({ onClose }) {
     accept: {
       'image/jpeg': [],
       'image/png': [],
-      'image/svg+xml': [],
     },
     maxSize: 10 * 1024 * 1024, // 10MB 제한
     noClick: images.length > 0,
@@ -253,7 +252,7 @@ function ImageUploadModal({ onClose }) {
             )}
           </DropArea>
           <FileLimit>
-            최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
+            최대 10MB 이하의 JPG, JPEG, PNG 파일만 첨부할 수 있습니다.
           </FileLimit>
           {error && <ErrorMessage>이미지를 업로드하세요</ErrorMessage>}
         </Body>

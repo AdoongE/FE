@@ -101,7 +101,6 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
     accept: {
       'image/jpeg': [],
       'image/png': [],
-      'image/svg+xml': [],
     },
     maxSize: 10 * 1024 * 1024, // 10 MB 제한
   });
@@ -127,9 +126,7 @@ const EditImageUploadComponent = ({ onSetRepresentative, setImages, Id }) => {
     <Wrapper>
       <Instructions>
         이미지 업로드*{' '}
-        <span>
-          최대 10MB 이하의 JPG, JPEG, PNG, SVG 파일만 첨부할 수 있습니다.
-        </span>
+        <span>최대 10MB 이하의 JPG, JPEG, PNG 파일만 첨부할 수 있습니다.</span>
       </Instructions>
 
       <ImagesWrapper>

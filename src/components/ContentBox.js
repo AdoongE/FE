@@ -61,12 +61,13 @@ function ContentBox({
             </Document>
           </PDFThumbnail>
         ) : seedType === 'LINK' ? (
-          <ContentImage
-            src={defaultImage}
-            alt="content thumbnail"
-            onClick={() => window.open(thumbnailImage, '_blank')}
-            isDefaultImage={true}
-          />
+          <LinkWrapper onClick={() => window.open(thumbnailImage, '_blank')}>
+            <ContentImage
+              src={defaultImage}
+              alt="content thumbnail"
+              isDefaultImage={true}
+            />
+          </LinkWrapper>
         ) : (
           <ContentImage
             onClick={open}
@@ -138,6 +139,14 @@ const ImageBox = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 3.75px #9a9a9a;
+`;
+
+const LinkWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentImage = styled.img`

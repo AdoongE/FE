@@ -521,7 +521,8 @@ const TagItem = styled.button`
   padding: 8px 14px;
   color: ${(props) => (props.$isSelected ? 'white' : '#9F9F9F')};
   background-color: ${(props) => (props.$isSelected ? '#41C3AB' : 'white')};
-  border: ${(props) => (props.$isSelected ? 0 : '1px solid var(--gray2)')};
+  border: ${(props) =>
+    props.$isSelected ? '1px solid var(--green2)' : '1px solid var(--gray2)'};
   display: flex;
   align-items: center;
   justify-content: center;

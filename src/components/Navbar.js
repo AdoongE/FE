@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import CheckboxModal from './modal/CheckboxModal';
 
-function Navbar() {
-  const [activeTab, setActiveTab] = useState('모아보기');
+function Navbar({ activeTab, setActiveTab }) {
   const [activeBarWidth, setActiveBarWidth] = useState(0); // ActiveBar 너비
   const [activeBarLeft, setActiveBarLeft] = useState(0); // ActiveBar 위치
   const navbarMenuRef = useRef(null);
@@ -107,6 +106,7 @@ function Navbar() {
           data-tab="탐색하기"
           onClick={() => {
             setActiveTab('탐색하기');
+            navigate('/main');
           }}
           active={activeTab === '탐색하기'}
         >

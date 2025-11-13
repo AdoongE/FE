@@ -10,6 +10,7 @@ import ViewThumbnailModal from '../components/modal/ViewThumbnailModal';
 import noSearchContent from '../assets/icons/noSearchContent.png';
 import Pagination from './Pagination';
 import { axiosInstance } from '../components/api/axios-instance';
+import ServicePreparation from '../components/ServicePreparation';
 
 const MainPage = () => {
   const location = useLocation();
@@ -194,88 +195,94 @@ const MainPage = () => {
         />
       </SidebarContainer>
       <MainContent>
-        <ContentHeader
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setFilteredData={setFilteredData}
-          setSortOrder={setSortOrder}
-          setSelectedFormat={setLocalSelectedFormat}
-          setSearchState={setSearchState}
-          categoryId={categoryId}
-          categoryName={categoryName}
-          filterId={filterId}
-          filterName={filterName}
-          setKeyword={setKeyword}
-          tags={tags}
-          setTags={setTags}
-        />
-        <ContentArea $isBlank={searchState || data.length === 0}>
-          {loading ? (
-            <div>로딩 중...</div>
-          ) : searchState ? (
-            <NoSearchContent>
-              <img
-                src={noSearchContent}
-                alt="noSearch"
-                style={{
-                  width: '220px',
-                  height: '156px',
-                  marginBottom: '20px',
-                }}
-              />
-              <div style={{ fontSize: '24px', marginBottom: '5px' }}>
-                해당 조건에 맞는 콘텐츠가 없어요
-              </div>
-              <div
-                style={{
-                  fontSize: '16px',
-                  color: '#9f9f9f',
-                  marginBottom: '100px',
-                }}
-              >
-                다른 키워드로 검색해보세요
-              </div>
-            </NoSearchContent>
-          ) : data.length === 0 ? (
-            <ContentBlank />
-          ) : (
-            (filteredData.length > 0 ? filteredData : data).map(
-              (item, index) => (
-                <React.Fragment key={item.seedId || index}>
-                  <StyledContentBox>
-                    <ContentBox
-                      contentId={item.seedId}
-                      title={item.seedName}
-                      category={item.categoryName}
-                      tags={item.tagName}
-                      dDay={item.dDay}
-                      seedType={item.seedType}
-                      thumbnailImage={item.thumbnailImage}
-                      message={item.seedDetail || ''}
-                      keyword={keyword}
-                      open={() => openModal(item)}
-                      fetchData={fetchData}
-                    />
-                  </StyledContentBox>
-                  {selectedData && selectedData.seedId === item.seedId && (
-                    <ViewThumbnailModal
-                      file={item.thumbnailImage}
-                      onClose={closeModal}
-                      seedType={item.seedType}
-                    />
-                  )}
-                </React.Fragment>
-              ),
-            )
-          )}
-        </ContentArea>
-        <Pagination
-          currentPage={currentPage}
-          totalCount={data.length}
-          contentPerPage={contentPerPage}
-          onPageChange={handlePageChange}
-          totalPages={totalPages}
-        />
+        {activeTab === '리마인더' || activeTab === '탐색하기' ? (
+          <ServicePreparation />
+        ) : (
+          <>
+            <ContentHeader
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              setFilteredData={setFilteredData}
+              setSortOrder={setSortOrder}
+              setSelectedFormat={setLocalSelectedFormat}
+              setSearchState={setSearchState}
+              categoryId={categoryId}
+              categoryName={categoryName}
+              filterId={filterId}
+              filterName={filterName}
+              setKeyword={setKeyword}
+              tags={tags}
+              setTags={setTags}
+            />
+            <ContentArea $isBlank={searchState || data.length === 0}>
+              {loading ? (
+                <div>로딩 중...</div>
+              ) : searchState ? (
+                <NoSearchContent>
+                  <img
+                    src={noSearchContent}
+                    alt="noSearch"
+                    style={{
+                      width: '220px',
+                      height: '156px',
+                      marginBottom: '20px',
+                    }}
+                  />
+                  <div style={{ fontSize: '24px', marginBottom: '5px' }}>
+                    해당 조건에 맞는 콘텐츠가 없어요
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '16px',
+                      color: '#9f9f9f',
+                      marginBottom: '100px',
+                    }}
+                  >
+                    다른 키워드로 검색해보세요
+                  </div>
+                </NoSearchContent>
+              ) : data.length === 0 ? (
+                <ContentBlank />
+              ) : (
+                (filteredData.length > 0 ? filteredData : data).map(
+                  (item, index) => (
+                    <React.Fragment key={item.seedId || index}>
+                      <StyledContentBox>
+                        <ContentBox
+                          contentId={item.seedId}
+                          title={item.seedName}
+                          category={item.categoryName}
+                          tags={item.tagName}
+                          dDay={item.dDay}
+                          seedType={item.seedType}
+                          thumbnailImage={item.thumbnailImage}
+                          message={item.seedDetail || ''}
+                          keyword={keyword}
+                          open={() => openModal(item)}
+                          fetchData={fetchData}
+                        />
+                      </StyledContentBox>
+                      {selectedData && selectedData.seedId === item.seedId && (
+                        <ViewThumbnailModal
+                          file={item.thumbnailImage}
+                          onClose={closeModal}
+                          seedType={item.seedType}
+                        />
+                      )}
+                    </React.Fragment>
+                  ),
+                )
+              )}
+            </ContentArea>
+            <Pagination
+              currentPage={currentPage}
+              totalCount={data.length}
+              contentPerPage={contentPerPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
+          </>
+        )}
       </MainContent>
     </MainContainer>
   );

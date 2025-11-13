@@ -47,6 +47,18 @@ function ContentHeader({
     return `${year}.${month}.${day}`;
   };
 
+  const recentSearchesRef = useRef(null);
+
+  const handleBlur = (e) => {
+    if (
+      recentSearchesRef.current &&
+      recentSearchesRef.current.contains(e.relatedTarget)
+    ) {
+      return;
+    }
+    setShowRecentSearches(false);
+  };
+
   // 검색어 저장
   const saveSearchQuery = (query) => {
     const currentDate = new Date().toISOString().split('T')[0];
@@ -141,6 +153,7 @@ function ContentHeader({
     setKeyword(query);
     saveSearchQuery(query); // 검색어 저장
     await fetchSearchResults(query); // 공통 검색 함수 호출
+    setShowRecentSearches(false);
 
     // 결과가 없으면 빈 콘텐츠 화면으로 설정
     if (!filteredData || filteredData.length === 0) {
@@ -293,15 +306,13 @@ function ContentHeader({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleSearchKeyPress} // 엔터 키 누를 때 실행
                 onFocus={() => setShowRecentSearches(true)} // 검색바 클릭 시 최근 검색어 표시
-                onBlur={() =>
-                  setTimeout(() => setShowRecentSearches(false), 200)
-                } // 클릭 해제 시 숨기기
+                onBlur={handleBlur}
               />
               <SearchButton type="button" onClick={() => showModal()}>
                 #태그 검색
               </SearchButton>
-              {showRecentSearches && (
-                <RecentSearchList>
+              {showRecentSearches && recentSearches.length > 0 && (
+                <RecentSearchList ref={recentSearchesRef}>
                   <RecentSearchTitle>최근 검색어</RecentSearchTitle>
                   {recentSearches.map((search, index) => (
                     <RecentSearchItem key={index}>

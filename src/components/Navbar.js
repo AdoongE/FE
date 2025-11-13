@@ -98,7 +98,7 @@ function Navbar({ activeTab, setActiveTab }) {
             setActiveTab('모아보기');
             navigate('/main');
           }}
-          active={activeTab === '모아보기'}
+          active={activeTab === '모아보기' || activeTab === '나의 씨드'}
         >
           모아보기
         </MenuButton>

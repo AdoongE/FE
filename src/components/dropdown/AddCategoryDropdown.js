@@ -8,8 +8,6 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { Icon } from '@iconify/react';
 import { axiosInstance } from '../api/axios-instance';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { font } from '../../styles/font';
 
@@ -24,20 +22,14 @@ const MenuProps = {
   },
 };
 
-export default function AddCategory({ value = [], onChange }) {
+export default function AddCategory({ value, onChange }) {
   const [categories, setCategories] = useState([]);
   const theme = useTheme();
 
-  const toggleItem = (field) => {
-    if (value.includes(field)) {
-      onChange(value.filter((item) => item !== field));
-    } else {
-      onChange([...value, field]);
-    }
-  };
+  const safeValue = Array.isArray(value) ? value : [];
 
   const handleDelete = (field) => {
-    onChange(value.filter((item) => item !== field));
+    onChange(safeValue.filter((item) => item !== field));
   };
 
   const handleViewCategory = async () => {
@@ -60,23 +52,21 @@ export default function AddCategory({ value = [], onChange }) {
           id="demo-multiple-chip"
           multiple
           displayEmpty
-          value={Array.isArray(value) ? value : []}
-          onChange={(event) => onChange(event.target.value)}
+          value={safeValue}
+          onChange={(event) => {
+            const newValue = event.target.value ?? [];
+            onChange(Array.isArray(newValue) ? newValue : []);
+          }}
           onOpen={handleViewCategory}
           input={<OutlinedInput id="demo-multiple-chip" />}
           renderValue={() => {
-            if (value.length === 0) {
+            if (safeValue.length === 0) {
               return <>최대 5개까지 선택 가능합니다</>;
             }
+
             return (
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '0.026vw',
-                }}
-              >
-                {value.map((val) => (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '0.026vw' }}>
+                {safeValue.map((val) => (
                   <Chip key={val}>
                     {val}
                     <CancelIcon
@@ -92,42 +82,78 @@ export default function AddCategory({ value = [], onChange }) {
             );
           }}
           MenuProps={MenuProps}
-          inputProps={{ 'aria-label': 'Without label' }}
         >
           <Title disabled>내 카테고리</Title>
-          {categories.map((field) => (
-            <FormGroup
-              key={field}
-              style={{
-                display: 'flex',
-                overflowX: 'auto',
-                whiteSpace: 'nowrap',
-              }}
-            >
+
+          {categories.map((field) => {
+            const isSelected = safeValue.includes(field);
+
+            return (
               <MenuItem
+                key={field}
                 value={field}
-                onClick={() => toggleItem(field)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isSelected) {
+                    onChange(safeValue.filter((v) => v !== field));
+                  } else {
+                    onChange([...safeValue, field]);
+                  }
+                }}
                 style={{
-                  fontWeight: value.includes(field)
+                  fontWeight: isSelected
                     ? theme.typography.fontWeightMedium
                     : theme.typography.fontWeightRegular,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={value.includes(field)}
-                        onChange={() => toggleItem(field)}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    }
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
+                  <Checkbox
+                    checked={isSelected}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isSelected) {
+                        onChange(safeValue.filter((v) => v !== field));
+                      } else {
+                        onChange([...safeValue, field]);
+                      }
+                    }}
                   />
-                  <div>{field}</div>
+
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isSelected) {
+                        onChange(safeValue.filter((v) => v !== field));
+                      } else {
+                        onChange([...safeValue, field]);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (isSelected) {
+                          onChange(safeValue.filter((v) => v !== field));
+                        } else {
+                          onChange([...safeValue, field]);
+                        }
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {field}
+                  </div>
                 </div>
               </MenuItem>
-            </FormGroup>
-          ))}
+            );
+          })}
         </StyledSelect>
       </StyledFormControl>
     </div>

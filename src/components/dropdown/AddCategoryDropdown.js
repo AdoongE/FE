@@ -28,11 +28,11 @@ export default function AddCategory({ value = [], onChange }) {
   const [categories, setCategories] = useState([]);
   const theme = useTheme();
 
-  const handleCheckChange = (event, field) => {
-    if (event.target.checked) {
-      onChange([...value, field]);
-    } else {
+  const toggleItem = (field) => {
+    if (value.includes(field)) {
       onChange(value.filter((item) => item !== field));
+    } else {
+      onChange([...value, field]);
     }
   };
 
@@ -106,33 +106,20 @@ export default function AddCategory({ value = [], onChange }) {
             >
               <MenuItem
                 value={field}
+                onClick={() => toggleItem(field)}
                 style={{
                   fontWeight: value.includes(field)
                     ? theme.typography.fontWeightMedium
                     : theme.typography.fontWeightRegular,
                 }}
               >
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => handleCheckChange(field)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleCheckChange(field);
-                    }
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                  }}
-                >
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
                         checked={value.includes(field)}
+                        onChange={() => toggleItem(field)}
                         onClick={(e) => e.stopPropagation()}
-                        onChange={() => handleCheckChange(field)}
                       />
                     }
                   />

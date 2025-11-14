@@ -7,7 +7,7 @@ import { font } from '../../styles/font';
 
 export const AddCategoryModal = ({ onClose, onConfirm, categories }) => {
   const [categoryName, setCategoryName] = useState('');
-  const [isPublic, setIsPublic] = useState(true); // 토글 공개 여부
+  const [isPublic, setIsPublic] = useState(true);
 
   const handleToggle = () => {
     setIsPublic(!isPublic);
@@ -144,7 +144,7 @@ const Input = styled.input`
   border: none;
   border-bottom: 0.73px solid var(--gray2);
   width: 100%;
-  padding: 12px 0;
+  padding: 12px 10px;
   margin-bottom: 20px;
   padding-left: 14px;
 `;

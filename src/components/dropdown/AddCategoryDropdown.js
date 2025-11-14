@@ -112,12 +112,27 @@ export default function AddCategory({ value = [], onChange }) {
                     : theme.typography.fontWeightRegular,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleCheckChange(field)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleCheckChange(field);
+                    }
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                  }}
+                >
                   <FormControlLabel
                     control={
                       <Checkbox
                         checked={value.includes(field)}
-                        onChange={(event) => handleCheckChange(event, field)}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={() => handleCheckChange(field)}
                       />
                     }
                   />

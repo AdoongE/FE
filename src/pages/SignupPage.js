@@ -10,112 +10,86 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { SignUpHandler } from '../components/api/SignUpApi';
 import SingleSelectPlaceholder from '../components/dropdown/JobDropdown';
 import { useNavigate } from 'react-router-dom';
+import { useSignup } from '../context/SignupContext';
 
 function SignupPage() {
-  const [checked, setChecked] = React.useState([false, false, false]);
+  const navigate = useNavigate();
+  const { signupData, updateSignup, resetSignup } = useSignup();
+
+  const [checked, setChecked] = useState([
+    signupData.consentToTermsOfService,
+    signupData.consentToPersonalInformation,
+    signupData.consentToMarketingAndAds,
+  ]);
+
   const [isOtherSelected, setIsOtherSelected] = useState(false);
   const [isFieldOther, setIsFieldOther] = useState(false);
   const [customOccupation, setCustomOccupation] = useState('');
   const [customField, setCustomField] = useState('');
-  const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
-    if (!isClicked) {
-      setIsClicked(true);
-    }
+    if (!isClicked) setIsClicked(true);
   };
 
-  const handleChange1 = (event) => {
-    setChecked([
-      event.target.checked,
-      event.target.checked,
-      event.target.checked,
-    ]);
+  const handleChange1 = (e) => {
+    const all = e.target.checked;
+    setChecked([all, all, all]);
   };
-
-  const handleChange2 = (event) => {
-    setChecked([event.target.checked, checked[1], checked[2]]);
-  };
-
-  const handleChange3 = (event) => {
-    setChecked([checked[0], event.target.checked, checked[2]]);
-  };
-
-  const handleChange4 = (event) => {
-    setChecked([checked[0], checked[1], event.target.checked]);
-  };
+  const handleChange2 = (e) =>
+    setChecked([e.target.checked, checked[1], checked[2]]);
+  const handleChange3 = (e) =>
+    setChecked([checked[0], e.target.checked, checked[2]]);
+  const handleChange4 = (e) =>
+    setChecked([checked[0], checked[1], e.target.checked]);
 
   const schema = yup.object().shape({
     nickname: yup
       .string()
       .matches(/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]{1,10}$/, '*공백포함 10자 이내')
       .required('*필수 항목입니다.'),
-    birthday: yup
-      .string()
-      .matches(/^\d{4}-\d{2}-\d{2}$/, '*필수 항목입니다.')
-      .required('*필수 항목입니다.'),
+    birthday: yup.string().required('*필수 항목입니다.'),
     gender: yup.string(),
     occupation: yup.string(),
     field: yup.string(),
-    consentToTermsOfService: yup
-      .boolean()
-      .oneOf([true], '서비스 이용약관에 동의해야 합니다.'),
-
-    consentToPersonalInformation: yup
-      .boolean()
-      .oneOf([true], '개인정보 수집 및 이용에 동의해야 합니다.'),
-
-    consentToMarketingAndAds: yup.boolean(),
   });
 
   const {
     register,
     handleSubmit,
     control,
-    // watch,
     setValue,
     trigger,
     formState: { isValid, errors, touchedFields },
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
-    defaultValues: {
-      consentToTermsOfService: checked[0],
-      consentToPersonalInformation: checked[1],
-      consentToMarketingAndAds: checked[2],
-    },
+    defaultValues: signupData,
   });
 
   useEffect(() => {
+    updateSignup('consentToTermsOfService', checked[0]);
+    updateSignup('consentToPersonalInformation', checked[1]);
+    updateSignup('consentToMarketingAndAds', checked[2]);
+
     setValue('consentToTermsOfService', checked[0]);
     setValue('consentToPersonalInformation', checked[1]);
     setValue('consentToMarketingAndAds', checked[2]);
-    if (isClicked) {
-      trigger();
-    } // 유효성 검사 강제 트리거
-  }, [checked, setValue, trigger, isClicked]);
+
+    if (isClicked) trigger();
+  }, [checked]);
 
   const onSubmit = async (data) => {
-    const formData = {
-      ...data,
-      consentToTermsOfService: checked[0],
-      consentToPersonalInformation: checked[1],
-      consentToMarketingAndAds: checked[2],
-    };
-    console.log('폼 데이터 제출:', formData);
-
+    const finalData = { ...signupData, ...data };
     try {
-      const result = await SignUpHandler(formData); // API 호출
+      const result = await SignUpHandler(finalData);
       if (result?.data?.status?.code === 200) {
-        alert('회원가입 성공: ' + result.data.status.message);
-        navigate('/main'); // 성공 시 페이지 이동
+        alert('회원가입 성공!');
+        resetSignup();
+        navigate('/main');
       }
     } catch (error) {
-      // 에러 발생 시 에러 메시지를 경고창으로 표시
-      alert(
-        `회원가입 실패: ${error.message || '알 수 없는 오류가 발생했습니다.'}`,
-      );
+      alert(`회원가입 실패: ${error.message}`);
     }
   };
 
@@ -129,127 +103,130 @@ function SignupPage() {
             <Short>회원가입을 위해 정보를 입력해주세요.</Short>
             <Line />
           </Header>
+
           <Signup>
             <Option>
               <Name>닉네임 *</Name>
               <Inputs
-                type={'text'}
+                type="text"
                 {...register('nickname')}
                 placeholder="닉네임을 입력하세요."
+                defaultValue={signupData.nickname}
+                onChange={(e) => {
+                  updateSignup('nickname', e.target.value);
+                  setValue('nickname', e.target.value);
+                }}
                 onClick={handleClick}
               />
-              {errors.nickname && touchedFields.nickname ? (
+              {errors.nickname && touchedFields.nickname && (
                 <Error>{errors.nickname?.message}</Error>
-              ) : (
-                <Error></Error>
               )}
             </Option>
+
             <Option>
-              <Name>생년원일 *</Name>
+              <Name>생년월일 *</Name>
               <Date
-                onClick={handleClick}
                 type="date"
                 {...register('birthday')}
+                defaultValue={signupData.birthday}
+                onChange={(e) => {
+                  updateSignup('birthday', e.target.value);
+                  setValue('birthday', e.target.value);
+                }}
+                onClick={handleClick}
               />
-              {errors.birthday && touchedFields.birthday ? (
+              {errors.birthday && touchedFields.birthday && (
                 <Error>{errors.birthday?.message}</Error>
-              ) : (
-                <Error></Error>
               )}
             </Option>
+
             <Option>
               <Name>성별</Name>
-
               <Controller
-                onClick={handleClick}
                 name="gender"
                 control={control}
-                defaultValue={''}
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <Gender>
                     <GenderChoice
-                      label="MALE"
-                      value={field.value}
                       $isSelected={field.value === 'MALE'}
-                      onClick={() => field.onChange('MALE')}
-                      $error={fieldState.error ? true : undefined}
-                      $helperText={fieldState.error && fieldState.error.message}
+                      onClick={() => {
+                        updateSignup('gender', 'MALE');
+                        field.onChange('MALE');
+                      }}
                     >
                       남자
                     </GenderChoice>
+
                     <GenderChoice
-                      label="FEMALE"
-                      value={field.value}
                       $isSelected={field.value === 'FEMALE'}
-                      onClick={() => field.onChange('FEMALE')}
-                      $error={fieldState.error ? true : undefined}
-                      $helperText={fieldState.error && fieldState.error.message}
+                      onClick={() => {
+                        updateSignup('gender', 'FEMALE');
+                        field.onChange('FEMALE');
+                      }}
                     >
                       여자
                     </GenderChoice>
                   </Gender>
                 )}
               />
-              {errors.gender && touchedFields.gender && (
-                <Error>{errors.gender?.message}</Error>
-              )}
             </Option>
+
             <Option>
               <Name>직업</Name>
               <Choice>
                 <Controller
                   name="occupation"
                   control={control}
-                  defaultValue={''}
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <SingleSelectPlaceholder
-                      label="occupation"
-                      $error={fieldState.error ? true : undefined}
-                      $helperText={fieldState.error && fieldState.error.message}
-                      value={isOtherSelected ? '' : field.value}
+                      value={field.value}
                       onChange={(value) => {
                         if (value === '기타(직접 입력)') {
-                          field.onChange('');
                           setIsOtherSelected(true);
+                          updateSignup('occupation', '');
+                          field.onChange('');
                         } else {
-                          field.onChange(value);
                           setIsOtherSelected(false);
+                          updateSignup('occupation', value);
+                          field.onChange(value);
                         }
                       }}
                     />
                   )}
                 />
+
                 {isOtherSelected && (
                   <Input
                     placeholder="직접 입력"
-                    type="text"
                     value={customOccupation}
-                    onChange={(e) => setCustomOccupation(e.target.value)}
-                    onBlur={() => setValue('occupation', customOccupation)}
+                    onChange={(e) => {
+                      setCustomOccupation(e.target.value);
+                      updateSignup('occupation', e.target.value);
+                      setValue('occupation', e.target.value);
+                    }}
                   />
                 )}
               </Choice>
             </Option>
+
             <Option>
               <Name>분야</Name>
               <Choice>
                 <Controller
                   name="field"
                   control={control}
-                  defaultValue={''}
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FieldSelectPlaceholder
-                      label="field"
-                      $error={fieldState.error ? true : undefined}
-                      $helperText={fieldState.error && fieldState.error.message}
-                      value={isFieldOther ? '' : field.value}
+                      value={field.value}
                       onChange={(value) => {
                         if (value === '기타(직접 입력)') {
-                          field.onChange('');
                           setIsFieldOther(true);
+                          updateSignup('field', '');
+                          field.onChange('');
                         } else {
-                          field.onChange(value);
                           setIsFieldOther(false);
+                          updateSignup('field', value);
+                          field.onChange(value);
                         }
                       }}
                     />
@@ -259,104 +236,77 @@ function SignupPage() {
                 {isFieldOther && (
                   <Input
                     placeholder="직접 입력"
-                    type="text"
                     value={customField}
-                    onChange={(e) => setCustomField(e.target.value)}
-                    onBlur={() => setValue('field', customField)}
+                    onChange={(e) => {
+                      setCustomField(e.target.value);
+                      updateSignup('field', e.target.value);
+                      setValue('field', e.target.value);
+                    }}
                   />
                 )}
               </Choice>
             </Option>
+
             <Option>
               <Name>약관 동의</Name>
               <div>
-                <div>
-                  <NewContent>
-                    <Contents>전체 동의</Contents>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          style={{
-                            transform: 'translateY(-0.521vw)',
-                          }}
-                          sx={{
-                            '& .MuiSvgIcon-root': { fontSize: '20px' },
-                            '&.Mui-checked': {
-                              color: '#41C3AB',
-                            },
-                          }}
-                          checked={checked[0] && checked[1] && checked[2]}
-                          onChange={handleChange1}
-                        />
-                      }
-                    />
-                  </NewContent>
-                </div>
+                <NewContent>
+                  <Contents>전체 동의</Contents>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked[0] && checked[1] && checked[2]}
+                        onChange={handleChange1}
+                      />
+                    }
+                  />
+                </NewContent>
+
                 <Lines />
+
                 <ContentCheck>
                   <NewContent>
                     <Content onClick={() => navigate('/service-consent')}>
-                      {/* accordion mui 라이브러리 이용 */}
                       <span style={{ color: 'red' }}>(필수)</span> 서비스
                       이용약관
-                      <div style={{ fontWeight: '700' }}>{'>'}</div>
+                      <div>{'>'}</div>
                     </Content>
-
                     <FormControlLabel
                       control={
                         <Checkbox
-                          style={{ transform: 'translateY(-0.521vw)' }}
                           checked={checked[0]}
                           onChange={handleChange2}
-                          sx={{
-                            '& .MuiSvgIcon-root': { fontSize: '20px' },
-                            '&.Mui-checked': {
-                              color: '#41C3AB',
-                            },
-                          }}
                         />
                       }
                     />
                   </NewContent>
+
                   <NewContent>
                     <Content onClick={() => navigate('/personal-consent')}>
                       <span style={{ color: 'red' }}>(필수)</span> 개인정보 수집
-                      및 이용동의 <div style={{ fontWeight: '700' }}>{'>'}</div>
+                      및 이용 동의
+                      <div>{'>'}</div>
                     </Content>
                     <FormControlLabel
                       control={
                         <Checkbox
-                          style={{ transform: 'translateY(-0.521vw)' }}
                           checked={checked[1]}
                           onChange={handleChange3}
-                          sx={{
-                            '& .MuiSvgIcon-root': { fontSize: '20px' },
-                            '&.Mui-checked': {
-                              color: '#41C3AB',
-                            },
-                          }}
                         />
                       }
                     />
                   </NewContent>
+
                   <NewContent>
                     <Content onClick={() => navigate('/marketing-consent')}>
-                      {/* accordion mui 라이브러리 이용 */}
-                      (선택) 마케팅 활용 및 광고성 정보 수신 동의{' '}
-                      <div style={{ fontWeight: '700' }}>{'>'}</div>
+                      (선택) 마케팅 정보 수신 동의
+                      <div>{'>'}</div>
                     </Content>
                     <FormControlLabel
                       control={
                         <Checkbox
-                          style={{ transform: 'translateY(-0.521vw)' }}
                           checked={checked[2]}
                           onChange={handleChange4}
-                          sx={{
-                            '& .MuiSvgIcon-root': { fontSize: '20px' },
-                            '&.Mui-checked': {
-                              color: '#41C3AB',
-                            },
-                          }}
                         />
                       }
                     />
@@ -365,6 +315,7 @@ function SignupPage() {
               </div>
             </Option>
           </Signup>
+
           <Button disabled={!isValid} type="submit">
             가입하기
           </Button>

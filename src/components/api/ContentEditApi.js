@@ -20,7 +20,9 @@ export const ContentEditHandler = async (seedType, data, images, pdfs, Id) => {
           } else if (seedType === 'PDF') {
             for (const pdf of pdfs) {
               const blob = await fetch(pdf.preview).then((res) => res.blob());
-              const file = new File([blob], pdf.label, { type: blob.type });
+              const file = new File([blob], pdf.label, {
+                type: 'application/pdf',
+              });
               formData.append('file', file);
             }
           }

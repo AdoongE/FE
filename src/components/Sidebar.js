@@ -24,6 +24,7 @@ const Sidebar = ({
   categoryCounts,
   activeTab,
   setActiveTab,
+  filterId,
 }) => {
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(true);
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
@@ -350,6 +351,10 @@ const Sidebar = ({
         i === index ? newConditionName : condition,
       ),
     );
+    const filterBeingEditedId = customFilterIds[index];
+    if (filterId === filterBeingEditedId) {
+      setFilterName(newConditionName);
+    }
   };
 
   const handleRemoveFilter = (index) => {
@@ -843,7 +848,8 @@ const FilterContent = styled.div`
   ${font.body2}
   color: var(--gray2);
   padding: 0 10px;
-  line-height: 0;
+  word-wrap: break-word;
+  word-break: break-word;
 `;
 
 const CustomList = styled.div`

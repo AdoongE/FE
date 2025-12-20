@@ -364,7 +364,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
         <CheckIcon icon="prime:check-square" />
         <div>D-day는 D-0입니다. ex) D-0 ~ D~10</div>
       </Short>
-      <Date>
+      <DdayBox>
         <Dday>
           <span>D-</span>
           <DdayInput
@@ -386,7 +386,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
             onChange={handleChangeEndDay}
           />
         </Dday>
-      </Date>
+      </DdayBox>
       <div style={{ display: 'flex', justifyContent: ' center' }}>
         <Button disabled={!isValid} onClick={handleSave}>
           저장하기
@@ -398,6 +398,17 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
 
 EditFilterModal.displayName = 'EditFilterModal';
 CustomInput.displayName = 'CustomInput';
+
+const DdayBox = styled.div`
+  display: flex;
+  column-gap: 5px;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 30px;
+  position: relative !important;
+  overflow: visible !important;
+  align-items: center;
+`;
 
 const CheckIcon = styled(Icon)`
   width: 16px;

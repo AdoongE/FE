@@ -10,7 +10,7 @@ function QuestionPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(20);
   const take = 5;
-  const nPage = Math.ceil(total / take + 1);
+  const nPage = Math.ceil(total / take);
   const numbers = [...Array(nPage + 1).keys()].slice(1);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ function QuestionPage() {
         ))}
 
         <PageButton
-          disabled={currentPage === nPage}
+          disabled={currentPage >= nPage}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >
           {'>'}
@@ -86,7 +86,6 @@ const PaginationContainer = styled.div`
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  background: white;
   padding: 10px 20px;
   border-radius: 8px;
   z-index: 10;

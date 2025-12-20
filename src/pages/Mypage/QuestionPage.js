@@ -8,7 +8,7 @@ import { getFaq } from '../../components/api/InfoApi';
 function QuestionPage() {
   const [faqList, setFaqList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(20);
+  const [total, setTotal] = useState(0);
   const take = 5;
   const nPage = Math.ceil(total / take);
   const numbers = [...Array(nPage + 1).keys()].slice(1);
@@ -16,9 +16,9 @@ function QuestionPage() {
   useEffect(() => {
     const fetchFaq = async () => {
       try {
-        const { list, count } = await getFaq({ page: currentPage, take });
+        const { list } = await getFaq({ page: currentPage - 1, take });
         setFaqList(list);
-        setTotal(count);
+        setTotal(11); // TODO: 11을 백 반환 변수로 바꿔주기.
       } catch (err) {
         console.error('FAQ 로딩 실패:', err);
       }
@@ -26,10 +26,10 @@ function QuestionPage() {
     fetchFaq();
   }, [currentPage]);
 
-  useEffect(() => {
-    console.log('faq목록:', faqList);
-    console.log('faq 개수:', total);
-  }, [faqList, total]);
+  // useEffect(() => {
+  //   console.log('faq목록:', faqList);
+  //   console.log('faq 개수:', total);
+  // }, [faqList, total]);
 
   return (
     <div>
@@ -67,7 +67,7 @@ function QuestionPage() {
         ))}
 
         <PageButton
-          disabled={currentPage >= nPage}
+          disabled={currentPage === nPage}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >
           {'>'}

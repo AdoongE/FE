@@ -352,7 +352,7 @@ function ContentHeader({
             }}
           />
           {/* 검색 필터링 */}
-          {activeTab === '검색필터' && (
+          {activeTab === '검색필터' && tags.length > 0 && (
             <FilterContainer>
               <ParentContainer>
                 <SearchTitle>

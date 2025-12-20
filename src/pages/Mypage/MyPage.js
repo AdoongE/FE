@@ -526,6 +526,7 @@ const Out = styled.div`
   font-weight: 400;
   font-size: 16px;
   text-decoration: underline;
+  cursor: pointer;
 `;
 
 const Lines = styled.div`

@@ -139,11 +139,6 @@ function ContentHeader({
       setKeyword(searchQuery.trim()); // 부모(MainPage)의 keyword 업데이트
       saveSearchQuery(searchQuery.trim()); // 최근 검색어 저장
       await fetchSearchResults(searchQuery.trim()); // 공통 검색 함수 호출
-    } else if (!searchQuery.trim()) {
-      // 검색어가 없을 때, 전체 콘텐츠 불러오기
-      setSearchState(false); // 검색 결과 있음
-      setFilteredDataState([]); // 빈 결과를 설정하지 않고 전체 씨드를 불러옴
-      await fetchSearchResults(''); // 전체 씨드를 불러오기 위한 빈 문자열 검색
     }
   };
 

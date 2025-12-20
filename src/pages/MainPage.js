@@ -158,7 +158,21 @@ const MainPage = () => {
 
   useEffect(() => {
     fetchData(currentPage - 1);
-  }, [fetchData, location, sortOrder, localSelectedFormat]);
+  }, [fetchData, location, sortOrder, localSelectedFormat, filterId]);
+
+  useEffect(() => {
+    const handleFilterUpdate = () => {
+      if (activeTab === '맞춤필터') {
+        fetchData(currentPage - 1);
+      }
+    };
+
+    window.addEventListener('filterUpdated', handleFilterUpdate);
+
+    return () => {
+      window.removeEventListener('filterUpdated', handleFilterUpdate);
+    };
+  }, [activeTab, currentPage, fetchData]);
 
   const seedTypeMapping = {
     IMAGE: '이미지',

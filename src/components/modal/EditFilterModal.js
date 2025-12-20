@@ -231,6 +231,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
       if (result?.data?.status?.code === 200) {
         console.log('맞춤 필터 수정 성공');
         dialogRef.current?.close();
+        window.dispatchEvent(new CustomEvent('filterUpdated'));
       }
     } catch (error) {
       console.error('에러 발생:', error);

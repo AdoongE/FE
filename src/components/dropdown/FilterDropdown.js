@@ -77,6 +77,7 @@ const FilterDropdown = ({
 
       if (response.status === 200) {
         console.log('필터 삭제 성공');
+        window.location.reload();
       } else {
         console.error('필터 삭제 실패');
       }
@@ -87,25 +88,27 @@ const FilterDropdown = ({
 
   return (
     <>
-      {ReactDOM.createPortal(
-        <DropdownMenu
-          className="filter"
-          ref={dropdownRef}
-          onClick={(e) => e.stopPropagation()}
-          top={position.top}
-          left={position.left}
-        >
-          <DropdownItem onClick={() => setShowEditModal(true)}>
-            <Icons icon="iconamoon:edit-light" />
-            이름 변경하기
-          </DropdownItem>
-          <DropdownItem onClick={() => setShowDeleteModal(true)}>
-            <Icons icon="mage:trash" />
-            삭제하기
-          </DropdownItem>
-        </DropdownMenu>,
-        document.body,
-      )}
+      {!showEditModal &&
+        !showDeleteModal &&
+        ReactDOM.createPortal(
+          <DropdownMenu
+            className="filter"
+            ref={dropdownRef}
+            onClick={(e) => e.stopPropagation()}
+            top={position.top}
+            left={position.left}
+          >
+            <DropdownItem onClick={() => setShowEditModal(true)}>
+              <Icons icon="iconamoon:edit-light" />
+              이름 변경하기
+            </DropdownItem>
+            <DropdownItem onClick={() => setShowDeleteModal(true)}>
+              <Icons icon="mage:trash" />
+              삭제하기
+            </DropdownItem>
+          </DropdownMenu>,
+          document.body,
+        )}
 
       {showEditModal && (
         <ModalOverlay onClick={() => setShowEditModal(false)}>
@@ -183,7 +186,7 @@ const DropdownMenu = styled.ul`
   border-radius: 8px;
   z-index: 1000;
   width: 148px;
-  box-shadow: 0 0 9px #dfdfdf;
+  box-shadow: 0 0 9.739px 0 rgba(0, 0, 0, 0.1);
   padding: 4px;
 `;
 
@@ -216,7 +219,7 @@ const ModalOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 99999;
 `;
 
 const ModalContent = styled.div`

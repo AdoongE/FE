@@ -10,6 +10,7 @@ import FieldSelectPlaceholder from '../../components/dropdown/FieldDropdown';
 import SingleSelectPlaceholder from '../../components/dropdown/JobDropdown';
 import { Icon } from '@iconify/react';
 import Navbar from '../../components/Navbar';
+import ImpossibleAlert from '../../assets/icons/impossible-alert.svg';
 
 function MyPage() {
   const [isOtherSelected, setIsOtherSelected] = useState(false);
@@ -21,6 +22,8 @@ function MyPage() {
   const [originalMyData, setOriginalMyData] = useState({});
   const [checked, setChecked] = React.useState(false);
   const [open, setOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const getDetail = async () => {
     try {
@@ -96,25 +99,44 @@ function MyPage() {
     }
   }, [originalMyData, reset]);
 
-  useEffect(() => {
-    setValue('consentToMarketingAndAds', checked);
-  }, [checked, setValue, isClicked]);
-
   const onSubmit = async (data) => {
     const formData = {
       ...data,
       consentToMarketingAndAds: checked,
     };
+
     console.log('폼 데이터 제출:', formData);
 
     try {
       const result = await axiosInstance.patch(`/api/v1/member`, formData);
+
       if (result?.data?.status?.code === 200) {
-        console.log('회원정보 수정 성공');
-        navigate('/mypage');
+        setToastMessage('회원 정보가 수정되었습니다.');
+        setShowToast(true);
+
+        setTimeout(() => {
+          setShowToast(false);
+          navigate('/mypage');
+        }, 1500);
+
+        return;
       }
+
+      setToastMessage('회원 정보 수정에 실패했습니다.');
+      setShowToast(true);
+
+      setTimeout(() => {
+        setShowToast(false);
+      }, 1500);
     } catch (error) {
       console.error(`회원정보 수정 실패: `, error);
+
+      setToastMessage('회원 정보 수정에 실패했습니다.');
+      setShowToast(true);
+
+      setTimeout(() => {
+        setShowToast(false);
+      }, 1500);
     }
   };
 
@@ -175,7 +197,7 @@ function MyPage() {
                 )}
               </Option>
               <Option>
-                <Name>생년원일 *</Name>
+                <Name>생년월일 *</Name>
                 <Date
                   onClick={handleClick}
                   type="date"
@@ -191,38 +213,37 @@ function MyPage() {
                 <Name>성별</Name>
 
                 <Controller
-                  onClick={handleClick}
+                  key={'gender'}
                   name="gender"
                   control={control}
                   defaultValue={''}
-                  render={({ field, fieldState }) => (
-                    <Gender>
-                      <GenderChoice
-                        label="MALE"
-                        value={field.value}
-                        $isSelected={field.value === 'MALE'}
-                        onClick={() => field.onChange('MALE')}
-                        $error={fieldState.error ? true : undefined}
-                        $helperText={
-                          fieldState.error && fieldState.error.message
-                        }
-                      >
-                        남자
-                      </GenderChoice>
-                      <GenderChoice
-                        label="FEMALE"
-                        value={field.value}
-                        $isSelected={field.value === 'FEMALE'}
-                        onClick={() => field.onChange('FEMALE')}
-                        $error={fieldState.error ? true : undefined}
-                        $helperText={
-                          fieldState.error && fieldState.error.message
-                        }
-                      >
-                        여자
-                      </GenderChoice>
-                    </Gender>
-                  )}
+                  render={({ field }) => {
+                    const handleSelect = (value) => {
+                      if (field.value === value) {
+                        field.onChange('');
+                      } else {
+                        field.onChange(value);
+                      }
+                    };
+
+                    return (
+                      <Gender>
+                        <GenderChoice
+                          $isSelected={field.value === 'MALE'}
+                          onClick={() => handleSelect('MALE')}
+                        >
+                          남자
+                        </GenderChoice>
+
+                        <GenderChoice
+                          $isSelected={field.value === 'FEMALE'}
+                          onClick={() => handleSelect('FEMALE')}
+                        >
+                          여자
+                        </GenderChoice>
+                      </Gender>
+                    );
+                  }}
                 />
                 {errors.gender && touchedFields.gender && (
                   <Error>{errors.gender?.message}</Error>
@@ -350,9 +371,69 @@ function MyPage() {
           </Dialog>
         </Backdrop>
       )}
+      {showToast && (
+        <CustomToast>
+          <ToastIcon>
+            <img src={ImpossibleAlert} alt="Alert" />
+          </ToastIcon>
+          <ToastMessage>{toastMessage}</ToastMessage>
+        </CustomToast>
+      )}
     </div>
   );
 }
+
+const CustomToast = styled.div`
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  padding: 14px 24px;
+  align-items: center;
+  gap: 16px;
+  border-radius: 8px;
+  background: var(--gray-gray4, #f2f2f2);
+  box-shadow: 0 0 4.808px 0 rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  animation:
+    fadeIn 0.3s,
+    fadeOut 0.3s 2.7s;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+    }
+  }
+`;
+
+const ToastIcon = styled.div`
+  width: 40px;
+  height: 40px;
+`;
+
+const ToastMessage = styled.div`
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
 
 const HeaderContainer = styled.div`
   width: 100%;

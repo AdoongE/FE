@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
   
   html, body, #root {
     font-family: "Pretendard";
+    height: 100%;
   }
 
   p {

@@ -29,20 +29,17 @@ export const getNotice = async ({ page, take }) => {
     const response = await axiosInstance.get(
       `/api/v1/notice?page=${page}&size=${take}`,
     );
-    const noticeList = response.data?.results;
-    const totalNum = response.data.metadata?.resultCount;
 
-    if (response.status) {
-      console.log('notice 가져오기 성공');
-      return {
-        list: noticeList,
-        count: totalNum,
-      };
-    } else {
-      console.error('notice 가져오기 실패');
-    }
+    const noticeList = response.data?.results ?? [];
+    const totalNum = response.data?.metadata?.resultCount ?? 0;
+
+    return {
+      list: noticeList,
+      count: totalNum,
+    };
   } catch (error) {
     console.error('에러 발생:', error);
+    return { list: [], count: 0 };
   }
 };
 

@@ -143,31 +143,37 @@ function SignupPage() {
             <Option>
               <Name>성별</Name>
               <Controller
+                key={'gender'}
                 name="gender"
                 control={control}
-                render={({ field }) => (
-                  <Gender>
-                    <GenderChoice
-                      $isSelected={field.value === 'MALE'}
-                      onClick={() => {
-                        updateSignup('gender', 'MALE');
-                        field.onChange('MALE');
-                      }}
-                    >
-                      남자
-                    </GenderChoice>
+                defaultValue={''}
+                render={({ field }) => {
+                  const handleSelect = (value) => {
+                    if (field.value === value) {
+                      field.onChange('');
+                    } else {
+                      field.onChange(value);
+                    }
+                  };
 
-                    <GenderChoice
-                      $isSelected={field.value === 'FEMALE'}
-                      onClick={() => {
-                        updateSignup('gender', 'FEMALE');
-                        field.onChange('FEMALE');
-                      }}
-                    >
-                      여자
-                    </GenderChoice>
-                  </Gender>
-                )}
+                  return (
+                    <Gender>
+                      <GenderChoice
+                        $isSelected={field.value === 'MALE'}
+                        onClick={() => handleSelect('MALE')}
+                      >
+                        남자
+                      </GenderChoice>
+
+                      <GenderChoice
+                        $isSelected={field.value === 'FEMALE'}
+                        onClick={() => handleSelect('FEMALE')}
+                      >
+                        여자
+                      </GenderChoice>
+                    </Gender>
+                  );
+                }}
               />
             </Option>
 

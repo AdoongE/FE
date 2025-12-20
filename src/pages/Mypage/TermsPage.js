@@ -3,14 +3,20 @@ import Navbar from '../../components/Navbar';
 import styled from 'styled-components';
 import InfoHeader from '../../components/bar/InfoHeader';
 import { getTermDetail } from '../../components/api/InfoApi';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 function TermsPage() {
   const navbarMenuRef = useRef(null);
   const [activeTab, setActiveTab] = useState('이용약관');
   const [activeBarWidth, setActiveBarWidth] = useState(0);
   const [activeBarLeft, setActiveBarLeft] = useState(0);
-  const [serviceDetail, setServiceDetail] = useState();
-  const [privacyDetail, setprivacyDetail] = useState();
+  const [serviceDetail, setServiceDetail] = useState('');
+  const [privacyDetail, setPrivacyDetail] = useState('');
+
+  marked.setOptions({
+    breaks: true,
+  });
 
   const handleTabClick = (tabName, event) => {
     setActiveTab(tabName);
@@ -27,14 +33,19 @@ function TermsPage() {
         const serviceResponse = await getTermDetail({ type: 'SERVICE' });
         const privacyResponse = await getTermDetail({ type: 'PRIVACY' });
 
-        setServiceDetail(serviceResponse?.content);
-        setprivacyDetail(privacyResponse?.content);
+        setServiceDetail(serviceResponse?.content || '');
+        setPrivacyDetail(privacyResponse?.content || '');
       } catch (err) {
         console.error('약관 로딩 실패:', err);
       }
     };
     fetchInfo();
   }, []);
+
+  const renderMarkdown = (md) => {
+    const html = marked(md || '');
+    return { __html: DOMPurify.sanitize(html) };
+  };
 
   return (
     <div>
@@ -46,27 +57,31 @@ function TermsPage() {
           <TabContainer>
             <NavbarMenu ref={navbarMenuRef}>
               <MenuButton
-                data-tab="이용약관"
-                onClick={(e) => {
-                  handleTabClick('이용약관', e);
-                }}
+                onClick={(e) => handleTabClick('이용약관', e)}
                 active={activeTab === '이용약관'}
               >
                 서비스 이용약관
               </MenuButton>
+
               <MenuButton
-                data-tab="처리방침"
                 onClick={(e) => handleTabClick('처리방침', e)}
                 active={activeTab === '처리방침'}
               >
                 개인정보 처리방침
               </MenuButton>
+
               <ActiveBar width={activeBarWidth} left={activeBarLeft} />
             </NavbarMenu>
+
             <TabLine />
-            <Box>
-              {activeTab === '이용약관' ? serviceDetail : privacyDetail}
-            </Box>
+
+            <Box
+              dangerouslySetInnerHTML={
+                activeTab === '이용약관'
+                  ? renderMarkdown(serviceDetail)
+                  : renderMarkdown(privacyDetail)
+              }
+            />
           </TabContainer>
         </Container>
       </Page>
@@ -83,12 +98,33 @@ const Line = styled.div`
 const Box = styled.div`
   position: absolute;
   width: 978px;
-  height: fit-content;
   padding: 30px;
   border-radius: 5px;
   top: 100px;
   border: 1px solid #9f9f9f;
-  white-space: pre-line;
+  font-size: 16px;
+  line-height: 1.6;
+
+  h1,
+  h2,
+  h3 {
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+
+  p {
+    margin-bottom: 12px;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  ul,
+  ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
 `;
 
 const TabContainer = styled.div`

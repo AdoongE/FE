@@ -42,9 +42,13 @@ function InfoPage() {
           />
           <Line />
         </Container>
-        {infoList.map((info) => (
-          <InfoBox key={info.id} info={info} />
-        ))}
+        {infoList.length === 0 ? (
+          <div style={{ marginTop: '40px', color: '#666' }}>
+            등록된 공지사항이 없습니다.
+          </div>
+        ) : (
+          infoList.map((info) => <InfoBox key={info.id} info={info} />)
+        )}
       </Page>
       <PaginationContainer>
         <PageButton

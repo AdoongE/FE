@@ -19,8 +19,9 @@ function SidebarLayout() {
 const LayoutWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
 `;
 
 const StyledSidebar = styled.div`

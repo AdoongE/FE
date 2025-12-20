@@ -1,10 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { font } from '../../styles/font';
-import userIcon from '../../assets/icons/user.png';
-import fileIcon from '../../assets/icons/file-text.png';
-import volumeIcon from '../../assets/icons/volume-2.png';
-import helpIcon from '../../assets/icons/help-circle.png';
+import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
 import { useActiveTab } from '../../context/ActiveTabContext';
 
@@ -29,28 +26,28 @@ function MypageSidebar() {
             active={activeTab === '회원정보수정'}
             onClick={() => handleTabClick('회원정보수정')}
           >
-            <ImgIcon src={userIcon} alt="user icon" />
+            <StyledIcon icon="ci:user-02" />
             회원 정보 수정
           </ManageBtn>
           <ManageBtn
             active={activeTab === '공지사항'}
             onClick={() => handleTabClick('공지사항')}
           >
-            <ImgIcon src={volumeIcon} alt="volume icon" />
+            <StyledIcon icon="meteor-icons:bullhorn" />
             공지사항
           </ManageBtn>
           <ManageBtn
             active={activeTab === '이용약관'}
             onClick={() => handleTabClick('이용약관')}
           >
-            <ImgIcon src={fileIcon} alt="file icon" />
+            <StyledIcon icon="bx:file" />
             이용약관
           </ManageBtn>
           <ManageBtn
             active={activeTab === 'FAQ'}
             onClick={() => handleTabClick('FAQ')}
           >
-            <ImgIcon src={helpIcon} alt="help icon" />
+            <StyledIcon icon="ri:question-line" />
             FAQ
           </ManageBtn>
         </BtnDiv>
@@ -73,7 +70,8 @@ const StMainPage = styled.div`
 `;
 
 const SideDiv = styled.div`
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   width: 262px;
   padding: 0 16px;
   background-color: var(--sidebar);
@@ -91,7 +89,7 @@ const BtnDiv = styled.div`
 const Button = styled.button`
   width: 100%;
   padding: 14px 12px;
-  gap: 12px;
+  gap: 7px;
   border-radius: 8px;
   border: none;
   background-color: ${({ active }) => (active ? '#def3f1' : 'transparent')};
@@ -103,11 +101,9 @@ const Button = styled.button`
 
 const ManageBtn = styled(Button)``;
 
-const ImgIcon = styled.img`
-  width: 18px;
-  height: 18px;
-  position: relative;
-  left: 0;
+const StyledIcon = styled(Icon)`
+  width: 20px;
+  height: 20px;
 `;
 
 export default MypageSidebar;

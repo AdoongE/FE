@@ -8,8 +8,8 @@ let isTokenExpired = false;
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jwtToken');
-
+    const token =
+      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTc2MzE1NzQ2MH0.jSl1H8aShSP5d_lBVgm95ZGDM8QirHKq9r6lQFPC0e4 ';
     if (!token) {
       if (!isTokenExpired) {
         isTokenExpired = true;

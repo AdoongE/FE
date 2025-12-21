@@ -5,7 +5,6 @@ import { Icon } from '@iconify/react';
 import AddTagModal from './modal/AddTagModal';
 import EditFilterModal from './modal/EditFilterModal';
 import filterIcon from '../assets/icons/filter.png';
-import { axiosInstance } from './api/axios-instance';
 
 function ContentHeader({
   setSortOrder,
@@ -18,8 +17,6 @@ function ContentHeader({
   setActiveTab,
   tags = [],
   setTags,
-  setFilteredData,
-  setSearchState,
   setKeyword,
 }) {
   const [localSelectedFormat, setLocalSelectedFormat] = useState('');
@@ -35,8 +32,6 @@ function ContentHeader({
   const [showRecentSearches, setShowRecentSearches] = useState(false);
   const dialogRef = useRef(null);
   const visibleTags = isExpanded ? tags : tags.slice(0, 4);
-
-  const [filteredData, setFilteredDataState] = useState([]);
 
   // 날짜 포맷 함수
   const formatDate = (dateString) => {
@@ -88,73 +83,20 @@ function ContentHeader({
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
-  // 공통 API 호출 함수
-  const fetchSearchResults = async (query) => {
-    try {
-      console.log('검색 요청 시작 - 키워드:', query); // 검색 키워드 확인
-
-      const requestData = {
-        keyword: query.trim(), // 검색어
-        sortOrder: selectedFilter || undefined,
-        seedType: localSelectedFormat || undefined,
-        tags: tags.length > 0 ? tags : undefined,
-      };
-
-      const response = await axiosInstance.post(
-        '/api/v1/seed/filtering',
-        requestData,
-      );
-
-      console.log('검색 응답 데이터:', response.data); // API 응답 확인
-
-      const results = response.data.results[0].seedInfoList.map((item) => ({
-        id: item.seedId || 'ID 없음',
-        seedName: item.seedName || '제목 없음',
-        categoryName: item.categoryName || [],
-        tagName: item.tagName || [],
-        dDay: item.dDay ?? null,
-        seedType: item.seedType || '타입 없음',
-        thumbnailImage: item.thumbnailImage || null,
-        updatedDt: item.updatedDt || '업데이트 정보 없음',
-        seedDetail: item.seedDetail || '',
-      }));
-
-      if (results.length === 0) {
-        setSearchState(true); // 검색 결과 없음
-        setFilteredData([]); // 빈 결과로 설정
-      } else {
-        setSearchState(false); // 검색 결과 있음
-        setFilteredData(results); // 검색 결과 저장
-      }
-
-      console.log('검색 후 매핑된 데이터:', results);
-    } catch (error) {
-      console.error('검색 실패:', error);
-    }
-  };
-
   // 엔터 키를 눌렀을 때 실행되는 함수
-  const handleSearchKeyPress = async (e) => {
+  const handleSearchKeyPress = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       setKeyword(searchQuery.trim()); // 부모(MainPage)의 keyword 업데이트
       saveSearchQuery(searchQuery.trim()); // 최근 검색어 저장
-      await fetchSearchResults(searchQuery.trim()); // 공통 검색 함수 호출
     }
   };
 
   // 최근 검색어 클릭 시 실행되는 함수
-  const handleRecentSearchClick = async (query) => {
+  const handleRecentSearchClick = (query) => {
     setSearchQuery(query); // 검색어 업데이트
     setKeyword(query);
     saveSearchQuery(query); // 검색어 저장
-    await fetchSearchResults(query); // 공통 검색 함수 호출
     setShowRecentSearches(false);
-
-    // 결과가 없으면 빈 콘텐츠 화면으로 설정
-    if (!filteredData || filteredData.length === 0) {
-      setSearchState(true); // 검색 결과 없음
-      setFilteredDataState([]); // 빈 결과 설정
-    }
   };
 
   // 태그 검색 모달 열기

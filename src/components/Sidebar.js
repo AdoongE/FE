@@ -407,7 +407,8 @@ const Sidebar = ({
             active={
               activeTab === '나의 씨드' ||
               activeTab === '카테고리' ||
-              activeTab === '모아보기'
+              activeTab === '모아보기' ||
+              activeTab === '검색필터'
             }
             onClick={() => handleTabClick('나의 씨드')}
           >

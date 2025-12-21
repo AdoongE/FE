@@ -102,7 +102,8 @@ function Navbar({ activeTab, setActiveTab }) {
             activeTab === '모아보기' ||
             activeTab === '나의 씨드' ||
             activeTab === '카테고리' ||
-            activeTab === '리마인더'
+            activeTab === '리마인더' ||
+            activeTab === '검색필터'
           }
         >
           모아보기

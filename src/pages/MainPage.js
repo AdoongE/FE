@@ -28,7 +28,6 @@ const MainPage = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [filterId, setFilterId] = useState(null);
   const [filterName, setFilterName] = useState('');
-  const [filteredData, setFilteredData] = useState([]);
   const [keyword, setKeyword] = useState(''); // 검색 키워드 상태 추가
   const [tags, setTags] = useState([]); // 검색 필터링을 위한
   const [searchState, setSearchState] = useState(false);
@@ -59,14 +58,18 @@ const MainPage = () => {
         let results = [];
         let pageInfos = [];
 
-        if (activeTab === '검색필터') {
+        if (keyword || activeTab === '검색필터') {
           url = '/api/v1/seed/filtering';
-          const data = { tags: tags };
-          const response = await axiosInstance.post(url, data, { params });
+          const postData = {
+            keyword: keyword || undefined,
+            tags: tags.length > 0 ? tags : undefined,
+          };
+          const response = await axiosInstance.post(url, postData, { params });
 
           if (response.data.status.code === 200) {
             if (response.data.status.message === '씨드가 존재하지 않습니다.') {
               setSearchState(true);
+              results = [];
             } else {
               pageInfos = response.data.results[0];
               setTotalPages(pageInfos.pageInfo.totalPages || 1);
@@ -92,6 +95,7 @@ const MainPage = () => {
           if (response.data.status.code === 200) {
             if (response.data.status.message === '씨드가 존재하지 않습니다.') {
               setSearchState(true);
+              results = [];
             } else {
               results = response.data.results[0].seedInfoList;
               pageInfos = response.data.results[0];
@@ -115,7 +119,7 @@ const MainPage = () => {
           const response = await axiosInstance.get(url, { params });
           if (response.data.status.message === '씨드가 존재하지 않습니다.') {
             if (activeTab === '카테고리') {
-              setData(results || []);
+              results = [];
             } else if (activeTab === '맞춤필터') {
               setSearchState(true);
             }
@@ -153,12 +157,13 @@ const MainPage = () => {
       tags,
       sortOrder,
       localSelectedFormat,
+      keyword,
     ],
   );
 
   useEffect(() => {
     fetchData(currentPage - 1);
-  }, [fetchData, location, sortOrder, localSelectedFormat, filterId]);
+  }, [fetchData, location, sortOrder, localSelectedFormat, filterId, keyword]);
 
   useEffect(() => {
     const handleFilterUpdate = () => {
@@ -216,10 +221,8 @@ const MainPage = () => {
             <ContentHeader
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-              setFilteredData={setFilteredData}
               setSortOrder={setSortOrder}
               setSelectedFormat={setLocalSelectedFormat}
-              setSearchState={setSearchState}
               categoryId={categoryId}
               categoryName={categoryName}
               filterId={filterId}
@@ -258,34 +261,32 @@ const MainPage = () => {
               ) : data.length === 0 ? (
                 <ContentBlank />
               ) : (
-                (filteredData.length > 0 ? filteredData : data).map(
-                  (item, index) => (
-                    <React.Fragment key={item.seedId || index}>
-                      <StyledContentBox>
-                        <ContentBox
-                          contentId={item.seedId}
-                          title={item.seedName}
-                          category={item.categoryName}
-                          tags={item.tagName}
-                          dDay={item.dDay}
-                          seedType={item.seedType}
-                          thumbnailImage={item.thumbnailImage}
-                          message={item.seedDetail || ''}
-                          keyword={keyword}
-                          open={() => openModal(item)}
-                          fetchData={fetchData}
-                        />
-                      </StyledContentBox>
-                      {selectedData && selectedData.seedId === item.seedId && (
-                        <ViewThumbnailModal
-                          file={item.thumbnailImage}
-                          onClose={closeModal}
-                          seedType={item.seedType}
-                        />
-                      )}
-                    </React.Fragment>
-                  ),
-                )
+                data.map((item, index) => (
+                  <React.Fragment key={item.seedId || index}>
+                    <StyledContentBox>
+                      <ContentBox
+                        contentId={item.seedId}
+                        title={item.seedName}
+                        category={item.categoryName}
+                        tags={item.tagName}
+                        dDay={item.dDay}
+                        seedType={item.seedType}
+                        thumbnailImage={item.thumbnailImage}
+                        message={item.seedDetail || ''}
+                        keyword={keyword}
+                        open={() => openModal(item)}
+                        fetchData={fetchData}
+                      />
+                    </StyledContentBox>
+                    {selectedData && selectedData.seedId === item.seedId && (
+                      <ViewThumbnailModal
+                        file={item.thumbnailImage}
+                        onClose={closeModal}
+                        seedType={item.seedType}
+                      />
+                    )}
+                  </React.Fragment>
+                ))
               )}
             </ContentArea>
             <Pagination

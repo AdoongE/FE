@@ -98,7 +98,12 @@ function Navbar({ activeTab, setActiveTab }) {
             setActiveTab('모아보기');
             navigate('/main');
           }}
-          active={activeTab === '모아보기' || activeTab === '나의 씨드'}
+          active={
+            activeTab === '모아보기' ||
+            activeTab === '나의 씨드' ||
+            activeTab === '카테고리' ||
+            activeTab === '리마인더'
+          }
         >
           모아보기
         </MenuButton>
@@ -115,12 +120,12 @@ function Navbar({ activeTab, setActiveTab }) {
         <ActiveBar width={activeBarWidth} left={activeBarLeft} />
       </NavbarMenu>
       <NavbarRight>
-        <Icon
+        {/* <Icon
           icon="iconoir:bell"
           width="24px"
           height="24px"
           style={{ color: 'black' }}
-        />
+        /> */}
         <NewContentButton onClick={handleNewContentClick}>
           <Icon
             icon="iconoir:plus"
@@ -189,6 +194,7 @@ export const MenuButton = styled.button`
   cursor: pointer;
   font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
   color: ${(props) => (props.active ? '#000' : '#666')};
+  padding-left: 4px;
 `;
 
 export const ActiveBar = styled.div`

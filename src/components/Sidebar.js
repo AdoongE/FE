@@ -404,7 +404,11 @@ const Sidebar = ({
       <SideDiv ref={scrollContainerRef}>
         <BtnDiv>
           <CollectBtn
-            active={activeTab === '나의 씨드'}
+            active={
+              activeTab === '나의 씨드' ||
+              activeTab === '카테고리' ||
+              activeTab === '모아보기'
+            }
             onClick={() => handleTabClick('나의 씨드')}
           >
             <ImgIcon src={seedIcon} alt="seed icon" />

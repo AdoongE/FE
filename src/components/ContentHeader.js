@@ -177,6 +177,10 @@ function ContentHeader({
     setShowSortDropdown(false); // 드롭다운 닫기
   };
 
+  useEffect(() => {
+    setSearchQuery('');
+  }, [activeTab]);
+
   // 태그 제출 처리
   const handleSubmit = () => {
     setActiveTab('검색필터');

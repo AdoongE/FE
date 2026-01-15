@@ -121,12 +121,15 @@ function Navbar({ activeTab, setActiveTab }) {
         <ActiveBar width={activeBarWidth} left={activeBarLeft} />
       </NavbarMenu>
       <NavbarRight>
-        {/* <Icon
-          icon="iconoir:bell"
-          width="24px"
-          height="24px"
-          style={{ color: 'black' }}
-        /> */}
+        <NotificationArea>
+          <Icon
+            icon="iconoir:bell"
+            width="24px"
+            height="24px"
+            style={{ color: 'black' }}
+          />
+          <Popover>아직 알림 기능은 준비 중이에요</Popover>
+        </NotificationArea>
         <NewContentButton onClick={handleNewContentClick}>
           <Icon
             icon="iconoir:plus"
@@ -216,6 +219,39 @@ export const NavbarRight = styled.div`
   gap: 16px;
   position: absolute;
   right: 30px;
+`;
+
+const NotificationWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const Popover = styled.div`
+  position: absolute;
+  top: 45px;
+  left: 0;
+  background: #4f4f4f;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s;
+  z-index: 1000;
+`;
+
+const NotificationArea = styled(NotificationWrapper)`
+  &:hover ${Popover} {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(10);
+  }
 `;
 
 export const NewContentButton = styled.button`

@@ -96,7 +96,8 @@ const Line = styled.div`
 `;
 
 const Box = styled.div`
-  position: absolute;
+  // position: absolute;
+  margin-top: 50px;
   width: 978px;
   padding: 30px;
   border-radius: 5px;
@@ -130,6 +131,7 @@ const Box = styled.div`
 const TabContainer = styled.div`
   position: relative;
   margin-top: 68px;
+  margin-bottom: 91px;
 `;
 
 const TabLine = styled.div`

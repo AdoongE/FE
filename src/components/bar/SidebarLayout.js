@@ -25,8 +25,9 @@ const LayoutWrapper = styled.div`
 `;
 
 const StyledSidebar = styled.div`
+  position: fixed;
+  left: 0;
   width: 262px;
-  flex-shrink: 0;
 `;
 
 const ContentWrapper = styled.div`

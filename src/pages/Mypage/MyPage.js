@@ -147,6 +147,8 @@ function MyPage() {
         setOpen(false);
         console.log('회원정보 삭제 성공: ' + response.data.status.message);
         navigate('/');
+      } else {
+        console.log('회원 탈퇴 실패');
       }
     } catch (error) {
       alert(

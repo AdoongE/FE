@@ -70,8 +70,7 @@ const StMainPage = styled.div`
 `;
 
 const SideDiv = styled.div`
-  min-height: 100vh;
-  height: auto;
+  height: 100vh;
   width: 262px;
   padding: 0 16px;
   background-color: var(--sidebar);

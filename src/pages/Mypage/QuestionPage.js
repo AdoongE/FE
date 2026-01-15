@@ -16,9 +16,12 @@ function QuestionPage() {
   useEffect(() => {
     const fetchFaq = async () => {
       try {
-        const { list } = await getFaq({ page: currentPage - 1, take });
+        const { list, totalElementCount } = await getFaq({
+          page: currentPage - 1,
+          take,
+        });
         setFaqList(list);
-        setTotal(11); // TODO: 11을 백 반환 변수로 바꿔주기.
+        setTotal(totalElementCount);
       } catch (err) {
         console.error('FAQ 로딩 실패:', err);
       }
@@ -26,28 +29,25 @@ function QuestionPage() {
     fetchFaq();
   }, [currentPage]);
 
-  // useEffect(() => {
-  //   console.log('faq목록:', faqList);
-  //   console.log('faq 개수:', total);
-  // }, [faqList, total]);
-
   return (
-    <div>
-      <Navbar style={{ position: 'relative' }} />
-      <Page>
-        <Container>
-          <InfoHeader
-            title="FAQ"
-            subTitle="궁금해 하실 만한 질문을 모아봤습니다."
-          />
-          <Line />
-          <QuestionBox>
-            {faqList.map((faq) => {
-              return <FAQbox key={faq.id} faq={faq} />;
-            })}
-          </QuestionBox>
-        </Container>
-      </Page>
+    <PageWrapper>
+      <ContentArea>
+        <Navbar style={{ position: 'relative' }} />
+        <Page>
+          <Container>
+            <InfoHeader
+              title="FAQ"
+              subTitle="궁금해 하실 만한 질문을 모아봤습니다."
+            />
+            <Line />
+            <QuestionBox>
+              {faqList.map((faq) => {
+                return <FAQbox key={faq.id} faq={faq} />;
+              })}
+            </QuestionBox>
+          </Container>
+        </Page>
+      </ContentArea>
       <PaginationContainer>
         <PageButton
           disabled={currentPage === 1}
@@ -73,22 +73,31 @@ function QuestionPage() {
           {'>'}
         </PageButton>
       </PaginationContainer>
-    </div>
+    </PageWrapper>
   );
 }
+
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 110vh;
+  justify-content: center;
+  column-gap: 500px;
+`;
+
+const ContentArea = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 220px;
+`;
 
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 40px;
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px 20px;
-  border-radius: 8px;
   z-index: 10;
+  padding-left: 170px;
 `;
 
 const PageButton = styled.button`

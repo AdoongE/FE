@@ -7,14 +7,14 @@ export const getFaq = async ({ page, take }) => {
     );
     const faqList = response.data?.results;
     const totalNum = response.data.metadata?.resultCount;
-    console.log('FAQ 목록: ', faqList);
-    console.log('FAQ 개수: ', totalNum);
+    const totalElementCount = response.data.metadata?.totalElementCount;
 
     if (response.status) {
       console.log('FAQ 가져오기 성공');
       return {
         list: faqList,
         count: totalNum,
+        totalElementCount: totalElementCount,
       };
     } else {
       console.error('FAQ 가져오기 실패');

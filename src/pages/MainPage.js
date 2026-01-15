@@ -15,7 +15,6 @@ import ServicePreparation from '../components/ServicePreparation';
 const MainPage = () => {
   const location = useLocation();
   const [data, setData] = useState([]);
-  const [fullData, setFullData] = useState([]); // 카테고리 내 씨드 개수 count를 위한
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('모아보기');
   const [categoryId, setCategoryId] = useState(null);
@@ -100,7 +99,6 @@ const MainPage = () => {
               results = response.data.results[0].seedInfoList;
               pageInfos = response.data.results[0];
               setTotalPages(pageInfos.pageInfo.totalPages || 1);
-              setFullData(results || []);
             }
           }
         } else {
@@ -191,13 +189,6 @@ const MainPage = () => {
     }
   };
 
-  const categoryCounts = fullData.reduce((acc, item) => {
-    item.categoryName.forEach((cat) => {
-      acc[cat] = (acc[cat] || 0) + 1;
-    });
-    return acc;
-  }, {});
-
   return (
     <MainContainer>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -207,7 +198,6 @@ const MainPage = () => {
           setActiveTab={setActiveTab}
           setCategoryId={setCategoryId}
           setCateName={setCateName}
-          categoryCounts={categoryCounts}
           filterId={filterId}
           setFilterId={setFilterId}
           setFilterName={setFilterName}

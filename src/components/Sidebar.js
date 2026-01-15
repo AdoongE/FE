@@ -21,7 +21,6 @@ const Sidebar = ({
   setFilterId,
   setCateName,
   setFilterName,
-  categoryCounts,
   activeTab,
   setActiveTab,
   filterId,
@@ -52,6 +51,8 @@ const Sidebar = ({
   const [customFilterIds, setCustomFilterIds] = useState([]);
   const [message, setMessage] = useState('');
   const [dropdownPosition, setDropdownPosition] = useState(null);
+  const [categorySeedCount, setCategorySeedCount] = useState([]);
+  const [bookmarkSeedCount, setbookmarkSeedCount] = useState([]);
 
   const scrollContainerRef = useRef(null);
 
@@ -88,7 +89,9 @@ const Sidebar = ({
       const response = await axiosInstance.get('/api/v1/category');
       const results = response.data.results;
       const ids = results.map((item) => item.categoryId);
+      const seedCount = results.map((item) => item.seedCount);
       setCategoryIds(ids);
+      setCategorySeedCount(seedCount);
       const names = results.map((item) => item.name);
       setCategories(names); // 카테고리 조회 연동
 
@@ -108,7 +111,9 @@ const Sidebar = ({
       );
       const results = response.data.results;
       const ids = results.map((item) => item.bookmarkId);
+      const seedCount = results.map((item) => item.seedCount);
       setBookmarkIds(ids);
+      setbookmarkSeedCount(seedCount);
       const ids_ = results.map((item) => item.categoryId);
       setBookcateIds(ids_); // 북마크의 카테고리 id
       const names = results.map((item) => item.name);
@@ -451,7 +456,7 @@ const Sidebar = ({
                     isActive={openBookmarkDropdowns[index]}
                   >
                     {bookmark}
-                    {` (${categoryCounts[bookmark] || 0})`}
+                    {` (${bookmarkSeedCount[index] || 0})`}
                     {(hoveredBookdmarkIndex === index ||
                       openBookmarkDropdowns[index]) && (
                       <DotBox
@@ -521,7 +526,7 @@ const Sidebar = ({
                       isActive={openDropdown === index}
                     >
                       {category}
-                      {` (${categoryCounts[category] || 0})`}
+                      {` (${categorySeedCount[index] || 0})`}
                       {(hoveredCategoryIndex === index ||
                         openDropdown === index) &&
                         category !== '미분류' && (

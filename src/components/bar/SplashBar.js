@@ -27,6 +27,9 @@ function SplashBar() {
             onClick={() => navigate('/main')}
           />
         </LogoContainer>
+        <QAButton onClick={() => navigate('/freq-question')}>
+          자주 묻는 질문
+        </QAButton>
         <LoginButton onClick={showModal}>로그인</LoginButton>
       </Bar>
       <LoginModal ref={dialogRef} />
@@ -54,6 +57,24 @@ const StyledLogo = styled.img`
   margin-top: 7px;
 `;
 
+const QAButton = styled.button`
+  width: fit-content;
+  border-radius: 28px;
+  padding: 9.5px 20.5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #4f4f4f;
+  background-color: #def3f1;
+  font-weight: 600;
+  font-size: 14px;
+  border: 0;
+  position: absolute;
+  top: 24px;
+  right: 124px;
+`;
+
 const LoginButton = styled.button`
   width: fit-content;
   border-radius: 28px;
@@ -68,8 +89,8 @@ const LoginButton = styled.button`
   font-size: 14px;
   border: 0;
   position: absolute;
-  top: 1.875vw;
-  right: 2.083vw;
+  top: 24px;
+  right: 30px;
 `;
 
 const Bar = styled.div`

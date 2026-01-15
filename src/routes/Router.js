@@ -17,6 +17,7 @@ import TermsPage from '../pages/Mypage/TermsPage';
 import InfoPage from '../pages/Mypage/InfoPage';
 import QuestionPage from '../pages/Mypage/QuestionPage';
 import InfoDetailPage from '../pages/Mypage/InfoDetailPage';
+import FreqQuestionPage from '../pages/FreqQuestionPage';
 import { ActiveTabProvider } from '../context/ActiveTabContext';
 import { SignupProvider } from '../context/SignupContext';
 
@@ -48,6 +49,7 @@ const Router = () => {
             <Route path="/service-consent" element={<ServiceConsent />} />
             <Route path="/personal-consent" element={<PersonalConsent />} />
             <Route path="/marketing-consent" element={<MarketingConsent />} />
+            <Route path="/freq-question" element={<FreqQuestionPage />} />
             <Route element={<SidebarLayout />}>
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/terms" element={<TermsPage />} />

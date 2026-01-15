@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function InfoHeader({ title, subTitle }) {
+function InfoHeader({ title, subTitle, center }) {
   return (
-    <Header>
+    <Header center={center}>
       <Titles>{title}</Titles>
       <Short>{subTitle} </Short>
     </Header>
@@ -22,7 +22,7 @@ const Short = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  ${(props) => (props.center === false ? '' : 'align-items: flex-start;')}
   flex-direction: column;
   margin-top: 72px;
 `;

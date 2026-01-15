@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
 import styled from 'styled-components';
-import InfoHeader from '../../components/bar/InfoHeader';
-import FAQbox from '../../components/box/FAQbox';
-import { getFaq } from '../../components/api/InfoApi';
+import SplashBar from '../components/bar/SplashBar';
+import InfoHeader from '../components/bar/InfoHeader';
+import FAQbox from '../components/box/FAQbox';
+import { getFaq } from '../components/api/InfoApi';
 
 function QuestionPage() {
   const [faqList, setFaqList] = useState([]);
@@ -31,13 +31,14 @@ function QuestionPage() {
 
   return (
     <PageWrapper>
+      <SplashBar />
       <ContentArea>
-        <Navbar style={{ position: 'relative' }} />
         <Page>
           <Container>
             <InfoHeader
               title="FAQ"
               subTitle="궁금해 하실 만한 질문을 모아봤습니다."
+              center={false}
             />
             <Line />
             <QuestionBox>
@@ -88,7 +89,6 @@ const ContentArea = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: 220px;
 `;
 
 const PaginationContainer = styled.div`
@@ -96,7 +96,7 @@ const PaginationContainer = styled.div`
   justify-content: center;
   gap: 8px;
   z-index: 10;
-  padding-left: 170px;
+  margin-bottom: 40px;
 `;
 
 const PageButton = styled.button`
@@ -127,16 +127,19 @@ const Line = styled.div`
 const Page = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 10%;
-  left: 25%;
-  height: calc(100vh - 100px);
+  min-height: calc(100vh - 100px);
+  width: 100%;
 `;
 
 const Container = styled.div`
   width: 100%;
+  // max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export default QuestionPage;

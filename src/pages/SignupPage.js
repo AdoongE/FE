@@ -87,6 +87,7 @@ function SignupPage() {
         alert('회원가입 성공!');
         resetSignup();
         sessionStorage.setItem('firstLogin', 'true');
+        sessionStorage.setItem('firstAddContent', 'true');
         navigate('/main');
       }
     } catch (error) {

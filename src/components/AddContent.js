@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import AddCategory from './dropdown/AddCategoryDropdown';
 import { FaArrowRight } from 'react-icons/fa';
+import ClosedIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,6 +33,19 @@ function AddContent() {
   const { summary } = location.state || '';
   const recoTags = location.state?.tags || [];
   const { link } = location.state || '';
+  const [showTagGuide, setShowTagGuide] = useState(false);
+
+  useEffect(() => {
+    const isFirst = sessionStorage.getItem('firstAddContent');
+    if (isFirst === 'true') {
+      setShowTagGuide(true);
+    }
+  }, []);
+
+  const handleCloseTagGuide = () => {
+    setShowTagGuide(false);
+    sessionStorage.removeItem('firstAddContent');
+  };
 
   useEffect(() => {
     console.log(
@@ -433,9 +447,21 @@ function AddContent() {
                     )}
                   />
                 </TagContainer>
-                <InputButton type="button" onClick={() => showTagModal()}>
-                  + 태그 선택
-                </InputButton>
+                <ButtonWrapper>
+                  <InputButton type="button" onClick={() => showTagModal()}>
+                    + 태그 선택
+                  </InputButton>
+                  {showTagGuide && (
+                    <GuideBubble>
+                      태그를 간편하게 선택할 수 있어요!
+                      <CloseBtn onClick={handleCloseTagGuide}>
+                        <ClosedIcon
+                          style={{ fontSize: '14px', color: 'white' }}
+                        />
+                      </CloseBtn>
+                    </GuideBubble>
+                  )}
+                </ButtonWrapper>
               </TagDiv>
               <Recommends>
                 <Recommend>추천</Recommend>
@@ -839,6 +865,46 @@ const ModalButton = styled.button`
     background-color: var(--gray4);
     color: black;
   }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+`;
+
+const GuideBubble = styled.div`
+  background-color: #4f4f4f;
+  color: white;
+  border-radius: 8px;
+  padding: 10px 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 50px;
+  ${font.body2}
+  gap: 5px;
+  width: max-content;
+  z-index: 10;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent #4f4f4f transparent;
+  }
+`;
+
+const CloseBtn = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 `;
 
 export default AddContent;

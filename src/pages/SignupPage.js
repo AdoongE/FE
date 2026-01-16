@@ -86,6 +86,7 @@ function SignupPage() {
       if (result?.data?.status?.code === 200) {
         alert('회원가입 성공!');
         resetSignup();
+        sessionStorage.setItem('firstLogin', 'true');
         navigate('/main');
       }
     } catch (error) {

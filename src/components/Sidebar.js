@@ -6,6 +6,7 @@ import circleCheckIcon from '../assets/icons/circleCheck.png';
 import ArrowRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CloseIcon from '@mui/icons-material/Close';
 import Dropdown from '../components/dropdown/CategoryDropdown';
 import FilterDropdown from '../components/dropdown/FilterDropdown';
 import { Icon } from '@iconify/react';
@@ -53,8 +54,21 @@ const Sidebar = ({
   const [dropdownPosition, setDropdownPosition] = useState(null);
   const [categorySeedCount, setCategorySeedCount] = useState([]);
   const [bookmarkSeedCount, setbookmarkSeedCount] = useState([]);
+  const [showGuide, setShowGuide] = useState(false);
 
   const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    const isFirst = sessionStorage.getItem('firstLogin');
+    if (isFirst === 'true') {
+      setShowGuide(true);
+    }
+  }, []);
+
+  const handleCloseGuide = () => {
+    setShowGuide(false);
+    sessionStorage.removeItem('firstLogin');
+  };
 
   useEffect(() => {
     const scrollElement = scrollContainerRef.current;
@@ -619,9 +633,19 @@ const Sidebar = ({
           </CustomUp>
           <CustomDiv>
             {customFilter.length === 0 && (
-              <FilterContent>
-                맞춤 조건은 최대 5개까지 설정 가능합니다.
-              </FilterContent>
+              <>
+                <FilterContent>
+                  맞춤 조건은 최대 5개까지 설정 가능합니다.
+                </FilterContent>
+                {showGuide && (
+                  <GuideBubble>
+                    맞춤 조건을 설정하고 <br /> 원하는 씨드만 모아보세요!
+                    <CloseBtn onClick={handleCloseGuide}>
+                      <CloseIcon style={{ fontSize: '14px', color: 'white' }} />
+                    </CloseBtn>
+                  </GuideBubble>
+                )}
+              </>
             )}
             {message && (
               <MessageBox>
@@ -922,6 +946,36 @@ const MessageBox = styled.div`
 
 const CheckIcon = styled.img`
   width: 44px;
+`;
+
+const GuideBubble = styled.div`
+  background-color: #4f4f4f;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 13px;
+  margin-top: 12px;
+  margin-left: 8px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  ${font.body2}
+  gap: 19px;
+  width: fit-content;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 30px;
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent #4f4f4f transparent;
+  }
+`;
+
+const CloseBtn = styled.div`
+  cursor: pointer;
+  display: flex;
 `;
 
 export default Sidebar;

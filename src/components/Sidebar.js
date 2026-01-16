@@ -639,7 +639,9 @@ const Sidebar = ({
                 </FilterContent>
                 {showGuide && (
                   <GuideBubble>
-                    맞춤 조건을 설정하고 <br /> 원하는 씨드만 모아보세요!
+                    맞춤 조건을 설정하고
+                    <br />
+                    원하는 씨드만 모아보세요!
                     <CloseBtn onClick={handleCloseGuide}>
                       <CloseIcon style={{ fontSize: '14px', color: 'white' }} />
                     </CloseBtn>

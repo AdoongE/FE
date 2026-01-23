@@ -93,7 +93,6 @@ const MainPage = () => {
 
           if (response.data.status.code === 200) {
             if (response.data.status.message === '씨드가 존재하지 않습니다.') {
-              setSearchState(true);
               results = [];
             } else {
               results = response.data.results[0].seedInfoList;

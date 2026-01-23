@@ -162,7 +162,7 @@ const EditFilterModal = forwardRef(({ filterId }, ref) => {
       const response = await axiosInstance.get('api/v1/tag/default/used');
       const result = response.data.results || [];
       if (response.status) {
-        console.log('사용한 기본 태그 가져오기 성공');
+        console.log('사용한 기본 태그 가져오기 성공.');
         setUsedTags(result);
       } else {
         console.error('사용한 기본 태그 가져오기 실패');

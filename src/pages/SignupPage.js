@@ -91,7 +91,7 @@ function SignupPage() {
         navigate('/main');
       }
     } catch (error) {
-      alert(`회원가입 실패: ${error.message}`);
+      alert(`회원가입 실패 : ${error.message}`);
     }
   };
 

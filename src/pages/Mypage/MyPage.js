@@ -105,7 +105,7 @@ function MyPage() {
       consentToMarketingAndAds: checked,
     };
 
-    console.log('폼 데이터 제출:', formData);
+    console.log('폼 데이터 제출: ', formData);
 
     try {
       const result = await axiosInstance.patch(`/api/v1/member`, formData);

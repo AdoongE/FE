@@ -28,7 +28,7 @@ const NewAddCategoryModal = forwardRef(({ onConfirm }, ref) => {
       });
 
       if (response.status === 200) {
-        console.log('카테고리 생성 성공');
+        console.log('카테고리 생성 성공.');
         closeModal();
       } else {
         console.error('카테고리 생성 실패');

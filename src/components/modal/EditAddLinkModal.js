@@ -201,7 +201,7 @@ const Dialog = styled.dialog`
   background-color: white;
   border: none;
   ::backdrop {
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color: rgba(0, 0, 0, 0.5);
   }
 `;
 

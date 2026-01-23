@@ -110,7 +110,7 @@ const MainPage = () => {
           }
 
           if (!url) {
-            console.warn('유효하지 않은 URL 요청입니다.');
+            console.warn('유효하지 않은 URL 요청입니다');
             return;
           }
 

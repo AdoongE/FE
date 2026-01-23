@@ -9,7 +9,9 @@ let isTokenExpired = false;
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('jwtToken');
-
+    if (window.location.pathname === '/freq-question') {
+      return config;
+    }
     if (!token) {
       if (!isTokenExpired) {
         isTokenExpired = true;

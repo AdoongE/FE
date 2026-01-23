@@ -16,16 +16,8 @@ function SplashBar() {
     <div>
       <Bar>
         <LogoContainer>
-          <StyledLogoImage
-            src={LogoImage}
-            alt="seedzip_logo"
-            onClick={() => navigate('/main')}
-          />
-          <StyledLogo
-            src={Logo}
-            alt="seedzip"
-            onClick={() => navigate('/main')}
-          />
+          <StyledLogoImage src={LogoImage} alt="seedzip_logo" />
+          <StyledLogo src={Logo} alt="seedzip" />
         </LogoContainer>
         <QAButton onClick={() => navigate('/freq-question')}>
           자주 묻는 질문
